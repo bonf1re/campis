@@ -7,11 +7,11 @@
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane id="AnchorPane" fx:id="fondo_login" prefHeight="447.0" prefWidth="620.0" style="-fx-background-position: center center; -fx-background-size: 850 500;" stylesheets="@../assets/css/login.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.FXMLDocumentController">
+<AnchorPane id="fondo_login" fx:id="fondo_login" opacity="0.95" prefHeight="447.0" prefWidth="620.0" style="-fx-background-position: center center; -fx-background-size: 850 500;" stylesheets="@../assets/css/login.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
    <children>
       <AnchorPane layoutX="95.0" layoutY="93.0" opacity="0.95" prefHeight="262.0" prefWidth="431.0" style="-fx-background-color: #F3D135; -fx-background-radius: 10;">
          <children>
-            <JFXPasswordField layoutX="93.0" layoutY="112.0" prefHeight="25.0" prefWidth="246.0" promptText="Password" />
+            <JFXPasswordField layoutX="100.0" layoutY="106.0" prefHeight="25.0" prefWidth="246.0" promptText="Password" />
             <JFXTextField layoutX="93.0" layoutY="62.0" prefHeight="25.0" prefWidth="246.0" promptText="Username" />
             <JFXButton layoutX="93.0" layoutY="176.0" prefHeight="25.0" prefWidth="246.0" style="-fx-background-color: #D99C22;" text="Aceptar" />
             <Label alignment="CENTER" contentDisplay="CENTER" layoutX="93.0" layoutY="22.0" prefHeight="17.0" prefWidth="246.0" text="Login" textAlignment="CENTER">
