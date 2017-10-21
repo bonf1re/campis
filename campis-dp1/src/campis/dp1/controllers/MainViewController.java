@@ -11,6 +11,11 @@ import java.io.IOException;
 public class MainViewController {
     private Main main;
     @FXML
+    private void goSecurity() throws IOException {
+        main.showSecuritySidebar();
+    }
+    
+    @FXML
     private void goWarehouse() throws IOException {
         main.showWarehouseSidebar();
     }

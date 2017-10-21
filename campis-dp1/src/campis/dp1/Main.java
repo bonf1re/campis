@@ -39,9 +39,16 @@ public class Main extends Application {
         primaryStage.show();
     }
     
-    public static void showWarehouseSidebar() throws IOException {
+    public static void showSecuritySidebar() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/layouts/SecuritySidebar.fxml"));
+        VBox securitySidebar = loader.load();
+        mainLayout.setLeft(securitySidebar);
+    }
+    
+    public static void showWarehouseSidebar() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/layouts/WarehouseSidebar.fxml"));
         VBox warehouseSidebar = loader.load();
         mainLayout.setLeft(warehouseSidebar);
     }
