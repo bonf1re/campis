@@ -40,6 +40,7 @@ Homestead.yaml
 
 #Build generated
 dist/
+build/
 
 
 ### SublimeText ###
