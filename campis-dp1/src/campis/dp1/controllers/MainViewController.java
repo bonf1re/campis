@@ -24,4 +24,5 @@ public class MainViewController {
     private void goWarehouseMainView() throws IOException{
         main.showWarehouseMainVew();
     }
+    
 }
