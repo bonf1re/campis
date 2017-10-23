@@ -77,7 +77,7 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <JFXDatePicker layoutX="568.0" layoutY="431.0" prefHeight="38.0" prefWidth="283.0" />
+            <JFXDatePicker layoutX="573.0" layoutY="432.0" prefHeight="38.0" prefWidth="283.0" />
             <JFXTextField layoutX="571.0" layoutY="188.0" prefHeight="37.0" prefWidth="91.0">
                <font>
                   <Font size="16.0" />

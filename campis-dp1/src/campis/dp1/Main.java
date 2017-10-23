@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -72,6 +73,27 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("views/products/editProduct.fxml"));
         BorderPane editProd = loader.load();
         mainLayout.setCenter(editProd);
+    }
+    
+    public static void showListRacks() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/racks/listRacks.fxml"));
+        BorderPane listRacks = loader.load();
+        mainLayout.setCenter(listRacks);
+    }
+    
+    public static void showNewRack() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/racks/newRack.fxml"));
+        BorderPane newRack = loader.load();
+        mainLayout.setCenter(newRack);
+    }
+    
+    public static void showEditRack() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/racks/editRack.fxml"));
+        BorderPane editRack = loader.load();
+        mainLayout.setCenter(editRack);
     }
 
     /** 
