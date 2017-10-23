@@ -52,8 +52,29 @@ public class Main extends Application {
         VBox warehouseSidebar = loader.load();
         mainLayout.setLeft(warehouseSidebar);
     }
+    
+    public static void showListProduct() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/products/listProducts.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
+    
+    public static void showCreateProduct() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/products/createProduct.fxml"));
+        BorderPane createProd = loader.load();
+        mainLayout.setCenter(createProd);
+    }
+    
+    public static void showEditProduct() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/products/editProduct.fxml"));
+        BorderPane editProd = loader.load();
+        mainLayout.setCenter(editProd);
+    }
 
-    /**
+    /** 
      * @param args the command line arguments
      */
     public static void main(String[] args) {
