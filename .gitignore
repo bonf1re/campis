@@ -111,3 +111,4 @@ $RECYCLE.BIN/
 ### Vim Files ###
 **/*.swp
 **/*.swo
+/campis-dp1/nbproject/private/

@@ -5,8 +5,11 @@
  */
 package campis.dp1.controllers;
 
+import campis.dp1.Main;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 /**
@@ -15,13 +18,20 @@ import javafx.fxml.Initializable;
  * @author Marco
  */
 public class Users implements Initializable {
+    private Main main;
 
-    /**
-     * Initializes the controller class.
-     */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
     
+    @FXML
+    private void goListUser() throws IOException {
+        main.showListUser();
+    }
+    @FXML
+
+    private void goCreateUser() throws IOException {
+        main.showCreateUser();
+    }
 }
