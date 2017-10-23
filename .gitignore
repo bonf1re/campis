@@ -39,6 +39,7 @@ Homestead.yaml
 !.env.*
 
 # NetBeans specific
+nbproject/private/
 build/
 nbbuild/
 dist/
