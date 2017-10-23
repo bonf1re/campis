@@ -58,12 +58,27 @@ public class Main extends Application {
     
     /* Warehouse methods
     */
-    public static void showWarehouseMainVew() throws IOException {
+    public static void showWarehouseMainView() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/warehouse/MainView.fxml"));
         BorderPane warehouseMainView = loader.load();
-        BorderPane subLayout = (BorderPane) mainLayout.getRight();
-        subLayout.setRight(warehouseMainView);
+        mainLayout.setCenter(warehouseMainView);
+        
+    }
+    
+    public static void showWarehouseCreateView() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/CreateView.fxml"));
+        BorderPane warehouseMainView = loader.load();
+        mainLayout.setCenter(warehouseMainView);
+        
+    }
+    
+     public static void showWarehouseVisualizeView() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/VisualizeView.fxml"));
+        BorderPane warehouseMainView = loader.load();
+        mainLayout.setCenter(warehouseMainView);
         
     }
     /* End Warehouse methods  */

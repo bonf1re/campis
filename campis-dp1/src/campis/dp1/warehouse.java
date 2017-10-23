@@ -11,17 +11,39 @@ package campis.dp1;
  */
 public class warehouse {
     String name;
-    float area;
+    float length;
+    float width;
     boolean status;
+    
+    public warehouse(String name, float length, float width, boolean status) {
+        this.name = name;
+        this.length = length;
+        this.width = width;
+        this.status = status;
+    }
+
+    public float getLength() {
+        return length;
+    }
+
+    public void setLength(float length) {
+        this.length = length;
+    }
+
+    public float getWidth() {
+        return width;
+    }
+
+    public void setWidth(float width) {
+        this.width = width;
+    }
+    
 
     public String getName() {
         return name;
     }
 
-    public float getArea() {
-        return area;
-    }
-
+ 
     public boolean isStatus() {
         return status;
     }
@@ -30,26 +52,8 @@ public class warehouse {
         this.name = name;
     }
 
-    public void setArea(float area) {
-        if (area<0){
-            // time being
-            System.out.println("No puede disenhar un  almacen con area negativa");
-            return;
-        }
-        this.area = area;
-    }
 
     public void setStatus(boolean status) {
         this.status = status;
     }
-    
-    
-
-    public warehouse(String name, float area, boolean status) {
-        this.name = name;
-        this.area = area;
-        this.status = status;
-    }
-    
-    
 }

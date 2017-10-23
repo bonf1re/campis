@@ -7,14 +7,15 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="400.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.Warehouse">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.Warehouse">
    <top>
-      <BorderPane prefHeight="302.0" prefWidth="604.0" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="645.0" prefWidth="1180.0" BorderPane.alignment="CENTER">
          <center>
-            <Pane prefHeight="266.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+            <Pane prefHeight="350.0" prefWidth="700.0" BorderPane.alignment="CENTER">
                <children>
-                  <TableView layoutX="173.0" layoutY="68.0" prefHeight="200.0" prefWidth="377.0">
+                  <TableView layoutX="163.0" layoutY="60.0" prefHeight="524.0" prefWidth="903.0">
                     <columns>
                       <TableColumn prefWidth="75.0" text="Nombre" />
                       <TableColumn prefWidth="75.0" text="Ancho" />
@@ -23,17 +24,19 @@
                         <TableColumn prefWidth="75.0" text="Estado" />
                     </columns>
                   </TableView>
+                  <Text layoutX="90.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LIsta de Almacenes" />
                </children>
             </Pane>
          </center>
       </BorderPane>
    </top>
    <bottom>
-      <BorderPane prefHeight="93.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <BorderPane prefHeight="143.0" prefWidth="700.0" BorderPane.alignment="CENTER">
          <center>
             <ButtonBar prefHeight="93.0" prefWidth="434.0" BorderPane.alignment="CENTER">
               <buttons>
-                <Button mnemonicParsing="false" text="Visualizar" />
+                <Button mnemonicParsing="false" onAction="#goWarehouseCreateView" text="Crear" />
+                  <Button mnemonicParsing="false" text="Visualizar" />
                   <Button mnemonicParsing="false" text="Modificar" />
                   <Button mnemonicParsing="false" text="Eliminar" />
               </buttons>
@@ -41,7 +44,7 @@
                   <Insets />
                </BorderPane.margin>
                <padding>
-                  <Insets right="110.0" />
+                  <Insets right="400.0" />
                </padding>
             </ButtonBar>
          </center>

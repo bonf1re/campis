@@ -23,7 +23,7 @@ public class MainViewController {
     @FXML
 
     private void goWarehouseMainView() throws IOException{
-        main.showWarehouseMainVew();
+        main.showWarehouseMainView();
     }
     
 

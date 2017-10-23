@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ButtonBar?>
 <?import javafx.scene.control.ComboBox?>
@@ -20,42 +21,48 @@
                      <font>
                         <Font size="20.0" />
                      </font></Text>
-                  <Text layoutX="276.0" layoutY="141.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre:">
+                  <Text disable="true" layoutX="90.0" layoutY="167.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre:">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Text>
-                  <Text layoutX="295.0" layoutY="283.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Largo:">
+                  <Text disable="true" layoutX="109.0" layoutY="309.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Largo:">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Text>
-                  <Text layoutX="540.0" layoutY="286.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ancho">
+                  <Text disable="true" layoutX="354.0" layoutY="312.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ancho">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Text>
-                  <Text layoutX="290.0" layoutY="415.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Estado:">
+                  <Text disable="true" layoutX="104.0" layoutY="441.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Estado:">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </Text>
-                  <TextField layoutX="385.0" layoutY="120.0">
+                  <TextField disable="true" editable="false" layoutX="199.0" layoutY="146.0">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </TextField>
-                  <TextField layoutX="385.0" layoutY="264.0" prefHeight="32.0" prefWidth="97.0">
+                  <TextField disable="true" editable="false" layoutX="199.0" layoutY="290.0" prefHeight="32.0" prefWidth="97.0">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </TextField>
-                  <TextField layoutX="633.0" layoutY="261.0" prefHeight="32.0" prefWidth="94.0">
+                  <TextField disable="true" editable="false" layoutX="447.0" layoutY="287.0" prefHeight="32.0" prefWidth="94.0">
                      <font>
                         <Font size="16.0" />
                      </font>
                   </TextField>
-                  <ComboBox layoutX="385.0" layoutY="396.0" prefWidth="150.0" />
+                  <ComboBox disable="true" layoutX="199.0" layoutY="422.0" prefWidth="150.0" />
+                  <Canvas height="428.0" layoutX="593.0" layoutY="122.0" width="530.0" />
+                  <Text layoutX="641.0" layoutY="78.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mapa">
+                     <font>
+                        <Font size="15.0" />
+                     </font>
+                  </Text>
                </children>
             </Pane>
          </center>
@@ -66,11 +73,11 @@
          <center>
             <ButtonBar prefHeight="93.0" prefWidth="434.0" BorderPane.alignment="CENTER">
               <buttons>
-                <Button mnemonicParsing="false" text="Grabar">
+                <Button mnemonicParsing="false" text="Editar">
                      <font>
                         <Font size="17.0" />
                      </font></Button>
-                  <Button mnemonicParsing="false" onAction="#goWarehouseMainView" text="Cancelar">
+                  <Button mnemonicParsing="false" onAction="#goWarehouseMainView" text="Volver">
                      <font>
                         <Font size="17.0" />
                      </font></Button>
