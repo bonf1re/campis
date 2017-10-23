@@ -49,9 +49,9 @@ public class Warehouse implements Initializable {
     @FXML
     private void goWarehouseVisualizeView() throws IOException{
         /* Canvas initialization */ 
-        GraphicsContext gc = 
-          warehouseCanvas.getGraphicsContext2D();
-        draw( gc );
+//        GraphicsContext gc = 
+//          warehouseCanvas.getGraphicsContext2D();
+//        draw( gc );
         /* End canvas initialization */
         main.showWarehouseVisualizeView();
     }

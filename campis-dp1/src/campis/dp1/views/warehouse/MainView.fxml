@@ -36,7 +36,7 @@
             <ButtonBar prefHeight="93.0" prefWidth="434.0" BorderPane.alignment="CENTER">
               <buttons>
                 <Button mnemonicParsing="false" onAction="#goWarehouseCreateView" text="Crear" />
-                  <Button mnemonicParsing="false" text="Visualizar" />
+                  <Button mnemonicParsing="false" onAction="#goWarehouseVisualizeView" text="Visualizar" />
                   <Button mnemonicParsing="false" text="Modificar" />
                   <Button mnemonicParsing="false" text="Eliminar" />
               </buttons>
