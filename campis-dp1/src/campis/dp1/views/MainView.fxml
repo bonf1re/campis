@@ -10,7 +10,7 @@
          <center>
             <ToolBar prefHeight="0.0" prefWidth="562.0" BorderPane.alignment="CENTER">
                <items>
-                  <Hyperlink onAction="#goWarehouse" text="Almacén" />
+                  <Hyperlink onAction="#goWarehouse" text="Almacenamiento" />
                   <Hyperlink text="Despacho" />
                   <Hyperlink text="Comercializaciòn" />
                   <Hyperlink text="Reportes" />
