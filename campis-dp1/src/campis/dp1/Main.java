@@ -53,13 +53,28 @@ public class Main extends Application {
         mainLayout.setLeft(warehouseSidebar);
     }
     
+
+    public static void showListUser() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/users/list.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
+    
+    public static void showCreateUser() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/users/create.fxml"));
+        BorderPane createProd = loader.load();
+        mainLayout.setCenter(createProd);
+    }
+
     public static void showListProduct() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/products/listProducts.fxml"));
         BorderPane listProd = loader.load();
         mainLayout.setCenter(listProd);
     }
-    
+
     public static void showCreateProduct() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/products/createProduct.fxml"));

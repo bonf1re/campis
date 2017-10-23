@@ -34,4 +34,9 @@ public class MainViewController {
     private void goEditProduct() throws IOException {
         main.showEditProduct();
     }
+
+    @FXML
+    private void goListUser() throws IOException {
+        main.showListUser();
+    }
 }
