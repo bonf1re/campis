@@ -19,4 +19,9 @@ public class MainViewController {
     private void goWarehouse() throws IOException {
         main.showWarehouseSidebar();
     }
+    
+    @FXML
+    private void goWarehouseMainView() throws IOException{
+        main.showWarehouseMainVew();
+    }
 }

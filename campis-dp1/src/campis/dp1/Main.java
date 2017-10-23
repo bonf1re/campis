@@ -12,6 +12,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -52,7 +53,19 @@ public class Main extends Application {
         VBox warehouseSidebar = loader.load();
         mainLayout.setLeft(warehouseSidebar);
     }
-
+    
+    
+    /* Warehouse methods
+    */
+    public static void showWarehouseMainVew() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/MainView.fxml"));
+        BorderPane warehouseMainView = loader.load();
+        BorderPane subLayout = (BorderPane) mainLayout.getRight();
+        subLayout.setRight(warehouseMainView);
+        
+    }
+    /* End Warehouse methods
     /**
      * @param args the command line arguments
      */
