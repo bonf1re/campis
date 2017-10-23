@@ -1,7 +1,7 @@
 package campis.dp1;
 
-public class products {
-    
+public class Product {
+    String codProd;
     String nombre;
     String descripcion;
     int phy_stock;
@@ -10,6 +10,15 @@ public class products {
     String marca;
     float precio_base;
 
+    public String getCodProd() {
+        return codProd;
+    }
+
+    public void setCodProd(String codProd) {
+        this.codProd = codProd;
+    }
+    
+    
     public String getNombre() {
         return nombre;
     }
@@ -66,8 +75,9 @@ public class products {
         this.precio_base = precio_base;
     }
 
-    public products(String nombre, String descripcion, int phy_stock, int comm_stock,
+    public Product(String codProd, String nombre, String descripcion, int phy_stock, int comm_stock,
                     float peso, String marca, float precio_base) {
+        this.codProd = codProd;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.phy_stock = phy_stock;
