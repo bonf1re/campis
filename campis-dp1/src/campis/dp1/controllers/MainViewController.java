@@ -21,8 +21,29 @@ public class MainViewController {
     }
     
     @FXML
+
     private void goWarehouseMainView() throws IOException{
         main.showWarehouseMainVew();
     }
     
+
+    private void goListProduct() throws IOException {
+        main.showListProduct();
+    }
+    
+    @FXML
+    private void goCreateProduct() throws IOException {
+        main.showCreateProduct();
+    }
+    
+    @FXML
+    private void goEditProduct() throws IOException {
+        main.showEditProduct();
+    }
+
+    @FXML
+    private void goListUser() throws IOException {
+        main.showListUser();
+    }
+
 }
