@@ -10,9 +10,9 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="773.0" prefWidth="1185.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.Users">
+<BorderPane prefHeight="773.0" prefWidth="1185.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.RolesController">
    <top>
-      <Label prefHeight="43.0" prefWidth="524.0" text="Lista de Usuarios">
+      <Label prefHeight="43.0" prefWidth="524.0" text="Lista de Roles">
          <font>
             <Font size="18.0" />
          </font>
@@ -28,8 +28,6 @@
       <TableView maxHeight="-Infinity" minHeight="0.0" prefHeight="400.0" prefWidth="1116.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn prefWidth="75.0" text="Nombres" />
-            <TableColumn prefWidth="75.0" text="Usuario" />
-            <TableColumn prefWidth="75.0" text="Rol" />
             <TableColumn prefWidth="75.0" text="Acciones" />
         </columns>
          <BorderPane.margin>
@@ -53,7 +51,7 @@
    <right>
       <HBox prefHeight="317.0" prefWidth="39.0" BorderPane.alignment="CENTER">
          <children>
-            <Button mnemonicParsing="false" onAction="#goCreateUser" prefHeight="20.0" prefWidth="26.0">
+            <Button mnemonicParsing="false" onAction="#goCreateRoles" prefHeight="20.0" prefWidth="26.0">
                <graphic>
                   <FontAwesomeIconView glyphName="PLUS_CIRCLE" size="18.0" wrappingWidth="16.428571701049805" />
                </graphic>
