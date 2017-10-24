@@ -2,10 +2,7 @@ package campis.dp1.controllers;
 
 import javafx.fxml.FXML;
 import campis.dp1.Main;
-import campis.dp1.models.Product;
 import java.io.IOException;
-import javafx.scene.control.TableColumn;
-import javafx.scene.control.TableView;
 
 /**
  *
@@ -41,6 +38,11 @@ public class MainViewController {
     }
     
     @FXML
+    private void goWarehouseMainView() throws IOException{
+        main.showWarehouseMainView();
+    }
+    
+    @FXML
     private void goListProduct() throws IOException {
         main.showListProduct();
     }
@@ -54,4 +56,15 @@ public class MainViewController {
     private void goEditProduct() throws IOException {
         main.showEditProduct();
     }
+
+    @FXML
+    private void goListUser() throws IOException {
+        main.showListUser();
+    }
+    
+    @FXML
+    private void goListRoles() throws IOException {
+        main.showListRoles();
+    }
+
 }
