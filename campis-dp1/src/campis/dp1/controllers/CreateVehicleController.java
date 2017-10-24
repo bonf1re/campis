@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
  *
  * @author david
  */
-public class VehicleController implements Initializable {
+public class CreateVehicleController implements Initializable {
 
     /**
      * Initializes the controller class.
