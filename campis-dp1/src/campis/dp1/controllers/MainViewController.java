@@ -2,7 +2,10 @@ package campis.dp1.controllers;
 
 import javafx.fxml.FXML;
 import campis.dp1.Main;
+import campis.dp1.models.Product;
 import java.io.IOException;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 
 /**
  *
@@ -10,6 +13,23 @@ import java.io.IOException;
  */
 public class MainViewController {
     private Main main;
+    /*@FXML
+    private TableView<Product> tablaProd;
+    @FXML
+    private TableColumn<Product, String> itemCol;
+    @FXML
+    private TableColumn<Product, String> nomCol;
+    @FXML
+    private TableColumn<Product, String> tipoCol;
+    @FXML
+    private TableColumn<Product, Float> pesoCol;
+    @FXML
+    private TableColumn<Product, String> medidaCol;
+    @FXML
+    private TableColumn<Product, Integer> pStockCol;
+    @FXML
+    private TableColumn<Product, Integer> cStockCol;*/
+    
     @FXML
     private void goSecurity() throws IOException {
         main.showSecuritySidebar();
