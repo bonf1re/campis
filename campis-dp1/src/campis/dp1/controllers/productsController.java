@@ -113,7 +113,7 @@ public class productsController implements Initializable {
             throw e;
         }
     }
-    
+    //hey
     @FXML
     private void insertProduct (ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
         try{
