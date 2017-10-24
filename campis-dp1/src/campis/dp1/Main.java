@@ -117,6 +117,20 @@ public class Main extends Application {
         BorderPane editProd = loader.load();
         mainLayout.setCenter(editProd);
     }
+    
+    public static void showListRoles() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/roles/list.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
+    
+    public static void showCreateRoles() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/roles/create.fxml"));
+        BorderPane createProd = loader.load();
+        mainLayout.setCenter(createProd);
+    }
 
     /** 
      * @param args the command line arguments
