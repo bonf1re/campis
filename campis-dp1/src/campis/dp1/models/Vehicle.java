@@ -9,39 +9,39 @@ package campis.dp1.models;
  *
  * @author david
  */
-public class vehicle {
-
-    private float max_weight;
-    private int max_speed;
+public class Vehicle {
+    private int idVehicle;
+    private float maxWeight;
+    private int maxSpeed;
     private boolean active;
     private String warehouse;
     
     /**
      * @return the max_weight
      */
-    public float getMax_weight() {
-        return max_weight;
+    public float getMaxWeight() {
+        return maxWeight;
     }
 
     /**
-     * @param max_weight the max_weight to set
+     * @param maxWeight the max_weight to set
      */
-    public void setMax_weight(float max_weight) {
-        this.max_weight = max_weight;
+    public void setMaxWeight(float maxWeight) {
+        this.maxWeight = maxWeight;
     }
 
     /**
      * @return the max_speed
      */
-    public int getMax_speed() {
-        return max_speed;
+    public int getMaxSpeed() {
+        return maxSpeed;
     }
 
     /**
-     * @param max_speed the max_speed to set
+     * @param maxSpeed the maxSpeed to set
      */
-    public void setMax_speed(int max_speed) {
-        this.max_speed = max_speed;
+    public void setMaxSpeed(int maxSpeed) {
+        this.maxSpeed = maxSpeed;
     }
 
     /**
@@ -72,10 +72,31 @@ public class vehicle {
         this.warehouse = warehouse;
     }
     
-    public vehicle(float max_weight, int max_speed, boolean active, String warehouse) {
-        this.max_weight = max_weight;
-        this.max_speed = max_speed;
+    /**
+     * @return the id_vehicle
+     */
+    public int getIdVehicle() {
+        return idVehicle;
+    }
+
+    /**
+     * @param idVehicle the id_vehicle to set
+     */
+    public void setIdVehicle(int idVehicle) {
+        this.idVehicle = idVehicle;
+    }
+    
+    public Vehicle (){
+        
+    }
+    
+    public Vehicle(int idVehicle, float maxWeight, int maxSpeed, boolean active, String warehouse) {
+        this.idVehicle = idVehicle;
+        this.maxWeight = maxWeight;
+        this.maxSpeed = maxSpeed;
         this.active = active;
         this.warehouse = warehouse;
     }
+
+    
 }
