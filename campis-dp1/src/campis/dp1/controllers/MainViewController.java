@@ -21,6 +21,11 @@ public class MainViewController {
     }
     
     @FXML
+    private void goWarehouseMainView() throws IOException{
+        main.showWarehouseMainView();
+    }
+    
+    @FXML
     private void goListProduct() throws IOException {
         main.showListProduct();
     }
@@ -44,4 +49,5 @@ public class MainViewController {
     private void goListRoles() throws IOException {
         main.showListRoles();
     }
+
 }
