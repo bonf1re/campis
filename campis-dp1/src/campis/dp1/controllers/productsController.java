@@ -69,13 +69,13 @@ public class productsController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        itemCol.setCellValueFactory(new PropertyValueFactory<Product,String>("id_poduct"));
+        /*itemCol.setCellValueFactory(new PropertyValueFactory<Product,String>("id_poduct"));
         nomCol.setCellValueFactory(new PropertyValueFactory<>("name"));
         tipoCol.setCellValueFactory(new PropertyValueFactory<>("id_product_type"));
         pesoCol.setCellValueFactory(new PropertyValueFactory<>("weight"));
         medidaCol.setCellValueFactory(new PropertyValueFactory<>("id_unit_of_measure"));
         pStockCol.setCellValueFactory(new PropertyValueFactory<>("p_stock"));
-        cStockCol.setCellValueFactory(new PropertyValueFactory<>("c_stock"));
+        cStockCol.setCellValueFactory(new PropertyValueFactory<>("c_stock"));*/
     }
     
     public static int searchCodMeasure(String measure) throws SQLException, ClassNotFoundException {
