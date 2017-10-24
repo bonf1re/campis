@@ -59,9 +59,17 @@ public class MainViewController {
         main.showListUser();
     }
     
+    
+    
+    @FXML
+    private void goListVehicle() throws IOException {
+        main.showListVehicle();
+    }
+    
     @FXML
     private void goListRoles() throws IOException {
         main.showListRoles();
+
     }
 
 
