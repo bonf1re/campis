@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1;
+package campis.dp1.model;
 
 /**
  *
  * @author Gina Bustamante
  */
-public class rack {
+public class Rack {
     
     private int id;
     private int num_levels;

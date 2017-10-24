@@ -39,9 +39,7 @@ public class MainViewController {
     private void goEditProduct() throws IOException {
         main.showEditProduct();
     }
-
-    
-    @FXML
+        @FXML
     private void goListRacks() throws IOException {
         main.showListRacks();
     }
