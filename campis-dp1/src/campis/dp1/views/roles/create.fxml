@@ -16,7 +16,7 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <Button layoutX="513.0" layoutY="643.0" mnemonicParsing="false" onAction="#goListRoles" prefHeight="39.0" prefWidth="116.0" text="Guardar">
+            <Button layoutX="513.0" layoutY="643.0" mnemonicParsing="false" onAction="#insertRole" prefHeight="39.0" prefWidth="116.0" text="Guardar">
                <font>
                   <Font size="16.0" />
                </font></Button>
@@ -29,7 +29,7 @@
                   <Font size="30.0" />
                </font>
             </Label>
-            <JFXTextField layoutX="571.0" layoutY="133.0" prefHeight="21.0" prefWidth="399.0">
+            <JFXTextField fx:id="description" layoutX="571.0" layoutY="133.0" prefHeight="21.0" prefWidth="399.0">
                <font>
                   <Font size="16.0" />
                </font>
