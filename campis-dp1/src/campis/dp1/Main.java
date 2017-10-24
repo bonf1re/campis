@@ -117,6 +117,15 @@ public class Main extends Application {
         BorderPane editProd = loader.load();
         mainLayout.setCenter(editProd);
     }
+    
+    
+            
+     public static void showListVehicle() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/vehicles/listVehicle.fxml"));
+        BorderPane listVehicle = loader.load();
+        mainLayout.setCenter(listVehicle);
+    }
 
     /** 
      * @param args the command line arguments

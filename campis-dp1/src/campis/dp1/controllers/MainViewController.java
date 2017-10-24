@@ -44,5 +44,12 @@ public class MainViewController {
     private void goListUser() throws IOException {
         main.showListUser();
     }
+    
+    
+    
+    @FXML
+    private void goListVehicle() throws IOException {
+        main.showListVehicle();
+    }
 
 }
