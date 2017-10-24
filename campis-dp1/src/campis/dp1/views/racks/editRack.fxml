@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 
 <BorderPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="campis.dp1.controllers.MainViewController">
+           fx:controller="campis.dp1.controllers.RacksController">
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
