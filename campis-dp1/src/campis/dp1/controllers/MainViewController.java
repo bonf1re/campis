@@ -40,6 +40,22 @@ public class MainViewController {
         main.showEditProduct();
     }
 
+    
+    @FXML
+    private void goListRacks() throws IOException {
+        main.showListRacks();
+    }
+    
+    @FXML
+    private void goNewRack() throws IOException {
+        main.showNewRack();
+    }
+    
+    @FXML
+    private void goEditRack() throws IOException {
+        main.showEditRack();
+    }
+    
     @FXML
     private void goListUser() throws IOException {
         main.showListUser();
@@ -57,5 +73,6 @@ public class MainViewController {
         main.showListRoles();
 
     }
+
 
 }

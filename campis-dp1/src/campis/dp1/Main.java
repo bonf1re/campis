@@ -119,6 +119,29 @@ public class Main extends Application {
     }
     
 
+    public static void showListRacks() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/racks/listRacks.fxml"));
+        BorderPane listRacks = loader.load();
+        mainLayout.setCenter(listRacks);
+    }
+    
+    public static void showNewRack() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/racks/newRack.fxml"));
+        BorderPane newRack = loader.load();
+        mainLayout.setCenter(newRack);
+    }
+    
+    public static void showEditRack() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/racks/editRack.fxml"));
+        BorderPane editRack = loader.load();
+        mainLayout.setCenter(editRack);
+    }
+
+
+
             
      public static void showListVehicle() throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -126,6 +149,7 @@ public class Main extends Application {
         BorderPane listVehicle = loader.load();
         mainLayout.setCenter(listVehicle);
      }
+
     public static void showListRoles() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/roles/list.fxml"));
