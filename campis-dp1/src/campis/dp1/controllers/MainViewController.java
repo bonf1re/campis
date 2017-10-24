@@ -51,5 +51,11 @@ public class MainViewController {
     private void goListVehicle() throws IOException {
         main.showListVehicle();
     }
+    
+    @FXML
+    private void goListRoles() throws IOException {
+        main.showListRoles();
+
+    }
 
 }

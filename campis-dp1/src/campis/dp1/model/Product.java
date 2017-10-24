@@ -1,7 +1,18 @@
-package campis.dp1;
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package campis.dp1.model;
 
-public class products {
-    
+import javafx.beans.property.StringProperty;
+
+/**
+ *
+ * @author Eddy
+ */
+public class Product {
+    String codProd;
     String nombre;
     String descripcion;
     int phy_stock;
@@ -9,6 +20,16 @@ public class products {
     float peso;
     String marca;
     float precio_base;
+    int id_medida;
+    String id_type;
+
+    public String getCodProd() {
+        return codProd;
+    }
+
+    public void setCodProd(String codProd) {
+        this.codProd = codProd;
+    }
 
     public String getNombre() {
         return nombre;
@@ -66,8 +87,36 @@ public class products {
         this.precio_base = precio_base;
     }
 
-    public products(String nombre, String descripcion, int phy_stock, int comm_stock,
+    public int getId_medida() {
+        return id_medida;
+    }
+
+    public void setId_medida(int id_medida) {
+        this.id_medida = id_medida;
+    }
+
+    public String getId_type() {
+        return id_type;
+    }
+
+    public void setId_type(String id_type) {
+        this.id_type = id_type;
+    }
+    
+    public Product(){
+        this.codProd = null;
+        this.nombre = null;
+        this.descripcion = null;
+        this.phy_stock = 0;
+        this.comm_stock = 0;
+        this.peso = 0;
+        this.marca = null;
+        this.precio_base = 0;
+    }
+    
+    public Product(String codProd, String nombre, String descripcion, int phy_stock, int comm_stock,
                     float peso, String marca, float precio_base) {
+        this.codProd = codProd;
         this.nombre = nombre;
         this.descripcion = descripcion;
         this.phy_stock = phy_stock;
