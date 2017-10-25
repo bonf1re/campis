@@ -37,7 +37,25 @@ public class Main extends Application {
         showMainView();
     }
 
-    private void showMainView() throws IOException {    
+    private void showMainView() throws IOException {
+        
+//        /* Text Area */
+//        Warehouse wh_test = new Warehouse("test_wh", 3, 3, true);
+//        
+//        Configuration configuration = new Configuration();
+//        configuration.configure("hibernate.cfg.xml");
+//        SessionFactory sessionFactory = configuration.buildSessionFactory();
+//        Session session = sessionFactory.openSession();
+//        
+//        session.beginTransaction();
+//        session.save(wh_test);
+//        session.getTransaction().commit();
+//        
+//        sessionFactory.close();
+//        /* End Text Area */
+        
+        
+        
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/MainView.fxml"));
         mainLayout = loader.load();
