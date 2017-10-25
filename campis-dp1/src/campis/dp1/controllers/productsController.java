@@ -5,10 +5,17 @@
  */
 package campis.dp1.controllers;
 
+import campis.dp1.models.WarehouseDAO;
+import java.io.IOException;
+import java.sql.SQLException;
+import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
+
 /**
  *
  * @author Eddy
  */
 public class productsController {
+    
     
 }

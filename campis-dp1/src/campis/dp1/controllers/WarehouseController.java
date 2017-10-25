@@ -6,13 +6,21 @@
 package campis.dp1.controllers;
 
 import campis.dp1.Main;
+import campis.dp1.models.WarehouseDAO;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
+import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Int;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.ResourceBundle;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.ComboBox;
+import javafx.scene.control.TextField;
 import javafx.scene.paint.Color;
 
 /**
@@ -20,8 +28,21 @@ import javafx.scene.paint.Color;
  *
  * @author sergio
  */
-public class Warehouse implements Initializable {
+public class WarehouseController implements Initializable {
     private Main main;
+    /* CreateView fields   */
+    @FXML
+    TextField create_name_tf;
+    @FXML
+    TextField create_length_tf;
+    @FXML
+    TextField create_width_tf;
+    @FXML
+    ComboBox create_status_cb;
+    
+    
+    /* VisualizeView fields */
+    @FXML
     private Canvas warehouseCanvas;
     /**
      * Initializes the controller class.
@@ -61,6 +82,19 @@ public class Warehouse implements Initializable {
         gc.fillOval(50, 100, 200, 200);
         gc.setFill(Color.RED);
         gc.fillRect(300, 100, 200, 200);
+    }
+    
+    @FXML
+    private void insertWarehouse(ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException{
+        try{
+            WarehouseDAO.insertWarehouse(create_name_tf.getText(),
+                                        Integer.parseInt(create_length_tf.getText()),
+                                        Integer.parseInt(create_width_tf.getText()),
+                                        true);
+            main.showWarehouseMainView();
+        }catch(Exception e){
+            throw e;
+        }
     }
     
 }
