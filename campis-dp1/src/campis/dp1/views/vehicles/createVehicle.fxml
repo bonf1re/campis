@@ -9,8 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.views.vehicles.CreateVehicleController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.CreateVehicleController">
    <center>
       <AnchorPane prefHeight="800.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
          <children>
@@ -39,13 +38,13 @@
                   <Font size="15.0" />
                </font>
             </Label>
-            <JFXTextField layoutX="673.0" layoutY="207.0" />
-            <JFXTextField layoutX="673.0" layoutY="307.0" />
-            <RadioButton layoutX="682.0" layoutY="411.0" mnemonicParsing="false" text="Sí" />
-            <RadioButton layoutX="778.0" layoutY="411.0" mnemonicParsing="false" text="No" />
-            <JFXComboBox layoutX="672.0" layoutY="507.0" prefHeight="26.0" prefWidth="157.0" />
-            <Button layoutX="472.0" layoutY="668.0" mnemonicParsing="false" text="Guardar" />
-            <Button layoutX="642.0" layoutY="668.0" mnemonicParsing="false" text="Cancelar" />
+            <JFXTextField fx:id="txtFieldMxWeight" layoutX="673.0" layoutY="207.0" />
+            <JFXTextField fx:id="txtFieldMxSpeed" layoutX="673.0" layoutY="307.0" />
+            <RadioButton fx:id="rdButtonY" layoutX="682.0" layoutY="411.0" mnemonicParsing="false" selected="true" text="Sí" />
+            <RadioButton fx:id="rdButtonN" disable="true" layoutX="778.0" layoutY="411.0" mnemonicParsing="false" text="No" />
+            <JFXComboBox fx:id="cmBoxWarhs" layoutX="672.0" layoutY="507.0" prefHeight="26.0" prefWidth="157.0" />
+            <Button fx:id="btnSave" layoutX="472.0" layoutY="668.0" mnemonicParsing="false" onAction="#insertVehicle" text="Guardar" />
+            <Button fx:id="btnCancel" layoutX="642.0" layoutY="668.0" mnemonicParsing="false" onAction="#goListVehicle" text="Cancelar" />
          </children>
       </AnchorPane>
    </center>
