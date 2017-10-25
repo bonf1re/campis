@@ -5,6 +5,7 @@
  */
 package campis.dp1;
 
+import campis.dp1.models.Warehouse;
 import java.io.IOException;
 import javafx.application.Application;
 import javafx.fxml.FXML;
@@ -16,6 +17,11 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+
+
 /**
  *
  * @author Marco
@@ -31,7 +37,7 @@ public class Main extends Application {
         showMainView();
     }
 
-    private void showMainView() throws IOException {
+    private void showMainView() throws IOException {    
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/MainView.fxml"));
         mainLayout = loader.load();
