@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXTextField?>
 <?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
@@ -10,29 +11,20 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.MainViewController">
-   <top>
-      <Label prefHeight="43.0" prefWidth="524.0" text="Lista de Productos">
-         <font>
-            <Font size="18.0" />
-         </font>
-         <BorderPane.margin>
-            <Insets left="20.0" />
-         </BorderPane.margin>
-      </Label>
-   </top>
+<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.productsController">
    <opaqueInsets>
       <Insets />
    </opaqueInsets>
    <center>
-      <TableView prefHeight="287.0" prefWidth="535.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tablaProd" prefHeight="473.0" prefWidth="1203.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="75.0" text="Item" />
-          <TableColumn prefWidth="75.0" text="Nombre" />
-            <TableColumn prefWidth="75.0" text="Tipo" />
-            <TableColumn prefWidth="75.0" text="Peso" />
-            <TableColumn prefWidth="75.0" text="Stock Físico" />
-            <TableColumn prefWidth="75.0" text="Stock Lógico" />
+          <TableColumn fx:id="itemCol" prefWidth="75.0" text="Item" />
+          <TableColumn fx:id="nomCol" prefWidth="75.0" text="Nombre" />
+            <TableColumn fx:id="tipoCol" prefWidth="75.0" text="Tipo" />
+            <TableColumn fx:id="pesoCol" prefWidth="75.0" text="Peso" />
+            <TableColumn fx:id="medidaCol" prefWidth="75.0" text="Unidad de Medida" />
+            <TableColumn fx:id="pStockCol" prefWidth="75.0" text="Stock Físico" />
+            <TableColumn fx:id="cStockCol" prefWidth="75.0" text="Stock Lógico" />
             <TableColumn prefWidth="75.0" text="Acciones" />
         </columns>
          <columnResizePolicy>
@@ -44,7 +36,7 @@
       </TableView>
    </center>
    <bottom>
-      <HBox alignment="CENTER" prefHeight="40.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+      <HBox alignment="TOP_CENTER" prefHeight="95.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
          <children>
             <Button mnemonicParsing="false" text="Aceptar" />
          </children>
@@ -54,9 +46,9 @@
       </HBox>
    </bottom>
    <right>
-      <HBox prefHeight="317.0" prefWidth="39.0" BorderPane.alignment="CENTER">
+      <HBox prefHeight="717.0" prefWidth="47.0" BorderPane.alignment="TOP_LEFT">
          <children>
-            <Button mnemonicParsing="false" onAction="#goCreateProduct" prefHeight="20.0" prefWidth="26.0">
+            <Button contentDisplay="CENTER" mnemonicParsing="false" onAction="#goCreateProduct" prefHeight="20.0" prefWidth="26.0">
                <graphic>
                   <FontAwesomeIconView glyphName="PLUS_CIRCLE" size="18.0" wrappingWidth="16.428571701049805" />
                </graphic>
@@ -64,4 +56,39 @@
          </children>
       </HBox>
    </right>
+   <top>
+      <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label text="Lista de Productos">
+               <font>
+                  <Font size="18.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="20.0" top="20.0" />
+               </HBox.margin>
+            </Label>
+            <Label text="Código :">
+               <font>
+                  <Font size="13.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" top="70.0" />
+               </HBox.margin>
+            </Label>
+            <JFXTextField>
+               <HBox.margin>
+                  <Insets left="30.0" top="60.0" />
+               </HBox.margin>
+            </JFXTextField>
+            <Button mnemonicParsing="false" text="Buscar">
+               <HBox.margin>
+                  <Insets left="50.0" top="60.0" />
+               </HBox.margin>
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Button>
+         </children>
+      </HBox>
+   </top>
 </BorderPane>
