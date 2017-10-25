@@ -56,15 +56,38 @@ public class MainViewController {
     private void goEditProduct() throws IOException {
         main.showEditProduct();
     }
-
+        @FXML
+    private void goListRacks() throws IOException {
+        main.showListRacks();
+    }
+    
+    @FXML
+    private void goNewRack() throws IOException {
+        main.showNewRack();
+    }
+    
+    @FXML
+    private void goEditRack() throws IOException {
+        main.showEditRack();
+    }
+    
     @FXML
     private void goListUser() throws IOException {
         main.showListUser();
     }
     
+    
+    
+    @FXML
+    private void goListVehicle() throws IOException {
+        main.showListVehicle();
+    }
+    
     @FXML
     private void goListRoles() throws IOException {
         main.showListRoles();
+
     }
+
 
 }
