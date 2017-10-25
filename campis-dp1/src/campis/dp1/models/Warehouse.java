@@ -3,40 +3,60 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1;
+package campis.dp1.models;
 
 /**
  *
  * @author sergio
  */
-public class warehouse {
-    String name;
-    float length;
-    float width;
-    boolean status;
+public class Warehouse {
+
     
-    public warehouse(String name, float length, float width, boolean status) {
+    int id;
+    String name;
+    int length;
+    int width;
+    boolean status;
+
+    public Warehouse(int id, String name, int length, int width, boolean status) {
+        this.id = id;
         this.name = name;
         this.length = length;
         this.width = width;
         this.status = status;
     }
+    
+    public Warehouse(){
+        super();
+    }
 
-    public float getLength() {
+    
+    
+    public int getId() {
+        return id;
+    }
+
+    public int getLength() {
         return length;
     }
 
-    public void setLength(float length) {
+    public void setLength(int length) {
         this.length = length;
     }
 
-    public float getWidth() {
+    public int getWidth() {
         return width;
     }
 
-    public void setWidth(float width) {
+    public void setWidth(int width) {
         this.width = width;
     }
+
+    
+
+    
+
+    
     
 
     public String getName() {
