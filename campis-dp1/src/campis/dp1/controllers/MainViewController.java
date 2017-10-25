@@ -10,6 +10,23 @@ import java.io.IOException;
  */
 public class MainViewController {
     private Main main;
+    /*@FXML
+    private TableView<Product> tablaProd;
+    @FXML
+    private TableColumn<Product, String> itemCol;
+    @FXML
+    private TableColumn<Product, String> nomCol;
+    @FXML
+    private TableColumn<Product, String> tipoCol;
+    @FXML
+    private TableColumn<Product, Float> pesoCol;
+    @FXML
+    private TableColumn<Product, String> medidaCol;
+    @FXML
+    private TableColumn<Product, Integer> pStockCol;
+    @FXML
+    private TableColumn<Product, Integer> cStockCol;*/
+    
     @FXML
     private void goSecurity() throws IOException {
         main.showSecuritySidebar();

@@ -1,10 +1,10 @@
 package campis.dp1.controllers;
 
 import campis.dp1.Main;
-import campis.dp1.model.Product;
-import campis.dp1.model.ProductDAO;
-import campis.dp1.model.ProductType;
-import campis.dp1.model.UnitOfMeasure;
+import campis.dp1.models.Product;
+import campis.dp1.models.ProductDAO;
+import campis.dp1.models.ProductType;
+import campis.dp1.models.UnitOfMeasure;
 import campis.dp1.util.DBUtil;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
@@ -12,43 +12,36 @@ import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.cell.PropertyValueFactory;
 
 public class productsController implements Initializable {
     private Main main;
     private ObservableList<Product> productos;
-    private ActionEvent actionEvent;
+    private DBUtil dc;
     
     @FXML
-    private void goListProduct() throws IOException, SQLException, ClassNotFoundException {
-        //fillTableProd(actionEvent);
+    private void goListProduct() throws IOException{
         main.showListProduct();
     }
     
-    @FXML
     private JFXTextField nameField;
-    @FXML
     private JFXTextField weightField;
-    @FXML
     private JFXComboBox measureField;
-    @FXML
     private JFXTextField trademarkField;
-    @FXML
     private JFXTextField priceField;
-    @FXML
     private JFXComboBox typeField;
-    @FXML
-    private JFXDatePicker expDateField;
-    @FXML
     private JFXTextArea descripField;
     @FXML
     private TableView<Product> tablaProd;
@@ -69,13 +62,33 @@ public class productsController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        /*itemCol.setCellValueFactory(new PropertyValueFactory<Product,String>("id_poduct"));
-        nomCol.setCellValueFactory(new PropertyValueFactory<>("name"));
-        tipoCol.setCellValueFactory(new PropertyValueFactory<>("id_product_type"));
-        pesoCol.setCellValueFactory(new PropertyValueFactory<>("weight"));
-        medidaCol.setCellValueFactory(new PropertyValueFactory<>("id_unit_of_measure"));
-        pStockCol.setCellValueFactory(new PropertyValueFactory<>("p_stock"));
-        cStockCol.setCellValueFactory(new PropertyValueFactory<>("c_stock"));*/
+        try {
+            dc = new DBUtil();
+            itemCol.setCellValueFactory(cellData -> cellData.getValue().codProdProperty());
+            nomCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+            tipoCol.setCellValueFactory(cellData -> cellData.getValue().typeProperty());
+            pesoCol.setCellValueFactory(cellData -> cellData.getValue().pesoProperty().asObject());
+            medidaCol.setCellValueFactory(cellData -> cellData.getValue().medidaProperty().asObject());
+            pStockCol.setCellValueFactory(cellData -> cellData.getValue().pStockProperty().asObject());
+            cStockCol.setCellValueFactory(cellData -> cellData.getValue().cStockProperty().asObject());
+            /**/
+            cargarData();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(productsController.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }
+    
+    private void cargarData() throws SQLException, ClassNotFoundException {
+        try{
+            productos = FXCollections.observableArrayList();
+            productos = ProductDAO.getProducts();
+        }catch(SQLException e){
+            System.out.println("Lista de productos no encontrado, sentencia Select fallo: " + e);
+            throw e;
+        }
+        
+        tablaProd.setItems(null);
+        tablaProd.setItems(productos);
     }
     
     public static int searchCodMeasure(String measure) throws SQLException, ClassNotFoundException {
@@ -128,27 +141,8 @@ public class productsController implements Initializable {
         }
     }
     
-    public ObservableList<Product> cargarGrilla() throws SQLException, ClassNotFoundException{
-        ObservableList<Product> listaProd = ProductDAO.getProducts();
-        for(int i = 0; i<listaProd.size(); i++){
-           Product prod = new Product();
-           prod.setCodProd(listaProd.get(i).getCodProd());
-           prod.setNombre(listaProd.get(i).getNombre());
-           prod.setDescripcion(listaProd.get(i).getDescripcion());
-           prod.setPhy_stock(listaProd.get(i).getPhy_stock());
-           prod.setComm_stock(listaProd.get(i).getComm_stock());
-           prod.setPeso(listaProd.get(i).getPeso());
-           prod.setMarca(listaProd.get(i).getMarca());
-           prod.setPrecio_base(listaProd.get(i).getPrecio_base());
-           prod.setId_medida(listaProd.get(i).getId_medida());
-           prod.setId_type(listaProd.get(i).getId_type());
-        }
-        return listaProd;
-    }
-    
     @FXML
-    private void fillTableProd (ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
-        ObservableList<Product> prod = cargarGrilla();
-        tablaProd.setItems(prod);
+    private void goCreateProduct(ActionEvent event) throws IOException{
+        main.showCreateProduct();
     }
 }
