@@ -100,7 +100,7 @@ public class VehicleDAO {
                          "INSERT INTO campis.vehicle " +
                          "(max_weight, speed, active, id_warehouse) " +
                          "VALUES " +
-                         "( "+maxWeight+","+maxSpeed+","+active+","+idWarehouse+" );";
+                         "( "+maxWeight+","+maxSpeed+",true , 1 );";
  
          
          try {

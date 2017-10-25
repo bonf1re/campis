@@ -88,6 +88,11 @@ public class MainViewController {
         main.showListRoles();
 
     }
+    
+    @FXML
+    private void goCreateVehicle() throws IOException {
+        main.showCreateVehicle();
+    }
 
 
 }

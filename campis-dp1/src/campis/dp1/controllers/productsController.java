@@ -1,3 +1,4 @@
+
 package campis.dp1.controllers;
 
 import campis.dp1.Main;
@@ -146,3 +147,4 @@ public class productsController implements Initializable {
         main.showCreateProduct();
     }
 }
+
