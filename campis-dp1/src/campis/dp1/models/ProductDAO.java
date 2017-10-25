@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1.model;
+package campis.dp1.models;
 
 import campis.dp1.util.DBUtil;
 import java.sql.ResultSet;
@@ -32,15 +32,9 @@ public class ProductDAO {
     private static Product getProductFromResultSet(ResultSet rs) throws SQLException {
         Product prod = null;
         if (rs.next()) {
-            prod = new Product();
-            prod.setCodProd(rs.getString("product_id"));
-            prod.setNombre(rs.getString("name"));
-            prod.setDescripcion(rs.getString("description"));
-            prod.setPhy_stock(rs.getInt("p_stock"));
-            prod.setComm_stock(rs.getInt("c_stock"));
-            prod.setPeso(rs.getFloat("weight"));
-            prod.setMarca(rs.getString("trademark"));
-            prod.setPrecio_base(rs.getFloat("base_price"));
+            prod = new Product(rs.getString(1), rs.getString(2), rs.getString(3), 
+                         rs.getInt(4), rs.getInt(5), rs.getFloat(6), rs.getString(7), 
+                         rs.getFloat(8), rs.getInt(9), rs.getString(10));
         }
         return prod;
     }
@@ -62,19 +56,9 @@ public class ProductDAO {
     private static ObservableList<Product> getProdList(ResultSet rs) throws SQLException, ClassNotFoundException {
         ObservableList<Product> prodList = FXCollections.observableArrayList();
         while (rs.next()) {
-            Product prod = new Product();
-            prod.setCodProd(rs.getString(1));
-            prod.setNombre(rs.getString(2));
-            prod.setDescripcion(rs.getString(3));
-            prod.setPhy_stock(rs.getInt(4));
-            prod.setComm_stock(rs.getInt(5));
-            prod.setPeso(rs.getFloat(6));
-            prod.setMarca(rs.getString(7));
-            prod.setPrecio_base(rs.getFloat(8));
-            prod.setId_medida(rs.getInt(9));
-            prod.setId_type(rs.getString(10));
-
-            prodList.add(prod);
+            prodList.add(new Product(rs.getString(1), rs.getString(2), rs.getString(3), 
+                         rs.getInt(4), rs.getInt(5), rs.getFloat(6), rs.getString(7), 
+                         rs.getFloat(8), rs.getInt(9), rs.getString(10)));
         }
         return prodList;
     }

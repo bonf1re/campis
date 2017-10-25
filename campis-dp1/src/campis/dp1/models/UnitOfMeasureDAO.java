@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1.model;
+package campis.dp1.models;
 
 import campis.dp1.util.DBUtil;
 import java.sql.ResultSet;
