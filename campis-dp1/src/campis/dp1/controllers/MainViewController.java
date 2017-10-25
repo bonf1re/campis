@@ -10,6 +10,23 @@ import java.io.IOException;
  */
 public class MainViewController {
     private Main main;
+    /*@FXML
+    private TableView<Product> tablaProd;
+    @FXML
+    private TableColumn<Product, String> itemCol;
+    @FXML
+    private TableColumn<Product, String> nomCol;
+    @FXML
+    private TableColumn<Product, String> tipoCol;
+    @FXML
+    private TableColumn<Product, Float> pesoCol;
+    @FXML
+    private TableColumn<Product, String> medidaCol;
+    @FXML
+    private TableColumn<Product, Integer> pStockCol;
+    @FXML
+    private TableColumn<Product, Integer> cStockCol;*/
+    
     @FXML
     private void goSecurity() throws IOException {
         main.showSecuritySidebar();
@@ -39,7 +56,21 @@ public class MainViewController {
     private void goEditProduct() throws IOException {
         main.showEditProduct();
     }
-
+        @FXML
+    private void goListRacks() throws IOException {
+        main.showListRacks();
+    }
+    
+    @FXML
+    private void goNewRack() throws IOException {
+        main.showNewRack();
+    }
+    
+    @FXML
+    private void goEditRack() throws IOException {
+        main.showEditRack();
+    }
+    
     @FXML
     private void goListUser() throws IOException {
         main.showListUser();
@@ -62,5 +93,6 @@ public class MainViewController {
     private void goCreateVehicle() throws IOException {
         main.showCreateVehicle();
     }
+
 
 }
