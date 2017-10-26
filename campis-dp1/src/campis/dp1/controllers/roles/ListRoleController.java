@@ -7,13 +7,16 @@ package campis.dp1.controllers.roles;
 
 import campis.dp1.Main;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 
 /**
  *
  * @author Gina Bustamante
  */
-public class ListRoleController {
+public class ListRoleController implements Initializable{
     private Main main;
     
     @FXML
@@ -24,5 +27,13 @@ public class ListRoleController {
     @FXML
     private void goEditRole() throws IOException {
         main.showEditRole();
+    } 
+    
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
     } 
 }

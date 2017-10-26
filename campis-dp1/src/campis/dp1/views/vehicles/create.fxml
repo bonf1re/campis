@@ -9,43 +9,42 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.views.vehicles.CreateVehicleController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.vehicles.CreateVehicleController">
    <center>
-      <AnchorPane prefHeight="800.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="500.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="203.0" layoutY="73.0" prefHeight="36.0" prefWidth="325.0" text="Crear nuevo vehículo">
+            <Label layoutX="45.0" layoutY="35.0" prefHeight="36.0" prefWidth="325.0" text="Crear vehículo">
                <font>
-                  <Font size="30.0" />
+                  <Font size="28.0" />
                </font>
             </Label>
-            <Label layoutX="390.0" layoutY="210.0" text="Peso máximo:">
-               <font>
-                  <Font size="15.0" />
-               </font>
-            </Label>
-            <Label layoutX="390.0" layoutY="510.0" text="Almacén:">
+            <Label layoutX="79.0" layoutY="145.0" text="Peso máximo:">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="390.0" layoutY="410.0" text="Activo:">
+            <Label layoutX="552.0" layoutY="145.0" text="Almacén:">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <Label layoutX="390.0" layoutY="310.0" text="Velocidad máxima:">
+            <Label layoutX="79.0" layoutY="323.0" text="Activo:">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <JFXTextField layoutX="673.0" layoutY="207.0" />
-            <JFXTextField layoutX="673.0" layoutY="307.0" />
-            <RadioButton layoutX="682.0" layoutY="411.0" mnemonicParsing="false" text="Sí" />
-            <RadioButton layoutX="778.0" layoutY="411.0" mnemonicParsing="false" text="No" />
-            <JFXComboBox layoutX="672.0" layoutY="507.0" prefHeight="26.0" prefWidth="157.0" />
-            <Button layoutX="472.0" layoutY="668.0" mnemonicParsing="false" text="Guardar" />
-            <Button layoutX="642.0" layoutY="668.0" mnemonicParsing="false" text="Cancelar" />
+            <Label layoutX="73.0" layoutY="240.0" text="Velocidad máxima:">
+               <font>
+                  <Font size="15.0" />
+               </font>
+            </Label>
+            <JFXTextField layoutX="279.0" layoutY="134.0" />
+            <JFXTextField layoutX="276.0" layoutY="225.0" />
+            <RadioButton layoutX="279.0" layoutY="323.0" mnemonicParsing="false" text="Sí" />
+            <RadioButton layoutX="375.0" layoutY="323.0" mnemonicParsing="false" text="No" />
+            <JFXComboBox layoutX="662.0" layoutY="134.0" prefHeight="26.0" prefWidth="157.0" />
+            <Button layoutX="360.0" layoutY="416.0" mnemonicParsing="false" onAction="#insertVehicle" text="Guardar" />
+            <Button layoutX="530.0" layoutY="416.0" mnemonicParsing="false" onAction="#goListVehicles" text="Cancelar" />
          </children>
       </AnchorPane>
    </center>

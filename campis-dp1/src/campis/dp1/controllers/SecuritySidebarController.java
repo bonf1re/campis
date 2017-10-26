@@ -24,6 +24,5 @@ public class SecuritySidebarController {
     @FXML
     private void goListRoles() throws IOException {
         main.showListRoles();
-
     }
 }

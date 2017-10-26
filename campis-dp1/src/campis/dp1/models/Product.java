@@ -5,160 +5,127 @@
  */
 package campis.dp1.models;
 
-import javafx.beans.property.FloatProperty;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleFloatProperty;
-import javafx.beans.property.SimpleIntegerProperty;
-import javafx.beans.property.StringProperty;
-import javafx.beans.property.SimpleStringProperty;
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 
 /**
  *
  * @author Eddy
  */
+@Entity
+@Table (name = "product")
 public class Product {
-    private final StringProperty codProd;
-    private final StringProperty nombre;
-    private final StringProperty descripcion;
-    private final IntegerProperty phy_stock;
-    private final IntegerProperty comm_stock;
-    private final FloatProperty peso;
-    private final StringProperty marca;
-    private final FloatProperty precio_base;
-    private final IntegerProperty id_medida;
-    private final StringProperty id_type;
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
+    Integer id_product;
+    String name;
+    String description;
+    Integer p_stock;
+    Integer c_stock;
+    Float weight;
+    String trademark;
+    Float base_price;
+    Integer id_unit_of_measure;
+    Integer id_product_type;
     
-    public Product(String codProd, String nombre, String descripcion, int phy_stock, int comm_stock,
-                    float peso, String marca, float precio_base, int medida, String type) {
-        this.codProd = new SimpleStringProperty(codProd);
-        this.nombre = new SimpleStringProperty(nombre);
-        this.descripcion = new SimpleStringProperty(descripcion);
-        this.phy_stock = new SimpleIntegerProperty(phy_stock);
-        this.comm_stock = new SimpleIntegerProperty(comm_stock);
-        this.peso = new SimpleFloatProperty(peso);
-        this.marca = new SimpleStringProperty(marca);
-        this.precio_base = new SimpleFloatProperty(precio_base);
-        this.id_medida = new SimpleIntegerProperty(medida);
-        this.id_type = new SimpleStringProperty(type);
+    public Product() {
+        super();
     }
     
-    public String getCodProd() {
-        return codProd.get();
+    public Product(String nombre, String descripcion, int phy_stock, int comm_stock,
+                    float peso, String marca, float precio_base, int medida, int type) {
+        this.name = nombre;
+        this.description = descripcion;
+        this.p_stock = phy_stock;
+        this.c_stock = comm_stock;
+        this.weight = peso;
+        this.trademark = marca;
+        this.base_price = precio_base;
+        this.id_unit_of_measure = medida;
+        this.id_product_type = type;
     }
-    
+
+    public Integer getId_product() {
+        return id_product;
+    }
+
+    public void setId_product(Integer id_product) {
+        this.id_product = id_product;
+    }
+
     public String getName() {
-        return nombre.get();
+        return name;
+    }
+
+    public void setName(String name) {
+        this.name = name;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public Integer getP_stock() {
+        return p_stock;
+    }
+
+    public void setP_stock(int p_stock) {
+        this.p_stock = p_stock;
+    }
+
+    public Integer getC_stock() {
+        return c_stock;
+    }
+
+    public void setC_stock(int c_stock) {
+        this.c_stock = c_stock;
+    }
+
+    public Float getWeight() {
+        return weight;
+    }
+
+    public void setWeight(float weight) {
+        this.weight = weight;
+    }
+
+    public String getTrademark() {
+        return trademark;
+    }
+
+    public void setTrademark(String trademark) {
+        this.trademark = trademark;
+    }
+
+    public Float getBase_price() {
+        return base_price;
+    }
+
+    public void setBase_price(float base_price) {
+        this.base_price = base_price;
+    }
+
+    public Integer getId_unit_of_measure() {
+        return id_unit_of_measure;
+    }
+
+    public void setId_unit_of_measure(int id_unit_of_measure) {
+        this.id_unit_of_measure = id_unit_of_measure;
+    }
+
+    public Integer getId_product_type() {
+        return id_product_type;
+    }
+
+    public void setId_product_type(Integer id_product_type) {
+        this.id_product_type = id_product_type;
     }
     
-    public String getDescrip() {
-        return descripcion.get();
-    }
-    
-    public int getPStock() {
-        return phy_stock.get();
-    }
-    
-    public int getCStock() {
-        return comm_stock.get();
-    }
-    
-    public float getPeso() {
-        return peso.get();
-    }
-    
-    public String getMarca() {
-        return marca.get();
-    }
-    
-    public float getPrecioB() {
-        return precio_base.get();
-    }
-    
-    public int getCodMed() {
-        return id_medida.get();
-    }
-    
-    public String getCodType() {
-        return id_type.get();
-    }
-    
-    public void setCodProd(String cod) {
-        codProd.set(cod);
-    }
-    
-    public void setName(String nomb) {
-        nombre.set(nomb);
-    }
-    
-    public void setDescrip(String descrip) {
-        descripcion.set(descrip);
-    }
-    
-    public void setPStock(int pstock) {
-        phy_stock.set(pstock);
-    }
-    
-    public void setCStock(int cstock) {
-        comm_stock.set(cstock);
-    }
-    
-    public void setPeso(float peso) {
-        this.peso.set(peso);
-    }
-    
-    public void setMarca(String marc) {
-        marca.set(marc);
-    }
-    
-    public void setPrecioB(float preciob) {
-        precio_base.set(preciob);
-    }
-    
-    public void setCodMed(int codMed) {
-        id_medida.set(codMed);
-    }
-    
-    public void setCodType(String codType) {
-        id_type.set(codType);
-    }
-    
-    public StringProperty codProdProperty() {
-        return codProd;
-    }
-    
-    public StringProperty nameProperty() {
-        return nombre;
-    }
-    
-    public StringProperty descripProperty() {
-        return descripcion;
-    }
-    
-    public IntegerProperty pStockProperty() {
-        return phy_stock;
-    }
-    
-    public IntegerProperty cStockProperty() {
-        return comm_stock;
-    }
-    
-    public FloatProperty pesoProperty() {
-        return peso;
-    }
-    
-    public StringProperty marcaProperty() {
-        return marca;
-    }
-    
-    public FloatProperty precioBProperty() {
-        return precio_base;
-    }
-    
-    public IntegerProperty medidaProperty() {
-        return id_medida;
-    }
-    
-    public StringProperty typeProperty() {
-        return id_type;
-    }
 }

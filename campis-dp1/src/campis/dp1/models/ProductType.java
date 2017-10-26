@@ -5,19 +5,29 @@
  */
 package campis.dp1.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  *
  * @author Eddy
  */
+@Entity
+@Table(name="product_type")
 public class ProductType {
-    String id_prodType;
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)   
+    Integer id_prodType;
     String descripcion;
 
-    public String getId_prodType() {
+    public int getId_prodType() {
         return id_prodType;
     }
 
-    public void setId_prodType(String id_prodType) {
+    public void setId_prodType(int id_prodType) {
         this.id_prodType = id_prodType;
     }
 
@@ -34,8 +44,12 @@ public class ProductType {
         this.descripcion = null;
     }
     
-    public ProductType(String id, String descrip){
+    public ProductType(int id, String descrip){
         this.id_prodType = id;
+        this.descripcion = descrip;
+    }
+    
+    public ProductType(String descrip){
         this.descripcion = descrip;
     }
 }

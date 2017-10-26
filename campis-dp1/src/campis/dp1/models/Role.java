@@ -10,29 +10,5 @@ package campis.dp1.models;
  * @author Marco
  */
 public class Role {
-    String description;
-    Integer role_id;
     
-    public String getDescription() {
-        return description;
-    }
-
-    public void setDescription(String description) {
-        this.description = description;
-    }
-    
-    public Integer getRoleId() {
-        return role_id;
-    }
-
-    public void setRoleId(Integer role_id) {
-        this.role_id = role_id;
-    }
-
-    public Role(String description) {
-        this.description = description;
-    }
-
-    public Role() {
-    }
 }

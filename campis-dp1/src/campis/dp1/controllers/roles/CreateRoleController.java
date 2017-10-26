@@ -7,13 +7,16 @@ package campis.dp1.controllers.roles;
 
 import campis.dp1.Main;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 
 /**
  *
  * @author Gina Bustamante
  */
-public class CreateRoleController {
+public class CreateRoleController implements Initializable{
     private Main main;
     
     @FXML
@@ -25,4 +28,12 @@ public class CreateRoleController {
     private void insertRole() throws IOException {
         //Todo
     }
+    
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+    } 
 }
