@@ -1,0 +1,62 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXPasswordField?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane prefHeight="800.0" prefWidth="1280.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1">
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="53.0" layoutY="47.0" text="Nuevo Usuario">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <Label layoutX="135.0" layoutY="168.0" text="Nombres">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <JFXTextField layoutX="325.0" layoutY="169.0" prefHeight="25.0" prefWidth="224.0" />
+            <JFXButton layoutX="305.0" layoutY="601.0" prefHeight="39.0" prefWidth="98.0" text="Guardar" />
+            <JFXButton layoutX="441.0" layoutY="601.0" prefHeight="39.0" prefWidth="98.0" text="Cancelar" />
+            <Label layoutX="138.0" layoutY="237.0" text="Apellidos">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <JFXTextField layoutX="328.0" layoutY="238.0" prefHeight="25.0" prefWidth="224.0" />
+            <Label layoutX="138.0" layoutY="303.0" text="Correo">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <JFXTextField layoutX="328.0" layoutY="304.0" prefHeight="25.0" prefWidth="224.0" />
+            <Label layoutX="138.0" layoutY="360.0" text="Usuario">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <JFXTextField layoutX="328.0" layoutY="361.0" prefHeight="25.0" prefWidth="224.0" />
+            <Label layoutX="135.0" layoutY="485.0" text="Rol">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <JFXComboBox layoutX="328.0" layoutY="486.0" prefHeight="25.0" prefWidth="225.0" />
+            <Label layoutX="135.0" layoutY="425.0" text="Contraseña">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <JFXPasswordField layoutX="328.0" layoutY="426.0" prefHeight="25.0" prefWidth="227.0" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>
