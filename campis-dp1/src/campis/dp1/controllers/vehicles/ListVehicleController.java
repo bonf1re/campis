@@ -30,7 +30,7 @@ public class ListVehicleController implements Initializable {
     } 
     
     @FXML
-    private void goEditRole() throws IOException {
+    private void goEditVehicle() throws IOException {
         main.showEditVehicle();
     } 
     
