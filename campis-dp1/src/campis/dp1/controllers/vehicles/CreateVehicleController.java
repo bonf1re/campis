@@ -17,7 +17,7 @@ import javafx.fxml.Initializable;
  *
  * @author david
  */
-public class CreateVehicleController {
+public class CreateVehicleController implements Initializable {
     private Main main;
    
     @FXML
@@ -29,4 +29,12 @@ public class CreateVehicleController {
     private void insertVehicle() throws IOException {
         //Todo
     }
+    
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
+    } 
 }

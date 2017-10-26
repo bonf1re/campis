@@ -23,7 +23,7 @@ import javafx.scene.control.cell.PropertyValueFactory;
  *
  * @author david
  */
-public class ListVehicleController {
+public class ListVehicleController implements Initializable {
     private Main main;
     
     @FXML
@@ -34,6 +34,14 @@ public class ListVehicleController {
     @FXML
     private void goEditRole() throws IOException {
         main.showEditVehicle();
+    } 
+    
+    /**
+     * Initializes the controller class.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        // TODO
     } 
  
 }
