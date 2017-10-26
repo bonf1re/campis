@@ -122,21 +122,21 @@ public class Main extends Application {
 
     public static void showListRacks() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/racks/listRacks.fxml"));
+        loader.setLocation(Main.class.getResource("views/racks/list.fxml"));
         BorderPane listRacks = loader.load();
         mainLayout.setCenter(listRacks);
     }
     
     public static void showNewRack() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/racks/newRack.fxml"));
+        loader.setLocation(Main.class.getResource("views/racks/create.fxml"));
         BorderPane newRack = loader.load();
         mainLayout.setCenter(newRack);
     }
     
     public static void showEditRack() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/racks/editRack.fxml"));
+        loader.setLocation(Main.class.getResource("views/racks/edit.fxml"));
         BorderPane editRack = loader.load();
         mainLayout.setCenter(editRack);
     }
@@ -158,15 +158,22 @@ public class Main extends Application {
         mainLayout.setCenter(listProd);
     }
     
-    public static void showCreateRoles() throws IOException {
+    public static void showNewRole() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/roles/create.fxml"));
         BorderPane createProd = loader.load();
         mainLayout.setCenter(createProd);
 
     }
+    
+    public static void showEditRole() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/roles/edit.fxml"));
+        BorderPane createProd = loader.load();
+        mainLayout.setCenter(createProd);
+    }
 
-    /** 
+    /**  
      * @param args the command line arguments
      */
     public static void main(String[] args) {
