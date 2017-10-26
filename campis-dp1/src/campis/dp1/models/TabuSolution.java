@@ -47,7 +47,7 @@ public class TabuSolution
         this.count++;
     }
 
-    public void printOrder()
+    public String stringFormatOrder()
     {
         String order = "";
 
@@ -55,6 +55,11 @@ public class TabuSolution
             order = order + "[" + this.order.get(i).stringFormat() + "], ";
         }
 
-        out.println(order);
+        return order;
+    }
+
+    public void printOrder()
+    {
+        out.println(this.stringFormatOrder());
     }
 }
