@@ -11,8 +11,6 @@ import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
-import campis.dp1.model.Vehicle;
-import campis.dp1.model.VehicleDAO;
 import java.io.IOException;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
