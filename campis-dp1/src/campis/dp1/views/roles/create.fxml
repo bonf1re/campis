@@ -29,7 +29,7 @@
                   <Font size="30.0" />
                </font>
             </Label>
-            <JFXTextField fx:id="description" layoutX="230.0" layoutY="129.0" prefHeight="21.0" prefWidth="399.0">
+            <JFXTextField fx:id="descriptionField" layoutX="230.0" layoutY="129.0" prefHeight="21.0" prefWidth="399.0">
                <font>
                   <Font size="16.0" />
                </font>
