@@ -142,15 +142,6 @@ public class Main extends Application {
     }
 
 
-
-            
-     public static void showListVehicle() throws IOException {
-        FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/vehicles/listVehicle.fxml"));
-        BorderPane listVehicle = loader.load();
-        mainLayout.setCenter(listVehicle);
-     }
-
     public static void showListRoles() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/roles/list.fxml"));
@@ -172,6 +163,14 @@ public class Main extends Application {
         BorderPane createProd = loader.load();
         mainLayout.setCenter(createProd);
     }
+    
+                
+    public static void showListVehicle() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/vehicles/list.fxml"));
+        BorderPane listVehicle = loader.load();
+        mainLayout.setCenter(listVehicle);
+     }
 
     /**  
      * @param args the command line arguments
