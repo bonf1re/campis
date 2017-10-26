@@ -5,8 +5,11 @@
  */
 package campis.dp1.controllers.users;
 
+import campis.dp1.Main;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 /**
@@ -15,7 +18,7 @@ import javafx.fxml.Initializable;
  * @author joseamz
  */
 public class ListController implements Initializable {
-
+    private Main main;
     /**
      * Initializes the controller class.
      */
@@ -24,4 +27,8 @@ public class ListController implements Initializable {
         // TODO
     }    
     
+    @FXML
+    private void goCreateUser() throws IOException {
+        main.showCreateUser();
+    }
 }

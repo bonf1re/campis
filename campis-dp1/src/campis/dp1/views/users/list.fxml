@@ -29,7 +29,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button layoutX="1096.0" layoutY="314.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
+            <Button layoutX="1096.0" layoutY="314.0" mnemonicParsing="false" onAction="#goCreateUser" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
             <Button layoutX="1096.0" layoutY="394.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Editar" />
             <Button layoutX="1096.0" layoutY="476.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
          </children>

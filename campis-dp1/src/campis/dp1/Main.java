@@ -77,11 +77,17 @@ public class Main extends Application {
         BorderPane listProd = loader.load();
         mainLayout.setCenter(listProd);
     }
+    
+    public static void showCreateUser() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/users/create.fxml"));
+        BorderPane createProd = loader.load();
+        mainLayout.setCenter(createProd);
+    }
     /**
      * @param args the command line arguments
      */
     public static void main(String[] args) {
         launch(args);
     }
-    
 }
