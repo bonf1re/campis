@@ -192,6 +192,13 @@ public class Main extends Application {
         mainLayout.setCenter(newEntry);
      }
     
+    public static void showNewBatch() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/entries/createBatchEntry.fxml"));
+        BorderPane newEntry = loader.load();
+        mainLayout.setCenter(newEntry);
+     }
+    
     public static void showListEntries() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/entries/list.fxml"));

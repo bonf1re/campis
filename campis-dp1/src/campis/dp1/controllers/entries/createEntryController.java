@@ -26,6 +26,11 @@ public class createEntryController implements Initializable {
         main.showListEntries();
     }
     
+    @FXML
+    private void goNewBatch() throws IOException {
+        main.showNewBatch();
+    }
+    
     /**
      * Initializes the controller class.
      */

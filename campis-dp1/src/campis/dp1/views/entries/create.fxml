@@ -9,11 +9,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.entries.viewEntryController">
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.entries.createEntryController">
     <stylesheets>
         <URL value="@/campis/dp1/assets/css/listentries.css" />
     </stylesheets>
-   <top>
+   <right>
       <AnchorPane prefHeight="800.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
          <children>
             <Label layoutX="44.0" layoutY="29.0" text="Crear lista de lotes a ingresar">
@@ -33,7 +33,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button layoutX="856.0" layoutY="346.0" mnemonicParsing="false" onAction="#goListEntries" prefHeight="35.0" prefWidth="85.0" text="Cerrar" />
+            <Button layoutX="880.0" layoutY="318.0" mnemonicParsing="false" onAction="#goListEntries" prefHeight="27.0" prefWidth="73.0" text="Cerrar" />
             <Label layoutX="44.0" layoutY="88.0" text="Provenientes de almacenes:">
                <font>
                   <Font size="16.0" />
@@ -44,10 +44,10 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Button layoutX="856.0" layoutY="262.0" mnemonicParsing="false" onAction="#goListEntries" prefHeight="35.0" prefWidth="85.0" text="Ingresar" />
+            <Button layoutX="880.0" layoutY="267.0" mnemonicParsing="false" onAction="#goListEntries" prefHeight="27.0" prefWidth="73.0" text="Ingresar" />
             <Button layoutX="443.0" layoutY="254.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="&gt;" />
             <Button layoutX="443.0" layoutY="305.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="&lt;" />
-            <TableView layoutX="480.0" layoutY="116.0" prefHeight="360.0" prefWidth="384.0">
+            <TableView layoutX="484.0" layoutY="117.0" prefHeight="360.0" prefWidth="384.0">
                <columns>
                   <TableColumn prefWidth="128.0" text="ID Lote" />
                   <TableColumn prefWidth="217.0" text="Producto" />
@@ -59,7 +59,8 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
+            <Button layoutX="898.0" layoutY="104.0" mnemonicParsing="false" onAction="#goNewBatch" prefHeight="27.0" prefWidth="37.0" text="+" />
          </children>
       </AnchorPane>
-   </top>
+   </right>
 </BorderPane>
