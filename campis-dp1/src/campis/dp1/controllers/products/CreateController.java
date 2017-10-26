@@ -70,10 +70,10 @@ public class CreateController implements Initializable {
         session.beginTransaction();
         Criteria criteria = session.createCriteria(UnitOfMeasure.class);
         criteria.add(Restrictions.eq("description",measure));
-        Integer codMeasure = null;
+        Integer codMeasure;
         List rsMeasure = criteria.list();
         UnitOfMeasure result = (UnitOfMeasure)rsMeasure.get(0);
-        codMeasure = result.getId_measure();
+        codMeasure = result.getId_unit_of_measure();
         return codMeasure;
     }
     
@@ -85,7 +85,7 @@ public class CreateController implements Initializable {
         session.beginTransaction();
         Criteria criteria = session.createCriteria(ProductType.class);
         criteria.add(Restrictions.eq("description",type));
-        Integer codType = null;
+        Integer codType;
         List rsType = criteria.list();
         ProductType result = (ProductType) rsType.get(0);
         codType = result.getId_prodType();
