@@ -20,36 +20,37 @@ import javax.persistence.Table;
 public class ProductType {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)   
-    Integer id_prodType;
-    String descripcion;
+    Integer id_product_type;
+    String description;
 
     public int getId_prodType() {
-        return id_prodType;
+        return id_product_type;
     }
 
     public void setId_prodType(int id_prodType) {
-        this.id_prodType = id_prodType;
+        this.id_product_type = id_prodType;
     }
 
-    public String getDescripcion() {
-        return descripcion;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescripcion(String descripcion) {
-        this.descripcion = descripcion;
+    public void setDescription(String description) {
+        this.description = description;
     }
     
     public ProductType() {
-        this.id_prodType = null;
-        this.descripcion = null;
+        this.id_product_type = null;
+        this.description = null;
     }
     
     public ProductType(int id, String descrip){
-        this.id_prodType = id;
-        this.descripcion = descrip;
+        this.id_product_type = id;
+        this.description = descrip;
     }
     
     public ProductType(String descrip){
-        this.descripcion = descrip;
+        this.id_product_type = null;
+        this.description = descrip;
     }
 }
