@@ -13,11 +13,10 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 /**
- * FXML Controller class
  *
  * @author Gina Bustamante
  */
-public class EditWarehouseController implements Initializable {
+public class CreateWarehouseController implements Initializable{
     private Main main;
     
     @FXML
@@ -25,12 +24,18 @@ public class EditWarehouseController implements Initializable {
         main.showListWarehouse();
     }
     
+    @FXML
+    private void insertWarehouse() throws IOException {
+        //Todo
+    }
+    
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    } 
     
 }

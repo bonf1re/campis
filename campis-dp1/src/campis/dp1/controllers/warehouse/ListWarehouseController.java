@@ -13,16 +13,20 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 /**
- * FXML Controller class
  *
  * @author Gina Bustamante
  */
-public class EditWarehouseController implements Initializable {
+public class ListWarehouseController implements Initializable {
     private Main main;
     
     @FXML
-    private void goListWarehouse() throws IOException{
-        main.showListWarehouse();
+    private void goNewWarehouse() throws IOException {
+        main.showNewWarehouse();
+    }
+    
+    @FXML
+    private void goEditWarehouse() throws IOException {
+        main.showEditWarehouse();
     }
     
     /**
@@ -31,6 +35,6 @@ public class EditWarehouseController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
-    }    
+    } 
     
 }

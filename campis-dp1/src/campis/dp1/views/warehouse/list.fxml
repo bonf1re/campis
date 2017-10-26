@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.Warehouse">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.ListWarehouseController">
    <top>
       <BorderPane prefHeight="645.0" prefWidth="1180.0" BorderPane.alignment="CENTER">
          <center>
@@ -35,9 +35,9 @@
          <center>
             <ButtonBar prefHeight="93.0" prefWidth="434.0" BorderPane.alignment="CENTER">
               <buttons>
-                <Button mnemonicParsing="false" onAction="#goWarehouseCreateView" text="Crear" />
-                  <Button mnemonicParsing="false" onAction="#goWarehouseVisualizeView" text="Visualizar" />
-                  <Button mnemonicParsing="false" text="Modificar" />
+                <Button mnemonicParsing="false" onAction="#goNewWarehouse" text="Crear" />
+                  <Button mnemonicParsing="false" text="Visualizar" />
+                  <Button mnemonicParsing="false" onAction="#goEditWarehouse" text="Modificar" />
                   <Button mnemonicParsing="false" text="Eliminar" />
               </buttons>
                <BorderPane.margin>
