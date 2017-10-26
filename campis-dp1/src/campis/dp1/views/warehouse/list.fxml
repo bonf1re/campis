@@ -7,47 +7,37 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="760.0" prefWidth="1180.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.ListWarehouseController">
-   <top>
-      <BorderPane prefHeight="645.0" prefWidth="1180.0" BorderPane.alignment="CENTER">
-         <center>
-            <Pane prefHeight="350.0" prefWidth="700.0" BorderPane.alignment="CENTER">
-               <children>
-                  <TableView layoutX="163.0" layoutY="60.0" prefHeight="524.0" prefWidth="903.0">
-                    <columns>
-                      <TableColumn prefWidth="75.0" text="Nombre" />
-                      <TableColumn prefWidth="75.0" text="Ancho" />
-                        <TableColumn prefWidth="75.0" text="Largo" />
-                        <TableColumn prefWidth="75.0" text="Área" />
-                        <TableColumn prefWidth="75.0" text="Estado" />
-                    </columns>
-                  </TableView>
-                  <Text layoutX="90.0" layoutY="38.0" strokeType="OUTSIDE" strokeWidth="0.0" text="LIsta de Almacenes" />
-               </children>
-            </Pane>
-         </center>
-      </BorderPane>
-   </top>
-   <bottom>
-      <BorderPane prefHeight="143.0" prefWidth="700.0" BorderPane.alignment="CENTER">
-         <center>
-            <ButtonBar prefHeight="93.0" prefWidth="434.0" BorderPane.alignment="CENTER">
-              <buttons>
-                <Button mnemonicParsing="false" onAction="#goNewWarehouse" text="Crear" />
-                  <Button mnemonicParsing="false" text="Visualizar" />
-                  <Button mnemonicParsing="false" onAction="#goEditWarehouse" text="Modificar" />
-                  <Button mnemonicParsing="false" text="Eliminar" />
-              </buttons>
-               <BorderPane.margin>
-                  <Insets />
-               </BorderPane.margin>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.ListWarehouseController">
+   <center>
+      <Pane prefHeight="35.0" prefWidth="85.0" BorderPane.alignment="CENTER">
+         <children>
+            <Text layoutX="40.0" layoutY="35.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lista de Almacenes">
+               <font>
+                  <Font size="28.0" />
+               </font>
+            </Text>
+            <TableView layoutX="40.0" layoutY="79.0" prefHeight="360.0" prefWidth="750.0">
+              <columns>
+                <TableColumn prefWidth="75.0" text="Nombre" />
+                <TableColumn prefWidth="75.0" text="Ancho" />
+                  <TableColumn prefWidth="75.0" text="Largo" />
+                  <TableColumn prefWidth="75.0" text="Área" />
+                  <TableColumn prefWidth="75.0" text="Estado" />
+              </columns>
+            </TableView>
+            <ButtonBar layoutX="83.0" layoutY="596.0" prefHeight="93.0" prefWidth="434.0">
                <padding>
                   <Insets right="400.0" />
                </padding>
             </ButtonBar>
-         </center>
-      </BorderPane>
-   </bottom>
+          <Button layoutX="831.0" layoutY="129.0" mnemonicParsing="false" onAction="#goNewWarehouse" prefHeight="35.0" prefWidth="85.0" text="Crear" />
+            <Button layoutX="831.0" layoutY="202.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Visualizar" />
+            <Button layoutX="831.0" layoutY="279.0" mnemonicParsing="false" onAction="#goEditWarehouse" prefHeight="35.0" prefWidth="85.0" text="Editar" />
+            <Button layoutX="831.0" layoutY="351.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
+         </children>
+      </Pane>
+   </center>
 </BorderPane>
