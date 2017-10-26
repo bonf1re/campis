@@ -5,10 +5,29 @@
  */
 package campis.dp1.models;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+
 /**
  *
  * @author Marco
  */
+@Entity
+@Table(name = "role")
 public class Role {
-    
+    String description;
+
+    /**
+     * @return the description
+     */
+    public String getDescription() {
+        return description;
+    }
+
+    /**
+     * @param description the description to set
+     */
+    public void setDescription(String description) {
+        this.description = description;
+    }
 }
