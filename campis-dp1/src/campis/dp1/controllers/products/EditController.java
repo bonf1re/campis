@@ -5,19 +5,28 @@
  */
 package campis.dp1.controllers.products;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 
 /**
  *
  * @author Eddy
  */
-public class EditController {
+public class EditController implements Initializable{
     private Main main;
     
     @FXML
     private void goListProduct() throws IOException {
         main.showListProduct();
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        System.out.println(ContextFX.getInstance().getId());
     }
 }

@@ -1,5 +1,6 @@
 package campis.dp1.controllers.products;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
@@ -14,8 +15,10 @@ import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.HashSet;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.Set;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.InvalidationListener;
@@ -132,6 +135,8 @@ public class ListController implements Initializable {
     
     @FXML
     private void goEditProduct(ActionEvent event) throws IOException{
+        ContextFX.getInstance().setId(1);
+        
         main.showEditProduct();
     }
 }
