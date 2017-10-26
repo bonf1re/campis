@@ -39,6 +39,9 @@
         <mapping class="campis.dp1.models.Warehouse"/>
         <mapping class="campis.dp1.models.User"/>
         <mapping class="campis.dp1.models.Role"/>
+        <mapping class="campis.dp1.models.Product"/>
+        <mapping class="campis.dp1.models.ProductType"/>
+        <mapping class="campis.dp1.models.UnitOfMeasure"/>
         
     </session-factory>
 
