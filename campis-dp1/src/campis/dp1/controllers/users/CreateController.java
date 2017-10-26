@@ -49,7 +49,7 @@ public class CreateController implements Initializable {
     
     @FXML
     private void goListUser() throws IOException {
-        main.showListUsers();
+        main.showListUser();
     }
 
     @FXML
@@ -70,7 +70,7 @@ public class CreateController implements Initializable {
         session.getTransaction().commit();
 
         sessionFactory.close();
-        main.showListUsers();
+        main.showListUser();
     }
  
     @FXML
@@ -90,7 +90,7 @@ public class CreateController implements Initializable {
         session.getTransaction().commit();
 
         sessionFactory.close();
-        main.showListUsers();
+        main.showListUser();
     }
 
 }
