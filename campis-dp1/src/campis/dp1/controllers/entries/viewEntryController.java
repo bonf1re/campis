@@ -9,7 +9,6 @@ import campis.dp1.Main;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
@@ -18,18 +17,14 @@ import javafx.fxml.Initializable;
  *
  * @author david
  */
-public class ListEntryController implements Initializable {
+public class viewEntryController implements Initializable {
+
     
     private Main main;
     
     @FXML
-    private void goVisualizeEntry() throws IOException {
-        main.showVisualizeEntry();
-    }
-    
-    @FXML
-    private void goNewEntry() throws IOException {
-        main.showNewEntry();
+    private void goListEntries() throws IOException {
+        main.showListEntries();
     }
     
     /**

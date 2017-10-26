@@ -3,13 +3,12 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1.controllers.entries;
+package campis.dp1.controllers;
 
 import campis.dp1.Main;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
@@ -18,20 +17,21 @@ import javafx.fxml.Initializable;
  *
  * @author david
  */
-public class ListEntryController implements Initializable {
+public class DispatchSidebarController implements Initializable {
+    
     
     private Main main;
     
     @FXML
-    private void goVisualizeEntry() throws IOException {
-        main.showVisualizeEntry();
+    private void goListEntries() throws IOException {
+        main.showListEntries();
     }
     
     @FXML
-    private void goNewEntry() throws IOException {
-        main.showNewEntry();
+    private void goListDepartures() throws IOException {
+        main.showListDepartures();
+
     }
-    
     /**
      * Initializes the controller class.
      */

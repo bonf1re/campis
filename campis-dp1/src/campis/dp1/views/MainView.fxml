@@ -12,7 +12,7 @@
             <ToolBar prefHeight="0.0" prefWidth="562.0" BorderPane.alignment="CENTER">
                <items>
                   <Hyperlink onAction="#goWarehouse" text="Almacenamiento" />
-                  <Hyperlink text="Despacho" />
+                  <Hyperlink onAction="#goDispatch" text="Despacho" />
                   <Hyperlink text="Comercializaciòn" />
                   <Hyperlink text="Reportes" />
                   <Hyperlink onAction="#goSecurity" text="Seguridad" />

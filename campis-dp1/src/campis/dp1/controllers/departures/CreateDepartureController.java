@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1.controllers.entries;
+package campis.dp1.controllers.departures;
 
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -14,7 +14,7 @@ import javafx.fxml.Initializable;
  *
  * @author david
  */
-public class CreateEntryController implements Initializable {
+public class CreateDepartureController implements Initializable {
 
     /**
      * Initializes the controller class.

@@ -17,6 +17,11 @@ public class MainViewController {
     }
     
     @FXML
+    private void goDispatch() throws IOException {
+        main.showDispatchSidebar();
+    }
+    
+    @FXML
     private void goWarehouse() throws IOException {
         main.showWarehouseSidebar();
     }

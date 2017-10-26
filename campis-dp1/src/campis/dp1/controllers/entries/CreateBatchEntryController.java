@@ -5,12 +5,8 @@
  */
 package campis.dp1.controllers.entries;
 
-import campis.dp1.Main;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 /**
@@ -18,20 +14,8 @@ import javafx.fxml.Initializable;
  *
  * @author david
  */
-public class ListEntryController implements Initializable {
-    
-    private Main main;
-    
-    @FXML
-    private void goVisualizeEntry() throws IOException {
-        main.showVisualizeEntry();
-    }
-    
-    @FXML
-    private void goNewEntry() throws IOException {
-        main.showNewEntry();
-    }
-    
+public class CreateBatchEntryController implements Initializable {
+
     /**
      * Initializes the controller class.
      */
