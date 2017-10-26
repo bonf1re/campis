@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1.controllers;
+package campis.dp1.controllers.vehicles;
 
 import campis.dp1.Main;
 import java.io.IOException;
@@ -15,23 +15,18 @@ import javafx.fxml.Initializable;
 /**
  * FXML Controller class
  *
- * @author Marco
+ * @author david
  */
-public class Users implements Initializable {
+public class CreateVehicleController {
     private Main main;
-
-    @Override
-    public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
+   
+    @FXML
+    private void goListVehicles() throws IOException {
+        main.showListVehicle();
+    }
     
     @FXML
-    private void goListUser() throws IOException {
-        main.showListUser();
-    }
-    @FXML
-
-    private void goCreateUser() throws IOException {
-        main.showCreateUser();
+    private void insertVehicle() throws IOException {
+        //Todo
     }
 }

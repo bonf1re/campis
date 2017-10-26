@@ -30,4 +30,9 @@ public class WarehouseSidebarController {
     private void goListRacks() throws IOException {
         main.showListRacks();
     }
+    
+    @FXML
+    private void goListVehicles() throws IOException {
+        main.showListVehicle();
+    }
 }

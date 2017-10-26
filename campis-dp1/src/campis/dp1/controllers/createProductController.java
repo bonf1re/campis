@@ -6,9 +6,9 @@
 package campis.dp1.controllers;
 
 import campis.dp1.Main;
-import campis.dp1.models.ProductDAO;
-import campis.dp1.models.ProductType;
-import campis.dp1.models.UnitOfMeasure;
+import campis.dp1.model.ProductDAO;
+import campis.dp1.model.ProductType;
+import campis.dp1.model.UnitOfMeasure;
 import campis.dp1.util.DBUtil;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextArea;
