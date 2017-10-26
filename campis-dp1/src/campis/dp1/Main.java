@@ -63,7 +63,20 @@ public class Main extends Application {
         primaryStage.setScene(scene);
         primaryStage.show();
     }
-
+    
+    public static void showSecuritySidebar() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/layouts/SecuritySidebar.fxml"));
+        VBox securitySidebar = loader.load();
+        mainLayout.setLeft(securitySidebar);
+    }
+    
+    public static void showListUsers() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/users/list.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
     /**
      * @param args the command line arguments
      */
