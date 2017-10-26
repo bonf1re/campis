@@ -14,10 +14,10 @@ public class TabuProblem
         this.map = map;
     }
 
-    public Solution initial(ArrayList<Coordinates> order)
+    public TabuSolution initial(ArrayList<Coordinates> order)
     {
         Collections.shuffle(order);
-        return new Solution(order);
+        return new TabuSolution(order);
     }
 
     private Double euclidean(Coordinates first, Coordinates second)
@@ -49,7 +49,7 @@ public class TabuProblem
         return (this.distance(s1) < this.distance(s2));
     }
 
-    public Solution bestNeighbor(ArrayList<TabuSolution> candidates, TabuList tabuList)
+    public TabuSolution bestNeighbor(ArrayList<TabuSolution> candidates, TabuList tabuList)
     {
         Collections.sort(candidates, (TabuSolution s1, TabuSolution s2) 
                 -> this.distance(s1).compareTo(this.distance(s2)));

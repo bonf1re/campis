@@ -1,4 +1,4 @@
-package campiss.dp1.model;
+package campis.dp1.models;
 
 import java.util.*;
 

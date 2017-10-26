@@ -1,6 +1,9 @@
 package campis.dp1.services;
 
+import campis.dp1.models.Coordinates;
 import campis.dp1.models.TabuList;
+import campis.dp1.models.TabuProblem;
+import campis.dp1.models.TabuSolution;
 import java.util.ArrayList;
 import static java.lang.System.out;
 
@@ -9,13 +12,13 @@ public class TabuSearchService
     private TabuList tabuList;
     private TabuUtils tUtils;
 
-    public TabuSearch()
+    public TabuSearchService()
     {
         this.tabuList = new TabuList();
         this.tUtils = new TabuUtils();
     }
 
-    public Solution search(TabuProblem problem, ArrayList<Coordinates> order) 
+    public TabuSolution search(TabuProblem problem, ArrayList<Coordinates> order) 
     { 
         TabuSolution current = problem.initial(order); 
         TabuSolution best = current; 
@@ -24,16 +27,16 @@ public class TabuSearchService
         
         while (!problem.stop(best, iteration)) { 
             out.println("=================================");
-            out.println("Iteración Nro " + iteracion);
+            out.println("Iteración Nro " + iteration);
             out.println("Mejor solución actual:");
-            out.println("Distancia: " + problema.distancia(mejor));
-            mejor.imprimirOrden();
+            out.println("Distancia: " + problem.distance(best));
+            best.printOrder();
             out.println("Ultima solución evaluada:");
-            out.println("Distancia: " + problema.distancia(actual));
-            actual.imprimirOrden();
+            out.println("Distancia: " + problem.distance(current));
+            current.printOrder();
 
-            ArrayList<Solution> candidatos = this.tUtils.vecinos(actual);
-            Solution nuevaSol = problema.mejorVecino(candidatos, this.listaT); 
+            ArrayList<TabuSolution> candidates = this.tUtils.vecinos(current);
+            TabuSolution nuevaSol = problema.mejorVecino(candidatos, this.listaT); 
 
             out.println("Mejor solución vecina posible:");
             out.println("Distancia: " + problema.distancia(nuevaSol));
