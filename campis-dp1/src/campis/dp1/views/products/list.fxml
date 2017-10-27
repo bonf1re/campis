@@ -35,16 +35,6 @@
          </BorderPane.margin>
       </TableView>
    </center>
-   <bottom>
-      <HBox alignment="CENTER" prefHeight="95.0" prefWidth="1280.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button mnemonicParsing="false" text="Aceptar" />
-         </children>
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-      </HBox>
-   </bottom>
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -64,12 +54,12 @@
                   <Insets left="10.0" top="70.0" />
                </HBox.margin>
             </Label>
-            <JFXTextField>
+            <JFXTextField fx:id="searchField">
                <HBox.margin>
                   <Insets left="30.0" top="60.0" />
                </HBox.margin>
             </JFXTextField>
-            <Button mnemonicParsing="false" text="Buscar">
+            <Button fx:id="searchButton" mnemonicParsing="false" onAction="#searchButtonAction" text="Buscar">
                <HBox.margin>
                   <Insets left="50.0" top="60.0" />
                </HBox.margin>

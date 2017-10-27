@@ -31,6 +31,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
@@ -39,46 +40,36 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 public class ListController implements Initializable {
+
     private Main main;
     private ObservableList<Product> productos;
     private ObservableList<ProductDisplay> productosView;
-    
-    @FXML
-    private void goListProduct() throws IOException{
+
+    private void goListProduct() throws IOException {
         main.showListProduct();
     }
-    
-    @FXML
-    private JFXTextField nameField;
-    @FXML
-    private JFXTextField weightField;
-    @FXML
-    private JFXComboBox measureField;
-    @FXML
-    private JFXTextField trademarkField;
-    @FXML
-    private JFXTextField priceField;
-    @FXML
-    private JFXComboBox typeField;
-    @FXML
-    private JFXTextArea descripField;
+
     @FXML
     private TableView<ProductDisplay> tablaProd;
     @FXML
-    private TableColumn<ProductDisplay,Integer> itemCol;
+    private TableColumn<ProductDisplay, Integer> itemCol;
     @FXML
-    private TableColumn<ProductDisplay,String> nomCol;
+    private TableColumn<ProductDisplay, String> nomCol;
     @FXML
-    private TableColumn<ProductDisplay,Integer> tipoCol;
+    private TableColumn<ProductDisplay, Integer> tipoCol;
     @FXML
-    private TableColumn<ProductDisplay,Float> pesoCol;
+    private TableColumn<ProductDisplay, Float> pesoCol;
     @FXML
-    private TableColumn<ProductDisplay,Integer> medidaCol;
+    private TableColumn<ProductDisplay, Integer> medidaCol;
     @FXML
-    private TableColumn<ProductDisplay,Integer> pStockCol;
+    private TableColumn<ProductDisplay, Integer> pStockCol;
     @FXML
-    private TableColumn<ProductDisplay,Integer> cStockCol;
-    
+    private TableColumn<ProductDisplay, Integer> cStockCol;
+    @FXML
+    private Button searchButton;
+    @FXML
+    private JFXTextField searchField;
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
@@ -95,7 +86,7 @@ public class ListController implements Initializable {
             Logger.getLogger(ListController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-    
+
     private ObservableList<Product> getProducts() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -107,36 +98,77 @@ public class ListController implements Initializable {
         ObservableList<Product> returnable;
         returnable = FXCollections.observableArrayList();
         for (int i = 0; i < lista.size(); i++) {
-            returnable.add((Product)lista.get(i));
+            returnable.add((Product) lista.get(i));
         }
         sessionFactory.close();
         return returnable;
     }
-    
+
     private void cargarData() throws SQLException, ClassNotFoundException {
         productos = FXCollections.observableArrayList();
         productosView = FXCollections.observableArrayList();
         productos = getProducts();
         for (int i = 0; i < productos.size(); i++) {
-            ProductDisplay prod = new ProductDisplay(productos.get(i).getId_product(), productos.get(i).getName(), 
-                                productos.get(i).getDescription(), productos.get(i).getP_stock(), productos.get(i).getC_stock(), 
-                                productos.get(i).getWeight(), productos.get(i).getTrademark(), productos.get(i).getBase_price(), 
-                                productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type());
+            ProductDisplay prod = new ProductDisplay(productos.get(i).getId_product(), productos.get(i).getName(),
+                    productos.get(i).getDescription(), productos.get(i).getP_stock(), productos.get(i).getC_stock(),
+                    productos.get(i).getWeight(), productos.get(i).getTrademark(), productos.get(i).getBase_price(),
+                    productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type());
             productosView.add(prod);
         }
         tablaProd.setItems(null);
         tablaProd.setItems(productosView);
     }
-    
+
+    private ObservableList<Product> getSearchList(Integer text) {
+        ObservableList<Product> returnable;
+        returnable = FXCollections.observableArrayList();
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Product.class);
+        List<Product> list = criteria.list();
+        for (int i = 0; i < list.size(); i++) {
+            if (list.get(i).getId_unit_of_measure().compareTo(text) == 0) {
+                returnable.add(list.get(i));
+            }
+        }
+        sessionFactory.close();
+        return returnable;
+    }
+
     @FXML
-    private void goCreateProduct(ActionEvent event) throws IOException{
+    private void searchButtonAction(ActionEvent event) throws SQLException, ClassNotFoundException {
+        String text = this.searchField.getText();
+        if (text.compareTo("")==0) {
+            cargarData();
+        } else {
+            Integer cod_measure = Integer.parseInt(text);
+            productos = FXCollections.observableArrayList();
+            productosView = FXCollections.observableArrayList();
+            productos = getSearchList(cod_measure);
+            for (int i = 0; i < productos.size(); i++) {
+                ProductDisplay prod = new ProductDisplay(productos.get(i).getId_product(), productos.get(i).getName(),
+                        productos.get(i).getDescription(), productos.get(i).getP_stock(), productos.get(i).getC_stock(),
+                        productos.get(i).getWeight(), productos.get(i).getTrademark(), productos.get(i).getBase_price(),
+                        productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type());
+                productosView.add(prod);
+            }
+            tablaProd.setItems(null);
+            tablaProd.setItems(productosView);
+        }
+    }
+
+    @FXML
+    private void goCreateProduct(ActionEvent event) throws IOException {
         main.showCreateProduct();
     }
-    
+
     @FXML
-    private void goEditProduct(ActionEvent event) throws IOException{
+    private void goEditProduct(ActionEvent event) throws IOException {
         ContextFX.getInstance().setId(1);
-        
+
         main.showEditProduct();
     }
 }

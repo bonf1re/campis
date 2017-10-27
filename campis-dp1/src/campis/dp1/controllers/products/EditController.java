@@ -18,12 +18,12 @@ import javafx.fxml.Initializable;
  * @author Eddy
  */
 public class EditController implements Initializable{
-    private Main main;
     
     @FXML
     private void goListProduct() throws IOException {
         main.showListProduct();
     }
+    private Main main;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
