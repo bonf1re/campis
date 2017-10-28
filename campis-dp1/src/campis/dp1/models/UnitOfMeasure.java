@@ -20,36 +20,37 @@ import javax.persistence.Table;
 public class UnitOfMeasure {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    Integer id_measure;
-    String descrip;
+    Integer id_unit_of_measure;
+    String description;
 
-    public Integer getId_measure() {
-        return id_measure;
+    public Integer getId_unit_of_measure() {
+        return id_unit_of_measure;
     }
 
     public void setId_measure(int id_measure) {
-        this.id_measure = id_measure;
+        this.id_unit_of_measure = id_measure;
     }
 
-    public String getDescrip() {
-        return descrip;
+    public String getDescription() {
+        return description;
     }
 
-    public void setDescrip(String descrip) {
-        this.descrip = descrip;
+    public void setDescription(String description) {
+        this.description = description;
     }
     
     public UnitOfMeasure() {
-        this.id_measure = 0;
-        this.descrip = null;
+        this.id_unit_of_measure = 0;
+        this.description = null;
     }
     
     public UnitOfMeasure(int id, String descripcion) {
-        this.id_measure = id;
-        this.descrip = descripcion;
+        this.id_unit_of_measure = id;
+        this.description = descripcion;
     }
     
     public UnitOfMeasure(String descripcion) {
-        this.descrip = descripcion;
+        this.id_unit_of_measure = null;
+        this.description = descripcion;
     }
 }
