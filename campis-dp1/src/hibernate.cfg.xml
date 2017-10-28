@@ -38,6 +38,7 @@
         <!-- Names the annotated entity class -->
         <mapping class="campis.dp1.models.Warehouse"/>
         <mapping class="campis.dp1.models.User"/>
+		<mapping class="campis.dp1.models.Rack"/>
         
     </session-factory>
 

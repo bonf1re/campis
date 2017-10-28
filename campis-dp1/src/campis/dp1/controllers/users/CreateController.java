@@ -58,19 +58,8 @@ public class CreateController implements Initializable {
         
         User user = new User(nameField.getText(), lastnameField.getText(), passwordField.getText(), emailField.getText(),currentTimestamp,true,1,currentTimestamp, usernameField.getText());
         
-        System.out.print(user.getLastname());
-        System.out.println(user.getCreated_at());
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-
-        session.beginTransaction();
-        session.save(user);
-        session.getTransaction().commit();
-
-        sessionFactory.close();
-        main.showListUser();
+        
+        
     }
  
     @FXML
