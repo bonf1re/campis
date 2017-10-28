@@ -47,6 +47,20 @@ public class Product {
         this.id_unit_of_measure = medida;
         this.id_product_type = type;
     }
+    
+    public Product(Integer codProd , String nombre, String descripcion, int phy_stock, int comm_stock,
+                    float peso, String marca, float precio_base, int medida, int type) {
+        this.id_product = codProd;
+        this.name = nombre;
+        this.description = descripcion;
+        this.p_stock = phy_stock;
+        this.c_stock = comm_stock;
+        this.weight = peso;
+        this.trademark = marca;
+        this.base_price = precio_base;
+        this.id_unit_of_measure = medida;
+        this.id_product_type = type;
+    }
 
     public Integer getId_product() {
         return id_product;
