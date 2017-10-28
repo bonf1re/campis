@@ -33,11 +33,13 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
+import javafx.scene.control.TablePosition;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 
 public class ListController implements Initializable {
 
@@ -167,8 +169,56 @@ public class ListController implements Initializable {
 
     @FXML
     private void goEditProduct(ActionEvent event) throws IOException {
-        ContextFX.getInstance().setId(1);
-
+        TablePosition pos = tablaProd.getSelectionModel().getSelectedCells().get(0);
+        int row = pos.getRow();
+        ProductDisplay item = tablaProd.getItems().get(row);
+        TableColumn col = pos.getTableColumn();
+        Integer id = (Integer)col.getCellObservableValue(item).getValue();
+        ContextFX.getInstance().setId(id);
         main.showEditProduct();
+    }
+    
+    private void deleteProduct(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Product.class);
+        Product prod = new Product();
+        prod.setId_product(cod);
+        session.delete(prod);
+        session.getTransaction().commit();
+
+        sessionFactory.close();
+    }
+    
+    @FXML
+    private void deleteProduct(ActionEvent event) {
+        TablePosition pos = tablaProd.getSelectionModel().getSelectedCells().get(0);
+        int row = pos.getRow();
+        ProductDisplay item = tablaProd.getItems().get(row);
+        TableColumn col = pos.getTableColumn();
+        Integer id = (Integer)col.getCellObservableValue(item).getValue();
+        ContextFX.getInstance().setId(id);
+        Integer id_product = ContextFX.getInstance().getId();
+        for ( int i = 0; i<tablaProd.getItems().size(); i++) {
+            tablaProd.getItems().clear();
+        }
+        deleteProduct(id);
+        for (int i = 0; i < productos.size(); i++) {
+            if(productos.get(i).getId_product().compareTo(id_product)==0){
+                productos.remove(i);
+            }
+        }
+        for (int i = 0; i < productos.size(); i++) {
+                ProductDisplay prod = new ProductDisplay(productos.get(i).getId_product(), productos.get(i).getName(),
+                        productos.get(i).getDescription(), productos.get(i).getP_stock(), productos.get(i).getC_stock(),
+                        productos.get(i).getWeight(), productos.get(i).getTrademark(), productos.get(i).getBase_price(),
+                        productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type());
+                productosView.add(prod);
+            }
+        tablaProd.setItems(null);
+        tablaProd.setItems(productosView);
     }
 }
