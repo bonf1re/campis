@@ -23,6 +23,10 @@ public class Role {
     int id_role;
     String description;
     
+    public Role() {
+        super();
+    }
+
     public Role(String description) {
         this.description = description;
     }
