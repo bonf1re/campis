@@ -5,8 +5,11 @@
  */
 package campis.dp1.controllers.departures;
 
+import campis.dp1.Main;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 /**
@@ -16,6 +19,13 @@ import javafx.fxml.Initializable;
  */
 public class ViewDepartureController implements Initializable {
 
+    private Main main;
+    
+    @FXML
+    private void goListDepartures() throws IOException {
+        main.showListDepartures();
+    }
+    
     /**
      * Initializes the controller class.
      */

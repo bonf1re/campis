@@ -223,6 +223,19 @@ public class Main extends Application {
         BorderPane listDepartures = loader.load();
         mainLayout.setCenter(listDepartures);
      }
+    public static void showVisualizeDeparture() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/departures/view.fxml"));
+        BorderPane seeDeparture = loader.load();
+        mainLayout.setCenter(seeDeparture);
+     }
+    
+    public static void showNewDeparture() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/departures/create.fxml"));
+        BorderPane newDeparture = loader.load();
+        mainLayout.setCenter(newDeparture);
+     }
     
     /**  
      * @param args the command line arguments
