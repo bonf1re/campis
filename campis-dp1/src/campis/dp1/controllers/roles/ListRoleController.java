@@ -60,7 +60,7 @@ public class ListRoleController implements Initializable{
         try {
             descriptionColumn.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
             /**/
-            cargarData();
+            loadData();
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ListController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -83,7 +83,7 @@ public class ListRoleController implements Initializable{
         return returnable;
     }
     
-    private void cargarData() throws SQLException, ClassNotFoundException {
+    private void loadData() throws SQLException, ClassNotFoundException {
         roles = FXCollections.observableArrayList();
         rolesView = FXCollections.observableArrayList();
         roles = getRoles();
