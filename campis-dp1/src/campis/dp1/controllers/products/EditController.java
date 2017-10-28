@@ -97,9 +97,6 @@ public class EditController implements Initializable{
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        /*Product prod = new Product();
-        prod.setId_product(id);
-        session.delete(prod);*/
         int measure = searchCodMeasure(measureField.getEditor().getText());
         int type = searchCodType(typeField.getEditor().getText());
         Query query = session.createQuery("update Product set name = :newName,description = :newDescrip,"
