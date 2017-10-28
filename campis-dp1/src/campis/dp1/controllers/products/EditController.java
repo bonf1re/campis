@@ -171,11 +171,11 @@ public class EditController implements Initializable{
         this.nameField.setText(result.getName());
         this.descripField.setText(result.getDescription());
         String measure = getMeasure(result.getId_unit_of_measure());
-        this.measureField.setPromptText(measure);
+        this.measureField.setValue(measure);
         this.priceField.setText(Float.toString(result.getBase_price()));
         this.trademarkField.setText(result.getTrademark());
         String type = getType(result.getId_product_type());
-        this.typeField.setPromptText(type);
+        this.typeField.setValue(type);
         this.weightField.setText(Float.toString(result.getWeight()));
         //System.out.println(ContextFX.getInstance().getId());
     }
