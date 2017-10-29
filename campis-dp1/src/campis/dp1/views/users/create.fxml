@@ -38,7 +38,7 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <Button layoutX="513.0" layoutY="643.0" mnemonicParsing="false" onAction="#hola" prefHeight="39.0" prefWidth="116.0" text="Guardar">
+            <Button layoutX="513.0" layoutY="643.0" mnemonicParsing="false" onAction="#insertUser" prefHeight="39.0" prefWidth="116.0" text="Guardar">
                <font>
                   <Font size="16.0" />
                </font></Button>
