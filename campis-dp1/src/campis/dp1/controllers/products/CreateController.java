@@ -27,7 +27,9 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 
 /**
  *
@@ -113,9 +115,45 @@ public class CreateController implements Initializable {
         sessionFactory.close();
         this.goListProduct();
     }
+    
+    public static List<UnitOfMeasure> getUnitsOfMeasure() {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(UnitOfMeasure.class)
+                .setProjection(Projections.projectionList()
+                .add(Projections.property("description"),"description"))
+                .setResultTransformer(Transformers.aliasToBean(UnitOfMeasure.class));
+        List<UnitOfMeasure> measures = criteria.list();
+        return measures;
+    }
+    
+    public static List<ProductType> getTypes() {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(ProductType.class)
+                .setProjection(Projections.projectionList()
+                .add(Projections.property("description"),"description"))
+                .setResultTransformer(Transformers.aliasToBean(ProductType.class));
+        List<ProductType> types = criteria.list();
+        return types;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         currencyType.getItems().addAll("S/.","$","€");
+        List<UnitOfMeasure> list = getUnitsOfMeasure();
+        for (int i = 0; i < list.size(); i++) {
+            measureField.getItems().addAll(list.get(i).getDescription());
+        }
+        List<ProductType> typeList = getTypes(); 
+        for (int i = 0; i < typeList.size(); i++) {
+            typeField.getItems().addAll(typeList.get(i).getDescription());
+        }
     }
 }
