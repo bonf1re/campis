@@ -7,6 +7,8 @@ package campis.dp1.controllers.products;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
+import static campis.dp1.controllers.products.CreateController.getTypes;
+import static campis.dp1.controllers.products.CreateController.getUnitsOfMeasure;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductType;
 import campis.dp1.models.UnitOfMeasure;
@@ -160,8 +162,16 @@ public class EditController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        currencyType.getItems().addAll("S/.","$","€");
         id = ContextFX.getInstance().getId();
+        currencyType.getItems().addAll("S/.","$","€");
+        List<UnitOfMeasure> list = CreateController.getUnitsOfMeasure();
+        for (int i = 0; i < list.size(); i++) {
+            measureField.getItems().addAll(list.get(i).getDescription());
+        }
+        List<ProductType> typeList = CreateController.getTypes(); 
+        for (int i = 0; i < typeList.size(); i++) {
+            typeField.getItems().addAll(typeList.get(i).getDescription());
+        }
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -174,11 +184,11 @@ public class EditController implements Initializable{
         this.nameField.setText(result.getName());
         this.descripField.setText(result.getDescription());
         String measure = getMeasure(result.getId_unit_of_measure());
-        this.measureField.setPromptText(measure);
+        this.measureField.setValue(measure);
         this.priceField.setText(Float.toString(result.getBase_price()));
         this.trademarkField.setText(result.getTrademark());
         String type = getType(result.getId_product_type());
-        this.typeField.setPromptText(type);
+        this.typeField.setValue(type);
         this.weightField.setText(Float.toString(result.getWeight()));
         //System.out.println(ContextFX.getInstance().getId());
     }
