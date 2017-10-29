@@ -11,6 +11,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
+import static java.lang.Boolean.TRUE;
 import java.net.URL;
 import java.sql.Connection;
 import java.sql.ResultSet;
@@ -130,7 +131,7 @@ public class ListController implements Initializable {
         tablaProd.setItems(productosView);
     }
 
-    private ObservableList<Product> getSearchList(Integer text) {
+    private ObservableList<Product> getSearchList(String text) {
         ObservableList<Product> returnable;
         returnable = FXCollections.observableArrayList();
         Configuration configuration = new Configuration();
@@ -141,7 +142,7 @@ public class ListController implements Initializable {
         Criteria criteria = session.createCriteria(Product.class);
         List<Product> list = criteria.list();
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId_unit_of_measure().compareTo(text) == 0) {
+            if (list.get(i).getName().contains(text) == TRUE) {
                 returnable.add(list.get(i));
             }
         }
@@ -152,19 +153,22 @@ public class ListController implements Initializable {
     @FXML
     private void searchButtonAction(ActionEvent event) throws SQLException, ClassNotFoundException {
         String text = this.searchField.getText();
-        if (text.compareTo("")==0) {
+        if (text.compareTo("") == 0) {
             cargarData();
         } else {
-            Integer cod_measure = Integer.parseInt(text);
             productos = FXCollections.observableArrayList();
             productosView = FXCollections.observableArrayList();
-            productos = getSearchList(cod_measure);
-            for (int i = 0; i < productos.size(); i++) {
-                ProductDisplay prod = new ProductDisplay(productos.get(i).getId_product(), productos.get(i).getName(),
-                        productos.get(i).getDescription(), productos.get(i).getP_stock(), productos.get(i).getC_stock(),
-                        productos.get(i).getWeight(), productos.get(i).getTrademark(), productos.get(i).getBase_price(),
-                        productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type());
-                productosView.add(prod);
+            productos = getSearchList(text);
+            if (productos == null) {
+                tablaProd.setItems(null);
+            } else {
+                for (int i = 0; i < productos.size(); i++) {
+                    ProductDisplay prod = new ProductDisplay(productos.get(i).getId_product(), productos.get(i).getName(),
+                            productos.get(i).getDescription(), productos.get(i).getP_stock(), productos.get(i).getC_stock(),
+                            productos.get(i).getWeight(), productos.get(i).getTrademark(), productos.get(i).getBase_price(),
+                            productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type());
+                    productosView.add(prod);
+                }
             }
             tablaProd.setItems(null);
             tablaProd.setItems(productosView);
@@ -182,6 +186,12 @@ public class ListController implements Initializable {
         main.showEditProduct();
     }
     
+    @FXML
+    private void goViewProduct(ActionEvent event) throws IOException {
+        ContextFX.getInstance().setId(selected_id);
+        main.showViewProduct();
+    }
+
     private void deleteProduct(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -196,7 +206,7 @@ public class ListController implements Initializable {
 
         sessionFactory.close();
     }
-    
+
     @FXML
     private void deleteProduct(ActionEvent event) throws SQLException, ClassNotFoundException {
         ContextFX.getInstance().setId(selected_id);
@@ -209,5 +219,6 @@ public class ListController implements Initializable {
         }
         cargarData();
     }
+    
 }
 

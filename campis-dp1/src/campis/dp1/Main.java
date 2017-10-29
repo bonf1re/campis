@@ -122,6 +122,13 @@ public class Main extends Application {
         mainLayout.setCenter(editProd);
     }
     
+    public static void showViewProduct() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/products/view.fxml"));
+        BorderPane viewProd = loader.load();
+        mainLayout.setCenter(viewProd);
+    }
+    
     /* Rack */
     public static void showListRacks() throws IOException {
         FXMLLoader loader = new FXMLLoader();

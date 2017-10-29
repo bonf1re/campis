@@ -35,6 +35,7 @@ import org.hibernate.criterion.Restrictions;
 public class EditController implements Initializable{
     
     Integer id;
+    Main main;
     @FXML
     private JFXTextField nameField;
     @FXML
@@ -56,7 +57,6 @@ public class EditController implements Initializable{
     private void goListProduct() throws IOException {
         main.showListProduct();
     }
-    private Main main;
     
     public static Integer searchCodMeasure(String measure) throws SQLException, ClassNotFoundException {
         Configuration configuration = new Configuration();
@@ -124,7 +124,7 @@ public class EditController implements Initializable{
         this.goListProduct();
     }
     
-    private String getMeasure(int cod) {
+    public static String getMeasure(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -139,7 +139,7 @@ public class EditController implements Initializable{
         return descrip;
     }
     
-    private String getType(int cod) {
+    public static String getType(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -157,8 +157,16 @@ public class EditController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        currencyType.getItems().addAll("S/.","$","€");
         id = ContextFX.getInstance().getId();
+        currencyType.getItems().addAll("S/.","$","€");
+        List<UnitOfMeasure> list = CreateController.getUnitsOfMeasure();
+        for (int i = 0; i < list.size(); i++) {
+            measureField.getItems().addAll(list.get(i).getDescription());
+        }
+        List<ProductType> typeList = CreateController.getTypes(); 
+        for (int i = 0; i < typeList.size(); i++) {
+            typeField.getItems().addAll(typeList.get(i).getDescription());
+        }
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -177,7 +185,6 @@ public class EditController implements Initializable{
         String type = getType(result.getId_product_type());
         this.typeField.setValue(type);
         this.weightField.setText(Float.toString(result.getWeight()));
-        //System.out.println(ContextFX.getInstance().getId());
     }
     
 }

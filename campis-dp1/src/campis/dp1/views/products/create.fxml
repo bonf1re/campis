@@ -10,34 +10,34 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.products.CreateController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.products.CreateController">
    <center>
-      <AnchorPane prefHeight="500.0" prefWidth="967.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="223.0" layoutY="125.0" text="Nombre :" />
-            <Label layoutX="223.0" layoutY="178.0" prefHeight="25.0" prefWidth="132.0" text="Peso :" />
-            <Label layoutX="223.0" layoutY="234.0" text="Marca :" />
-            <Label layoutX="223.0" layoutY="293.0" text="Precio :" />
-            <Label layoutX="222.0" layoutY="354.0" text="Tipo de Producto :" />
-            <Label layoutX="222.0" layoutY="490.0" text="Descripción :" />
-            <Button layoutX="376.0" layoutY="565.0" mnemonicParsing="false" onAction="#insertProduct" prefHeight="21.0" prefWidth="72.0" text="Guardar" />
-            <Button layoutX="577.0" layoutY="565.0" mnemonicParsing="false" onAction="#goListProduct" prefHeight="25.0" prefWidth="74.0" text="Cancelar" />
-            <Label layoutX="54.0" layoutY="91.0" text="Crear producto">
+            <Label layoutX="220.0" layoutY="71.0" text="Nombre :" />
+            <Label layoutX="220.0" layoutY="124.0" prefHeight="25.0" prefWidth="132.0" text="Peso :" />
+            <Label layoutX="220.0" layoutY="180.0" text="Marca :" />
+            <Label layoutX="220.0" layoutY="239.0" text="Precio :" />
+            <Label layoutX="219.0" layoutY="300.0" text="Tipo de Producto :" />
+            <Label layoutX="219.0" layoutY="436.0" text="Descripción :" />
+            <Button layoutX="373.0" layoutY="534.0" mnemonicParsing="false" onAction="#insertProduct" prefHeight="21.0" prefWidth="72.0" text="Guardar" />
+            <Button layoutX="574.0" layoutY="534.0" mnemonicParsing="false" onAction="#goListProduct" prefHeight="25.0" prefWidth="74.0" text="Cancelar" />
+            <Label layoutX="51.0" layoutY="37.0" text="Crear producto">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <JFXComboBox fx:id="currencyType" editable="true" layoutX="403.0" layoutY="289.0" prefHeight="18.0" prefWidth="78.0" />
-            <JFXTextField fx:id="nameField" layoutX="403.0" layoutY="117.0" prefHeight="21.0" prefWidth="399.0" />
-            <JFXTextField fx:id="priceField" layoutX="494.0" layoutY="289.0" prefHeight="18.0" prefWidth="129.0" />
-            <JFXComboBox fx:id="measureField" editable="true" layoutX="513.0" layoutY="178.0" prefHeight="21.0" prefWidth="292.0" />
-            <JFXComboBox fx:id="typeField" editable="true" layoutX="400.0" layoutY="350.0" prefHeight="20.0" prefWidth="399.0" />
-            <JFXTextArea fx:id="descripField" layoutX="399.0" layoutY="478.0" prefHeight="59.0" prefWidth="402.0" />
-            <Label layoutX="223.0" layoutY="422.0" text="Fecha de Vencimiento :" />
+            <JFXComboBox fx:id="currencyType" editable="true" layoutX="400.0" layoutY="235.0" prefHeight="18.0" prefWidth="78.0" />
+            <JFXTextField fx:id="nameField" layoutX="400.0" layoutY="63.0" prefHeight="21.0" prefWidth="399.0" />
+            <JFXTextField fx:id="priceField" layoutX="491.0" layoutY="235.0" prefHeight="18.0" prefWidth="129.0" />
+            <JFXComboBox fx:id="measureField" editable="true" layoutX="510.0" layoutY="124.0" prefHeight="21.0" prefWidth="292.0" />
+            <JFXComboBox fx:id="typeField" editable="true" layoutX="397.0" layoutY="296.0" prefHeight="20.0" prefWidth="399.0" />
+            <JFXTextArea fx:id="descripField" layoutX="396.0" layoutY="424.0" prefHeight="59.0" prefWidth="402.0" />
+            <Label layoutX="220.0" layoutY="368.0" text="Fecha de Vencimiento :" />
 
-            <JFXDatePicker layoutX="400.0" layoutY="418.0" prefHeight="17.0" prefWidth="283.0" />
-            <JFXTextField fx:id="weightField" layoutX="403.0" layoutY="178.0" prefHeight="17.0" prefWidth="91.0" />
-            <JFXTextField fx:id="trademarkField" layoutX="400.0" layoutY="228.0" prefHeight="21.0" prefWidth="399.0" />
+            <JFXDatePicker layoutX="397.0" layoutY="364.0" prefHeight="17.0" prefWidth="283.0" />
+            <JFXTextField fx:id="weightField" layoutX="400.0" layoutY="124.0" prefHeight="17.0" prefWidth="91.0" />
+            <JFXTextField fx:id="trademarkField" layoutX="397.0" layoutY="174.0" prefHeight="21.0" prefWidth="399.0" />
          </children>
       </AnchorPane>
    </center>
