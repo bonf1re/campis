@@ -44,4 +44,18 @@ public class Role {
     public void setDescription(String description) {
         this.description = description;
     }
+
+    /**
+     * @return the id_role
+     */
+    public int getId_role() {
+        return id_role;
+    }
+
+    /**
+     * @param id_role the id_role to set
+     */
+    public void setId_role(int id_role) {
+        this.id_role = id_role;
+    }
 }
