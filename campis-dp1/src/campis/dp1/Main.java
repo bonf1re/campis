@@ -1,9 +1,3 @@
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package campis.dp1;
 
 import java.io.IOException;
@@ -129,6 +123,13 @@ public class Main extends Application {
         mainLayout.setCenter(editProd);
     }
     
+    public static void showViewProduct() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/products/view.fxml"));
+        BorderPane viewProd = loader.load();
+        mainLayout.setCenter(viewProd);
+    }
+    
     /* Rack */
     public static void showListRacks() throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -249,7 +250,5 @@ public class Main extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-    }
-    
+    }   
 }
-
