@@ -28,7 +28,7 @@
             </TableView>
             <Button layoutX="840.0" layoutY="160.0" mnemonicParsing="false" onAction="#goNewRack" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
             <Button layoutX="840.0" layoutY="240.0" mnemonicParsing="false" onAction="#goEditRack" prefHeight="35.0" prefWidth="85.0" text="Editar" />
-            <Button layoutX="840.0" layoutY="320.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
+            <Button fx:id="DeleteButton" onAction="#deleteRack" layoutX="840.0" layoutY="320.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
          </children>
       </AnchorPane>
    </center>
