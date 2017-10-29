@@ -19,14 +19,18 @@
                   <Font size="28.0" />
                </font>
             </Text>
-            <TableView layoutX="40.0" layoutY="79.0" prefHeight="360.0" prefWidth="750.0">
+            <TableView fx:id="warehouseTable" layoutX="40.0" layoutY="79.0" prefHeight="360.0" prefWidth="750.0">
               <columns>
-                <TableColumn prefWidth="75.0" text="Nombre" />
-                <TableColumn prefWidth="75.0" text="Ancho" />
-                  <TableColumn prefWidth="75.0" text="Largo" />
-                  <TableColumn prefWidth="75.0" text="Área" />
-                  <TableColumn prefWidth="75.0" text="Estado" />
+                  <TableColumn fx:id="idCol" prefWidth="75.0" text="ID" />
+                <TableColumn fx:id="nameCol" prefWidth="75.0" text="Nombre" />
+                <TableColumn fx:id="widthCol" prefWidth="75.0" text="Ancho" />
+                  <TableColumn fx:id="lengthCol" prefWidth="75.0" text="Largo" />
+                  <TableColumn fx:id="areaCol" prefWidth="75.0" text="Área" />
+                  <TableColumn fx:id="statusCol" prefWidth="75.0" text="Estado" />
               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
             </TableView>
             <ButtonBar layoutX="83.0" layoutY="596.0" prefHeight="93.0" prefWidth="434.0">
                <padding>

@@ -19,6 +19,7 @@ public class WarehouseDisplay {
     private final StringProperty name;
     private final IntegerProperty length;
     private final IntegerProperty width;
+    private final IntegerProperty area;
     private final StringProperty status;
     
     public WarehouseDisplay(int id_warehouse, String name, int length, int width, boolean status){
@@ -26,6 +27,7 @@ public class WarehouseDisplay {
         this.name = new SimpleStringProperty(name);
         this.length = new SimpleIntegerProperty(length);
         this.width = new SimpleIntegerProperty(width);
+        this.area = new SimpleIntegerProperty(length*width);
         if (status==true){
             this.status = new SimpleStringProperty("Habilitado");
         }else{
@@ -47,6 +49,10 @@ public class WarehouseDisplay {
     
     public IntegerProperty widthProperty(){
         return width;
+    }
+    
+    public IntegerProperty areaProperty(){
+        return area;
     }
     
     public StringProperty statusProperty(){
