@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.net.URL?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="95.0" 
+      xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.DispatchSidebarController">
+    <stylesheets>
+        <URL value="@/campis/dp1/assets/css/dispatchsidebar.css"/>
+    </stylesheets>
+    <children>
+      <Hyperlink alignment="CENTER" contentDisplay="CENTER" onAction="#goListEntries" prefHeight="50.0" prefWidth="95.0" text="Entradas" textAlignment="CENTER" />
+      <Hyperlink alignment="CENTER" contentDisplay="CENTER" onAction="#goListDepartures" prefHeight="50.0" prefWidth="95.0" text="Salidas" textAlignment="CENTER" />
+   </children>
+</VBox>
