@@ -47,6 +47,7 @@ public class ListController implements Initializable {
     private Main main;
     private ObservableList<Product> productos;
     private ObservableList<ProductDisplay> productosView;
+    private int selected_id;
 
     private void goListProduct() throws IOException {
         main.showListProduct();
@@ -75,6 +76,14 @@ public class ListController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        tablaProd.getSelectionModel().selectedItemProperty().addListener(
+        (observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                return;
+            }
+            this.selected_id = newValue.codProdProperty().getValue().intValue();
+            }
+        );
         try {
             itemCol.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
             nomCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -173,13 +182,14 @@ public class ListController implements Initializable {
 
     @FXML
     private void goEditProduct(ActionEvent event) throws IOException {
-        TablePosition pos = tablaProd.getSelectionModel().getSelectedCells().get(0);
-        int row = pos.getRow();
-        ProductDisplay item = tablaProd.getItems().get(row);
-        TableColumn col = pos.getTableColumn();
-        Integer id = (Integer)col.getCellObservableValue(item).getValue();
-        ContextFX.getInstance().setId(id);
+        ContextFX.getInstance().setId(selected_id);
         main.showEditProduct();
+    }
+    
+    @FXML
+    private void goViewProduct(ActionEvent event) throws IOException {
+        ContextFX.getInstance().setId(selected_id);
+        main.showViewProduct();
     }
 
     private void deleteProduct(int cod) {
@@ -198,31 +208,17 @@ public class ListController implements Initializable {
     }
 
     @FXML
-    private void deleteProduct(ActionEvent event) {
-        TablePosition pos = tablaProd.getSelectionModel().getSelectedCells().get(0);
-        int row = pos.getRow();
-        ProductDisplay item = tablaProd.getItems().get(row);
-        TableColumn col = pos.getTableColumn();
-        Integer id = (Integer) col.getCellObservableValue(item).getValue();
-        ContextFX.getInstance().setId(id);
+    private void deleteProduct(ActionEvent event) throws SQLException, ClassNotFoundException {
+        ContextFX.getInstance().setId(selected_id);
         Integer id_product = ContextFX.getInstance().getId();
-        for (int i = 0; i < tablaProd.getItems().size(); i++) {
-            tablaProd.getItems().clear();
-        }
-        deleteProduct(id);
+        deleteProduct(selected_id);
         for (int i = 0; i < productos.size(); i++) {
-            if (productos.get(i).getId_product().compareTo(id_product) == 0) {
+            if(productos.get(i).getId_product().compareTo(id_product) == 0){
                 productos.remove(i);
             }
         }
-        for (int i = 0; i < productos.size(); i++) {
-            ProductDisplay prod = new ProductDisplay(productos.get(i).getId_product(), productos.get(i).getName(),
-                    productos.get(i).getDescription(), productos.get(i).getP_stock(), productos.get(i).getC_stock(),
-                    productos.get(i).getWeight(), productos.get(i).getTrademark(), productos.get(i).getBase_price(),
-                    productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type());
-            productosView.add(prod);
-        }
-        tablaProd.setItems(null);
-        tablaProd.setItems(productosView);
+        cargarData();
     }
+    
 }
+

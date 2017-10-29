@@ -7,8 +7,6 @@ package campis.dp1.controllers.products;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
-import static campis.dp1.controllers.products.CreateController.getTypes;
-import static campis.dp1.controllers.products.CreateController.getUnitsOfMeasure;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductType;
 import campis.dp1.models.UnitOfMeasure;
@@ -37,6 +35,7 @@ import org.hibernate.criterion.Restrictions;
 public class EditController implements Initializable{
     
     Integer id;
+    Main main;
     @FXML
     private JFXTextField nameField;
     @FXML
@@ -58,7 +57,6 @@ public class EditController implements Initializable{
     private void goListProduct() throws IOException {
         main.showListProduct();
     }
-    private Main main;
     
     public static Integer searchCodMeasure(String measure) throws SQLException, ClassNotFoundException {
         Configuration configuration = new Configuration();
@@ -99,9 +97,6 @@ public class EditController implements Initializable{
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        /*Product prod = new Product();
-        prod.setId_product(id);
-        session.delete(prod);*/
         int measure = searchCodMeasure(measureField.getEditor().getText());
         int type = searchCodType(typeField.getEditor().getText());
         Query query = session.createQuery("update Product set name = :newName,description = :newDescrip,"
@@ -129,7 +124,7 @@ public class EditController implements Initializable{
         this.goListProduct();
     }
     
-    private String getMeasure(int cod) {
+    public static String getMeasure(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -144,7 +139,7 @@ public class EditController implements Initializable{
         return descrip;
     }
     
-    private String getType(int cod) {
+    public static String getType(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -190,7 +185,6 @@ public class EditController implements Initializable{
         String type = getType(result.getId_product_type());
         this.typeField.setValue(type);
         this.weightField.setText(Float.toString(result.getWeight()));
-        //System.out.println(ContextFX.getInstance().getId());
     }
     
 }

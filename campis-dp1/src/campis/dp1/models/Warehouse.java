@@ -9,15 +9,16 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import org.hibernate.annotations.Table;
+import javax.persistence.Table;
+
 
 /**
  *
  * @author sergio
  */
 @Entity
+@Table(name="warehouse")
 public class Warehouse {
-    
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     int id_warehouse;

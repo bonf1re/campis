@@ -16,7 +16,7 @@
       <Insets />
    </opaqueInsets>
    <center>
-      <TableView fx:id="tablaProd" prefHeight="473.0" prefWidth="1203.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tablaProd" prefHeight="335.0" prefWidth="737.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="itemCol" prefWidth="75.0" text="Item" />
           <TableColumn fx:id="nomCol" prefWidth="75.0" text="Nombre" />
@@ -35,6 +35,13 @@
          </BorderPane.margin>
       </TableView>
    </center>
+   <bottom>
+      <HBox alignment="CENTER" prefHeight="44.0" prefWidth="967.0" BorderPane.alignment="CENTER">
+         <BorderPane.margin>
+            <Insets />
+         </BorderPane.margin>
+      </HBox>
+   </bottom>
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
@@ -46,7 +53,7 @@
                   <Insets left="20.0" top="20.0" />
                </HBox.margin>
             </Label>
-            <Label text="Código :">
+            <Label text="Nombre :">
                <font>
                   <Font size="13.0" />
                </font>
@@ -59,7 +66,7 @@
                   <Insets left="30.0" top="60.0" />
                </HBox.margin>
             </JFXTextField>
-            <Button fx:id="searchButton" mnemonicParsing="false" onAction="#searchButtonAction" text="Buscar">
+            <Button mnemonicParsing="false" onAction="#searchButtonAction" text="Buscar">
                <HBox.margin>
                   <Insets left="50.0" top="60.0" />
                </HBox.margin>
@@ -73,9 +80,10 @@
    <right>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="58.0" layoutY="72.0" mnemonicParsing="false" onAction="#goCreateProduct" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
-            <Button layoutX="58.0" layoutY="135.0" mnemonicParsing="false" onAction="#goEditProduct" prefHeight="35.0" prefWidth="85.0" text="Editar" />
-            <Button fx:id="DeleteButton" layoutX="58.0" layoutY="203.0" mnemonicParsing="false" onAction="#deleteProduct" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
+            <Button layoutX="58.0" layoutY="101.0" mnemonicParsing="false" onAction="#goCreateProduct" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
+            <Button layoutX="58.0" layoutY="161.0" mnemonicParsing="false" onAction="#goEditProduct" prefHeight="35.0" prefWidth="85.0" text="Editar" />
+            <Button layoutX="58.0" layoutY="224.0" mnemonicParsing="false" onAction="#deleteProduct" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
+            <Button layoutX="58.0" layoutY="38.0" mnemonicParsing="false" onAction="#goViewProduct" prefHeight="35.0" prefWidth="85.0" text="Visualizar" />
          </children>
       </AnchorPane>
    </right>
