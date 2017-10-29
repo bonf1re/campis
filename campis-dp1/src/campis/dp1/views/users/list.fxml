@@ -25,11 +25,11 @@
       <Insets />
    </opaqueInsets>
    <center>
-      <TableView maxHeight="-Infinity" minHeight="0.0" prefHeight="400.0" prefWidth="1116.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tableUser" maxHeight="-Infinity" minHeight="0.0" prefHeight="400.0" prefWidth="1116.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn prefWidth="75.0" text="Nombres" />
-            <TableColumn prefWidth="75.0" text="Usuario" />
-            <TableColumn prefWidth="75.0" text="Rol" />
+          <TableColumn fx:id="namesColumn" prefWidth="75.0" text="Nombres" />
+            <TableColumn fx:id="usernameColumn" prefWidth="75.0" text="Usuario" />
+            <TableColumn fx:id="emailColumn" prefWidth="75.0" text="Correo" />
             <TableColumn prefWidth="75.0" text="Acciones" />
         </columns>
          <BorderPane.margin>

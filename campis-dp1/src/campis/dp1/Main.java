@@ -1,3 +1,4 @@
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
@@ -55,6 +56,13 @@ public class Main extends Application {
         mainLayout.setLeft(warehouseSidebar);
     }
     
+    public static void showDispatchSidebar() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/layouts/DispatchSidebar.fxml"));
+        VBox dispatchSidebar = loader.load();
+        mainLayout.setLeft(dispatchSidebar);
+    }
+    
 
     
     /* Warehouse */
@@ -95,21 +103,21 @@ public class Main extends Application {
 
     public static void showListProduct() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/products/listProducts.fxml"));
+        loader.setLocation(Main.class.getResource("views/products/list.fxml"));
         BorderPane listProd = loader.load();
         mainLayout.setCenter(listProd);
     }
 
     public static void showCreateProduct() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/products/createProduct.fxml"));
+        loader.setLocation(Main.class.getResource("views/products/create.fxml"));
         BorderPane createProd = loader.load();
         mainLayout.setCenter(createProd);
     }
     
     public static void showEditProduct() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/products/editProduct.fxml"));
+        loader.setLocation(Main.class.getResource("views/products/edit.fxml"));
         BorderPane editProd = loader.load();
         mainLayout.setCenter(editProd);
     }
@@ -181,6 +189,53 @@ public class Main extends Application {
         BorderPane editVehicle = loader.load();
         mainLayout.setCenter(editVehicle);
     }
+    public static void showVisualizeEntry() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/entries/view.fxml"));
+        BorderPane seeEntry = loader.load();
+        mainLayout.setCenter(seeEntry);
+     }
+    
+    public static void showNewEntry() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/entries/create.fxml"));
+        BorderPane newEntry = loader.load();
+        mainLayout.setCenter(newEntry);
+     }
+    
+    public static void showNewBatch() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/entries/createBatchEntry.fxml"));
+        BorderPane newEntry = loader.load();
+        mainLayout.setCenter(newEntry);
+     }
+    
+    public static void showListEntries() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/entries/list.fxml"));
+        BorderPane listEntries = loader.load();
+        mainLayout.setCenter(listEntries);
+     }
+    
+    public static void showListDepartures() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/departures/list.fxml"));
+        BorderPane listDepartures = loader.load();
+        mainLayout.setCenter(listDepartures);
+     }
+    public static void showVisualizeDeparture() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/departures/view.fxml"));
+        BorderPane seeDeparture = loader.load();
+        mainLayout.setCenter(seeDeparture);
+     }
+    
+    public static void showNewDeparture() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/departures/create.fxml"));
+        BorderPane newDeparture = loader.load();
+        mainLayout.setCenter(newDeparture);
+     }
     
     /**  
      * @param args the command line arguments
@@ -190,3 +245,4 @@ public class Main extends Application {
     }
     
 }
+

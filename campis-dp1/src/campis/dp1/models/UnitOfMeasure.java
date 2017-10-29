@@ -13,35 +13,44 @@ import javax.persistence.Table;
 
 /**
  *
- * @author Marco
+ * @author Eddy
  */
 @Entity
-@Table(name = "role")
-public class Role {
+@Table (name = "unit_of_measure")
+public class UnitOfMeasure {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    int id_role;
+    Integer id_unit_of_measure;
     String description;
-    
-    public Role() {
-        super();
+
+    public Integer getId_unit_of_measure() {
+        return id_unit_of_measure;
     }
 
-    public Role(String description) {
-        this.description = description;
+    public void setId_measure(int id_measure) {
+        this.id_unit_of_measure = id_measure;
     }
 
-    /**
-     * @return the description
-     */
     public String getDescription() {
         return description;
     }
 
-    /**
-     * @param description the description to set
-     */
     public void setDescription(String description) {
         this.description = description;
+    }
+    
+    public UnitOfMeasure() {
+        this.id_unit_of_measure = 0;
+        this.description = null;
+    }
+    
+    public UnitOfMeasure(int id, String descripcion) {
+        this.id_unit_of_measure = id;
+        this.description = descripcion;
+    }
+    
+    public UnitOfMeasure(String descripcion) {
+        this.id_unit_of_measure = null;
+        this.description = descripcion;
     }
 }
