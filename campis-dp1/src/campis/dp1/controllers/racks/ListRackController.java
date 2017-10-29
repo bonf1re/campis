@@ -46,7 +46,8 @@ public class ListRackController implements Initializable{
     }
     
     @FXML
-    private void goEditRack() throws IOException {
+    private void goEditRack(ActionEvent event) throws IOException {
+        ContextFX.getInstance().setId(selected_id);
         main.showEditRack();
     }
 
@@ -90,6 +91,8 @@ public class ListRackController implements Initializable{
             //System.out.println(racks.get(i).getId_rack());
             
             RackDisplay r = new RackDisplay(racks.get(i).getId_rack(), 
+                                            racks.get(i).getPos_x(),
+                                            racks.get(i).getPos_y(),
                                             racks.get(i).getId_warehouse(),
                                             racks.get(i).getN_columns(),
                                             racks.get(i).getN_floors(),

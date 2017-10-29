@@ -17,17 +17,17 @@ public class RackDisplay {
     
     private final IntegerProperty id_rack;
     private final IntegerProperty id_warehouse;
-    //private final IntegerProperty pos_x;
-    //private final IntegerProperty pos_y;
+    private final IntegerProperty pos_x;
+    private final IntegerProperty pos_y;
     private final IntegerProperty n_columns;
     private final IntegerProperty n_floors;
     private final IntegerProperty orientation;
     
-    public RackDisplay(int id_rack, int id_warehouse, int n_columns, int n_floors, int orientation) {
+    public RackDisplay(int id_rack, int id_warehouse, int pos_x, int pos_y, int n_columns, int n_floors, int orientation) {
         this.id_rack = new SimpleIntegerProperty(id_rack);
         this.id_warehouse = new SimpleIntegerProperty(id_warehouse);
-        //this.pos_x =  new SimpleIntegerProperty(pos_x);
-        //this.pos_y = new SimpleIntegerProperty(pos_y);
+        this.pos_x =  new SimpleIntegerProperty(pos_x);
+        this.pos_y = new SimpleIntegerProperty(pos_y);
         this.n_columns = new SimpleIntegerProperty(n_columns);
         this.n_floors = new SimpleIntegerProperty(n_floors);
         this.orientation = new SimpleIntegerProperty(orientation);
