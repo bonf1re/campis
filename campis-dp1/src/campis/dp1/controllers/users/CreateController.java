@@ -6,6 +6,7 @@
 package campis.dp1.controllers.users;
 
 import campis.dp1.Main;
+import campis.dp1.models.Role;
 import campis.dp1.models.User;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXPasswordField;
@@ -17,12 +18,16 @@ import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.time.ZonedDateTime;
 import java.util.Calendar;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Projections;
+import org.hibernate.transform.Transformers;
 
 /**
  *
@@ -44,7 +49,10 @@ public class CreateController implements Initializable {
     private JFXComboBox roleField;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        List<Role> roleList = campis.dp1.controllers.users.CreateController.getRoles(); 
+        for (int i = 0; i < roleList.size(); i++) {
+            roleField.getItems().addAll(roleList.get(i).getDescription());
+        }
     }
     
     @FXML
@@ -52,24 +60,18 @@ public class CreateController implements Initializable {
         main.showListUser();
     }
 
-    @FXML
-    private void hola() throws IOException {
-        Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-        
-        User user = new User(nameField.getText(), lastnameField.getText(), passwordField.getText(), emailField.getText(),currentTimestamp,true,1,currentTimestamp, usernameField.getText());
-        
-        System.out.print(user.getLastname());
+    public static List<Role> getRoles() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
-
         session.beginTransaction();
-        session.save(user);
-        session.getTransaction().commit();
-
-        sessionFactory.close();
-        main.showListUser();    
+        Criteria criteria = session.createCriteria(Role.class)
+                .setProjection(Projections.projectionList()
+                .add(Projections.property("description"),"description"))
+                .setResultTransformer(Transformers.aliasToBean(Role.class));
+        List<Role> types = criteria.list();
+        return types;
     }
  
     @FXML
