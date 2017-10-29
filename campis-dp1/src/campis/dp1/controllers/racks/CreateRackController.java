@@ -7,6 +7,7 @@ package campis.dp1.controllers.racks;
 
 import campis.dp1.Main;
 import campis.dp1.models.Rack;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.awt.event.ActionEvent;
 import java.io.IOException;
@@ -36,8 +37,8 @@ public class CreateRackController implements Initializable{
     @FXML
     private JFXTextField y_Field;
     @FXML
-    private JFXTextField orientationField;
-    
+    private JFXComboBox orientationCb;
+   
     @FXML
     private void goListRacks() throws IOException {
         main.showListRacks();
@@ -46,9 +47,11 @@ public class CreateRackController implements Initializable{
     @FXML
     private void insertRack() throws IOException {
         
+        //int orientation = orientationCb.getSelectionModel().getSelectedIndex();
+        
         Rack r = new Rack(1, Integer.parseInt(x_Field.getText()), Integer.parseInt(y_Field.getText()), 
-                            Integer.parseInt(columnsField.getText()), Integer.parseInt(floorsField.getText()), 
-                            Integer.parseInt(orientationField.getText()));
+                            Integer.parseInt(columnsField.getText()), Integer.parseInt(floorsField.getText()),
+                            0);
         
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -60,7 +63,7 @@ public class CreateRackController implements Initializable{
         session.getTransaction().commit();
 
         sessionFactory.close();
-        //main.showListUser();
+        this.goListRacks();
     }
 
     /**
