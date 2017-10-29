@@ -30,6 +30,7 @@ public class ListController implements Initializable{
     private Main main;
     private ObservableList<User> users;
     private ObservableList<UserDisplay> usersView;
+    private int selected_id;
 
     @FXML
     private TableView<UserDisplay> tableUser;
@@ -45,11 +46,25 @@ public class ListController implements Initializable{
         main.showCreateUser();
     }
 
+    @FXML
+    private void goEditUser(ActionEvent event) throws IOException {
+        ContextFX.getInstance().setId(selected_id);
+        main.showEditUser();
+    }
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        tableUser.getSelectionModel().selectedItemProperty().addListener(
+        (observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                return;
+            }
+            this.selected_id = newValue.idUserProperty().getValue().intValue();
+            }
+        );
         try {
             namesColumn.setCellValueFactory(cellData -> cellData.getValue().namesProperty());
             usernameColumn.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
@@ -88,5 +103,33 @@ public class ListController implements Initializable{
         }
         tableUser.setItems(null);
         tableUser.setItems(usersView);
+    }
+
+    private void deleteUser(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(User.class);
+        User user = new User();
+        user.setId_user(cod);
+        session.delete(user);
+        session.getTransaction().commit();
+
+        sessionFactory.close();
+    }
+    
+    @FXML
+    private void deleteUser(ActionEvent event) throws SQLException, ClassNotFoundException {
+        ContextFX.getInstance().setId(selected_id);
+        Integer id_user = ContextFX.getInstance().getId();
+        deleteUser(selected_id);
+        for (int i = 0; i < useros.size(); i++) {
+            if (users.get(i).getId_user().compareTo(id_user) == 0) {
+                users.remove(i);
+            }
+        }
+        loadData();
     }
 }

@@ -8,6 +8,7 @@ import javafx.beans.property.StringProperty;
  * @author Marco
  */
 public class UserDisplay {
+    private final IntegerProperty id_user;
     private final StringProperty names;
     private final StringProperty email;
     private final StringProperty username;
@@ -19,6 +20,10 @@ public class UserDisplay {
         this.username = new SimpleStringProperty(username);
     }
     
+    public IntegerProperty idUserProperty() {
+        return id_product;
+    }
+
     public StringProperty namesProperty() {
         return names;
     }
