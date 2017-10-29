@@ -73,12 +73,13 @@ public class CreateController implements Initializable {
     }
  
     @FXML
-    private void insertUser(ActionEvent actionEvent) throws IOException {
+    public void insertUser() throws IOException {
         Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
         
         User user = new User(nameField.getText(), lastnameField.getText(), passwordField.getText(), emailField.getText(),currentTimestamp,true,1,currentTimestamp, usernameField.getText());
-        
+          
         System.out.print(user.getLastname());
+        System.out.println(user.getCreated_at());
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -89,7 +90,7 @@ public class CreateController implements Initializable {
         session.getTransaction().commit();
 
         sessionFactory.close();
-        main.showListUser();
+        main.showListUser();      
     }
 
 }
