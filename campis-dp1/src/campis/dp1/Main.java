@@ -1,9 +1,3 @@
-
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package campis.dp1;
 
 import java.io.IOException;
@@ -86,6 +80,15 @@ public class Main extends Application {
         BorderPane editWarehouse = loader.load();
         mainLayout.setCenter(editWarehouse);      
     }
+     
+     public static void showVisualizeWarehouse() throws IOException{
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/visualize.fxml"));
+        BorderPane visualizeWarehouse = loader.load();
+        mainLayout.setCenter(visualizeWarehouse);       
+     }
+     
+    /* End Warehouse */
 
     public static void showListUser() throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -97,8 +100,15 @@ public class Main extends Application {
     public static void showCreateUser() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/users/create.fxml"));
-        BorderPane createProd = loader.load();
-        mainLayout.setCenter(createProd);
+        BorderPane createUser = loader.load();
+        mainLayout.setCenter(createUser);
+    }
+
+    public static void showEditUser() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/users/edit.fxml"));
+        BorderPane editUser = loader.load();
+        mainLayout.setCenter(editUser);
     }
 
     public static void showListProduct() throws IOException {
@@ -249,7 +259,5 @@ public class Main extends Application {
      */
     public static void main(String[] args) {
         launch(args);
-    }
-    
+    }   
 }
-

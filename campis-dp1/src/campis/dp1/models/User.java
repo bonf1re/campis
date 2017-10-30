@@ -22,14 +22,14 @@ import javax.persistence.Table;
 public class User {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    int id_user;
+    Integer id_user;
     String firstname;
     String lastname;
     String password;
     String email;
     Timestamp created_at;
     boolean active;
-    int id_role;
+    Integer id_role;
     Timestamp updated_at;
     String username;
     
@@ -38,7 +38,7 @@ public class User {
     }
     
     public User(String firstname, String lastname, String password,
-            String email, Timestamp created_at, boolean active, int id_role,
+            String email, Timestamp created_at, boolean active, Integer id_role,
             Timestamp updated_at, String username ) {
         this.firstname = firstname;
         this.lastname = lastname;
@@ -54,14 +54,14 @@ public class User {
     /**
      * @return the id_user
      */
-    public int getId_user() {
+    public Integer getId_user() {
         return id_user;
     }
 
     /**
      * @param id_user the id_user to set
      */
-    public void setId_user(int id_user) {
+    public void setId_user(Integer id_user) {
         this.id_user = id_user;
     }
 
@@ -152,14 +152,14 @@ public class User {
     /**
      * @return the id_role
      */
-    public int getId_role() {
+    public Integer getId_role() {
         return id_role;
     }
 
     /**
      * @param id_role the id_role to set
      */
-    public void setId_role(int id_role) {
+    public void setId_role(Integer id_role) {
         this.id_role = id_role;
     }
 
