@@ -93,6 +93,13 @@ public class Main extends Application {
         mainLayout.setCenter(visualizeWarehouse);       
      }
      
+     public static void showWarehouseMoves() throws IOException{
+         FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(Main.class.getResource("views/warehouse/moves.fxml"));
+         BorderPane warehouseMoves = loader.load();
+         mainLayout.setCenter(warehouseMoves);
+     }
+     
     /* End Warehouse */
 
     public static void showListUser() throws IOException {
