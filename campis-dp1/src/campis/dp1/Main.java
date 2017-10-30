@@ -259,6 +259,29 @@ public class Main extends Application {
         mainLayout.setCenter(newDeparture);
      }
     
+    /* BuyOrder */
+    
+    public static void showListRequestOrder() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/requestOrder/list.fxml"));
+        BorderPane listRequestOrder = loader.load();
+        mainLayout.setCenter(listRequestOrder);
+     }
+    
+    public static void showCreateRequestOrder() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/requestOrder/create.fxml"));
+        BorderPane createRequestOrder = loader.load();
+        mainLayout.setCenter(createRequestOrder);
+    }
+    
+    public static void showAddItem() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/requestOrder/addItem.fxml"));
+        BorderPane addItem = loader.load();
+        mainLayout.setCenter(addItem);
+    }
+    
     /**  
      * @param args the command line arguments
      */
