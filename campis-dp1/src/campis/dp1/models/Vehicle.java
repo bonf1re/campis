@@ -41,7 +41,16 @@ public class Vehicle {
         this.id_warehouse = id_warehouse;
         this.plate = plate;
     }
-
+    
+    public Vehicle(Double max_weight, Integer speed, boolean active, Integer id_warehouse, String plate) {
+        this.max_weight = max_weight;
+        this.speed = speed;
+        this.active = active;
+        this.id_warehouse = id_warehouse;
+        this.plate = plate;
+    }
+    
+    
     public Integer getId_vehicle() {
         return id_vehicle;
     }

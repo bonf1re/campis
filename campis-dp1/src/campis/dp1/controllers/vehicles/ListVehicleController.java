@@ -38,7 +38,7 @@ public class ListVehicleController implements Initializable {
     private ObservableList<Vehicle> vehiculos;
     private ObservableList<VehicleDisplay> vehiculosView;
     
-        @FXML
+    @FXML
     private TableView<VehicleDisplay> tableVehicle;
 
     @FXML
@@ -76,6 +76,7 @@ public class ListVehicleController implements Initializable {
     
     @FXML
     private void goEditVehicle() throws IOException {
+        ContextFX.getInstance().setId(selected_id);
         main.showEditVehicle();
     } 
     
