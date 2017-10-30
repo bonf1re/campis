@@ -5,31 +5,26 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.racks.ListRackController">
-   <center>
-      <AnchorPane prefHeight="500.0" prefWidth="967.0">
-         <children>
-            <Label layoutX="40.0" layoutY="35.0" text="Lista de racks">
-               <font>
-                  <Font size="28.0" />
-               </font>
-            </Label>
-            <TableView fx:id="tablaRacks" layoutX="40.0" layoutY="95.0" prefHeight="360.0" prefWidth="750.0">
-              <columns>
-                <TableColumn fx:id="idCol" prefWidth="120.0" text="ID" />
-                  <TableColumn fx:id="warehouseCol" prefWidth="176.0" text="Almacen" />
-                <TableColumn fx:id="numColumnsCol" prefWidth="158.0" text="N° Columnas" />
-                  <TableColumn fx:id="numFloorsCol" prefWidth="162.0" text="N° Pisos" />
-                  <TableColumn fx:id="orientationCol" prefWidth="133.0" text="Orientacion" />
-              </columns>
-            </TableView>
-            <Button layoutX="840.0" layoutY="160.0" mnemonicParsing="false" onAction="#goNewRack" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
-            <Button layoutX="840.0" layoutY="240.0" mnemonicParsing="false" onAction="#goEditRack" prefHeight="35.0" prefWidth="85.0" text="Editar" />
-            <Button fx:id="DeleteButton" onAction="#deleteRack" layoutX="840.0" layoutY="320.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
-         </children>
-      </AnchorPane>
-   </center>
-</BorderPane>
+<AnchorPane prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.racks.ListRackController">
+   <children>
+      <Label layoutX="50.0" layoutY="45.0" text="Lista de racks">
+         <font>
+            <Font size="28.0" />
+         </font>
+      </Label>
+      <TableView fx:id="tablaRacks" layoutX="50.0" layoutY="105.0" prefHeight="360.0" prefWidth="750.0">
+         <columns>
+            <TableColumn fx:id="idCol" prefWidth="120.0" text="ID" />
+            <TableColumn fx:id="warehouseCol" prefWidth="176.0" text="Almacen" />
+            <TableColumn fx:id="numColumnsCol" prefWidth="158.0" text="N° Columnas" />
+            <TableColumn fx:id="numFloorsCol" prefWidth="162.0" text="N° Pisos" />
+            <TableColumn fx:id="orientationCol" prefWidth="133.0" text="Orientacion" />
+         </columns>
+      </TableView>
+      <Button layoutX="850.0" layoutY="170.0" mnemonicParsing="false" onAction="#goNewRack" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
+      <Button layoutX="850.0" layoutY="250.0" mnemonicParsing="false" onAction="#goEditRack" prefHeight="35.0" prefWidth="85.0" text="Editar" />
+      <Button fx:id="DeleteButton" layoutX="850.0" layoutY="330.0" mnemonicParsing="false" onAction="#deleteRack" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
+   </children>
+</AnchorPane>
