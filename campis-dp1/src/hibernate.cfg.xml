@@ -43,7 +43,12 @@
         <mapping class="campis.dp1.models.Product"/>
         <mapping class="campis.dp1.models.ProductType"/>
         <mapping class="campis.dp1.models.UnitOfMeasure"/>
+<<<<<<< HEAD
         <mapping class="campis.dp1.models.WarehouseMove"/>
+=======
+        <mapping class="campis.dp1.models.DispatchMove"/>
+        
+>>>>>>> 9da7233307332ca01d7319f38a338f56e32ed1cd
         
     </session-factory>
 
