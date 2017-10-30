@@ -5,6 +5,7 @@
  */
 package campis.dp1.controllers.vehicles;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import java.net.URL;
 import java.util.ResourceBundle;
@@ -20,6 +21,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.event.ActionEvent;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -137,4 +139,32 @@ public class ListVehicleController implements Initializable {
         tableVehicle.setItems(vehiculosView);
     }
  
+    @FXML
+    private void deleteVehicle(ActionEvent event) throws SQLException, ClassNotFoundException {
+        ContextFX.getInstance().setId(selected_id);
+        Integer id_vehicle = ContextFX.getInstance().getId();
+        deleteSelectedVehicle(selected_id);
+        for (int i = 0; i < vehiculos.size(); i++) {
+            if(vehiculos.get(i).getId_vehicle().compareTo(id_vehicle) == 0){
+                vehiculos.remove(i);
+            }
+        }
+        cargarData();
+    }
+    
+    private void deleteSelectedVehicle(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Vehicle.class);
+        Vehicle veh = new Vehicle();
+        veh.setId_vehicle(cod);
+        session.delete(veh);
+        session.getTransaction().commit();
+
+        sessionFactory.close();
+    }
 }
