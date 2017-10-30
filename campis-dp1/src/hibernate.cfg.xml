@@ -44,6 +44,8 @@
         <mapping class="campis.dp1.models.ProductType"/>
         <mapping class="campis.dp1.models.UnitOfMeasure"/>
         <mapping class="campis.dp1.models.Vehicle"/>
+        <mapping class="campis.dp1.models.DispatchMove"/>
+
         
     </session-factory>
 

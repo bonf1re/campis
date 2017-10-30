@@ -93,6 +93,13 @@ public class Main extends Application {
         mainLayout.setCenter(visualizeWarehouse);       
      }
      
+     public static void showWarehouseMoves() throws IOException{
+         FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(Main.class.getResource("views/warehouse/moves.fxml"));
+         BorderPane warehouseMoves = loader.load();
+         mainLayout.setCenter(warehouseMoves);
+     }
+     
     /* End Warehouse */
 
     public static void showListUser() throws IOException {
@@ -148,7 +155,7 @@ public class Main extends Application {
     public static void showListRacks() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/racks/list.fxml"));
-        BorderPane listRacks = loader.load();
+        AnchorPane listRacks = loader.load();
         mainLayout.setCenter(listRacks);
     }
     
@@ -258,6 +265,29 @@ public class Main extends Application {
         BorderPane newDeparture = loader.load();
         mainLayout.setCenter(newDeparture);
      }
+    
+    /* BuyOrder */
+    
+    public static void showListRequestOrder() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/requestOrder/list.fxml"));
+        BorderPane listRequestOrder = loader.load();
+        mainLayout.setCenter(listRequestOrder);
+     }
+    
+    public static void showCreateRequestOrder() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/requestOrder/create.fxml"));
+        BorderPane createRequestOrder = loader.load();
+        mainLayout.setCenter(createRequestOrder);
+    }
+    
+    public static void showAddItem() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/requestOrder/addItem.fxml"));
+        BorderPane addItem = loader.load();
+        mainLayout.setCenter(addItem);
+    }
     
     /**  
      * @param args the command line arguments
