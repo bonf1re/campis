@@ -1,0 +1,5 @@
+#fondo_login {
+    -fx-background-image: url("../images/login-warehouse.jpg");
+    -fx-background-position: center center;
+    -fx-background-size: 850 500;
+}
