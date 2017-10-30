@@ -1,6 +1,16 @@
 package campis.dp1;
 
+import campis.dp1.models.TabuProblem;
+import campis.dp1.models.InputManager;
+import campis.dp1.models.Coordinates;
+import campis.dp1.models.TabuSolution;
+import campis.dp1.services.TabuSearchService;
+import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.io.PrintWriter;
+import static java.lang.System.out;
+import java.util.ArrayList;
+import java.util.Arrays;
 import javafx.application.Application;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -249,6 +259,53 @@ public class Main extends Application {
      * @param args the command line arguments
      */
     public static void main(String[] args) {
-        launch(args);
+    	InputManager inputM = new InputManager();
+        Integer[][] mapa = new Integer[60][30];
+
+        try {
+            mapa = inputM.cargarMatriz("map.txt");
+        } catch (IOException ex) {
+            out.println("Error con el archivo map.txt!");
+        }
+
+        out.println("==================");
+        out.println("MAPA DEL DEPOSITO:");
+
+        for (int i = 0; i < 30; i++) {
+            out.println(Arrays.toString(mapa[i]));
+        }
+        
+        ArrayList<Coordinates> orden = new ArrayList<Coordinates>();
+
+        try {
+            orden = inputM.cargarOrden("coordinates.txt");
+        } catch (IOException ex) {
+            out.println("Error con el archivo de orden!");
+        }
+
+        out.println("==================");
+        out.println("ORDEN A ATENDER:");
+
+        for (int i = 0; i < 50; i++) {
+            out.println(orden.get(i).stringFormat());
+        }
+
+        TabuProblem problema = new TabuProblem(mapa);
+        TabuSearchService busqueda = new TabuSearchService();
+        TabuSolution mejor = busqueda.search(problema, orden);
+        out.println("==================");
+        out.println("SOLUCIÓN FINAL:"); 
+        mejor.printOrder();
+
+        try {
+            PrintWriter output = new PrintWriter("output.txt", "UTF-8");
+            output.println("Archivo: output.txt");
+            output.println("Distancia: " + problema.distance(mejor));
+            output.close();
+        } catch (IOException e) {
+            out.println("Error al imprimir resultados!");
+        }
+
+    	launch(args);
     }   
 }
