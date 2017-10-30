@@ -57,7 +57,12 @@ public class Main extends Application {
         mainLayout.setLeft(dispatchSidebar);
     }
     
-
+    public static void showCommerceSidebar() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/layouts/CommerceSidebar.fxml"));
+        VBox commerceSidebar = loader.load();
+        mainLayout.setLeft(commerceSidebar);
+    }
     
     /* Warehouse */
     public static void showListWarehouse() throws IOException {
@@ -80,6 +85,15 @@ public class Main extends Application {
         BorderPane editWarehouse = loader.load();
         mainLayout.setCenter(editWarehouse);      
     }
+     
+     public static void showVisualizeWarehouse() throws IOException{
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/visualize.fxml"));
+        BorderPane visualizeWarehouse = loader.load();
+        mainLayout.setCenter(visualizeWarehouse);       
+     }
+     
+    /* End Warehouse */
 
     public static void showListUser() throws IOException {
         FXMLLoader loader = new FXMLLoader();

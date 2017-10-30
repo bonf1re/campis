@@ -70,6 +70,12 @@ public class ListWarehouseController implements Initializable {
         main.showEditWarehouse();
     }
     
+    @FXML void goVisualizeWarehouse() throws IOException{
+        System.out.println(selected_id);
+        ContextFX.getInstance().setId(selected_id);
+        main.showVisualizeWarehouse();
+    }
+    
     /**
      * Initializes the controller class.
      */
@@ -114,6 +120,7 @@ public class ListWarehouseController implements Initializable {
     private ObservableList<Warehouse> getWarehouses() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
