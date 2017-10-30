@@ -13,6 +13,8 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import java.io.IOException;
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableCell;
 import javafx.scene.control.TableColumn;
@@ -21,6 +23,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
 public class AddPermissionController implements Initializable {
     Integer id;
@@ -128,7 +131,7 @@ public class AddPermissionController implements Initializable {
                     String userId = cell.getItem();
                     for (int i = 0; i < permissions.size(); i++) {
                         if (permissions.get(i).getId_permission().compareTo(selected_id) == 0) {
-                            permissions.get(i).setVisualize(! permissions.get(i).getVisualize());
+                            permissions.get(i).setModify(! permissions.get(i).getModify());
                         }
                     }
                     try {
@@ -151,5 +154,27 @@ public class AddPermissionController implements Initializable {
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ListController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+
+
+    @FXML
+    private void updatePermission (ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
+    	Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+    	for (int i = 0; i < permissions.size(); i++) {
+            
+	        Query query = session.createQuery("update Permission set visualize = :newVisualize, modify = :newModify "
+	                + "where id_permission = :oldIdPerm");
+	        query.setParameter("newVisualize", permissions.get(i).getVisualize());
+	        query.setParameter("newModify", permissions.get(i).getModify());
+	        query.setParameter("oldIdPerm", permissions.get(i).getId_permission());
+	        int result = query.executeUpdate();
+    	}
+        session.getTransaction().commit();
+        sessionFactory.close();
+        
     }
 }
