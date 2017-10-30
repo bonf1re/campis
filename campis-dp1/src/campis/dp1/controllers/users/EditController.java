@@ -57,6 +57,7 @@ public class EditController implements Initializable {
     public static Integer searchIdRole(String type) throws SQLException, ClassNotFoundException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -74,6 +75,7 @@ public class EditController implements Initializable {
     public static String getRole(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -93,6 +95,7 @@ public class EditController implements Initializable {
         
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -122,6 +125,7 @@ public class EditController implements Initializable {
         }
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
