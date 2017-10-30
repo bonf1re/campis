@@ -74,6 +74,6 @@ public class TabuProblem
 
     public boolean stop(TabuSolution best, Integer iterations) 
     {
-        return (iterations >= 100000 || best.getCount() == 5000);
+        return (iterations >= 100000 || best.getCount() == 2500);
     }
 }

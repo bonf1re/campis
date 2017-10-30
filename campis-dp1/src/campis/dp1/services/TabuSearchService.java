@@ -10,12 +10,10 @@ import static java.lang.System.out;
 public class TabuSearchService
 {
     private TabuList tabuList;
-    private TabuUtils tUtils;
 
     public TabuSearchService()
     {
         this.tabuList = new TabuList();
-        this.tUtils = new TabuUtils();
     }
 
     public TabuSolution search(TabuProblem problem, ArrayList<Coordinates> order) 
@@ -35,32 +33,32 @@ public class TabuSearchService
             out.println("Distancia: " + problem.distance(current));
             current.printOrder();
 
-            ArrayList<TabuSolution> candidates = this.tUtils.vecinos(current);
-            TabuSolution nuevaSol = problema.mejorVecino(candidatos, this.listaT); 
+            ArrayList<TabuSolution> candidates = current.neighbors();
+            TabuSolution newSolution = problem.bestNeighbor(candidates, this.tabuList); 
 
             out.println("Mejor solución vecina posible:");
-            out.println("Distancia: " + problema.distancia(nuevaSol));
-            nuevaSol.imprimirOrden();
+            out.println("Distancia: " + problem.distance(newSolution));
+            newSolution.printOrder();
 
-            actual = nuevaSol; 
-            this.listaT.actualizar(actual); 
+            current = newSolution; 
+            this.tabuList.update(current); 
 
-            if (problema.esMejor(actual, mejor)) { 
-                mejor = actual; 
+            if (problem.isBetter(current, best)) { 
+                best = current; 
                 out.println("Nueva mejor solución encontrada");
             } else { 
-                mejor.aumentarCount(); 
+                best.increaseCount(); 
                 out.println("Se mantiene mejor solución");
             } 
 
             out.println("Mejor solución actual:");
-            out.println("Distancia: " + problema.distancia(mejor));
-            mejor.imprimirOrden();
-            out.println("Contador: " + mejor.getCount());
+            out.println("Distancia: " + problem.distance(best));
+            best.printOrder();
+            out.println("Contador: " + best.getCount());
             
-            iteracion++;
+            iteration++;
         } 
 
-        return mejor;
+        return best;
     }
 }

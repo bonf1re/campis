@@ -3,6 +3,7 @@ package campis.dp1.models;
 import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
 
 public class TabuSolution
 {
@@ -61,5 +62,26 @@ public class TabuSolution
     public void printOrder()
     {
         out.println(this.stringFormatOrder());
+    }
+
+    public void swap(int first, int second)
+    {
+        Collections.swap(this.order, first, second);
+    }
+
+    public ArrayList<TabuSolution> neighbors()
+    {
+        ArrayList<TabuSolution> neighbors = new ArrayList<TabuSolution>();
+        neighbors.add(new TabuSolution(this));
+
+        for (int i = 0; i < this.order.size(); i++) {
+            for (int j = i + 1; j < this.order.size(); j++) {
+                TabuSolution neighbor = new TabuSolution(this);
+                neighbor.swap(i, j);
+                neighbors.add(neighbor);
+            }
+        }
+
+        return neighbors;
     }
 }
