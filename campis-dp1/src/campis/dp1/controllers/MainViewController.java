@@ -27,6 +27,11 @@ public class MainViewController {
     }
     
     @FXML
+    private void goCommerce() throws IOException {
+        main.showCommerceSidebar();
+    }
+
+    @FXML
     private void goListWarehouse() throws IOException{
         main.showListWarehouse();
     }
