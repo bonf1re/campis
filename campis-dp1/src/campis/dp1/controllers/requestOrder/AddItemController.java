@@ -43,6 +43,7 @@ public class AddItemController implements Initializable{
     Main main;
     private ObservableList<ProductDisplay> productsView;
     private ObservableList<Product> products;
+    private int selected_id;
     
     @FXML
     private JFXTextField codField;
@@ -175,8 +176,24 @@ public class AddItemController implements Initializable{
         return types;
     }
     
+    @FXML
+    private void addItemAction() throws IOException {
+        this.goCreateRequestOrder();
+    }
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        tableProd.getSelectionModel().selectedItemProperty().addListener(
+        (observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                return;
+            }
+            this.selected_id = newValue.codProdProperty().getValue().intValue();
+            }
+        );
+        
+        Integer quantity = Integer.parseInt(quantityField.getText());
+        
         codColumn.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty().asObject());
