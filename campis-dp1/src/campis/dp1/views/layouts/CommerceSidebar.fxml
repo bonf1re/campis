@@ -1,15 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import javafx.scene.control.Hyperlink?>
+<?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="95.0" 
-      xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.CommerceSidebarController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="95.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.CommerceSidebarController">
     <children>
-      <Hyperlink alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="95.0" text="Ordenes de Compra" textAlignment="CENTER" />
-      <Hyperlink alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="95.0" text="Ordenes de Venta" textAlignment="CENTER" />
+      <Hyperlink alignment="CENTER" contentDisplay="CENTER" prefHeight="63.0" prefWidth="95.0" text="Órdenes de Compra" textAlignment="CENTER" wrapText="true" />
+      <Hyperlink alignment="CENTER" contentDisplay="CENTER" prefHeight="61.0" prefWidth="95.0" text="Órdenes de Venta" textAlignment="CENTER" wrapText="true" />
    </children>
 </VBox>
