@@ -12,7 +12,7 @@
                <items>
                   <Hyperlink onAction="#goWarehouse" text="Almacenamiento" />
                   <Hyperlink onAction="#goDispatch" text="Despacho" />
-                  <Hyperlink text="Comercializaciòn" />
+                  <Hyperlink onAction="#goCommerce" text="Comercialización" />
                   <Hyperlink text="Reportes" />
                   <Hyperlink onAction="#goSecurity" text="Seguridad" />
                </items>
