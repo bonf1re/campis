@@ -5,13 +5,17 @@
  */
 package campis.dp1.controllers.requestOrder;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 
@@ -19,9 +23,10 @@ import javafx.scene.control.TableView;
  *
  * @author Eddy
  */
-public class CreateController {
+public class CreateController implements Initializable{
     
     Main main;
+    int id;
     
     @FXML
     private JFXTextField amountField;
@@ -56,6 +61,12 @@ public class CreateController {
     @FXML
     private void goListRequestOrder() throws IOException{
         main.showListRequestOrder();
+    }
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        id = ContextFX.getInstance().getId();
+        
     }
     
 }
