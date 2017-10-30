@@ -7,6 +7,8 @@ package campis.dp1.controllers.warehouse;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
+import campis.dp1.models.CRack;
+import campis.dp1.models.Coord;
 import campis.dp1.models.Rack;
 import campis.dp1.models.Warehouse;
 import com.jfoenix.controls.JFXComboBox;
@@ -42,7 +44,7 @@ public class VisualizeWarehouseController implements Initializable {
     private int x;
     private int y;
     private int warehouse_id;
-    private ArrayList<Rack> rackList = new ArrayList<>();
+    private ArrayList<CRack> crackList = new ArrayList<>();
     
     @FXML
     private JFXTextField nameField;
@@ -65,8 +67,7 @@ public class VisualizeWarehouseController implements Initializable {
         
         // First we will draw the warehouse without racks
         initializeMap();
-        putRacks();
-        
+        putCRacks();
         
        
        float canvas_height=(float) gc.getCanvas().getHeight();
@@ -100,10 +101,15 @@ public class VisualizeWarehouseController implements Initializable {
                 if (this.real_map[j][i]==1){
                    gc.setFill(Color.BLACK); 
                    gc.fillRect(i*mult+padding_x, j*mult+padding_y, mult, mult);
-                }else{
+                }
+                if (this.real_map[j][i]==0){
                     gc.setFill(Color.WHITE);
                     gc.setStroke(Color.BLACK);
                     gc.strokeRect(i*mult+padding_x, j*mult+padding_y, mult, mult);
+                }
+                if (this.real_map[j][i]==2){
+                    gc.setFill(Color.RED); 
+                    gc.fillRect(i*mult+padding_x, j*mult+padding_y, mult, mult);
                 }
                  
                
@@ -203,7 +209,7 @@ public class VisualizeWarehouseController implements Initializable {
         }
     }
 
-    private void putRacks() {
+    private void putCRacks() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -213,10 +219,10 @@ public class VisualizeWarehouseController implements Initializable {
         criteria.add(Restrictions.eq("id_warehouse",this.warehouse_id));
         List racks = criteria.list();
         for (int i = 0; i < racks.size(); i++) {
-            this.rackList.add((Rack) racks.get(i));
+            this.crackList.add(new CRack((Rack) racks.get(i)));
         }
         
-        for (Rack rack : this.rackList) {
+        for (CRack rack : this.crackList) {
             int rack_y = rack.getPos_y();
             int rack_x = rack.getPos_x();
             int rack_length = rack.getN_columns();
@@ -225,7 +231,12 @@ public class VisualizeWarehouseController implements Initializable {
                     this.real_map[i+rack_y][j+rack_x]=1;
                 }
             }
+            for (int i = 0; i < 4; i++) {
+                Coord corner = rack.getCorner(i);
+                this.real_map[corner.y][corner.x] = 2;
+            }
         }
         
     }
+
 }

@@ -70,7 +70,14 @@ public class ListWarehouseController implements Initializable {
         main.showEditWarehouse();
     }
     
-    @FXML void goVisualizeWarehouse() throws IOException{
+    @FXML
+    private void goWarehouseMoves() throws IOException{
+        ContextFX.getInstance().setId(selected_id);
+        main.showWarehouseMoves();
+    }
+    
+    @FXML 
+    private void goVisualizeWarehouse() throws IOException{
         System.out.println(selected_id);
         ContextFX.getInstance().setId(selected_id);
         main.showVisualizeWarehouse();
