@@ -6,11 +6,16 @@
 package campis.dp1.controllers.warehouse;
 
 import campis.dp1.Main;
+import campis.dp1.models.Rack;
+import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
+import java.util.ArrayList;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.canvas.Canvas;
 
 /**
  * FXML Controller class
@@ -19,6 +24,21 @@ import javafx.fxml.Initializable;
  */
 public class EditWarehouseController implements Initializable {
     private Main main;
+    Integer id;
+    private ArrayList<Rack> rackList = new ArrayList<>();
+    
+        
+    @FXML
+    private JFXTextField nameField;
+    @FXML
+    private JFXTextField lengthField;
+    @FXML
+    private JFXTextField widthField;
+    @FXML
+    private JFXComboBox statusCb;
+    
+    @FXML
+    private Canvas mapCanvas;
     
     @FXML
     private void goListWarehouse() throws IOException{
