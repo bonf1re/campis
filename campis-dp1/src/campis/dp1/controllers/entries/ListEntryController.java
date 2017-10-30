@@ -6,12 +6,28 @@
 package campis.dp1.controllers.entries;
 
 import campis.dp1.Main;
+import campis.dp1.controllers.products.ListController;
+import campis.dp1.models.DispatchMovesDisplay;
+import campis.dp1.models.DispatchMoves;
+import campis.dp1.models.Rack;
+import campis.dp1.models.RackDisplay;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
-import javafx.event.ActionEvent;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 /**
  * FXML Controller class
@@ -21,6 +37,9 @@ import javafx.fxml.Initializable;
 public class ListEntryController implements Initializable {
     
     private Main main;
+    private ObservableList<DispatchMoves> entries;
+    private ObservableList<DispatchMovesDisplay> entriesView;
+    private int selected_id;
     
     @FXML
     private void goVisualizeEntry() throws IOException {
@@ -32,12 +51,71 @@ public class ListEntryController implements Initializable {
         main.showNewEntry();
     }
     
+    @FXML
+    private TableView<DispatchMovesDisplay> tablaEntries;
+    @FXML
+    private TableColumn<DispatchMovesDisplay, Integer> idIngresCol;
+    @FXML
+    private TableColumn<DispatchMovesDisplay,  Integer> prov_AlmCol;
+    @FXML
+    private TableColumn<DispatchMovesDisplay, String> dateCol;
+    @FXML
+    private TableColumn<DispatchMovesDisplay, Integer> reasonsCol;
+    
+    private ObservableList<DispatchMoves> getEntries() {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(DispatchMoves.class);
+        List lista = criteria.list();
+        ObservableList<DispatchMoves> returnable;
+        returnable = FXCollections.observableArrayList();
+        for (int i = 0; i < lista.size(); i++) {
+            returnable.add((DispatchMoves)lista.get(i));
+        }
+        sessionFactory.close();
+        return returnable;        
+    }
+    
+    private void loadData() throws SQLException, ClassNotFoundException  {
+        entries = FXCollections.observableArrayList();
+        entriesView = FXCollections.observableArrayList();
+        entries = getEntries();
+        
+        for (int i = 0; i < entries.size(); i++) {
+            
+            DispatchMovesDisplay e = new DispatchMovesDisplay(entries.get(i).getId_group_batch(), 
+                                              entries.get(i).getTyoe_owner(),
+                                              entries.get(i).getId_owner(),
+                                              entries.get(i).getArrival_date().toString(),
+                                              entries.get(i).getReason());
+            
+            System.out.println("campis.dp1.controllers.entries.ListEntryController.loadData()");
+            System.out.println(entries.get(i).getId_group_batch());
+            entriesView.add(e);
+        }
+        
+        tablaEntries.setItems(null);  
+        tablaEntries.setItems(entriesView);  
+    }
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        try {
+            idIngresCol.setCellValueFactory(cellData -> cellData.getValue().id_group_batchProperty().asObject());
+            prov_AlmCol.setCellValueFactory(cellData -> cellData.getValue().id_ownerProperty().asObject());
+            dateCol.setCellValueFactory(cellData -> cellData.getValue().arrival_dateProperty());
+            reasonsCol.setCellValueFactory(cellData -> cellData.getValue().reasonProperty().asObject());
+             
+            loadData();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ListController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }    
     
 }
