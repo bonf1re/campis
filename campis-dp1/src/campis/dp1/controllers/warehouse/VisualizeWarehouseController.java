@@ -25,7 +25,6 @@ import javafx.fxml.Initializable;
 import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.paint.Color;
-import javax.persistence.Query;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -33,11 +32,10 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 
 /**
- * FXML Controller class
  *
- * @author Gina Bustamante
+ * @author sergio
  */
-public class EditWarehouseController implements Initializable {
+public class VisualizeWarehouseController implements Initializable {
     private Main main;
     @FXML
     private Canvas mapCanvas;
@@ -129,6 +127,7 @@ public class EditWarehouseController implements Initializable {
         
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -195,43 +194,14 @@ public class EditWarehouseController implements Initializable {
     }
     
     @FXML
-    private void updateWarehouse() throws IOException{
-        boolean verified = verifiyUpdate();
-        if (verified == false){
-            return;
-        }
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Query query = session.createQuery("update Warehouse set name=:newName,"+
-                                            "length=:newLength,"+
-                                            "width=:newWidth,"+
-                                            "status=:newStatus"+
-                                            " where id_warehouse=:oldIdWh");
-        query.setParameter("newName", nameField.getText());
-        query.setParameter("newLength", Integer.parseInt(lengthField.getText()));
-        query.setParameter("newWidth", Integer.parseInt(widthField.getText()));
-        boolean aux_status;
-        if (statusCb.getSelectionModel().getSelectedIndex()==0){
-            aux_status=true;
-        }else{
-            aux_status=false;
-        }
-        query.setParameter("newStatus", aux_status);
-        query.setParameter("oldIdWh", this.warehouse_id);
-        int result = query.executeUpdate();
-        
-        session.getTransaction().commit();
-        session.close();
-        sessionFactory.close();
-        this.goListWarehouse();
+    private void editWarehouse() throws IOException{
+        ContextFX.getInstance().setId(warehouse_id);
+        main.showEditWarehouse();
     }
 
     private void initializeMap() {
-        this.y=Integer.parseInt(this.widthField.getText());
-        this.x=Integer.parseInt(this.lengthField.getText());
+        this.y=Integer.parseInt(this.lengthField.getText());
+        this.x=Integer.parseInt(this.widthField.getText());
         this.real_map = new int[this.y][this.x];
         for (int i = 0; i < this.y; i++) {
             for (int j = 0; j < this.x; j++) {
@@ -243,6 +213,7 @@ public class EditWarehouseController implements Initializable {
     private void putCRacks() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -270,19 +241,4 @@ public class EditWarehouseController implements Initializable {
         
     }
 
-    private boolean verifiyUpdate() {
-        int new_length=Integer.parseInt(lengthField.getText());
-        int new_width=Integer.parseInt(widthField.getText());
-        for (CRack crack: this.crackList) {
-            if (crack.getOrientation() == 0){ // horizontal
-                if (crack.getPos_y()+2>=new_width) return false;
-                if (crack.getPos_x()+crack.getN_columns()>=new_length) return false;
-            }else{  // vertical
-                if (crack.getPos_x()+2>=new_length) return false;
-                if (crack.getPos_y()+crack.getN_columns()>=new_width) return false;
-            }
-        }
-        return true;
-    }
-    
 }

@@ -21,7 +21,7 @@
         <property name="connection.password">campis172</property>
 
         <!-- JDBC connection pool (use the built-in) -->
-        <property name="connection.pool_size">10</property>
+        <property name="connection.pool_size">1</property>
 
         <!-- SQL dialect -->
         <property name="dialect">org.hibernate.dialect.PostgreSQLDialect</property>
@@ -45,6 +45,8 @@
         <mapping class="campis.dp1.models.View"/>
         <mapping class="campis.dp1.models.ProductType"/>
         <mapping class="campis.dp1.models.UnitOfMeasure"/>
+        <mapping class="campis.dp1.models.DispatchMove"/>
+        
         
     </session-factory>
 

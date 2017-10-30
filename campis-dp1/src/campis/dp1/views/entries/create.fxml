@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXCheckBox?>
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import java.net.URL?>
 <?import javafx.scene.control.Button?>
@@ -23,33 +22,14 @@
                   <Font size="28.0" />
                </font>
             </Label>
-            <TableView layoutX="44.0" layoutY="155.0" prefHeight="280.0" prefWidth="384.0">
-              <columns>
-                <TableColumn prefWidth="128.0" text="ID Lote" />
-                  <TableColumn prefWidth="217.0" text="Producto" />
-                  <TableColumn prefWidth="182.0" text="Cantidad" />
-                  <TableColumn prefWidth="75.0" text="U. med" />
-                  <TableColumn prefWidth="152.0" text="Exp." />
-              </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
-            </TableView>
             <Button layoutX="880.0" layoutY="318.0" mnemonicParsing="false" onAction="#goListEntries" prefHeight="27.0" prefWidth="73.0" text="Cerrar" />
-            <Label layoutX="44.0" layoutY="126.0" text="Productos provenientes de almacén:">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
-            <Label layoutX="484.0" layoutY="126.0" prefHeight="20.0" prefWidth="303.0" text="Lista de lotes a ingresar:">
+            <Label layoutX="44.0" layoutY="131.0" prefHeight="20.0" prefWidth="303.0" text="Lista de lotes a ingresar:">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
             <Button layoutX="880.0" layoutY="267.0" mnemonicParsing="false" onAction="#goListEntries" prefHeight="27.0" prefWidth="73.0" text="Guardar" />
-            <Button layoutX="443.0" layoutY="292.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="&gt;" />
-            <Button layoutX="443.0" layoutY="343.0" mnemonicParsing="false" prefHeight="20.0" prefWidth="20.0" text="&lt;" />
-            <TableView layoutX="484.0" layoutY="155.0" prefHeight="280.0" prefWidth="384.0">
+            <TableView layoutX="45.0" layoutY="155.0" prefHeight="280.0" prefWidth="823.0">
                <columns>
                   <TableColumn prefWidth="128.0" text="ID Lote" />
                   <TableColumn prefWidth="217.0" text="Producto" />
@@ -62,15 +42,12 @@
                </columnResizePolicy>
             </TableView>
             <Button layoutX="898.0" layoutY="104.0" mnemonicParsing="false" onAction="#goNewBatch" prefHeight="27.0" prefWidth="37.0" text="+" />
-            <Label layoutX="44.0" layoutY="87.0" text="Proveniente de:">
+            <Label layoutX="44.0" layoutY="87.0" text="Proveedor:">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <JFXCheckBox layoutX="191.0" layoutY="88.0" text="Almacén" />
-            <JFXCheckBox layoutX="448.0" layoutY="88.0" text="Proveedor" />
-            <JFXComboBox layoutX="327.0" layoutY="84.0" />
-            <JFXComboBox layoutX="580.0" layoutY="84.0" />
+            <JFXComboBox layoutX="215.0" layoutY="84.0" prefHeight="26.0" prefWidth="168.0" />
             <Label layoutX="44.0" layoutY="454.0" text="Motivo:">
                <font>
                   <Font size="16.0" />

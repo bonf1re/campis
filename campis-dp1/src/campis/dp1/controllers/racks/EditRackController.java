@@ -7,8 +7,6 @@ package campis.dp1.controllers.racks;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
-import static campis.dp1.controllers.products.EditController.searchCodMeasure;
-import static campis.dp1.controllers.products.EditController.searchCodType;
 import campis.dp1.models.Rack;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
@@ -57,6 +55,7 @@ public class EditRackController implements Initializable{
         
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -94,6 +93,7 @@ public class EditRackController implements Initializable{
         
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
