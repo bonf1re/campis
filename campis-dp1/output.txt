@@ -1,0 +1,2 @@
+Archivo: output.txt
+Distancia: 306.48517181906004
