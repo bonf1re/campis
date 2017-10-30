@@ -1,15 +1,59 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
 
-<BorderPane xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.EditWarehouseController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.EditWarehouseController">
    <center>
-      <AnchorPane id="AnchorPane" prefHeight="400.0" prefWidth="600.0">
+      <Pane prefHeight="350.0" prefWidth="700.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="242.0" layoutY="185.0" mnemonicParsing="false" text="Editora warehouse" />
+            <Text layoutX="40.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modificación de Almacén">
+               <font>
+                  <Font size="28.0" />
+               </font>
+            </Text>
+            <Text disable="true" layoutX="40.0" layoutY="134.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Nombre:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Text disable="true" layoutX="40.0" layoutY="229.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Largo:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Text disable="true" layoutX="236.0" layoutY="232.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Ancho:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+            <Text disable="true" layoutX="45.0" layoutY="322.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Estado:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Text>
+          <Button layoutX="353.0" layoutY="495.0" mnemonicParsing="false" onAction="#updateWarehouse" prefHeight="35.0" prefWidth="106.0" text="Grabar">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Button>
+            <Button layoutX="486.0" layoutY="495.0" mnemonicParsing="false" onAction="#goListWarehouse" prefHeight="38.0" prefWidth="108.0" text="Regresar">
+               <font>
+                  <Font size="17.0" />
+               </font>
+            </Button>
+            <JFXTextField fx:id="nameField" layoutX="143.0" layoutY="100.0" />
+            <JFXTextField fx:id="lengthField" layoutX="143.0" layoutY="192.0" prefHeight="26.0" prefWidth="47.0" />
+            <JFXTextField fx:id="widthField" layoutX="316.0" layoutY="199.0" prefHeight="26.0" prefWidth="47.0" />
+            <JFXComboBox fx:id="statusCb" editable="true" layoutX="143.0" layoutY="303.0" prefHeight="26.0" prefWidth="154.0" />
+            <Canvas fx:id="mapCanvas" height="376.0" layoutX="472.0" layoutY="64.0" width="474.0" />
          </children>
-      </AnchorPane>
+      </Pane>
    </center>
 </BorderPane>

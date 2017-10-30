@@ -55,6 +55,7 @@ public class EditRackController implements Initializable{
         
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -92,6 +93,7 @@ public class EditRackController implements Initializable{
         
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();

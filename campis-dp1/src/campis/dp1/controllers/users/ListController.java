@@ -85,6 +85,7 @@ public class ListController implements Initializable{
     private ObservableList<User> getUsers() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -116,6 +117,7 @@ public class ListController implements Initializable{
         returnable = FXCollections.observableArrayList();
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -155,6 +157,7 @@ public class ListController implements Initializable{
     private void deleteUser(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
