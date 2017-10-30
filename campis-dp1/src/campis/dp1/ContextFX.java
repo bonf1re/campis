@@ -16,6 +16,7 @@ public class ContextFX {
     }
     
     Integer id = null;
+    Integer quantity = null;
 
     public Integer getId() {
         Integer returnable = new Integer(this.id);
@@ -27,5 +28,13 @@ public class ContextFX {
         this.id = id;
     }
     
+    public Integer getQuantity() {
+        Integer returnable = new Integer(this.quantity);
+        this.quantity = null;
+        return returnable;
+    }
     
+    public void setQuantity(Integer quantity) {
+        this.quantity = quantity;
+    }
 }
