@@ -13,17 +13,26 @@ import javax.persistence.Table;
  * @author Marco
  */
 @Entity
-@Table(name = "permissions")
+@Table(name = "permission")
 public class Permission {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id_view;
-    private Integer id_role;
-    private Boolean visualize;
-    private Boolean modify;
+    Integer id_permission;
+    Integer id_view;
+    Integer id_role;
+    Boolean visualize;
+    Boolean modify;
     
     public Permission(){
         super();
+    }
+    
+    public Integer getId_permission() {
+        return id_view;
+    }
+
+    public void setId_permission(Integer id_permission) {
+        this.id_permission = id_permission;
     }
 
     /**

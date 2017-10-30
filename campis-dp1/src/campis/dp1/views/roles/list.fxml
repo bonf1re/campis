@@ -35,7 +35,7 @@
             <Button layoutX="840.0" layoutY="133.0" mnemonicParsing="false" onAction="#goCreateRole" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
             <Button layoutX="840.0" layoutY="205.0" mnemonicParsing="false" onAction="#goEditRole" prefHeight="35.0" prefWidth="85.0" text="Editar" />
             <Button layoutX="840.0" layoutY="275.0" mnemonicParsing="false" onAction="#deleteRole" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
-            <Button layoutX="840.0" layoutY="343.0" mnemonicParsing="false" onAction="#goCreateRole" prefHeight="36.0" prefWidth="85.0" text="Permisos" />
+            <Button layoutX="840.0" layoutY="343.0" mnemonicParsing="false" onAction="#goPermission" prefHeight="36.0" prefWidth="85.0" text="Permisos" />
          </children>
       </AnchorPane>
    </center>
