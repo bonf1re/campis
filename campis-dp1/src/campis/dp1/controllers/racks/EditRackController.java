@@ -7,8 +7,6 @@ package campis.dp1.controllers.racks;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
-import static campis.dp1.controllers.products.EditController.searchCodMeasure;
-import static campis.dp1.controllers.products.EditController.searchCodType;
 import campis.dp1.models.Rack;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;

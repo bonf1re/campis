@@ -133,7 +133,7 @@ public class Main extends Application {
     public static void showListRacks() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/racks/list.fxml"));
-        BorderPane listRacks = loader.load();
+        AnchorPane listRacks = loader.load();
         mainLayout.setCenter(listRacks);
     }
     

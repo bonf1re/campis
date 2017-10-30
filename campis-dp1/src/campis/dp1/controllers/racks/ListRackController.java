@@ -8,7 +8,6 @@ package campis.dp1.controllers.racks;
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.controllers.products.ListController;
-import campis.dp1.models.Product;
 import campis.dp1.models.Rack;
 import campis.dp1.models.RackDisplay;
 import java.io.IOException;
@@ -87,8 +86,6 @@ public class ListRackController implements Initializable{
         racks = getRacks();
         
         for (int i = 0; i < racks.size(); i++) {
-            //System.out.println("campis.dp1.controllers.racks.ListRackController.loadData()");
-            //System.out.println(racks.get(i).getId_rack());
             
             RackDisplay r = new RackDisplay(racks.get(i).getId_rack(), 
                                             racks.get(i).getPos_x(),
