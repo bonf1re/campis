@@ -7,10 +7,8 @@ package campis.dp1.controllers.entries;
 
 import campis.dp1.Main;
 import campis.dp1.controllers.products.ListController;
-import campis.dp1.models.DispatchMovesDisplay;
-import campis.dp1.models.DispatchMoves;
-import campis.dp1.models.Rack;
-import campis.dp1.models.RackDisplay;
+import campis.dp1.models.DispatchMoveDisplay;
+import campis.dp1.models.DispatchMove;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -37,8 +35,8 @@ import org.hibernate.cfg.Configuration;
 public class ListEntryController implements Initializable {
     
     private Main main;
-    private ObservableList<DispatchMoves> entries;
-    private ObservableList<DispatchMovesDisplay> entriesView;
+    private ObservableList<DispatchMove> entries;
+    private ObservableList<DispatchMoveDisplay> entriesView;
     private int selected_id;
     
     @FXML
@@ -52,28 +50,28 @@ public class ListEntryController implements Initializable {
     }
     
     @FXML
-    private TableView<DispatchMovesDisplay> tablaEntries;
+    private TableView<DispatchMoveDisplay> tablaEntries;
     @FXML
-    private TableColumn<DispatchMovesDisplay, Integer> idIngresCol;
+    private TableColumn<DispatchMoveDisplay, Integer> idIngresCol;
     @FXML
-    private TableColumn<DispatchMovesDisplay,  Integer> prov_AlmCol;
+    private TableColumn<DispatchMoveDisplay,  Integer> prov_AlmCol;
     @FXML
-    private TableColumn<DispatchMovesDisplay, String> dateCol;
+    private TableColumn<DispatchMoveDisplay, String> dateCol;
     @FXML
-    private TableColumn<DispatchMovesDisplay, Integer> reasonsCol;
+    private TableColumn<DispatchMoveDisplay, Integer> reasonsCol;
     
-    private ObservableList<DispatchMoves> getEntries() {
+    private ObservableList<DispatchMove> getEntries() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Criteria criteria = session.createCriteria(DispatchMoves.class);
+        Criteria criteria = session.createCriteria(DispatchMove.class);
         List lista = criteria.list();
-        ObservableList<DispatchMoves> returnable;
+        ObservableList<DispatchMove> returnable;
         returnable = FXCollections.observableArrayList();
         for (int i = 0; i < lista.size(); i++) {
-            returnable.add((DispatchMoves)lista.get(i));
+            returnable.add((DispatchMove)lista.get(i));
         }
         sessionFactory.close();
         return returnable;        
@@ -86,7 +84,7 @@ public class ListEntryController implements Initializable {
         
         for (int i = 0; i < entries.size(); i++) {
             
-            DispatchMovesDisplay e = new DispatchMovesDisplay(entries.get(i).getId_group_batch(), 
+            DispatchMoveDisplay e = new DispatchMoveDisplay(entries.get(i).getId_group_batch(), 
                                               entries.get(i).getTyoe_owner(),
                                               entries.get(i).getId_owner(),
                                               entries.get(i).getArrival_date().toString(),

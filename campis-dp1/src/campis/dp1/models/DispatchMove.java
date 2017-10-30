@@ -19,7 +19,7 @@ import javax.persistence.Table;
 
 @Entity
 @Table(name = "group_batch")
-public class DispatchMoves {
+public class DispatchMove {
     
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
@@ -29,11 +29,11 @@ public class DispatchMoves {
     private Timestamp arrival_date;
     private Integer reason;
     
-    public DispatchMoves(){
+    public DispatchMove(){
         super();
     }
     
-    public DispatchMoves(Integer type_owner, Integer id_owner, Timestamp arrival_date, 
+    public DispatchMove(Integer type_owner, Integer id_owner, Timestamp arrival_date, 
                  Integer reason){
         
         this.type_owner = type_owner;

@@ -15,7 +15,7 @@ import javafx.beans.property.StringProperty;
  *
  * @author Gina Bustamante
  */
-public class DispatchMovesDisplay {
+public class DispatchMoveDisplay {
     
     private final IntegerProperty id_group_batch;
     private final IntegerProperty tyoe_owner;
@@ -23,7 +23,7 @@ public class DispatchMovesDisplay {
     private final StringProperty arrival_date;
     private final IntegerProperty reason;
     
-    public DispatchMovesDisplay(Integer id_group_batch, Integer type_owner, Integer id_owner, 
+    public DispatchMoveDisplay(Integer id_group_batch, Integer type_owner, Integer id_owner, 
                         String arrival_date, Integer reason){
         this.id_group_batch = new SimpleIntegerProperty(id_group_batch);
         this.tyoe_owner = new SimpleIntegerProperty(type_owner);
