@@ -28,7 +28,7 @@ public class Permission {
     }
     
     public Integer getId_permission() {
-        return id_view;
+        return id_permission;
     }
 
     public void setId_permission(Integer id_permission) {

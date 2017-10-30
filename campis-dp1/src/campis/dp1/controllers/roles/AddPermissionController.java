@@ -149,13 +149,11 @@ public class AddPermissionController implements Initializable {
             viewColumn.setCellValueFactory(cellData -> cellData.getValue().getView());
             editColumn.setCellValueFactory(cellData -> cellData.getValue().getModify());
             visualizeColumn.setCellValueFactory(cellData -> cellData.getValue().getVisualize());
-            /**/
             loadData();
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ListController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
-
 
     @FXML
     private void updatePermission (ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
@@ -165,7 +163,6 @@ public class AddPermissionController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
     	for (int i = 0; i < permissions.size(); i++) {
-            
 	        Query query = session.createQuery("update Permission set visualize = :newVisualize, modify = :newModify "
 	                + "where id_permission = :oldIdPerm");
 	        query.setParameter("newVisualize", permissions.get(i).getVisualize());
