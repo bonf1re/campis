@@ -306,6 +306,6 @@ public class Main extends Application {
             out.println("Error al imprimir resultados!");
         }
 
-    	launch(args);
+    	//launch(args);
     }   
 }
