@@ -5,6 +5,8 @@
  */
 package campis.dp1.models;
 
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
@@ -13,12 +15,18 @@ import javafx.beans.property.StringProperty;
  * @author Marco
  */
 public class RoleDisplay {
+    private final IntegerProperty id_role;
     private final StringProperty description;
     
-    public RoleDisplay(String description) {
+    public RoleDisplay(int id, String description) {
+        this.id_role = new SimpleIntegerProperty(id);
         this.description = new SimpleStringProperty(description);
     }
-    
+
+    public IntegerProperty idRoleProperty() {
+        return id_role;
+    }
+
     public StringProperty descriptionProperty() {
         return description;
     }
