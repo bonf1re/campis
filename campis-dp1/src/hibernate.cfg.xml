@@ -38,11 +38,19 @@
         <!-- Names the annotated entity class -->
         <mapping class="campis.dp1.models.Warehouse"/>
         <mapping class="campis.dp1.models.User"/>
-		<mapping class="campis.dp1.models.Rack"/>
+        <mapping class="campis.dp1.models.Rack"/>
         <mapping class="campis.dp1.models.Role"/>
         <mapping class="campis.dp1.models.Product"/>
+        <mapping class="campis.dp1.models.Permission"/>
+        <mapping class="campis.dp1.models.View"/>
         <mapping class="campis.dp1.models.ProductType"/>
         <mapping class="campis.dp1.models.UnitOfMeasure"/>
+        <mapping class="campis.dp1.models.Vehicle"/>
+        <mapping class="campis.dp1.models.WarehouseMove"/>
+        <mapping class="campis.dp1.models.DispatchMove"/>
+        <mapping class="campis.dp1.models.Batch"/>
+        <mapping class="campis.dp1.models.RequestOrder"/>
+        <mapping class="campis.dp1.models.Client"/>
         
     </session-factory>
 

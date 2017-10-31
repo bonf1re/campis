@@ -93,6 +93,20 @@ public class Main extends Application {
         mainLayout.setCenter(visualizeWarehouse);       
      }
      
+     public static void showWarehouseMoves() throws IOException{
+         FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(Main.class.getResource("views/warehouse/moves.fxml"));
+         BorderPane warehouseMoves = loader.load();
+         mainLayout.setCenter(warehouseMoves);
+     }
+     
+     public static void showWarehouseCreateMove() throws IOException{
+         FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(Main.class.getResource("views/warehouse/createmove.fxml"));
+         BorderPane creamove = loader.load();
+         mainLayout.setCenter(creamove);
+     }
+     
     /* End Warehouse */
 
     public static void showListUser() throws IOException {
@@ -148,7 +162,7 @@ public class Main extends Application {
     public static void showListRacks() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/racks/list.fxml"));
-        BorderPane listRacks = loader.load();
+        AnchorPane listRacks = loader.load();
         mainLayout.setCenter(listRacks);
     }
     
@@ -188,7 +202,21 @@ public class Main extends Application {
         BorderPane createProd = loader.load();
         mainLayout.setCenter(createProd);
     }
+
+    public static void showPermission() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/roles/addPermission.fxml"));
+        BorderPane createProd = loader.load();
+        mainLayout.setCenter(createProd);
+    }
     
+    public static void showViewRole() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/roles/show.fxml"));
+        BorderPane viewProd = loader.load();
+        mainLayout.setCenter(viewProd);
+    }
+
     /* Vehículos */
     
     public static void showListVehicle() throws IOException {
@@ -288,4 +316,11 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }   
+
+    public static   void showRouteMove() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/routemove.fxml"));
+        BorderPane routeMove = loader.load();
+        mainLayout.setCenter(routeMove);
+    }
 }

@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Button?>
@@ -20,12 +21,12 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label layoutX="156.0" layoutY="99.0" text="Nombre Cliente:" />
-            <JFXTextField fx:id="nameClientField" layoutX="273.0" layoutY="99.0" prefHeight="25.0" prefWidth="210.0" />
-            <Label layoutX="156.0" layoutY="161.0" text="Fecha Creación:" />
-            <JFXDatePicker fx:id="creationDate" layoutX="273.0" layoutY="157.0" />
-            <Label layoutX="504.0" layoutY="161.0" text="Fecha Delivery:" />
-            <JFXDatePicker fx:id="deliveryDate" layoutX="599.0" layoutY="157.0" />
+            <Label layoutX="156.0" layoutY="73.0" text="Nombre Cliente:" />
+            <JFXTextField fx:id="nameClientField" layoutX="273.0" layoutY="73.0" prefHeight="25.0" prefWidth="210.0" />
+            <Label layoutX="156.0" layoutY="135.0" text="Fecha Creación:" />
+            <JFXDatePicker fx:id="creationDate" layoutX="273.0" layoutY="131.0" />
+            <Label layoutX="504.0" layoutY="135.0" text="Fecha Delivery:" />
+            <JFXDatePicker fx:id="deliveryDate" layoutX="599.0" layoutY="131.0" />
             <TableView fx:id="tablaProd" layoutX="156.0" layoutY="243.0" prefHeight="200.0" prefWidth="657.0">
               <columns>
                 <TableColumn fx:id="idColumn" prefWidth="75.0" text="Código" />
@@ -46,8 +47,10 @@
             <Button layoutX="838.0" layoutY="353.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Eliminar Item" />
             <Button layoutX="316.0" layoutY="522.0" mnemonicParsing="false" onAction="#createRequestOrder" prefHeight="35.0" prefWidth="85.0" text="Crear" />
             <Button layoutX="536.0" layoutY="522.0" mnemonicParsing="false" onAction="#goListRequestOrder" prefHeight="35.0" prefWidth="87.0" text="Cancelar" />
-            <Label layoutX="515.0" layoutY="99.0" text="Código Cliente:" />
-            <JFXTextField fx:id="codClientField" layoutX="632.0" layoutY="99.0" prefHeight="25.0" prefWidth="82.0" />
+            <Label layoutX="515.0" layoutY="73.0" text="Código Cliente:" />
+            <JFXTextField fx:id="codClientField" layoutX="632.0" layoutY="73.0" prefHeight="25.0" prefWidth="82.0" />
+            <Label layoutX="156.0" layoutY="177.0" text="Estado:" />
+            <JFXComboBox fx:id="statesField" layoutX="273.0" layoutY="173.0" prefHeight="25.0" prefWidth="167.0" />
          </children>
       </AnchorPane>
    </bottom>

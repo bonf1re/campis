@@ -41,14 +41,14 @@ public class RackDisplay {
         return id_warehouse;
     }
     
-//    public IntegerProperty pos_xProperty() {
-//        return pos_x;
-//    }
-//    
-//    public IntegerProperty pos_yProperty() {
-//        return pos_y;
-//    }
-//    
+    public IntegerProperty pos_xProperty() {
+        return pos_x;
+    }
+    
+    public IntegerProperty pos_yProperty() {
+        return pos_y;
+    }
+    
     public IntegerProperty n_columnsProperty() {
         return n_columns;
     }

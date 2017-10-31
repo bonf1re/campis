@@ -9,12 +9,24 @@ import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
+import campis.dp1.models.RequestOrder;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import static java.time.temporal.TemporalQueries.zoneId;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.TimeZone;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -67,6 +79,8 @@ public class CreateController implements Initializable {
     private JFXDatePicker deliveryDate;
     @FXML
     private JFXTextField codClientField;
+    @FXML
+    private JFXComboBox statesField;
 
     @FXML
     private void goAddItem() throws IOException {
@@ -76,6 +90,30 @@ public class CreateController implements Initializable {
     @FXML
     private void goListRequestOrder() throws IOException {
         main.showListRequestOrder();
+    }
+    
+    @FXML
+    private void createRequestOrder() throws IOException, ParseException {
+        SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        Date date_creation = getDate(creationDate.getValue());
+        Date date_delivery = getDate(deliveryDate.getValue());
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        RequestOrder requestOrder = new RequestOrder(Timestamp.valueOf(formatIn.format(date_creation)), 
+                                    Timestamp.valueOf((String)formatIn.format(date_delivery)), 
+                                    Float.parseFloat(amountField.getText()), 
+                                    Float.parseFloat(amountField.getText()),
+                                    (String)statesField.getEditor().getText(), 
+                                    Integer.parseInt(codClientField.getText()));
+        session.save(requestOrder);
+        session.getTransaction().commit();
+        
+        sessionFactory.close();
+        this.goListRequestOrder();
     }
     
     private ObservableList<Product> getProduct(int cod) {
@@ -119,6 +157,7 @@ public class CreateController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
+            statesField.getItems().addAll("ENTREGADO","CANCELADO","EN PROGRESO");
             id = ContextFX.getInstance().getId();
             quantity = ContextFX.getInstance().getQuantity();
             
@@ -139,6 +178,14 @@ public class CreateController implements Initializable {
             finalAmountColumn.setCellValueFactory(cellData -> cellData.getValue().pesoProperty().asObject());
             stateColumn.setCellValueFactory(cellData -> cellData.getValue().marcaProperty());
         }
+    }
+
+    private Date getDate(LocalDate value) {
+        
+        Calendar calendar = new GregorianCalendar(value.getYear(),
+                                                    value.getMonthValue(),
+                                                    value.getDayOfMonth());
+        return calendar.getTime();
     }
 
 }

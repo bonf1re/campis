@@ -6,9 +6,10 @@
 package campis.dp1;
 
 import campis.dp1.models.ProductDisplay;
-import javafx.beans.property.SimpleListProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  *
@@ -21,9 +22,20 @@ public class ContextFX {
     }
     
     Integer id = null;
+    List aux_list = null;   // Abstract so it can take any kind of arraylist
     Integer quantity = null;
     Float totAmount = 0.0f;
     ObservableList<ProductDisplay> tempList = FXCollections.observableArrayList();
+    
+    public List getList(){
+        List returnable = new ArrayList<>(this.aux_list);
+        this.aux_list = null;
+        return returnable;
+    }
+    
+    public void setList(List aux_list){
+        this.aux_list = new ArrayList<>(aux_list);
+    }
 
     public Integer getId() {
         Integer returnable = new Integer(this.id);
