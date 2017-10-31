@@ -10,7 +10,9 @@ import campis.dp1.Main;
 import campis.dp1.models.Client;
 import campis.dp1.models.RequestDisplay;
 import campis.dp1.models.RequestOrder;
+import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
+import static java.lang.Boolean.TRUE;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -42,6 +44,8 @@ public class ListController implements Initializable{
     String name;
     private int selected_id;
     
+    @FXML
+    private JFXTextField searchField;
     @FXML
     private TableView<RequestDisplay> requestTable;
     @FXML
@@ -161,5 +165,51 @@ public class ListController implements Initializable{
         session.getTransaction().commit();
         
         sessionFactory.close();
+    }
+    
+    @FXML
+    private void searchRequest(ActionEvent event) {
+        String text = this.searchField.getText();
+        if(text.compareTo("") == 0) {
+            loadData();
+        } else {
+            requestList = FXCollections.observableArrayList();
+            requestView = FXCollections.observableArrayList();
+            requestList = getSearchList(text);
+            if(requestList == null){
+                requestTable.setItems(null);
+            } else {
+                for (int i = 0; i < requestList.size(); i++) {
+                    name = getName(requestList.get(i).getId_client());
+                    RequestDisplay request = new RequestDisplay(requestList.get(i).getId_request_order(), 
+                                    name, requestList.get(i).getTotal_amount(), 
+                                    requestList.get(i).getStatus());
+                    requestView.add(request);
+                }
+            }
+            requestTable.setItems(null);
+            requestTable.setItems(requestView);
+        }
+    }
+
+    private ObservableList<RequestOrder> getSearchList(String text) {
+        ObservableList<RequestOrder> returnable;
+        returnable = FXCollections.observableArrayList();
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(RequestOrder.class);
+        List<RequestOrder> list = criteria.list();
+        for (int i = 0; i < list.size(); i++) {
+            name = getName(list.get(i).getId_client());
+            if(name.contains(text) == TRUE) {
+                returnable.add(list.get(i));
+            }
+        }
+        sessionFactory.close();
+        return returnable;
     }
 }

@@ -34,8 +34,8 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <JFXTextField layoutX="327.0" layoutY="99.0" />
-            <Button layoutX="507.0" layoutY="99.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="77.0" text="Buscar" />
+            <JFXTextField fx:id="searchField" layoutX="327.0" layoutY="99.0" />
+            <Button layoutX="507.0" layoutY="99.0" mnemonicParsing="false" onAction="#searchRequest" prefHeight="29.0" prefWidth="77.0" text="Buscar" />
          </children>
       </AnchorPane>
    </center>
