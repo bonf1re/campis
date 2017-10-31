@@ -195,7 +195,21 @@ public class Main extends Application {
         BorderPane createProd = loader.load();
         mainLayout.setCenter(createProd);
     }
+
+    public static void showPermission() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/roles/addPermission.fxml"));
+        BorderPane createProd = loader.load();
+        mainLayout.setCenter(createProd);
+    }
     
+    public static void showViewRole() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/roles/show.fxml"));
+        BorderPane viewProd = loader.load();
+        mainLayout.setCenter(viewProd);
+    }
+
     /* Vehículos */
     
     public static void showListVehicle() throws IOException {
@@ -265,6 +279,29 @@ public class Main extends Application {
         BorderPane newDeparture = loader.load();
         mainLayout.setCenter(newDeparture);
      }
+    
+    /* BuyOrder */
+    
+    public static void showListRequestOrder() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/requestOrder/list.fxml"));
+        BorderPane listRequestOrder = loader.load();
+        mainLayout.setCenter(listRequestOrder);
+     }
+    
+    public static void showCreateRequestOrder() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/requestOrder/create.fxml"));
+        BorderPane createRequestOrder = loader.load();
+        mainLayout.setCenter(createRequestOrder);
+    }
+    
+    public static void showAddItem() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/requestOrder/addItem.fxml"));
+        BorderPane addItem = loader.load();
+        mainLayout.setCenter(addItem);
+    }
     
     /**  
      * @param args the command line arguments

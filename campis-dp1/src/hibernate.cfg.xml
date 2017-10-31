@@ -41,10 +41,14 @@
 		<mapping class="campis.dp1.models.Rack"/>
         <mapping class="campis.dp1.models.Role"/>
         <mapping class="campis.dp1.models.Product"/>
+        <mapping class="campis.dp1.models.Permission"/>
+        <mapping class="campis.dp1.models.View"/>
         <mapping class="campis.dp1.models.ProductType"/>
         <mapping class="campis.dp1.models.UnitOfMeasure"/>
+        <mapping class="campis.dp1.models.Vehicle"/>
+        <mapping class="campis.dp1.models.WarehouseMove"/>
         <mapping class="campis.dp1.models.DispatchMove"/>
-        
+
         
     </session-factory>
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1.controllers;
+package campis.dp1.controllers.requestOrder;
 
 import campis.dp1.Main;
 import java.io.IOException;
@@ -11,15 +11,14 @@ import javafx.fxml.FXML;
 
 /**
  *
- * @author Marco
+ * @author Eddy
  */
-public class CommerceSidebarController {
+public class ListController {
     
-    private Main main;
+    Main main;
     
     @FXML
-    private void goListRequestOrder() throws IOException{
-        main.showListRequestOrder();
+    private void goCreateRequestOrder() throws IOException {
+        main.showCreateRequestOrder();
     }
-    
 }

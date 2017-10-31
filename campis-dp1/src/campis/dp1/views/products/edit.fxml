@@ -20,7 +20,7 @@
             <Label layoutX="216.0" layoutY="235.0" prefHeight="25.0" prefWidth="140.0" text="Precio :" />
             <Label layoutX="216.0" layoutY="296.0" text="Tipo de Producto :" />
             <Label layoutX="213.0" layoutY="420.0" prefHeight="25.0" prefWidth="154.0" text="Descripción :" />
-            <Button layoutX="361.0" layoutY="506.0" mnemonicParsing="false" onAction="#goListProduct" prefHeight="26.0" prefWidth="69.0" text="Guardar" />
+            <Button layoutX="361.0" layoutY="506.0" mnemonicParsing="false" onAction="#insertProduct" prefHeight="26.0" prefWidth="69.0" text="Guardar" />
             <Button layoutX="642.0" layoutY="507.0" mnemonicParsing="false" onAction="#goListProduct" prefHeight="23.0" prefWidth="67.0" text="Cancelar" />
             <Label layoutX="24.0" layoutY="42.0" text="Editar producto">
                <font>
