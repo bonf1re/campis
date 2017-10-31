@@ -43,18 +43,24 @@ public class ListRoleController implements Initializable{
     private TableView<RoleDisplay> tableRole;
     @FXML
     private TableColumn<RoleDisplay,String> descriptionColumn;
-    
+
     @FXML
     private void goCreateRole() throws IOException {
         main.showNewRole();
     } 
-    
+
     @FXML
     private void goEditRole() throws IOException {
         ContextFX.getInstance().setId(selected_id);
         main.showEditRole();
     }
-    
+
+    @FXML
+    private void goShowRole() throws IOException {
+        ContextFX.getInstance().setId(selected_id);
+        main.showViewRole();
+    }
+
     /**
      * Initializes the controller class.
      */
@@ -94,7 +100,7 @@ public class ListRoleController implements Initializable{
         sessionFactory.close();
         return returnable;
     } 
-    
+
     private void loadData() throws SQLException, ClassNotFoundException {
         roles = FXCollections.observableArrayList();
         rolesView = FXCollections.observableArrayList();
@@ -125,10 +131,9 @@ public class ListRoleController implements Initializable{
         role.setId_role(cod);
         session.delete(role);
         session.getTransaction().commit();
-
         sessionFactory.close();
     }
-    
+
     @FXML
     private void deleteRole(ActionEvent event) throws SQLException, ClassNotFoundException {
         ContextFX.getInstance().setId(selected_id);
