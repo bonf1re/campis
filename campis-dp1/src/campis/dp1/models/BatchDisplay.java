@@ -5,8 +5,10 @@
  */
 package campis.dp1.models;
 
+import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -28,6 +30,7 @@ public class BatchDisplay {
     private final StringProperty location;
     private final StringProperty state;
     private final StringProperty heritage;
+    private final BooleanProperty selected;
     
 
     public BatchDisplay(Batch whMove) {
@@ -42,6 +45,11 @@ public class BatchDisplay {
         this.location = new SimpleStringProperty(whMove.getLocation());
         this.state = new SimpleStringProperty(Boolean.toString(whMove.isState()));
         this.heritage = new SimpleStringProperty(whMove.getHeritage());
+        this.selected = new SimpleBooleanProperty(false);
+    }
+
+    public BooleanProperty getSelected() {
+        return selected;
     }
     
 

@@ -36,6 +36,10 @@ public class Batch {
     private String location;
     private boolean state;
     private String heritage=null;
+    
+    public Batch(){
+        super();
+    }
 
     public Batch(int quantity, float batch_cost, Timestamp arrival_date, Timestamp expiration_date, int id_product, int type_batch, int id_group_batch, String location, boolean state) {
         this.quantity = quantity;

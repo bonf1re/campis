@@ -9,10 +9,14 @@ package campis.dp1.controllers.vehicles;
 import campis.dp1.models.Vehicle;
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
+import static campis.dp1.controllers.vehicles.CreateVehicleController.getWarehouses;
+import campis.dp1.models.Warehouse;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -21,7 +25,9 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.transform.Transformers;
 
 /**
  *
@@ -50,6 +56,23 @@ public class EditVehicleController implements Initializable {
     }
 
     
+    public static Integer searchWarehouse(String wr) throws SQLException, ClassNotFoundException {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Warehouse.class);
+        criteria.add(Restrictions.eq("name",wr));
+        Integer codWr;
+        List rsWarehouse = criteria.list();
+        Warehouse result = (Warehouse)rsWarehouse.get(0);
+        codWr = result.getId();
+        return codWr;
+    }
+    
+    
     @FXML
     private void updateVehicle() throws IOException{
 
@@ -59,6 +82,20 @@ public class EditVehicleController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
+        
+        int codWr=0;
+        
+        try
+         {
+            codWr = searchWarehouse(cmWarehouse.getValue());
+         }
+        catch (ClassNotFoundException |SQLException e)
+         {
+            e.printStackTrace();
+            //agregar error
+         }
+        
+        
         Query query = session.createQuery("update Vehicle set max_weight=:newMweight,"+
                                             "speed=:newSpeed,"+
                                           //  "active=:newActive,"+
@@ -67,7 +104,7 @@ public class EditVehicleController implements Initializable {
                                             " where id_vehicle=:oldId");
         query.setParameter("newMweight", Double.parseDouble(lblWeight.getText()));
         query.setParameter("newSpeed", Integer.parseInt(lblSpeed.getText()));
-        query.setParameter("newidW", Integer.parseInt(cmWarehouse.getValue()));
+        query.setParameter("newidW", codWr);
         query.setParameter("newPlate", lblPlate.getText());
         query.setParameter("oldId", this.vehicle_id);
         int result = query.executeUpdate();
@@ -77,13 +114,33 @@ public class EditVehicleController implements Initializable {
         sessionFactory.close();
         this.goListVehicles();
     }
+    
+    public static List<Warehouse> getWarehouses() {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Warehouse.class)
+                .setProjection(Projections.projectionList()
+                .add(Projections.property("name"),"name"))
+                .setResultTransformer(Transformers.aliasToBean(Warehouse.class));
+        List<Warehouse> measures = criteria.list();
+        return measures;
+    }
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.vehicle_id = ContextFX.getInstance().getId();
-        cmWarehouse.getItems().addAll("1","2","3");
+        
+        List<Warehouse> list = getWarehouses();
+        for (int i = 0; i < list.size(); i++) {
+            cmWarehouse.getItems().addAll(list.get(i).getName());
+        }
         
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");

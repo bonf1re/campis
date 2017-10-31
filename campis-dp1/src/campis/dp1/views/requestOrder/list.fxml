@@ -18,12 +18,12 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <TableView layoutX="77.0" layoutY="169.0" prefHeight="366.0" prefWidth="697.0">
+            <TableView fx:id="requestTable" layoutX="77.0" layoutY="169.0" prefHeight="366.0" prefWidth="697.0">
               <columns>
-                <TableColumn prefWidth="75.0" text="Código de Venta" />
-                <TableColumn prefWidth="75.0" text="Cliente" />
-                  <TableColumn prefWidth="75.0" text="Monto Final" />
-                  <TableColumn prefWidth="75.0" text="Estado" />
+                <TableColumn fx:id="codColumn" prefWidth="75.0" text="Código de Venta" />
+                <TableColumn fx:id="clientColumn" prefWidth="75.0" text="Cliente" />
+                  <TableColumn fx:id="amountColumn" prefWidth="75.0" text="Monto Final" />
+                  <TableColumn fx:id="stateColumn" prefWidth="75.0" text="Estado" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -34,8 +34,8 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <JFXTextField layoutX="327.0" layoutY="99.0" />
-            <Button layoutX="507.0" layoutY="99.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="77.0" text="Buscar" />
+            <JFXTextField fx:id="searchField" layoutX="327.0" layoutY="99.0" />
+            <Button layoutX="507.0" layoutY="99.0" mnemonicParsing="false" onAction="#searchRequest" prefHeight="29.0" prefWidth="77.0" text="Buscar" />
          </children>
       </AnchorPane>
    </center>
@@ -45,7 +45,7 @@
             <Button layoutX="46.0" layoutY="253.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Visualizar" />
             <Button layoutX="46.0" layoutY="191.0" mnemonicParsing="false" onAction="#goCreateRequestOrder" prefHeight="35.0" prefWidth="88.0" text="Nuevo" />
             <Button layoutX="46.0" layoutY="317.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Modificar" />
-            <Button layoutX="46.0" layoutY="377.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Eliminar" />
+            <Button layoutX="46.0" layoutY="377.0" mnemonicParsing="false" onAction="#deleteRequest" prefHeight="35.0" prefWidth="88.0" text="Eliminar" />
          </children>
       </AnchorPane>
    </right>

@@ -5,6 +5,8 @@
  */
 package campis.dp1.models;
 
+import static java.lang.Math.sqrt;
+
 /**
  *
  * @author sergio
@@ -21,6 +23,11 @@ public class Coord {
         this.y=y;
     }
 
+    public Coord(Coord get) {
+        this.x=get.x;
+        this.y=get.y;
+    }
+
     public void modify_c(int y,int x){
         this.y+=y;
         this.x+=x;
@@ -33,7 +40,14 @@ public class Coord {
     }
 
     public int c_distance(Coord coord) {
-        return (int) ((this.x-coord.x)^2+(this.y-coord.y)^2)^(1/2);
+        int op1=(this.x-coord.x)*(this.x-coord.x);
+        int op2=(this.y-coord.y)*(this.y-coord.y);
+        int returnable= (int)sqrt(op1+op2);
+        return  returnable;
+    }
+    
+    public void print_c(){
+        System.out.print("[ "+this.y+", "+this.x+"] ");
     }
 }
 
