@@ -5,6 +5,7 @@
  */
 package campis.dp1.controllers.requestOrder;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import static campis.dp1.controllers.products.CreateController.getTypes;
 import campis.dp1.models.Product;
@@ -68,7 +69,10 @@ public class AddItemController implements Initializable{
     }
     
     private ObservableList<Product> getSearchList(String text, String text2, String text3) throws SQLException, ClassNotFoundException {
-        int codType = getCodType(text3);
+        int codType = 0;
+        if(text3.compareTo("")!=0){
+            codType = getCodType(text3);
+        }
         ObservableList<Product>  returnable;
         returnable = FXCollections.observableArrayList();
         Configuration configuration = new Configuration();
@@ -178,6 +182,8 @@ public class AddItemController implements Initializable{
     
     @FXML
     private void addItemAction() throws IOException {
+        ContextFX.getInstance().setId(selected_id);
+        ContextFX.getInstance().setQuantity(Integer.parseInt(quantityField.getText()));
         this.goCreateRequestOrder();
     }
     
@@ -191,9 +197,6 @@ public class AddItemController implements Initializable{
             this.selected_id = newValue.codProdProperty().getValue().intValue();
             }
         );
-        
-        Integer quantity = Integer.parseInt(quantityField.getText());
-        
         codColumn.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty().asObject());
