@@ -69,7 +69,9 @@ public class ListEntryController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(DispatchMove.class);
+        
         List lista = criteria.list();
+        
         ObservableList<DispatchMove> returnable;
         returnable = FXCollections.observableArrayList();
         for (int i = 0; i < lista.size(); i++) {

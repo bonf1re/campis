@@ -10,6 +10,7 @@ import campis.dp1.Main;
 import campis.dp1.controllers.products.ListController;
 import campis.dp1.models.DispatchMove;
 import campis.dp1.models.BatchEntry;
+import campis.dp1.models.Batch;
 import campis.dp1.models.BatchEntryDisplay;
 import campis.dp1.models.Rack;
 import campis.dp1.models.RackDisplay;
@@ -50,28 +51,38 @@ public class viewEntryController implements Initializable {
     }
     
     private ObservableList<BatchEntry> getBatchEntries() {
-        /*
+        
+        System.out.println("ANTES ENTRANDO A BATCH ENTRIES");
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Criteria criteria = session.createCriteria(Rack.class);
+        
+        Criteria criteria = session.createCriteria(BatchEntry.class);
+        criteria.add(Restrictions.eq("id_group_batch",this.id));
+        
         List lista = criteria.list();
-        ObservableList<Rack> returnable;
-        returnable = FXCollections.observableArrayList();
+        
+        ObservableList<BatchEntry> returnable = FXCollections.observableArrayList();
+        
+        System.out.println("TAMAñO DE LA LSITA");
+        System.out.println(lista.size());
+        
         for (int i = 0; i < lista.size(); i++) {
-            returnable.add((Rack)lista.get(i));
+            returnable.add((BatchEntry)lista.get(i));
+            System.out.println("BATCH ENTRY 1");
         }
         sessionFactory.close();
         return returnable;
-        */
+        
     }
     
     private void loadData() throws SQLException, ClassNotFoundException  {
         batchEntries = FXCollections.observableArrayList();
         batchEntriesView = FXCollections.observableArrayList();
+        System.out.println("ANTES DE BATCH ENTRIES");
         batchEntries = getBatchEntries();
         
         for (int i = 0; i < batchEntries.size(); i++) {
@@ -80,20 +91,23 @@ public class viewEntryController implements Initializable {
                                             batchEntries.get(i).getQuantity(),
                                             batchEntries.get(i).getBatch_cost(),
                                             batchEntries.get(i).getArrival_date().toString(),
-                                            batchEntries.get(i).getExpirantion_date().toString(),
+                                            batchEntries.get(i).getExpiration_date().toString(),
                                             batchEntries.get(i).getId_product(),
                                             batchEntries.get(i).getType_batch(),
                                             batchEntries.get(i).getId_group_batch(),
                                             batchEntries.get(i).getLocation(),
                                             batchEntries.get(i).getState(),
                                             batchEntries.get(i).getHeritage(),
-                                            batchEntries.get(i). getId_unit());
+                                            batchEntries.get(i).getId_unit());
+            
+            System.out.println("campis.dp1.controllers.entries.viewEntryController.loadData()");
+            System.out.println(batchEntries.get(i).getId_batch());
             batchEntriesView.add(be);
         }
-        /*
-        tablaRacks.setItems(null);
-        tablaRacks.setItems(racksView); 
-        */
+        
+        tablaBatchEntries.setItems(null);
+        tablaBatchEntries.setItems(batchEntriesView); 
+       
     }
     
     @FXML
@@ -101,7 +115,7 @@ public class viewEntryController implements Initializable {
     @FXML
     private JFXTextField arrivalDateField;
     @FXML
-    private TableView<BatchEntry> tablaBatchEntries;
+    private TableView<BatchEntryDisplay> tablaBatchEntries;
     @FXML
     private TableColumn<BatchEntryDisplay, Integer> idCol;
     @FXML
@@ -136,16 +150,6 @@ public class viewEntryController implements Initializable {
         criteria.add(Restrictions.eq("id_group_batch",id));
         List rsType = criteria.list();
         DispatchMove result = (DispatchMove)rsType.get(0);     
-        //Obtenemos los batchs para ese group entry
-        criteria = session.createCriteria(BatchEntry.class);
-        //Solo los batch entry que pertenecen al group batch que necesitamos
-        criteria.add(Restrictions.eq("id_group_batch",id));
-        List lista = criteria.list();
-        ObservableList<BatchEntry> list_batchEntries;
-        list_batchEntries = FXCollections.observableArrayList();
-        for (int i = 0; i < lista.size(); i++) {
-            list_batchEntries.add((BatchEntry)lista.get(i));
-        }
         sessionFactory.close();
         
         this.ownerFiled.setText(result.getId_owner().toString());
@@ -159,6 +163,7 @@ public class viewEntryController implements Initializable {
             unitCol.setCellValueFactory(cellData -> cellData.getValue().id_unitProperty().asObject());
             expiration_dateCol.setCellValueFactory(cellData -> cellData.getValue().expirantion_dateProperty());
             
+            System.out.println("ANTES DE LOAD DATA");
             loadData();
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ListController.class.getName()).log(Level.SEVERE, null, ex);

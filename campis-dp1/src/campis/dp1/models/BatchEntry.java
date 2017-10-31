@@ -21,26 +21,13 @@ import javax.persistence.Table;
 @Table(name = "batch")
 public class BatchEntry {
 
-    /**
-     * @return the id_unit
-     */
-    public Integer getId_unit() {
-        return id_unit;
-    }
-
-    /**
-     * @param id_unit the id_unit to set
-     */
-    public void setId_unit(Integer id_unit) {
-        this.id_unit = id_unit;
-    }
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id_batch;
     private Integer quantity;
     private Float batch_cost;
     private Timestamp arrival_date;
-    private Timestamp expirantion_date;
+    private Timestamp expiration_date;
     private Integer id_product;
     private Integer type_batch;
     private Integer id_group_batch;
@@ -48,6 +35,10 @@ public class BatchEntry {
     private Boolean state;
     private String heritage;
     private Integer id_unit;
+    
+    public BatchEntry(){
+        super();
+    }
     
     public BatchEntry(Integer id_batch, Integer quantity, Float batch_cost, 
                         Timestamp arrival_date, Timestamp expiration_date, 
@@ -58,7 +49,7 @@ public class BatchEntry {
         this.quantity = quantity;
         this.batch_cost = batch_cost;
         this.arrival_date = arrival_date;
-        this.expirantion_date = expiration_date;
+        this.expiration_date = expiration_date;
         this.id_product = id_product;
         this.type_batch = type_batch;
         this.id_group_batch = id_group_batch;
@@ -125,17 +116,17 @@ public class BatchEntry {
     }
 
     /**
-     * @return the expirantion_date
+     * @return the expiration_date
      */
-    public Timestamp getExpirantion_date() {
-        return expirantion_date;
+    public Timestamp getExpiration_date() {
+        return expiration_date;
     }
 
     /**
-     * @param expirantion_date the expirantion_date to set
+     * @param expiration_date the expiration_date to set
      */
-    public void setExpirantion_date(Timestamp expirantion_date) {
-        this.expirantion_date = expirantion_date;
+    public void setExpiration_date(Timestamp expiration_date) {
+        this.expiration_date = expiration_date;
     }
 
     /**
@@ -220,6 +211,20 @@ public class BatchEntry {
      */
     public void setHeritage(String heritage) {
         this.heritage = heritage;
+    }
+    
+        /**
+     * @return the id_unit
+     */
+    public Integer getId_unit() {
+        return id_unit;
+    }
+
+    /**
+     * @param id_unit the id_unit to set
+     */
+    public void setId_unit(Integer id_unit) {
+        this.id_unit = id_unit;
     }
   
 }
