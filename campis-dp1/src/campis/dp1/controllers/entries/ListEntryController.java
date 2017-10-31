@@ -5,6 +5,7 @@
  */
 package campis.dp1.controllers.entries;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.controllers.products.ListController;
 import campis.dp1.models.DispatchMoveDisplay;
@@ -41,6 +42,7 @@ public class ListEntryController implements Initializable {
     
     @FXML
     private void goVisualizeEntry() throws IOException {
+        ContextFX.getInstance().setId(selected_id);
         main.showVisualizeEntry();
     }
     
@@ -67,7 +69,9 @@ public class ListEntryController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(DispatchMove.class);
+        
         List lista = criteria.list();
+        
         ObservableList<DispatchMove> returnable;
         returnable = FXCollections.observableArrayList();
         for (int i = 0; i < lista.size(); i++) {
@@ -90,8 +94,8 @@ public class ListEntryController implements Initializable {
                                               entries.get(i).getArrival_date().toString(),
                                               entries.get(i).getReason());
             
-            System.out.println("campis.dp1.controllers.entries.ListEntryController.loadData()");
-            System.out.println(entries.get(i).getId_group_batch());
+            //System.out.println("campis.dp1.controllers.entries.ListEntryController.loadData()");
+            //System.out.println(entries.get(i).getId_group_batch());
             entriesView.add(e);
         }
         
@@ -104,6 +108,14 @@ public class ListEntryController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        tablaEntries.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue) -> {
+                if (newValue == null) return;
+                this.selected_id = newValue.id_group_batchProperty().getValue();
+            }
+        );
+        
         try {
             idIngresCol.setCellValueFactory(cellData -> cellData.getValue().id_group_batchProperty().asObject());
             prov_AlmCol.setCellValueFactory(cellData -> cellData.getValue().id_ownerProperty().asObject());
