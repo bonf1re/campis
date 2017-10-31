@@ -6,12 +6,21 @@
 package campis.dp1.controllers;
 
 import campis.dp1.Main;
+import campis.dp1.models.User;
 import java.io.IOException;
+import java.util.List;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -32,7 +41,26 @@ public class LoginController {
     private Button btnLogin;
     
     public void Authenticate() throws IOException{
-        //algo
-        main.showTopMenu();
+        if (VerifyUser()) {
+            main.showTopMenu();
+        }
+    }
+    
+    public boolean VerifyUser() {
+        ObservableList<User> returnable;
+        returnable = FXCollections.observableArrayList();
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.eq("username",usernameField.getText()));
+        criteria.add(Restrictions.eq("password",passwordField.getText()));
+        List<User> users = criteria.list();
+        
+        sessionFactory.close();
+        return users.size() > 0;
     }
 }
