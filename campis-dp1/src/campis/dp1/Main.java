@@ -25,6 +25,7 @@ public class Main extends Application {
         this.primaryStage = primaryStage;
         this.primaryStage.setTitle("CAMPIS");
         showMainView();
+        showLogin();
     }
     
     private void showMainView() throws IOException {
@@ -36,6 +37,22 @@ public class Main extends Application {
         primaryStage.show();
     }
     
+    public static void showLogin() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/login.fxml"));
+        AnchorPane login = loader.load();
+        mainLayout.setCenter(login);    
+    } 
+    
+    public static void showTopMenu() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/layouts/TopMenu.fxml"));
+        AnchorPane securitySidebar = loader.load();
+        mainLayout.setTop(securitySidebar);
+        BorderPane inner = new BorderPane();
+        mainLayout.setCenter(inner);
+    }
+
     public static void showSecuritySidebar() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/layouts/SecuritySidebar.fxml"));
