@@ -9,7 +9,6 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.RouteMoveController">
    <center>
       <Pane prefHeight="200.0" prefWidth="967.0" BorderPane.alignment="CENTER">
@@ -35,7 +34,7 @@
       <Pane prefHeight="600.0" prefWidth="486.0" BorderPane.alignment="CENTER">
          <children>
             <Canvas fx:id="mapCanvas" height="430.0" layoutX="13.0" layoutY="85.0" width="460.0" />
-            <Button layoutX="83.0" layoutY="537.0" mnemonicParsing="false" text="Generar Ruta" />
+            <Button layoutX="83.0" layoutY="537.0" mnemonicParsing="false" onAction="#generateRoute" text="Generar Ruta" />
             <Button layoutX="225.0" layoutY="537.0" mnemonicParsing="false" text="Grabar" />
             <Button layoutX="327.0" layoutY="537.0" mnemonicParsing="false" text="Cancelar" />
             <Text layoutX="225.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mapa" />

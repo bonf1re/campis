@@ -8,12 +8,14 @@ package campis.dp1.controllers.warehouse;
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Batch;
+import campis.dp1.models.BatchWH_Move;
 import campis.dp1.models.CGraph;
 import campis.dp1.models.CNode;
 import campis.dp1.models.CRack;
 import campis.dp1.models.Coord;
 import campis.dp1.models.Rack;
 import campis.dp1.models.Warehouse;
+import campis.dp1.models.routing.Grasp;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -50,30 +52,36 @@ public class RouteMoveController implements Initializable{
     private int id_warehouse;
     private Warehouse wh;
     private ArrayList<Integer> id_batchesList = new ArrayList<>();
-    private ObservableList<Batch> batchesList;
+    private ObservableList<BatchWH_Move> batchesList;
     private ArrayList<CRack> crackList = new ArrayList<>();
     private CGraph routesGraph = new CGraph();
+    private ArrayList<Coord> batchesCoords = new ArrayList<>();
+    private ArrayList<Coord> routeGenerated;
     
-    
+    /* Drawing variables section */
     @FXML
     private Canvas mapCanvas;
     private GraphicsContext gc;
     private int[][] real_map;
     private int x;
     private int y;
+    private int padding_y;
+    private int padding_x;
+    private int mult;
+    /* End Drawing variables section */
     
     @FXML
-    private TableView<Batch> batchTable;
+    private TableView<BatchWH_Move> batchTable;
     @FXML
-    private TableColumn<Batch,Integer> idCol;
+    private TableColumn<BatchWH_Move,Integer> idCol;
     @FXML
-    private TableColumn<Batch, Integer> qtCol;
+    private TableColumn<BatchWH_Move, Integer> qtCol;
     @FXML
-    private TableColumn<Batch, Integer> prodCol;
+    private TableColumn<BatchWH_Move, Integer> prodCol;
     @FXML
-    private TableColumn<Batch, Integer> posX;
+    private TableColumn<BatchWH_Move, Integer> posX;
     @FXML
-    private TableColumn<Batch, Integer> posY;
+    private TableColumn<BatchWH_Move, Integer> posY;
     
     
     @Override
@@ -87,7 +95,7 @@ public class RouteMoveController implements Initializable{
             
             // set column for pos_x
             posX.setCellFactory(
-                TextFieldTableCell.<Batch,Integer>forTableColumn(new StringConverter<Integer>(){
+                TextFieldTableCell.<BatchWH_Move,Integer>forTableColumn(new StringConverter<Integer>(){
                     @Override
                     public String toString(Integer value){
                         return value.toString();
@@ -98,11 +106,11 @@ public class RouteMoveController implements Initializable{
                     }
                 }));
             posX.setCellValueFactory(
-                    cellData->new SimpleIntegerProperty(-1).asObject()
+                    cellData->cellData.getValue().getPos_x().asObject()
             );
             // set column for pos_y
             posY.setCellFactory(
-                TextFieldTableCell.<Batch,Integer>forTableColumn(new StringConverter<Integer>(){
+                TextFieldTableCell.<BatchWH_Move,Integer>forTableColumn(new StringConverter<Integer>(){
                     @Override
                     public String toString(Integer value){
                         return value.toString();
@@ -113,7 +121,7 @@ public class RouteMoveController implements Initializable{
                     }
                 }));
             posY.setCellValueFactory(
-                    cellData->new SimpleIntegerProperty(-1).asObject()
+                    cellData->cellData.getValue().getPos_y().asObject()
             );
             
             // make sure table is editable so fields can be edited
@@ -138,6 +146,15 @@ public class RouteMoveController implements Initializable{
             Logger.getLogger(ListWarehouseController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    
+    @FXML
+    private void generateRoute(){
+        readPositions();
+        System.out.println(this.batchesCoords);
+        Grasp graspSolution = new Grasp(this.real_map,this.routesGraph,this.batchesCoords);
+        this.routeGenerated = graspSolution.execute();
+        printRoute();
+    }
 
     private void batchLoadData(Session session) throws SQLException, ClassNotFoundException{
         // we need to get each batch selected and add it to the table
@@ -147,7 +164,7 @@ public class RouteMoveController implements Initializable{
             Criteria criteria = session.createCriteria(Batch.class);
             criteria.add(Restrictions.eq("id_batch",integer));
             List rs = criteria.list();
-            this.batchesList.add((Batch) rs.get(0));
+            this.batchesList.add(new BatchWH_Move((Batch)rs.get(0)));
         }
         batchTable.setItems(null);
         batchTable.setItems(batchesList);
@@ -198,15 +215,15 @@ public class RouteMoveController implements Initializable{
                 this.routesGraph.addNode(new CNode(corner));
             }
         }
-        this.routesGraph.setup();
+        if (this.routesGraph.getSize()>0){
+            this.routesGraph.addNode(new CNode(new Coord(0,0)));
+        }
+        this.routesGraph.setup(this.real_map);
         
     }
 
     @FXML
     private void draw(GraphicsContext gc){
-        //System.out.println(ContextFX.getInstance().getId());
-        // String filename = "/media/Multimedia/Projects/GitProjects/GRASP-OPT2/Inputs/map_0.txt";
-        // read_map(filename);
         
         // First we will draw the warehouse without racks
         
@@ -214,17 +231,17 @@ public class RouteMoveController implements Initializable{
        float canvas_height=(float) gc.getCanvas().getHeight();
        float canvas_width =(float) gc.getCanvas().getWidth();
 
-       int mult = 0;
+       
        if (canvas_width/x > canvas_height/y){
-           mult = (int) canvas_height/y;
+           this.mult = (int) canvas_height/y;
            //mult = (int) canvas_height/x;
        }else{
-           mult = (int) canvas_width/x;
+           this.mult = (int) canvas_width/x;
            //mult = (int) canvas_width/y;
        }
        
-       int padding_y=(int)(((int)canvas_height)-mult*y)/4;
-       int padding_x=(int)(((int)canvas_width)-mult*x)/4;
+       this.padding_y=(int)(((int)canvas_height)-mult*y)/4;
+       this.padding_x=(int)(((int)canvas_width)-mult*x)/4;
        
        if (padding_y>0){
            padding_y+=mult/2;
@@ -256,5 +273,27 @@ public class RouteMoveController implements Initializable{
                
             }
         }
+    }
+
+    private void readPositions() {
+        ObservableList<BatchWH_Move> aux_list = batchTable.getItems();
+        int list_size = aux_list.size();
+        for (int i = 0; i < list_size; i++) {
+            int pos_y = aux_list.get(i).getPos_y().get();
+            int pos_x = aux_list.get(i).getPos_x().get();
+            System.out.println("[ "+pos_y+", "+pos_x+"]");
+            if (pos_y != -1 && pos_x != -1){
+                this.batchesCoords.add(new Coord(pos_y,pos_x));
+            }
+        }
+        
+    }
+
+    private void printRoute() {
+        System.out.println("\nLa ruta generada fue: ");
+        for (int i = 0; i < this.routeGenerated.size(); i++) {
+            System.out.print(" [ "+this.routeGenerated.get(i).y+", "+this.routeGenerated.get(i).x+"],");
+        }
+        System.out.println(".");
     }
 }
