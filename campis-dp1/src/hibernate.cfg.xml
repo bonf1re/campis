@@ -47,6 +47,7 @@
         <mapping class="campis.dp1.models.UnitOfMeasure"/>
         <mapping class="campis.dp1.models.Vehicle"/>
         <mapping class="campis.dp1.models.WarehouseMove"/>
+		<mapping class="campis.dp1.models.DispatchMove"/>
 		<mapping class="campis.dp1.models.BatchEntry"/>
         <mapping class="campis.dp1.models.Batch"/>
         <mapping class="campis.dp1.models.RequestOrder"/>
