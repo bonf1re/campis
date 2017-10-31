@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.BorderPane?>
@@ -26,7 +27,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Text layoutX="72.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Entrada a almacén">
+            <Text layoutX="71.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Entrada a almacén / Seleccionar lotes">
                <font>
                   <Font size="28.0" />
                </font>
@@ -34,4 +35,11 @@
          </children>
       </Pane>
    </center>
+   <bottom>
+      <Pane prefHeight="121.0" prefWidth="967.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="444.0" layoutY="48.0" mnemonicParsing="false" onAction="#goRouteMove" text="Siguiente" />
+         </children>
+      </Pane>
+   </bottom>
 </BorderPane>

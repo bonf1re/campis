@@ -64,6 +64,7 @@ public class WarehouseMovesController implements Initializable {
     
     @FXML
     private void goCreateMove() throws IOException{
+        ContextFX.getInstance().setId(warehouse_id);
         main.showWarehouseCreateMove();
     }
     

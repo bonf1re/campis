@@ -40,4 +40,8 @@ public class CGraph {
         // final step
         this.nodes.remove(key);
     }
+
+    public void setup() {
+        System.out.println("This method will configure the paths between nodes");
+    }
 }

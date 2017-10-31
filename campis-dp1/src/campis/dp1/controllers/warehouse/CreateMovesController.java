@@ -5,13 +5,17 @@
  */
 package campis.dp1.controllers.warehouse;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Batch;
 import campis.dp1.models.BatchDisplay;
 import campis.dp1.models.WarehouseMoveDisplay;
 import java.awt.Checkbox;
+import java.io.IOError;
+import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -36,8 +40,10 @@ import org.hibernate.criterion.Restrictions;
  */
 public class CreateMovesController implements Initializable{
     private Main main;
+    private int id_warehouse_back;
     ObservableList<Batch> batches;
     ObservableList<BatchDisplay> batchesView;
+    
     
     
     @FXML
@@ -69,6 +75,7 @@ public class CreateMovesController implements Initializable{
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.id_warehouse_back = ContextFX.getInstance().getId();
         // TODO
 //        batchTable.getSelectionModel().selectedItemProperty().addListener(
 //        (observable, oldValue, newValue) -> {
@@ -93,7 +100,7 @@ public class CreateMovesController implements Initializable{
             selCol.setCellValueFactory(
                     cellData->cellData.getValue().getSelected()
             );
-            // make sure table is editable so checkbox can be checked n unchecked
+            // make sure table is editable so checkbox can be checked n unchecked   
             batchTable.setEditable(true);
             batchLoadData();
         } catch (SQLException | ClassNotFoundException ex) {
@@ -131,6 +138,34 @@ public class CreateMovesController implements Initializable{
         }
         sessionFactory.close();
         return returnable;
+    }
+    
+    private ArrayList<Integer> getMarked(){
+        ArrayList<Integer> returnable = new ArrayList<>();
+        // TODO
+        for (BatchDisplay item : batchTable.getItems()) {
+            boolean selected = item.getSelected().getValue();
+            if (selected ==  true){
+                returnable.add(item.getId_batch().get());
+            }
+        }
+        
+        return returnable;
+    }
+    
+    @FXML
+    private void goWarehouseMoves() throws IOException{
+        ContextFX.getInstance().setId(id_warehouse_back);
+        main.showWarehouseCreateMove();
+        
+    }
+    
+    @FXML
+    private void goRouteMove() throws IOException{
+        List aux = getMarked();
+        ContextFX.getInstance().setList(aux);
+        ContextFX.getInstance().setId(id_warehouse_back);
+        main.showRouteMove();
     }
     
 }

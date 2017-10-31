@@ -5,6 +5,9 @@
  */
 package campis.dp1;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author Eddy
@@ -16,7 +19,18 @@ public class ContextFX {
     }
     
     Integer id = null;
+    List aux_list = null;   // Abstract so it can take any kind of arraylist
     Integer quantity = null;
+    
+    public List getList(){
+        List returnable = new ArrayList<>(this.aux_list);
+        this.aux_list = null;
+        return returnable;
+    }
+    
+    public void setList(List aux_list){
+        this.aux_list = new ArrayList<>(aux_list);
+    }
 
     public Integer getId() {
         Integer returnable = new Integer(this.id);

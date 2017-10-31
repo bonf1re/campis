@@ -316,4 +316,11 @@ public class Main extends Application {
     public static void main(String[] args) {
         launch(args);
     }   
+
+    public static   void showRouteMove() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/routemove.fxml"));
+        BorderPane routeMove = loader.load();
+        mainLayout.setCenter(routeMove);
+    }
 }
