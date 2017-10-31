@@ -202,7 +202,21 @@ public class Main extends Application {
         BorderPane createProd = loader.load();
         mainLayout.setCenter(createProd);
     }
+
+    public static void showPermission() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/roles/addPermission.fxml"));
+        BorderPane createProd = loader.load();
+        mainLayout.setCenter(createProd);
+    }
     
+    public static void showViewRole() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/roles/show.fxml"));
+        BorderPane viewProd = loader.load();
+        mainLayout.setCenter(viewProd);
+    }
+
     /* Vehículos */
     
     public static void showListVehicle() throws IOException {
