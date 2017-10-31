@@ -61,6 +61,12 @@ public class ListController implements Initializable{
         main.showEditUser();
     }
 
+    @FXML
+    private void goShowUser() throws IOException {
+        ContextFX.getInstance().setId(selected_id);
+        main.showViewUser();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         tableUser.getSelectionModel().selectedItemProperty().addListener(

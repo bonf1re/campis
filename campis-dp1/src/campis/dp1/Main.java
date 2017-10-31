@@ -130,6 +130,13 @@ public class Main extends Application {
         mainLayout.setCenter(editUser);
     }
 
+    public static void showViewUser() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/users/show.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
+
     public static void showListProduct() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/products/list.fxml"));
