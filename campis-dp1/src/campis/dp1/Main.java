@@ -195,6 +195,13 @@ public class Main extends Application {
         BorderPane createProd = loader.load();
         mainLayout.setCenter(createProd);
     }
+
+    public static void showPermission() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/roles/addPermission.fxml"));
+        BorderPane createProd = loader.load();
+        mainLayout.setCenter(createProd);
+    }
     
     /* Vehículos */
     

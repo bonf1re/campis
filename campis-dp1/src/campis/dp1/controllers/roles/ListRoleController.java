@@ -92,7 +92,7 @@ public class ListRoleController implements Initializable{
         }
         sessionFactory.close();
         return returnable;
-    }
+    } 
     
     private void loadData() throws SQLException, ClassNotFoundException {
         roles = FXCollections.observableArrayList();
@@ -104,6 +104,12 @@ public class ListRoleController implements Initializable{
         }
         tableRole.setItems(null);
         tableRole.setItems(rolesView);
+    }
+
+    @FXML
+    private void goPermission(ActionEvent event) throws IOException {
+        ContextFX.getInstance().setId(selected_id);
+        main.showPermission();
     }
 
     private void deleteRole(int cod) {
