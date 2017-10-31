@@ -31,8 +31,9 @@ public class Grasp {
         this.prodList = batchesCoords;
     }
     
-    public ArrayList<Coord> execute() {
+    public GraspResults execute() {
         ArrayList<Coord> returnable = new ArrayList<>();
+        ArrayList<Coord> returnable_p = new ArrayList<>();
         ArrayList<Coord> graspList = new ArrayList<>(this.prodList);
         // we start from coord 0,0
         returnable.add(new Coord(0,0));
@@ -49,7 +50,7 @@ public class Grasp {
             Random generator = new Random();
             int k = generator.nextInt((int)(routes.size()*alpha+1));
             Route route_chosen=routes.remove(k); // Selected route
-            graspList.remove(k); // Remove from graspList
+            returnable_p.add(graspList.remove(k)); // Remove from graspList
             for (int i = 0; i < route_chosen.getPaths().size(); i++) {
                 returnable.add(route_chosen.getPaths().get(i));
             }
@@ -66,7 +67,7 @@ public class Grasp {
             }
         }
         
-        return returnable;
+        return new GraspResults(returnable,returnable_p);
     }
     
     

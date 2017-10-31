@@ -16,6 +16,7 @@ import campis.dp1.models.Coord;
 import campis.dp1.models.Rack;
 import campis.dp1.models.Warehouse;
 import campis.dp1.models.routing.Grasp;
+import campis.dp1.models.routing.GraspResults;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -152,8 +153,10 @@ public class RouteMoveController implements Initializable{
         readPositions();
         System.out.println(this.batchesCoords);
         Grasp graspSolution = new Grasp(this.real_map,this.routesGraph,this.batchesCoords);
-        this.routeGenerated = graspSolution.execute();
+        GraspResults gResults = graspSolution.execute();
+        this.routeGenerated = gResults.getRoute();
         printRoute();
+        gResults.getProducts(); // orden de productos
     }
 
     private void batchLoadData(Session session) throws SQLException, ClassNotFoundException{
