@@ -5,19 +5,4 @@
 <?import javafx.scene.layout.BorderPane?>
 
 <BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="1067.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.MainViewController">
-   <top>
-      <BorderPane prefHeight="27.0" prefWidth="600.0" BorderPane.alignment="CENTER">
-         <center>
-            <ToolBar prefHeight="0.0" prefWidth="562.0" BorderPane.alignment="CENTER">
-               <items>
-                  <Hyperlink onAction="#goWarehouse" text="Almacenamiento" />
-                  <Hyperlink onAction="#goDispatch" text="Despacho" />
-                  <Hyperlink onAction="#goCommerce" text="Comercialización" />
-                  <Hyperlink text="Reportes" />
-                  <Hyperlink onAction="#goSecurity" text="Seguridad" />
-               </items>
-            </ToolBar>
-         </center>
-      </BorderPane>
-   </top>
 </BorderPane>
