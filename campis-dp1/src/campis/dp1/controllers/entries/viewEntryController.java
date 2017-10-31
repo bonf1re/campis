@@ -79,18 +79,18 @@ public class viewEntryController implements Initializable {
             BatchEntryDisplay be = new BatchEntryDisplay(batchEntries.get(i).getId_batch(), 
                                             batchEntries.get(i).getQuantity(),
                                             batchEntries.get(i).getBatch_cost(),
-                                            batchEntries.get(i).getArrival_date(),
-                                            batchEntries.get(i).getExpirantion_date(),
+                                            batchEntries.get(i).getArrival_date().toString(),
+                                            batchEntries.get(i).getExpirantion_date().toString(),
                                             batchEntries.get(i).getId_product(),
                                             batchEntries.get(i).getType_batch(),
                                             batchEntries.get(i).getId_group_batch(),
                                             batchEntries.get(i).getLocation(),
                                             batchEntries.get(i).getState(),
                                             batchEntries.get(i).getHeritage(),
-                                            batchEntries.get(i). get());
-            racksView.add(r);
+                                            batchEntries.get(i). getId_unit());
+            batchEntriesView.add(be);
         }
-        
+        /*
         tablaRacks.setItems(null);
         tablaRacks.setItems(racksView); 
         */
@@ -157,7 +157,7 @@ public class viewEntryController implements Initializable {
             productCol.setCellValueFactory(cellData -> cellData.getValue().id_productProperty().asObject());
             quantityCol.setCellValueFactory(cellData -> cellData.getValue().quantityProperty().asObject());
             unitCol.setCellValueFactory(cellData -> cellData.getValue().id_unitProperty().asObject());
-            expiration_dateCol.setCellValueFactory(cellData -> cellData.getValue().expirantion_dateProperty().asObject());
+            expiration_dateCol.setCellValueFactory(cellData -> cellData.getValue().expirantion_dateProperty());
             
             loadData();
         } catch (SQLException | ClassNotFoundException ex) {
