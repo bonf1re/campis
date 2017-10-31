@@ -7,6 +7,7 @@ package campis.dp1.controllers.vehicles;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
+import campis.dp1.models.Role;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -17,6 +18,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import campis.dp1.models.Vehicle;
 import campis.dp1.models.VehicleDisplay;
+import campis.dp1.models.Warehouse;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.logging.Level;
@@ -26,6 +28,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * FXML Controller class
@@ -125,14 +128,34 @@ public class ListVehicleController implements Initializable {
         return returnable;
     }
     
+    public static String getWarehouse(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Warehouse.class);
+        criteria.add(Restrictions.eq("id_warehouse",cod));
+        String descripType;
+        List rsType = criteria.list();
+        Warehouse result = (Warehouse) rsType.get(0);
+        descripType = result.getName();
+        sessionFactory.close();
+
+        return descripType;
+    }
+    
     
     private void cargarData() throws SQLException, ClassNotFoundException {
         vehiculos = FXCollections.observableArrayList();
         vehiculosView = FXCollections.observableArrayList();
         vehiculos = getVehicles();
+
         for (int i = 0; i < vehiculos.size(); i++) {
+ 
             VehicleDisplay veh = new VehicleDisplay(vehiculos.get(i).getId_vehicle(), vehiculos.get(i).getMax_weight(),
-                    vehiculos.get(i).getSpeed(), vehiculos.get(i).isActive(), String.valueOf(vehiculos.get(i).getId_warehouse()),
+                    vehiculos.get(i).getSpeed(), vehiculos.get(i).isActive(), getWarehouse(vehiculos.get(i).getId_warehouse()),
                     vehiculos.get(i).getPlate());
             vehiculosView.add(veh);
         }
