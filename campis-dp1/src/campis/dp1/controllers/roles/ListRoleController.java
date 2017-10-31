@@ -51,8 +51,9 @@ public class ListRoleController implements Initializable{
     
     @FXML
     private void goEditRole() throws IOException {
+        ContextFX.getInstance().setId(selected_id);
         main.showEditRole();
-    } 
+    }
     
     /**
      * Initializes the controller class.

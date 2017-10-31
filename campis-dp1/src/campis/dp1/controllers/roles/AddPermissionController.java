@@ -7,6 +7,7 @@ import campis.dp1.models.PermissionDisplay;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
+import campis.dp1.Main;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -26,6 +27,7 @@ import org.hibernate.cfg.Configuration;
 import org.hibernate.query.Query;
 
 public class AddPermissionController implements Initializable {
+    private Main main;
     Integer id;
     private int selected_id;
     private ObservableList<Permission> permissions;
@@ -42,6 +44,7 @@ public class AddPermissionController implements Initializable {
 	private ObservableList<Permission> getPermissions() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -159,6 +162,7 @@ public class AddPermissionController implements Initializable {
     private void updatePermission (ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
     	Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -172,6 +176,6 @@ public class AddPermissionController implements Initializable {
     	}
         session.getTransaction().commit();
         sessionFactory.close();
-        
+        main.showListRoles();
     }
 }
