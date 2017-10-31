@@ -62,6 +62,11 @@ public class WarehouseMovesController implements Initializable {
         main.showListWarehouse();
     }
     
+    @FXML
+    private void goCreateMove() throws IOException{
+        main.showWarehouseCreateMove();
+    }
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.warehouse_id=ContextFX.getInstance().getId();

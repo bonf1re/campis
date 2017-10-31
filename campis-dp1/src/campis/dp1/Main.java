@@ -100,6 +100,13 @@ public class Main extends Application {
          mainLayout.setCenter(warehouseMoves);
      }
      
+     public static void showWarehouseCreateMove() throws IOException{
+         FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(Main.class.getResource("views/warehouse/createmove.fxml"));
+         BorderPane creamove = loader.load();
+         mainLayout.setCenter(creamove);
+     }
+     
     /* End Warehouse */
 
     public static void showListUser() throws IOException {
