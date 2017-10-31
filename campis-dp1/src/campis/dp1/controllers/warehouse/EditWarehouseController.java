@@ -265,10 +265,10 @@ public class EditWarehouseController implements Initializable {
                     this.real_map[i+rack_y][j+rack_x]=1;
                 }
             }
-            for (int i = 0; i < 4; i++) {
-                Coord corner = rack.getCorner(i);
-                this.real_map[corner.y][corner.x] = 2;
-            }
+//            for (int i = 0; i < 4; i++) {
+//                Coord corner = rack.getCorner(i);
+//                this.real_map[corner.y][corner.x] = 2;
+//            }
         }
         
     }

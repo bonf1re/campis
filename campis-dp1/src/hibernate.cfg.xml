@@ -48,6 +48,7 @@
         <mapping class="campis.dp1.models.Vehicle"/>
         <mapping class="campis.dp1.models.WarehouseMove"/>
         <mapping class="campis.dp1.models.DispatchMove"/>
+        <mapping class="campis.dp1.models.Batch"/>
 
         
     </session-factory>
