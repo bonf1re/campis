@@ -49,8 +49,7 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("views/layouts/TopMenu.fxml"));
         AnchorPane securitySidebar = loader.load();
         mainLayout.setTop(securitySidebar);
-        BorderPane inner = new BorderPane();
-        mainLayout.setCenter(inner);
+        mainLayout.setCenter(null);
     }
 
     public static void showSecuritySidebar() throws IOException {
@@ -58,6 +57,7 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("views/layouts/SecuritySidebar.fxml"));
         VBox securitySidebar = loader.load();
         mainLayout.setLeft(securitySidebar);
+        mainLayout.setCenter(null);
     }
     
     public static void showWarehouseSidebar() throws IOException {
@@ -65,6 +65,7 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("views/layouts/WarehouseSidebar.fxml"));
         VBox warehouseSidebar = loader.load();
         mainLayout.setLeft(warehouseSidebar);
+        mainLayout.setCenter(null);
     }
     
     public static void showDispatchSidebar() throws IOException {
@@ -79,6 +80,7 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("views/layouts/CommerceSidebar.fxml"));
         VBox commerceSidebar = loader.load();
         mainLayout.setLeft(commerceSidebar);
+        mainLayout.setCenter(null);
     }
     
     /* Warehouse */
@@ -86,7 +88,7 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/warehouse/list.fxml"));
         BorderPane listWarehouse = loader.load();
-        mainLayout.setCenter(listWarehouse);     
+        mainLayout.setCenter(listWarehouse);  
     }
     
     public static void showNewWarehouse() throws IOException {

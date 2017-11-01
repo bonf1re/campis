@@ -1,21 +1,43 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import java.util.*?>
-<?import javafx.scene.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+<?import de.jensd.fx.glyphs.fontawesome.FontAwesomeIconView?>
+<?import javafx.scene.control.ToolBar?>
+<?import javafx.scene.effect.Shadow?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
 
-<AnchorPane id="AnchorPane" prefHeight="27" prefWidth="600.0" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.MainViewController">
-    <BorderPane prefHeight="27.0" prefWidth="600.0" BorderPane.alignment="CENTER">
+<AnchorPane id="AnchorPane" maxHeight="2000.0" prefHeight="27" prefWidth="1067.0" styleClass="container" stylesheets="@../../assets/css/menu.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.MainViewController">
+    <BorderPane maxWidth="-Infinity" prefHeight="27.0" prefWidth="1067.0" BorderPane.alignment="CENTER">
    <center>
-      <ToolBar prefHeight="0.0" prefWidth="562.0" BorderPane.alignment="CENTER">
+      <ToolBar maxWidth="-Infinity" prefHeight="0.0" prefWidth="1067.0" styleClass="menu" BorderPane.alignment="CENTER">
          <items>
-            <Hyperlink onAction="#goWarehouse" text="Almacenamiento" />
-            <Hyperlink onAction="#goDispatch" text="Despacho" />
-            <Hyperlink onAction="#goCommerce" text="Comercialización" />
-            <Hyperlink text="Reportes" />
-            <Hyperlink onAction="#goSecurity" text="Seguridad" />
+               <FontAwesomeIconView glyphName="CC" size="25.0" textAlignment="CENTER" wrappingWidth="95.0" />
+               <JFXButton onAction="#goWarehouse" styleClass="option" text="Almacenamiento">
+                  <effect>
+                     <Shadow />
+                  </effect>
+               </JFXButton>
+               <JFXButton onAction="#goCommerce" styleClass="option" text="Comercialización">
+                  <effect>
+                     <Shadow />
+                  </effect>
+               </JFXButton>
+               <JFXButton onAction="#goDispatch" styleClass="option" text="Despacho">
+                  <effect>
+                     <Shadow />
+                  </effect>
+               </JFXButton>
+               <JFXButton styleClass="option" text="Reportes">
+                  <effect>
+                     <Shadow />
+                  </effect>
+               </JFXButton>
+               <JFXButton onAction="#goSecurity" styleClass="option" text="Seguridad">
+                  <effect>
+                     <Shadow />
+                  </effect>
+               </JFXButton>
          </items>
       </ToolBar>
    </center>

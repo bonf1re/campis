@@ -5,14 +5,17 @@
  */
 package campis.dp1.controllers;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.User;
+import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
@@ -28,6 +31,7 @@ import org.hibernate.criterion.Restrictions;
  */
 public class LoginController {
     Main main;
+    int id_user;
     @FXML
     private AnchorPane fondo_login;
 
@@ -38,11 +42,15 @@ public class LoginController {
     private TextField usernameField;
 
     @FXML
-    private Button btnLogin;
+    private JFXButton btnLogin;
     
+    @FXML
+    private Label message;
     public void Authenticate() throws IOException{
         if (VerifyUser()) {
             main.showTopMenu();
+        } else {
+            message.setText("Contraseña incorrecta");
         }
     }
     
@@ -61,6 +69,8 @@ public class LoginController {
         List<User> users = criteria.list();
         
         sessionFactory.close();
-        return users.size() > 0;
+        ContextFX.getInstance().setUser((users.size() > 0 ? users.get(0) : null));
+
+        return (users.size() > 0);
     }
 }
