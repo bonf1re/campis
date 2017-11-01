@@ -1,13 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.control.Hyperlink?>
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="95.0" 
-      xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.SecuritySidebarController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="95.0" styleClass="container" stylesheets="@../../assets/css/sidebar.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.SecuritySidebarController">
    <children>
-      <Hyperlink alignment="CENTER" contentDisplay="CENTER" onAction="#goListUser" prefHeight="50.0" prefWidth="95.0" text="Usuarios" textAlignment="CENTER" />
-      <Hyperlink alignment="CENTER" contentDisplay="CENTER" onAction="#goListRoles" prefHeight="50.0" prefWidth="95.0" text="Roles" textAlignment="CENTER" />
-      <Hyperlink alignment="CENTER" contentDisplay="CENTER" prefHeight="50.0" prefWidth="95.0" text="Logs" textAlignment="CENTER" />
+      <JFXButton onAction="#goListUser" prefHeight="47.0" prefWidth="95.0" styleClass="option" text="Usuarios" />
+      <JFXButton onAction="#goListRoles" prefHeight="47.0" prefWidth="95.0" styleClass="option" text="Roles" />
+      <JFXButton prefHeight="47.0" prefWidth="95.0" styleClass="option" text="Logs" />
    </children>
 </VBox>
