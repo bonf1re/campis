@@ -35,9 +35,4 @@ public class WarehouseSidebarController {
     private void goListVehicles() throws IOException {
         main.showListVehicle();
     }
-
-    @FXML
-    private void goListClient() throws IOException {
-        main.showListClient();
-    }
 }
