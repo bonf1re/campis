@@ -6,6 +6,7 @@
 package campis.dp1;
 
 import campis.dp1.models.ProductDisplay;
+import campis.dp1.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.util.ArrayList;
@@ -22,6 +23,7 @@ public class ContextFX {
     }
     
     Integer id = null;
+    private User user;
     List aux_list = null;   // Abstract so it can take any kind of arraylist
     Integer quantity = null;
     Float totAmount = 0.0f;
@@ -73,5 +75,13 @@ public class ContextFX {
     
     public void setTempList(ObservableList<ProductDisplay> tempList) {
         this.tempList = tempList;
+    }
+
+    public User getUser() {
+        return user;
+    }
+
+    public void setUser(User user) {
+        this.user = user;
     }
 }

@@ -1,0 +1,12 @@
+.container {
+	-fx-background-color: #375a7f;
+}
+
+.menu {
+	-fx-text-fill: #FFFFFF;	
+}
+
+.option {
+	-fx-text-fill: #FFFFFF;
+	-fx-font-weight: bold;
+}

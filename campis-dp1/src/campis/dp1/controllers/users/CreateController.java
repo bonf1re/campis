@@ -78,7 +78,6 @@ public class CreateController implements Initializable {
     @FXML
     public void insertUser() throws IOException {
         Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-        
         User user = new User(nameField.getText(), lastnameField.getText(), passwordField.getText(), emailField.getText(),currentTimestamp,true,1,currentTimestamp, usernameField.getText());
           
         System.out.print(user.getLastname());

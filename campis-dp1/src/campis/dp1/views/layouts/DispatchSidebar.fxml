@@ -1,16 +1,15 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import java.net.URL?>
-<?import javafx.scene.control.Hyperlink?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefWidth="95.0" 
-      xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.DispatchSidebarController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="95.0" styleClass="container" stylesheets="@../../assets/css/sidebar.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.DispatchSidebarController">
     <stylesheets>
-        <URL value="@/campis/dp1/assets/css/dispatchsidebar.css"/>
+        <URL value="@/campis/dp1/assets/css/dispatchsidebar.css" />
     </stylesheets>
     <children>
-      <Hyperlink alignment="CENTER" contentDisplay="CENTER" onAction="#goListEntries" prefHeight="50.0" prefWidth="95.0" text="Entradas" textAlignment="CENTER" />
-      <Hyperlink alignment="CENTER" contentDisplay="CENTER" onAction="#goListDepartures" prefHeight="50.0" prefWidth="95.0" text="Salidas" textAlignment="CENTER" />
+      <JFXButton onAction="#goListEntries" prefHeight="51.0" prefWidth="95.0" styleClass="option" text="Entradas" />
+      <JFXButton onAction="#goListDepartures" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Salidas" />
    </children>
 </VBox>
