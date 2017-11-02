@@ -41,7 +41,8 @@ public class Main extends Application {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/login.fxml"));
         AnchorPane login = loader.load();
-        mainLayout.setCenter(login);    
+        mainLayout.setCenter(login);
+        mainLayout.setTop(null);
     } 
     
     public static void showTopMenu() throws IOException {

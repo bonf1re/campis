@@ -52,7 +52,7 @@ public class TabuSolution
     {
         String order = "";
 
-        for (int i = 0; i < 50; i++) {
+        for (int i = 0; i < this.order.size(); i++) {
             order = order + "[" + this.order.get(i).stringFormat() + "], ";
         }
 

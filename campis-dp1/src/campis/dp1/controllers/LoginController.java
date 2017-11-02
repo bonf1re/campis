@@ -11,6 +11,10 @@ import campis.dp1.models.User;
 import com.jfoenix.controls.JFXButton;
 import java.io.IOException;
 import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -19,6 +23,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.AnchorPane;
+import javafx.util.Duration;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -49,9 +54,23 @@ public class LoginController {
     public void Authenticate() throws IOException{
         if (VerifyUser()) {
             main.showTopMenu();
+            Timeline timeline = new Timeline(new KeyFrame(
+                Duration.millis(300000),
+                ae -> {
+                try {
+                    GoLogin();
+                } catch (IOException ex) {
+                    Logger.getLogger(LoginController.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }));
+        timeline.play();
         } else {
             message.setText("Contraseña incorrecta");
         }
+    }
+
+    public void GoLogin() throws IOException {
+        main.showLogin();
     }
     
     public boolean VerifyUser() {
