@@ -354,9 +354,17 @@ public class Main extends Application {
     public static void showViewRequest() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/requestOrder/view.fxml"));
-        BorderPane viewRequestOrder = loader.load();
-        mainLayout.setCenter(viewRequestOrder);
+        BorderPane RequestOrder = loader.load();
+        mainLayout.setCenter(RequestOrder);
     }
+    
+    public static void showListSaleConditions() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/saleConditions/list.fxml"));
+        BorderPane saleConditions = loader.load();
+        mainLayout.setCenter(saleConditions);
+    }
+    
     
     /* End RequestOrder*/
     

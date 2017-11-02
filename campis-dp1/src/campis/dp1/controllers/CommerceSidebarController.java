@@ -22,4 +22,9 @@ public class CommerceSidebarController {
         main.showListRequestOrder();
     }
     
+    @FXML
+    private void goListSaleConditions() throws IOException{
+        main.showListSaleConditions();
+    }
+    
 }
