@@ -4,6 +4,15 @@ import static java.lang.System.out;
 
 public class Coordinates
 {
+    public Coordinates(){
+        super();
+        
+    }
+    
+    public Coordinates(Integer X, Integer Y) {
+        this.X = X;
+        this.Y = Y;
+    }
     private Integer X;
     private Integer Y;
 
