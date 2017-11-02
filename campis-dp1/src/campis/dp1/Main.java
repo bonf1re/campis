@@ -206,6 +206,13 @@ public class Main extends Application {
         BorderPane editRack = loader.load();
         mainLayout.setCenter(editRack);
     }
+    
+    public static void showListRequestStatuses() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/requestStatus/list.fxml"));
+        BorderPane listRequestStatus = loader.load();
+        mainLayout.setCenter(listRequestStatus);
+    }
 
     /* Roles */
     public static void showListRoles() throws IOException {

@@ -91,4 +91,9 @@ public class MainViewController {
         main.showListRoles();
 
     }
+    
+    @FXML
+    private void goListRequestStatuses() throws IOException {
+        main.showListRequestStatuses();
+    }
 }
