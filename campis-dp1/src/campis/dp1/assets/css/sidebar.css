@@ -1,0 +1,8 @@
+.container {
+	-fx-background-color: #222222;
+}
+
+.option {
+	-fx-text-fill: #FFFFFF;
+	-fx-font-weight: bold;
+}
