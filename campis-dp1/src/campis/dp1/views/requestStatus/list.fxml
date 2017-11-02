@@ -19,24 +19,20 @@
             <Insets />
          </BorderPane.margin>
          <children>
-            <Label layoutX="40.0" layoutY="35.0" prefHeight="43.0" prefWidth="524.0" text="Lista de Roles">
+            <Label layoutX="40.0" layoutY="35.0" prefHeight="43.0" prefWidth="524.0" text="Lista de Estados">
                <font>
                   <Font size="28.0" />
                </font>
             </Label>
-            <TableView fx:id="tableRole" layoutX="40.0" layoutY="95.0" maxHeight="-Infinity" minHeight="0.0" prefHeight="360.0" prefWidth="750.0">
+            <TableView fx:id="tableRequestStatus" layoutX="40.0" layoutY="95.0" maxHeight="-Infinity" minHeight="0.0" prefHeight="360.0" prefWidth="750.0">
               <columns>
-                <TableColumn fx:id="descriptionColumn" prefWidth="-1.0" text="Nombres" />
+                <TableColumn fx:id="nameColumn" prefWidth="-1.0" text="Nombres" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button layoutX="840.0" layoutY="193.0" mnemonicParsing="false" onAction="#goShowRole" prefHeight="35.0" prefWidth="85.0" text="Visualizar" />
-            <Button layoutX="840.0" layoutY="258.0" mnemonicParsing="false" onAction="#goEditRole" prefHeight="35.0" prefWidth="85.0" text="Editar" />
-            <Button layoutX="840.0" layoutY="319.0" mnemonicParsing="false" onAction="#deleteRole" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
-            <Button layoutX="840.0" layoutY="383.0" mnemonicParsing="false" onAction="#goPermission" prefHeight="36.0" prefWidth="85.0" text="Permisos" />
-            <Button layoutX="840.0" layoutY="130.0" mnemonicParsing="false" onAction="#goCreateRole" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
+            <Button layoutX="840.0" layoutY="258.0" mnemonicParsing="false" onAction="#goEditRequestStatus" prefHeight="35.0" prefWidth="85.0" text="Editar" />
          </children>
       </AnchorPane>
    </center>
