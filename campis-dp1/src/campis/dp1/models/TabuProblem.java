@@ -1,5 +1,6 @@
 package campis.dp1.models;
 
+import campis.dp1.models.routing.RouteGen;
 import static java.lang.System.out;
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -8,7 +9,8 @@ import java.util.Collections;
 public class TabuProblem
 {
     private Integer[][] map = new Integer[60][30];
-
+    private RouteGen routeGen;
+    
     public TabuProblem(Integer[][] map)
     {
         this.map = map;
@@ -16,6 +18,10 @@ public class TabuProblem
 
     public TabuProblem() {
         super();
+    }
+    
+    public TabuProblem(RouteGen routeGen) {
+        this.routeGen = routeGen;
     }
 
     public TabuSolution initial(ArrayList<Coordinates> order)
@@ -31,19 +37,21 @@ public class TabuProblem
 
     public Double distance(TabuSolution solution)
     {
-        Double distance = 0.0;
-        Coordinates origin = new Coordinates();
-        origin.setX(0);
-        origin.setY(0);
-
-        distance += this.euclidean(origin, solution.getOrder().get(0));
-
-        for(int i = 0; i < solution.getOrder().size() - 1; i++) {
-            Double step = this.euclidean(solution.getOrder().get(i), solution.getOrder().get(i+1));
-            distance += step;    
-        }
-
-        distance += this.euclidean(solution.getOrder().get(solution.getOrder().size() - 1), origin);
+//        Double distance = 0.0;
+//        Coordinates origin = new Coordinates();
+//        origin.setX(0);
+//        origin.setY(0);
+//
+//        distance += this.euclidean(origin, solution.getOrder().get(0));
+//
+//        for(int i = 0; i < solution.getOrder().size() - 1; i++) {
+//            Double step = this.euclidean(solution.getOrder().get(i), solution.getOrder().get(i+1));
+//            distance += step;    
+//        }
+//
+//        distance += this.euclidean(solution.getOrder().get(solution.getOrder().size() - 1), origin);
+        
+        double distance = this.routeGen.calculateTabuRouteCost(solution.getOrder());
 
         return distance;
     }
@@ -78,6 +86,6 @@ public class TabuProblem
 
     public boolean stop(TabuSolution best, Integer iterations) 
     {
-        return (iterations >= 100000 || best.getCount() == 2500);
+        return (iterations >= 10000 || best.getCount() == 2500);
     }
 }

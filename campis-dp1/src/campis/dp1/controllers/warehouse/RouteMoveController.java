@@ -20,6 +20,8 @@ import campis.dp1.models.TabuSolution;
 import campis.dp1.models.Warehouse;
 import campis.dp1.models.routing.Grasp;
 import campis.dp1.models.routing.GraspResults;
+import campis.dp1.models.routing.RouteGen;
+import campis.dp1.models.routing.RoutingUtils;
 import campis.dp1.services.TabuSearchService;
 import java.net.URL;
 import java.sql.SQLException;
@@ -60,8 +62,8 @@ public class RouteMoveController implements Initializable{
     private ObservableList<BatchWH_Move> batchesList;
     private ArrayList<CRack> crackList = new ArrayList<>();
     private CGraph routesGraph = new CGraph();
-    private ArrayList<Coord> batchesCoords = new ArrayList<>();
-    private ArrayList<Coord> routeGenerated;
+    //private ArrayList<Coord> batchesCoords = new ArrayList<>();
+    //private ArrayList<Coord> routeGenerated;
     
     /* Drawing variables section */
     @FXML
@@ -154,18 +156,23 @@ public class RouteMoveController implements Initializable{
     
     @FXML
     private void generateRoute(){
-        readPositions();
-        System.out.println(this.batchesCoords);
-        Grasp graspSolution = new Grasp(this.real_map,this.routesGraph,this.batchesCoords);
+        RoutingUtils utils=new RoutingUtils();
+        ArrayList<Coord> batchesCoords = readPositions();
+        System.out.println(batchesCoords);
+//        RouteGen routeGen = new RouteGen(this.real_map,this.routesGraph, this.batchesCoords);
+        Grasp graspSolution = new Grasp(this.real_map,this.routesGraph, batchesCoords);
         GraspResults gResults = graspSolution.execute();
-        this.routeGenerated = gResults.getRoute();
-        printRoute();
         ArrayList<Coordinates> tabuInput = toCoordinates(gResults.getProducts()); // orden de productos
+        RouteGen routeGen = graspSolution.getRouteGen();
+        routeGen.printDict();
+        utils.printCoords(gResults.getRoute());
+        utils.printCoordinates(tabuInput);
         TabuSearchService tabu = new TabuSearchService();
-        TabuProblem tabuProblem = new TabuProblem();
+        TabuProblem tabuProblem = new TabuProblem(routeGen);
         TabuSolution tabuSolution = tabu.search(tabuProblem, tabuInput);
-        System.out.println("Solución final del tabu fue:\n");
-        tabuSolution.printOrder();
+//        System.out.println("Solución final del tabu fue:\n");
+//        tabuSolution.printOrder();
+        
     }
 
     private void batchLoadData(Session session) throws SQLException, ClassNotFoundException{
@@ -287,27 +294,22 @@ public class RouteMoveController implements Initializable{
         }
     }
 
-    private void readPositions() {
+    private ArrayList<Coord> readPositions() {
         ObservableList<BatchWH_Move> aux_list = batchTable.getItems();
+        ArrayList<Coord> returnable = new ArrayList<>();
         int list_size = aux_list.size();
         for (int i = 0; i < list_size; i++) {
             int pos_y = aux_list.get(i).getPos_y().get();
             int pos_x = aux_list.get(i).getPos_x().get();
             System.out.println("[ "+pos_y+", "+pos_x+"]");
             if (pos_y != -1 && pos_x != -1){
-                this.batchesCoords.add(new Coord(pos_y,pos_x));
+                returnable.add(new Coord(pos_y,pos_x));
             }
         }
-        
+        return returnable;
     }
 
-    private void printRoute() {
-        System.out.println("\nLa ruta generada fue: ");
-        for (int i = 0; i < this.routeGenerated.size(); i++) {
-            System.out.print(" [ "+this.routeGenerated.get(i).y+", "+this.routeGenerated.get(i).x+"],");
-        }
-        System.out.println(".");
-    }
+    
 
     private ArrayList<Coordinates> toCoordinates(ArrayList<Coord> products) {
         ArrayList<Coordinates> returnable = new ArrayList<>();
