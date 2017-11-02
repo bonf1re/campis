@@ -314,7 +314,7 @@ public class Main extends Application {
         mainLayout.setCenter(newDeparture);
      }
     
-    /* BuyOrder */
+    /* RequestOrder */
     
     public static void showListRequestOrder() throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -336,6 +336,29 @@ public class Main extends Application {
         BorderPane addItem = loader.load();
         mainLayout.setCenter(addItem);
     }
+    
+    public static void showAddItem2() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/requestOrder/addItem2.fxml"));
+        BorderPane addItem2 = loader.load();
+        mainLayout.setCenter(addItem2);
+    }
+    
+    public static void showEditRequestOrder() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/requestOrder/edit.fxml"));
+        BorderPane editRequestOrder = loader.load();
+        mainLayout.setCenter(editRequestOrder);
+    }
+    
+    public static void showViewRequest() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/requestOrder/view.fxml"));
+        BorderPane viewRequestOrder = loader.load();
+        mainLayout.setCenter(viewRequestOrder);
+    }
+    
+    /* End RequestOrder*/
     
     /**  
      * @param args the command line arguments

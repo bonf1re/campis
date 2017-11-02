@@ -52,6 +52,7 @@
         <mapping class="campis.dp1.models.Batch"/>
         <mapping class="campis.dp1.models.RequestOrder"/>
         <mapping class="campis.dp1.models.Client"/>
+        <mapping class="campis.dp1.models.RequestOrderLine"/>
         
     </session-factory>
 
