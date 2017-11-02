@@ -42,7 +42,7 @@ public class ListRequestStatusController implements Initializable {
     @FXML
     private TableView<RequestStatusDisplay> tableRequestStatus;
     @FXML
-    private TableColumn<RequestStatusDisplay,String> nameColumn;
+    private TableColumn<RequestStatusDisplay,String> descriptionColumn;
 
     @FXML
     private void goEditRequestStatus() throws IOException {
@@ -64,7 +64,7 @@ public class ListRequestStatusController implements Initializable {
             }
         );
         try {
-            nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+            descriptionColumn.setCellValueFactory(cellData -> cellData.getValue().descriptionProperty());
             /**/
             loadData();
         } catch (SQLException | ClassNotFoundException ex) {
@@ -95,7 +95,7 @@ public class ListRequestStatusController implements Initializable {
         requestStatusesView = FXCollections.observableArrayList();
         requestStatuses = getRequestStatuses();
         for (int i = 0; i < requestStatuses.size(); i++) {
-            RequestStatusDisplay status = new RequestStatusDisplay(requestStatuses.get(i).getId_request_status(), requestStatuses.get(i).getName());
+            RequestStatusDisplay status = new RequestStatusDisplay(requestStatuses.get(i).getId_request_status(), requestStatuses.get(i).getDescription());
             requestStatusesView.add(status);
         }
         tableRequestStatus.setItems(null);

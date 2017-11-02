@@ -20,14 +20,14 @@ public class RequestStatus {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     int id_request_status;
-    String name;
+    String description;
     
     public RequestStatus() {
         super();
     }
     
-    public RequestStatus(String name) {
-        this.name = name;
+    public RequestStatus(String description) {
+        this.description = description;
     }
 
     public int getId_request_status() {
@@ -38,11 +38,11 @@ public class RequestStatus {
         this.id_request_status = id_request_status;
     }
 
-    public String getName() {
-        return name;
+    public String getDescription() {
+        return description;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

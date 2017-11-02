@@ -15,18 +15,18 @@ import javafx.beans.property.StringProperty;
  */
 public class RequestStatusDisplay {
     private final IntegerProperty id_request_status;
-    private final StringProperty name;
+    private final StringProperty description;
     
-    public RequestStatusDisplay(int id, String name) {
+    public RequestStatusDisplay(int id, String description) {
         this.id_request_status = new SimpleIntegerProperty(id);
-        this.name = new SimpleStringProperty(name);
+        this.description = new SimpleStringProperty(description);
     }
     
     public IntegerProperty idRequestStatusProperty() {
         return id_request_status;
     }
     
-    public StringProperty nameProperty() {
-        return name;
+    public StringProperty descriptionProperty() {
+        return description;
     }
 }
