@@ -7,6 +7,7 @@ package campis.dp1.controllers.requestStatuses;
 
 import campis.dp1.Main;
 import javafx.event.ActionEvent;
+import campis.dp1.controllers.products.ListController;
 import campis.dp1.models.RequestStatusDisplay;
 import campis.dp1.models.RequestStatus;
 import campis.dp1.ContextFX;
@@ -46,7 +47,7 @@ public class ListRequestStatusController implements Initializable {
     @FXML
     private void goEditRequestStatus() throws IOException {
         ContextFX.getInstance().setId(selected_id);
-        main.showEditRequestStatus();
+        //main.showEditRequestStatus();
     }
 
     /**
@@ -71,7 +72,7 @@ public class ListRequestStatusController implements Initializable {
         }
     }
 
-    private ObservableList<Role> getRequestStatuses() {
+    private ObservableList<RequestStatus> getRequestStatuses() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
