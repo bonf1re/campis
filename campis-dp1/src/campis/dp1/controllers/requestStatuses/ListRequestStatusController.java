@@ -47,7 +47,7 @@ public class ListRequestStatusController implements Initializable {
     @FXML
     private void goEditRequestStatus() throws IOException {
         ContextFX.getInstance().setId(selected_id);
-        //main.showEditRequestStatus();
+        main.showEditRequestStatuses();
     }
 
     /**
