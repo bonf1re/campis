@@ -135,7 +135,13 @@ public class ListController implements Initializable{
     @FXML
     private void goEditRequest(ActionEvent event) throws IOException{
         ContextFX.getInstance().setId(selected_id);
-        //main.showEditRequest();
+        main.showEditRequestOrder();
+    }
+    
+    @FXML
+    private void goViewRequest(ActionEvent event) throws IOException {
+        ContextFX.getInstance().setId(selected_id);
+        main.showViewRequest();
     }
     
     @FXML

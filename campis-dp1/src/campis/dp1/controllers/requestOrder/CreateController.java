@@ -10,6 +10,7 @@ import campis.dp1.Main;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.RequestOrder;
+import campis.dp1.models.RequestOrderLine;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
@@ -47,11 +48,11 @@ public class CreateController implements Initializable {
 
     Main main;
     Integer id, quantity;
+    Integer num = 0;
     float totalAmount = 0; 
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView = FXCollections.observableArrayList();
-    
-    
+       
     @FXML
     private JFXTextField amountField;
     
@@ -80,7 +81,7 @@ public class CreateController implements Initializable {
     @FXML
     private JFXTextField codClientField;
     @FXML
-    private JFXComboBox statesField;
+    private JFXComboBox<String> statesField;
 
     @FXML
     private void goAddItem() throws IOException {
@@ -107,12 +108,13 @@ public class CreateController implements Initializable {
                                     Timestamp.valueOf((String)formatIn.format(date_delivery)), 
                                     Float.parseFloat(amountField.getText()), 
                                     Float.parseFloat(amountField.getText()),
-                                    (String)statesField.getEditor().getText(), 
+                                    (String)statesField.getValue(), 
                                     Integer.parseInt(codClientField.getText()));
         session.save(requestOrder);
         session.getTransaction().commit();
         
         sessionFactory.close();
+        createRequestOrderLine(requestOrder.getId_request_order());
         this.goListRequestOrder();
     }
     
@@ -160,7 +162,9 @@ public class CreateController implements Initializable {
             statesField.getItems().addAll("ENTREGADO","CANCELADO","EN PROGRESO");
             id = ContextFX.getInstance().getId();
             quantity = ContextFX.getInstance().getQuantity();
-            
+            num = ContextFX.getInstance().getNum();
+            num = num + 1;
+            ContextFX.getInstance().setNum(num);
             idColumn.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
             nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
             typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty().asObject());
@@ -186,6 +190,25 @@ public class CreateController implements Initializable {
                                                     value.getMonthValue(),
                                                     value.getDayOfMonth());
         return calendar.getTime();
+    }
+
+    private void createRequestOrderLine(int codReqOrd) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        for (int i = 0; i < num; i++) {
+            ProductDisplay prod = tablaProd.getItems().get(i);
+            Integer idprod = prod.codProdProperty().getValue();
+            Integer quant = prod.cStockProperty().getValue();
+            Float cost = prod.precioBProperty().getValue();
+            RequestOrderLine reqOrdLine = new RequestOrderLine(quant, cost, codReqOrd, idprod);
+            session.save(reqOrdLine);
+        }
+        session.getTransaction().commit();
+        sessionFactory.close();
     }
 
 }
