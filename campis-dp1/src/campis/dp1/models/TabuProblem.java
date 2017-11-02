@@ -14,6 +14,10 @@ public class TabuProblem
         this.map = map;
     }
 
+    public TabuProblem() {
+        super();
+    }
+
     public TabuSolution initial(ArrayList<Coordinates> order)
     {
         Collections.shuffle(order);
