@@ -28,7 +28,6 @@ public class Client {
     String address;
     String phone;
     String email;
-    Integer priority;
 
     public Integer getId_client() {
         return id_client;
@@ -93,29 +92,20 @@ public class Client {
     public void setEmail(String email) {
         this.email = email;
     }
-
-    public Integer getPriority() {
-        return priority;
-    }
-
-    public void setPriority(Integer priority) {
-        this.priority = priority;
-    }
     
     public Client() {
         super();
     }
     
     public Client(String nom, String dni, String ruc,
-                  boolean active, String address, String phone, 
-                  String email, int priority) {
+                   String address, String phone, 
+                  String email) {
         this.name = nom;
         this.dni = dni;
         this.ruc = ruc;
-        this.active = active;
         this.address = address;
         this.phone = phone;
         this.email = email;
-        this.priority = priority;
+        this.active = true;
     }
 }

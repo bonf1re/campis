@@ -27,7 +27,27 @@ public class ContextFX {
     List aux_list = null;   // Abstract so it can take any kind of arraylist
     Integer quantity = null;
     Float totAmount = 0.0f;
+    Integer num = 0; // Useful to save any integer variable.
+    Integer var = 0;
     ObservableList<ProductDisplay> tempList = FXCollections.observableArrayList();
+    
+    public Integer getNum() {
+        Integer returnable = new Integer(this.num);
+        return returnable;
+    }
+
+    public void setNum(Integer num) {
+        this.num = num;
+    }
+    
+    public Integer getVar() {
+        Integer returnable = new Integer(this.var);
+        return returnable;
+    }
+
+    public void setVar(Integer var) {
+        this.var = var;
+    }
     
     public List getList(){
         List returnable = new ArrayList<>(this.aux_list);
