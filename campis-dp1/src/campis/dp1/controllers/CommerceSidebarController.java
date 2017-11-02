@@ -21,6 +21,11 @@ public class CommerceSidebarController {
     private void goListRequestOrder() throws IOException{
         main.showListRequestOrder();
     }
+
+    @FXML
+    private void goListClient() throws IOException {
+        main.showListClient();
+    }
     
     @FXML
     private void goListRequestStatuses() throws IOException {
