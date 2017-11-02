@@ -13,10 +13,14 @@ import campis.dp1.models.CGraph;
 import campis.dp1.models.CNode;
 import campis.dp1.models.CRack;
 import campis.dp1.models.Coord;
+import campis.dp1.models.Coordinates;
 import campis.dp1.models.Rack;
+import campis.dp1.models.TabuProblem;
+import campis.dp1.models.TabuSolution;
 import campis.dp1.models.Warehouse;
 import campis.dp1.models.routing.Grasp;
 import campis.dp1.models.routing.GraspResults;
+import campis.dp1.services.TabuSearchService;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.ArrayList;
@@ -156,7 +160,12 @@ public class RouteMoveController implements Initializable{
         GraspResults gResults = graspSolution.execute();
         this.routeGenerated = gResults.getRoute();
         printRoute();
-        gResults.getProducts(); // orden de productos
+        ArrayList<Coordinates> tabuInput = toCoordinates(gResults.getProducts()); // orden de productos
+        TabuSearchService tabu = new TabuSearchService();
+        TabuProblem tabuProblem = new TabuProblem();
+        TabuSolution tabuSolution = tabu.search(tabuProblem, tabuInput);
+        System.out.println("Solución final del tabu fue:\n");
+        tabuSolution.printOrder();
     }
 
     private void batchLoadData(Session session) throws SQLException, ClassNotFoundException{
@@ -298,5 +307,14 @@ public class RouteMoveController implements Initializable{
             System.out.print(" [ "+this.routeGenerated.get(i).y+", "+this.routeGenerated.get(i).x+"],");
         }
         System.out.println(".");
+    }
+
+    private ArrayList<Coordinates> toCoordinates(ArrayList<Coord> products) {
+        ArrayList<Coordinates> returnable = new ArrayList<>();
+        for (int i = 0; i < products.size(); i++) {
+            Coord aux = products.get(i);
+            returnable.add(new Coordinates(aux.x,aux.y));
+        }
+        return returnable;
     }
 }
