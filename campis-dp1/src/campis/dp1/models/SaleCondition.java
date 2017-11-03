@@ -18,7 +18,7 @@ import javax.persistence.Table;
  */
 @Entity
 @Table(name = "sale_condition")
-public class SaleConditions {
+public class SaleCondition {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id_sale_condition;
@@ -127,7 +127,7 @@ public class SaleConditions {
         this.id_to_take = id_to_take;
     }
     
-    public SaleConditions() {
+    public SaleCondition() {
         super();
     }
     
