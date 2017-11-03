@@ -408,6 +408,27 @@ public class Main extends Application {
         mainLayout.setCenter(saleConditions);
     }
     
+    public static void showNewSaleCondition() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/saleConditions/create.fxml"));
+        BorderPane newClient = loader.load();
+        mainLayout.setCenter(newClient);    
+    }
+
+    public static void showEditSaleCondition() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/saleConditions/edit.fxml"));
+        BorderPane newClient = loader.load();
+        mainLayout.setCenter(newClient);    
+    }
+
+    public static void showViewSaleCondition() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/saleConditions/show.fxml"));
+        BorderPane newClient = loader.load();
+        mainLayout.setCenter(newClient);    
+    }
+    
     
     /* End RequestOrder*/
     

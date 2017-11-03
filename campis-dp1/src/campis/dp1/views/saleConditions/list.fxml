@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.saleConditions.ListController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.saleConditions.ListSaleConditionController">
    <center>
       <AnchorPane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
@@ -18,15 +18,15 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <TableView fx:id="requestTable" layoutX="77.0" layoutY="169.0" prefHeight="366.0" prefWidth="697.0">
+            <TableView fx:id="saleCondTable" layoutX="77.0" layoutY="169.0" prefHeight="366.0" prefWidth="697.0">
               <columns>
                 <TableColumn fx:id="codColumn" prefWidth="75.0" text="ID" />
-                <TableColumn fx:id="clientColumn" prefWidth="75.0" text="Día inicial" />
-                  <TableColumn fx:id="amountColumn" prefWidth="75.0" text="Día final" />
-                  <TableColumn fx:id="stateColumn" prefWidth="75.0" text="Porcentaje" />
-                  <TableColumn prefWidth="75.0" text="Tipo" />
-                  <TableColumn prefWidth="75.0" text="Límite" />
-                  <TableColumn prefWidth="75.0" text="Aplicado a" />
+                <TableColumn fx:id="initialColumn" prefWidth="75.0" text="Día inicial" />
+                  <TableColumn fx:id="endColumn" prefWidth="75.0" text="Día final" />
+                  <TableColumn fx:id="amountColumn" prefWidth="75.0" text="Porcentaje" />
+                  <TableColumn fx:id="typeColumn" prefWidth="75.0" text="Tipo" />
+                  <TableColumn fx:id="totakeColumn" prefWidth="75.0" text="Aplicado a" />
+                  <TableColumn fx:id="limitColumn" prefWidth="75.0" text="Límite" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -38,23 +38,23 @@
                </font>
             </Label>
             <Button layoutX="736.0" layoutY="80.0" mnemonicParsing="false" prefHeight="29.0" prefWidth="77.0" text="Buscar" />
-            <JFXDatePicker layoutX="228.0" layoutY="76.0" prefHeight="26.0" prefWidth="138.0" />
+            <JFXDatePicker fx:id="pickerInitial" layoutX="228.0" layoutY="76.0" prefHeight="26.0" prefWidth="138.0" />
             <Label layoutX="394.0" layoutY="84.0" text="Fecha de fin:">
                <font>
                   <Font size="16.0" />
                </font>
             </Label>
-            <JFXDatePicker layoutX="532.0" layoutY="76.0" prefHeight="26.0" prefWidth="138.0" />
+            <JFXDatePicker fx:id="pickerFInal" layoutX="532.0" layoutY="76.0" prefHeight="26.0" prefWidth="138.0" />
          </children>
       </AnchorPane>
    </center>
    <right>
       <AnchorPane prefHeight="600.0" prefWidth="179.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="46.0" layoutY="253.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Visualizar" />
-            <Button layoutX="46.0" layoutY="191.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Nuevo" />
-            <Button layoutX="46.0" layoutY="317.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Modificar" />
-            <Button layoutX="46.0" layoutY="377.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Eliminar" />
+            <Button layoutX="46.0" layoutY="253.0" mnemonicParsing="false" onAction="#goViewSaleCondition" prefHeight="35.0" prefWidth="88.0" text="Visualizar" />
+            <Button layoutX="46.0" layoutY="191.0" mnemonicParsing="false" onAction="#goNewSaleCondition" prefHeight="35.0" prefWidth="88.0" text="Nuevo" />
+            <Button layoutX="46.0" layoutY="317.0" mnemonicParsing="false" onAction="#goEditSaleCondition" prefHeight="35.0" prefWidth="88.0" text="Modificar" />
+            <Button layoutX="46.0" layoutY="377.0" mnemonicParsing="false" onAction="#deleteSaleCondition" prefHeight="35.0" prefWidth="88.0" text="Eliminar" />
          </children>
       </AnchorPane>
    </right>
