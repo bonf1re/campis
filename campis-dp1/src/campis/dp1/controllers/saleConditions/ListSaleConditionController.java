@@ -15,6 +15,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -49,7 +51,7 @@ public class ListSaleConditionController implements Initializable {
     @FXML
     private TableColumn<SaleConditionDisplay, Integer> codColumn;
 
-     @FXML
+    @FXML
     private TableColumn<SaleConditionDisplay, String> initialColumn;
 
     @FXML
@@ -75,7 +77,27 @@ public class ListSaleConditionController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        saleCondTable.getSelectionModel().selectedItemProperty().addListener(
+        (observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                return;
+            }
+            this.selected_id = newValue.getId_sale_condition().getValue().intValue();
+            }
+        );
+        try {
+            codColumn.setCellValueFactory(cellData -> cellData.getValue().getId_sale_condition().asObject());
+            initialColumn.setCellValueFactory(cellData -> cellData.getValue().getInitial_date());
+            endColumn.setCellValueFactory(cellData -> cellData.getValue().getFinal_date());
+            amountColumn.setCellValueFactory(cellData -> cellData.getValue().getAmount().asObject());
+            typeColumn.setCellValueFactory(cellData -> cellData.getValue().getSale_condition_type());
+            totakeColumn.setCellValueFactory(cellData -> cellData.getValue().getApplied_to());
+            limitColumn.setCellValueFactory(cellData -> cellData.getValue().getLimits().asObject());
+            /**/
+            cargarData();
+        } catch (SQLException | ClassNotFoundException ex) {
+            Logger.getLogger(ListSaleConditionController.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }    
     
     
@@ -83,12 +105,12 @@ public class ListSaleConditionController implements Initializable {
         condiciones = FXCollections.observableArrayList();
         condicionesView = FXCollections.observableArrayList();
         condiciones = getSaleConditions();
-        //for (int i = 0; i < condiciones.size(); i++) {
-        //    SaleConditionDisplay sc = new SaleConditionDisplay(condiciones.get(i).getId_sale_condition(), condiciones.get(i).getInitial_date(),
-        //            condiciones.get(i).getFinal_date(), condiciones.get(i).getAmount(), condiciones.get(i).getId_sale_condition_type(),
-        //            condiciones.get(i).getId_to_take(),condiciones.get(i).getLimits());
-        //    condicionesView.add(sc);
-        //}
+        for (int i = 0; i < condiciones.size(); i++) {
+            SaleConditionDisplay sc = new SaleConditionDisplay(condiciones.get(i).getId_sale_condition(), condiciones.get(i).getInitial_date(),
+                    condiciones.get(i).getFinal_date(), condiciones.get(i).getAmount(), condiciones.get(i).getId_sale_condition_type(),
+                    condiciones.get(i).getId_to_take(),condiciones.get(i).getLimits());
+            condicionesView.add(sc);
+        }
         saleCondTable.setItems(null);
         saleCondTable.setItems(condicionesView);
     }

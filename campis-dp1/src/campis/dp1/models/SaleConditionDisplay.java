@@ -7,6 +7,9 @@ package campis.dp1.models;
 
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 
 /**
@@ -72,14 +75,16 @@ public class SaleConditionDisplay {
         return applied_to;
     }
 
-    public SaleConditionDisplay(IntegerProperty id_sale_condition, StringProperty initial_date, StringProperty final_date, FloatProperty amount, StringProperty sale_condition_type, IntegerProperty limits, StringProperty applied_to) {
-        this.id_sale_condition = id_sale_condition;
-        this.initial_date = initial_date;
-        this.final_date = final_date;
-        this.amount = amount;
-        this.sale_condition_type = sale_condition_type;
-        this.limits = limits;
-        this.applied_to = applied_to;
+    public SaleConditionDisplay(Integer id_sale_condition, String initial_date, 
+            String final_date, Float amount, String sale_condition_type, 
+            Integer limits, String applied_to) {
+        this.id_sale_condition = new SimpleIntegerProperty(id_sale_condition);
+        this.initial_date = new SimpleStringProperty(initial_date);
+        this.final_date = new SimpleStringProperty(final_date);
+        this.amount = new SimpleFloatProperty(amount);
+        this.sale_condition_type = new SimpleStringProperty(sale_condition_type);
+        this.limits = new SimpleIntegerProperty(limits);
+        this.applied_to = new SimpleStringProperty(applied_to);
     }
     
     
