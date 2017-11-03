@@ -47,6 +47,23 @@ public class BatchDisplay {
         this.heritage = new SimpleStringProperty(whMove.getHeritage());
         this.selected = new SimpleBooleanProperty(false);
     }
+    
+    public BatchDisplay(int id_batch, int quantity, float cost, String arrivalDate, String expirationDate,
+                        int id_product, int type, int idGroupBatch, String location, String state, String heritage) {
+        
+        this.id_batch = new SimpleIntegerProperty(id_batch);
+        this.quantity = new SimpleIntegerProperty(quantity);
+        this.batch_cost = new SimpleFloatProperty(cost);
+        this.arrival_date = new SimpleStringProperty(arrivalDate);
+        this.expiration_date = new SimpleStringProperty(expirationDate);
+        this.id_product = new SimpleIntegerProperty(id_product);
+        this.type_batch = new SimpleIntegerProperty(type);
+        this.id_group_batch = new SimpleIntegerProperty(idGroupBatch);
+        this.location = new SimpleStringProperty(location);
+        this.state = new SimpleStringProperty(state);
+        this.heritage = new SimpleStringProperty(heritage);
+        this.selected = new SimpleBooleanProperty(false);
+    }
 
     public BooleanProperty getSelected() {
         return selected;

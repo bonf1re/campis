@@ -17,7 +17,7 @@ class Route {
     private int cost = 0;
     
     
-    public void increaseCost(int sum){
+    private void increaseCost(int sum){
         this.cost+=sum;
     }
             
@@ -47,6 +47,7 @@ class Route {
     }
     
     public void addPath(Coord coord){
+        if (this.paths.size()>0) this.increaseCost(this.paths.get(this.paths.size()-1).c_distance(coord));
         this.paths.add(coord);
     }
     

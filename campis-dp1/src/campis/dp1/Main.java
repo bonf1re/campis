@@ -43,6 +43,7 @@ public class Main extends Application {
         AnchorPane login = loader.load();
         mainLayout.setCenter(login);
         mainLayout.setTop(null);
+        mainLayout.setLeft(null);
     } 
     
     public static void showTopMenu() throws IOException {
@@ -206,6 +207,20 @@ public class Main extends Application {
         BorderPane editRack = loader.load();
         mainLayout.setCenter(editRack);
     }
+    
+    public static void showListRequestStatuses() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/requestStatus/list.fxml"));
+        BorderPane listRequestStatus = loader.load();
+        mainLayout.setCenter(listRequestStatus);
+    }
+
+    public static void showEditRequestStatuses() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/requestStatus/edit.fxml"));
+        BorderPane editRequestStatus = loader.load();
+        mainLayout.setCenter(editRequestStatus);
+    }
 
     /* Roles */
     public static void showListRoles() throws IOException {
@@ -336,7 +351,35 @@ public class Main extends Application {
         BorderPane addItem = loader.load();
         mainLayout.setCenter(addItem);
     }
+
+    public static void showListClient() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/clients/list.fxml"));
+        BorderPane listClient = loader.load();
+        mainLayout.setCenter(listClient);  
+    }
     
+    public static void showCreateClient() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/clients/create.fxml"));
+        BorderPane newClient = loader.load();
+        mainLayout.setCenter(newClient);    
+    }
+
+    public static void showEditClient() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/clients/edit.fxml"));
+        BorderPane newClient = loader.load();
+        mainLayout.setCenter(newClient);    
+    }
+
+    public static void showViewClient() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/clients/show.fxml"));
+        BorderPane newClient = loader.load();
+        mainLayout.setCenter(newClient);    
+    }
+
     public static void showAddItem2() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/requestOrder/addItem2.fxml"));

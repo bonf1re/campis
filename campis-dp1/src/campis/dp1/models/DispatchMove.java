@@ -42,6 +42,14 @@ public class DispatchMove {
         this.reason =  reason;
     }
     
+    public DispatchMove(Integer type_owner, Integer id_owner, 
+                 Integer reason){
+        
+        this.type_owner = type_owner;
+        this.id_owner = id_owner;
+        this.reason =  reason;
+    }
+    
     /**
      * @return the id_group_batch
      */
