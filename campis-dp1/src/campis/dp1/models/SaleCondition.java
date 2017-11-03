@@ -28,6 +28,8 @@ public class SaleCondition {
     private Integer id_sale_condition_type;
     private Integer limits;
     private Integer id_to_take;
+    private Integer id_campaign;
+    
 
     /**
      * @return the id_sale_condition
@@ -125,6 +127,17 @@ public class SaleCondition {
      */
     public void setId_to_take(Integer id_to_take) {
         this.id_to_take = id_to_take;
+    }
+    
+     public Integer getId_campaign() {
+        return id_campaign;
+    }
+
+    /**
+     * @param id_campaign the id_campaign to set
+     */
+    public void setId_campaign(Integer id_campaign) {
+        this.id_campaign = id_campaign;
     }
     
     public SaleCondition() {

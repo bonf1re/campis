@@ -70,6 +70,9 @@ public class ListSaleConditionController implements Initializable {
     private TableColumn<SaleConditionDisplay, Integer> limitColumn;
 
     @FXML
+    private TableColumn<SaleConditionDisplay, String> campaignColumn;
+    
+    @FXML
     private JFXDatePicker pickerInitial;
 
     @FXML
@@ -93,6 +96,7 @@ public class ListSaleConditionController implements Initializable {
             typeColumn.setCellValueFactory(cellData -> cellData.getValue().getSale_condition_type());
             totakeColumn.setCellValueFactory(cellData -> cellData.getValue().getApplied_to());
             limitColumn.setCellValueFactory(cellData -> cellData.getValue().getLimits().asObject());
+            campaignColumn.setCellValueFactory(cellData -> cellData.getValue().getCampaign());
             /**/
             cargarData();
         } catch (SQLException | ClassNotFoundException ex) {
@@ -106,9 +110,11 @@ public class ListSaleConditionController implements Initializable {
         condicionesView = FXCollections.observableArrayList();
         condiciones = getSaleConditions();
         for (int i = 0; i < condiciones.size(); i++) {
-            SaleConditionDisplay sc = new SaleConditionDisplay(condiciones.get(i).getId_sale_condition(), condiciones.get(i).getInitial_date(),
-                    condiciones.get(i).getFinal_date(), condiciones.get(i).getAmount(), condiciones.get(i).getId_sale_condition_type(),
-                    condiciones.get(i).getId_to_take(),condiciones.get(i).getLimits());
+            //wITHOUT SEARCH BY IDS !!!!!!!!!!!!!
+            SaleConditionDisplay sc = new SaleConditionDisplay(condiciones.get(i).getId_sale_condition(), condiciones.get(i).getInitial_date().toString(),
+                    condiciones.get(i).getFinal_date().toString(), condiciones.get(i).getAmount(), condiciones.get(i).getId_sale_condition_type().toString(), 
+                    condiciones.get(i).getLimits(),condiciones.get(i).getId_to_take().toString(),
+                    condiciones.get(i).getId_campaign().toString());
             condicionesView.add(sc);
         }
         saleCondTable.setItems(null);

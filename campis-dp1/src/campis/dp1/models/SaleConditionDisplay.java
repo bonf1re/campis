@@ -25,6 +25,8 @@ public class SaleConditionDisplay {
     private final StringProperty sale_condition_type;
     private final IntegerProperty limits;
     private final StringProperty applied_to;
+    private StringProperty campaign;
+    
 
     /**
      * @return the id_sale_condition
@@ -77,7 +79,7 @@ public class SaleConditionDisplay {
 
     public SaleConditionDisplay(Integer id_sale_condition, String initial_date, 
             String final_date, Float amount, String sale_condition_type, 
-            Integer limits, String applied_to) {
+            Integer limits, String applied_to, String campaign) {
         this.id_sale_condition = new SimpleIntegerProperty(id_sale_condition);
         this.initial_date = new SimpleStringProperty(initial_date);
         this.final_date = new SimpleStringProperty(final_date);
@@ -85,6 +87,22 @@ public class SaleConditionDisplay {
         this.sale_condition_type = new SimpleStringProperty(sale_condition_type);
         this.limits = new SimpleIntegerProperty(limits);
         this.applied_to = new SimpleStringProperty(applied_to);
+        this.campaign = new SimpleStringProperty(campaign);
+        
+    }
+
+    /**
+     * @return the campaign
+     */
+    public StringProperty getCampaign() {
+        return campaign;
+    }
+
+    /**
+     * @param campaign the campaign to set
+     */
+    public void setCampaign(StringProperty campaign) {
+        this.campaign = campaign;
     }
     
     
