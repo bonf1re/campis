@@ -38,7 +38,7 @@ import org.hibernate.criterion.Restrictions;
  *
  * @author sergio
  */
-public class CreateMovesController implements Initializable{
+public class EntryMoveCreateController implements Initializable{
     private Main main;
     private int id_warehouse_back;
     ObservableList<Batch> batches;
@@ -104,7 +104,7 @@ public class CreateMovesController implements Initializable{
             batchTable.setEditable(true);
             batchLoadData();
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ListWarehouseController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WarehouseListController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -154,18 +154,18 @@ public class CreateMovesController implements Initializable{
     }
     
     @FXML
-    private void goWarehouseMoves() throws IOException{
+    private void goWhEntryMoveCreate() throws IOException{
         ContextFX.getInstance().setId(id_warehouse_back);
-        main.showWarehouseCreateMove();
+        main.showWhEntryMoveCreate();
         
     }
     
     @FXML
-    private void goRouteMove() throws IOException{
+    private void goWhEntryMoveRoute() throws IOException{
         List aux = getMarked();
         ContextFX.getInstance().setList(aux);
         ContextFX.getInstance().setId(id_warehouse_back);
-        main.showRouteMove();
+        main.showWhEntryMoveRoute();
     }
     
 }
