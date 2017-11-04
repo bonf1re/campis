@@ -17,8 +17,8 @@ public class WarehouseSidebarController {
     private Main main;
     
     @FXML
-    private void goListWarehouse() throws IOException{
-        main.showListWarehouse();
+    private void goWhList() throws IOException{
+        main.showWhList();
     }
     
     @FXML
