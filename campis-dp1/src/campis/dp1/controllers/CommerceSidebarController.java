@@ -31,4 +31,9 @@ public class CommerceSidebarController {
     private void goListRequestStatuses() throws IOException {
         main.showListRequestStatuses();
     }
+
+    @FXML
+    private void goListComplaint() throws IOException {
+        main.showListComplaint();
+    }
 }

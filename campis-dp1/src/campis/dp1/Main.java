@@ -401,6 +401,26 @@ public class Main extends Application {
         mainLayout.setCenter(viewRequestOrder);
     }
     
+    public static void showListComplaint() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/complaints/list.fxml"));
+        BorderPane listComplaint = loader.load();
+        mainLayout.setCenter(listComplaint);  
+    }
+
+    public static void showCreateComplaint() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/complaints/create.fxml"));
+        BorderPane newComplaint = loader.load();
+        mainLayout.setCenter(newComplaint);    
+    }
+
+    public static void showEditComplaint() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/complaints/edit.fxml"));
+        BorderPane newComplaint = loader.load();
+        mainLayout.setCenter(newComplaint);    
+    }
     /* End RequestOrder*/
     
     /**  
