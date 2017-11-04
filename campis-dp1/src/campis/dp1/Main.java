@@ -415,9 +415,9 @@ public class Main extends Application {
         mainLayout.setCenter(newComplaint);    
     }
 
-    public static void showEditComplaint() throws IOException {
+    public static void goAttendComplaint() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/complaints/edit.fxml"));
+        loader.setLocation(Main.class.getResource("views/complaints/attend_complaint.fxml"));
         BorderPane newComplaint = loader.load();
         mainLayout.setCenter(newComplaint);    
     }
