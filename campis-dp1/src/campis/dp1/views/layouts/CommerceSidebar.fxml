@@ -9,5 +9,6 @@
       <JFXButton onAction="#goListRequestOrder" prefHeight="61.0" prefWidth="95.0" styleClass="option" text="Órdenes de Venta" textAlignment="CENTER" wrapText="true" />
       <JFXButton onAction="#goListRequestStatuses" prefHeight="61.0" prefWidth="95.0" styleClass="option" text="Estados de Orden" textAlignment="CENTER" wrapText="true" />
       <JFXButton onAction="#goListClient" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Cliente" />
+      <JFXButton onAction="#goListFreights" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Flete" />
    </children>
 </VBox>
