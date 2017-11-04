@@ -19,8 +19,8 @@
             <Label layoutX="220.0" layoutY="239.0" text="Porcentaje (desc):" />
             <Label layoutX="219.0" layoutY="300.0" text="Límite:" />
             <Label layoutX="219.0" layoutY="436.0" text="Fecha de Fin:" />
-            <Button fx:id="saveBtn" layoutX="373.0" layoutY="534.0" mnemonicParsing="false" onAction="#insertProduct" prefHeight="21.0" prefWidth="72.0" text="Guardar" />
-            <Button fx:id="cancelBtn" layoutX="574.0" layoutY="534.0" mnemonicParsing="false" onAction="#goListProduct" prefHeight="26.0" prefWidth="88.0" text="Cancelar" />
+            <Button fx:id="saveBtn" layoutX="373.0" layoutY="534.0" mnemonicParsing="false" prefHeight="21.0" prefWidth="72.0" text="Guardar" />
+            <Button fx:id="cancelBtn" layoutX="574.0" layoutY="534.0" mnemonicParsing="false" onAction="#goListSaleConditions" prefHeight="26.0" prefWidth="88.0" text="Cancelar" />
             <Label layoutX="51.0" layoutY="37.0" text="Crear condición de venta">
                <font>
                   <Font size="20.0" />

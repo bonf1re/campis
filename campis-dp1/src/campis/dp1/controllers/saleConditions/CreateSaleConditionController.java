@@ -5,8 +5,11 @@
  */
 package campis.dp1.controllers.saleConditions;
 
+import campis.dp1.Main;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 
 /**
@@ -15,7 +18,7 @@ import javafx.fxml.Initializable;
  * @author david
  */
 public class CreateSaleConditionController implements Initializable {
-
+    Main main;
     /**
      * Initializes the controller class.
      */
@@ -23,5 +26,10 @@ public class CreateSaleConditionController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
     }    
+    
+    @FXML
+    private void goListSaleConditions() throws IOException{
+        main.showListSaleConditions();
+    }
     
 }
