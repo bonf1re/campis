@@ -53,6 +53,7 @@
         <mapping class="campis.dp1.models.RequestOrder"/>
         <mapping class="campis.dp1.models.Client"/>
         <mapping class="campis.dp1.models.Complaint"/>
+        <mapping class="campis.dp1.models.Refund"/>
         <mapping class="campis.dp1.models.RequestStatus"/>
         <mapping class="campis.dp1.models.RequestOrderLine"/>
         
