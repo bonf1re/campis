@@ -42,14 +42,18 @@ public class CreateRackController implements Initializable{
     }
     
     @FXML
-    private void insertRack() throws IOException {
-        
-        //int orientation = orientationCb.getSelectionModel().getSelectedIndex();
+    private void goInsertRack() throws IOException {
         
         Rack r = new Rack(1, Integer.parseInt(x_Field.getText()), Integer.parseInt(y_Field.getText()), 
                             Integer.parseInt(columnsField.getText()), Integer.parseInt(floorsField.getText()),
                             0);
         
+        this.insertRack(r);
+        
+        this.goListRacks();
+    }
+    
+    public void insertRack(Rack r) throws IOException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
@@ -60,8 +64,7 @@ public class CreateRackController implements Initializable{
         session.save(r);
         session.getTransaction().commit();
 
-        sessionFactory.close();
-        this.goListRacks();
+        sessionFactory.close();  
     }
 
     /**

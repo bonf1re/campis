@@ -41,7 +41,7 @@
             <JFXTextField fx:id="floorsField" layoutX="294.0" layoutY="203.0" prefHeight="30.0" prefWidth="160.0" />
             <JFXTextField layoutX="678.0" layoutY="138.0" prefHeight="30.0" prefWidth="160.0" fx:id="x_Field" />
             <JFXTextField fx:id="y_Field" layoutX="678.0" layoutY="204.0" prefHeight="30.0" prefWidth="160.0" />
-            <Button layoutX="355.0" layoutY="420.0" mnemonicParsing="false" onAction="#insertRack" prefHeight="35.0" prefWidth="85.0" text="Guardar" />
+            <Button layoutX="355.0" layoutY="420.0" mnemonicParsing="false" onAction="#goInsertRack" prefHeight="35.0" prefWidth="85.0" text="Guardar" />
             <Button layoutX="529.0" layoutY="420.0" mnemonicParsing="false" onAction="#goListRacks" prefHeight="35.0" prefWidth="85.0" text="Cancelar" />
             <Label layoutX="144.0" layoutY="299.0" text="Orientacion:">
                <font>
