@@ -42,7 +42,7 @@
             <Button layoutX="832.0" layoutY="341.0" mnemonicParsing="false" onAction="#goWhEdit" prefHeight="35.0" prefWidth="85.0" text="Editar" />
             <Button layoutX="831.0" layoutY="404.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
             <Button layoutX="824.0" layoutY="147.0" mnemonicParsing="false" onAction="#goWhEntryMoveList" prefHeight="35.0" prefWidth="102.0" text="Entradas" />
-            <Button layoutX="824.0" layoutY="79.0" mnemonicParsing="false" onAction="#goWhEntryMoveList" prefHeight="35.0" prefWidth="102.0" text="Areas" />
+            <Button layoutX="824.0" layoutY="79.0" mnemonicParsing="false" onAction="#goAreaList" prefHeight="35.0" prefWidth="102.0" text="Areas" />
          </children>
       </Pane>
    </center>
