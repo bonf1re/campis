@@ -65,7 +65,7 @@ public class AreaListController implements Initializable {
     
     @FXML
     private void goAreaCreate() throws IOException{
-        //main.showWhList();
+        main.showAreaCreate();
     }
     
     @Override
