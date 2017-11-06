@@ -45,6 +45,12 @@ public class ListProductTypeController implements Initializable {
     private TableColumn<ProductTypeDisplay,String> descriptionColumn;
 
     @FXML
+    private void goCreateProductType() throws IOException {
+        ContextFX.getInstance().setId(selected_id);
+        main.showCreateProductType();
+    }
+    
+    @FXML
     private void goEditProductType() throws IOException {
         ContextFX.getInstance().setId(selected_id);
         main.showEditProductType();
@@ -101,5 +107,29 @@ public class ListProductTypeController implements Initializable {
         }
         tableProductType.setItems(null);
         tableProductType.setItems(productTypesView);
+    }
+    
+    private void deleteProductType(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(ProductType.class);
+        ProductType product_type = new ProductType();
+        product_type.setId_prodType(cod);
+        session.delete(product_type);
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
+    }
+    
+    @FXML
+    private void deleteProductType(ActionEvent event) throws SQLException, ClassNotFoundException {
+        ContextFX.getInstance().setId(selected_id);
+        Integer id_product_type = ContextFX.getInstance().getId();
+        deleteProductType(selected_id);
+        loadData();
     }
 }
