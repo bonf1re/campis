@@ -57,6 +57,7 @@ public class AddPermissionController implements Initializable {
                 returnable.add(list.get(i));
         	}
         }
+        session.close();
         sessionFactory.close();
 
         return returnable;
@@ -175,6 +176,7 @@ public class AddPermissionController implements Initializable {
 	        int result = query.executeUpdate();
     	}
         session.getTransaction().commit();
+        session.close();
         sessionFactory.close();
         main.showListRoles();
     }

@@ -137,6 +137,7 @@ public class WarehouseListController implements Initializable {
         for (int i = 0; i < whList.size(); i++) {
             returnable.add((Warehouse) whList.get(i));
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }

@@ -75,7 +75,7 @@ public class EditRackController implements Initializable{
         int result = query.executeUpdate();
         
         session.getTransaction().commit();
-
+        session.close();
         sessionFactory.close();
         this.goListRacks();    
     } 

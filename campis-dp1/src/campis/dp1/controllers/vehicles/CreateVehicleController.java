@@ -110,7 +110,7 @@ public class CreateVehicleController implements Initializable {
                                             codWr, lblPlate.getText());
         session.save(v);
         session.getTransaction().commit();
-
+        session.close();
         sessionFactory.close();
         this.goListVehicles();
     }

@@ -52,6 +52,7 @@ public class EditRequestStatusController implements Initializable{
         query.setParameter("oldIdRequestStatus", id);
         int result = query.executeUpdate();
         session.getTransaction().commit();
+        session.close();
         sessionFactory.close();
         this.goListRequestStatuses();
     }
