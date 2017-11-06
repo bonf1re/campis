@@ -1,10 +1,16 @@
 package campis.dp1.models;
 
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -77,5 +83,20 @@ public class Complaint {
      */
     public void setId_request_order(Integer id_request_order) {
         this.id_request_order = id_request_order;
+    }
+
+    public static Complaint getComplaint(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Complaint.class);
+        criteria.add(Restrictions.eq("id_complaint",cod));
+        String descrip;
+        List rsMeasure = criteria.list();
+        Complaint result = (Complaint)rsMeasure.get(0);
+
+        return result;
     }
 }
