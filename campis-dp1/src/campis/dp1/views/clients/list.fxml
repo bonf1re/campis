@@ -41,7 +41,7 @@
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Lista de Productos">
+            <Label text="Lista de Clientes">
                <font>
                   <Font size="18.0" />
                </font>

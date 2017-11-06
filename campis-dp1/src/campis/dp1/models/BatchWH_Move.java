@@ -31,17 +31,15 @@ public class BatchWH_Move extends Batch {
                 batch.getArrival_date(),
                 batch.getExpiration_date(),
                 batch.getId_product(),
-                batch.getType_batch(),
-                batch.getId_group_batch(),
+                batch.getType_batch(),                
                 batch.getLocation(),
                 batch.isState());
         pos_x=new SimpleIntegerProperty(-1);
         pos_y=new SimpleIntegerProperty(-1);
     }
 
-    public BatchWH_Move(int quantity, float batch_cost, Timestamp arrival_date, Timestamp expiration_date, int id_product, int type_batch, int id_group_batch, String location, boolean state) {
-        
-    }
-    
+    public BatchWH_Move(){
+        super();
+    }    
     
 }

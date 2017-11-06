@@ -17,11 +17,12 @@ import campis.dp1.models.Coordinates;
 import campis.dp1.models.Rack;
 import campis.dp1.models.TabuProblem;
 import campis.dp1.models.TabuSolution;
+import campis.dp1.models.Utils.GraphicsUtils;
 import campis.dp1.models.Warehouse;
 import campis.dp1.models.routing.Grasp;
 import campis.dp1.models.routing.GraspResults;
 import campis.dp1.models.routing.RouteGen;
-import campis.dp1.models.routing.RoutingUtils;
+import campis.dp1.models.Utils.RoutingUtils;
 import campis.dp1.services.TabuSearchService;
 import java.net.URL;
 import java.sql.SQLException;
@@ -54,7 +55,7 @@ import org.hibernate.criterion.Restrictions;
  *
  * @author sergio
  */
-public class RouteMoveController implements Initializable{
+public class DepartureMoveRouteController implements Initializable{
     private Main main;
     private int id_warehouse;
     private Warehouse wh;
@@ -71,10 +72,7 @@ public class RouteMoveController implements Initializable{
     private GraphicsContext gc;
     private int[][] real_map;
     private int x;
-    private int y;
-    private int padding_y;
-    private int padding_x;
-    private int mult;
+    private int y;    
     /* End Drawing variables section */
     
     @FXML
@@ -150,7 +148,7 @@ public class RouteMoveController implements Initializable{
             sessionFactory.close();
             
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ListWarehouseController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WarehouseListController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -188,47 +186,25 @@ public class RouteMoveController implements Initializable{
         batchTable.setItems(null);
         batchTable.setItems(batchesList);
     }
-    
-    private void initializeMap() {
-        this.y=wh.getWidth();
-        this.x=wh.getLength();
-        this.real_map = new int[this.y][this.x];
-        for (int i = 0; i < this.y; i++) {
-            for (int j = 0; j < this.x; j++) {
-                this.real_map[i][j]=0;
-            }
-        }
-    }
 
     private void drawMap(Session session) {
         Criteria criteria = session.createCriteria(Warehouse.class);
         criteria.add(Restrictions.eq("id_warehouse", this.id_warehouse));
         List rs = criteria.list();
         this.wh = (Warehouse) rs.get(0);
-        initializeMap();
-        putCRacks(session);
+        GraphicsUtils gu = new GraphicsUtils();
+        this.y=this.wh.getWidth();
+        this.x=this.wh.getLength();
+        this.real_map=gu.initMap(this.y,this.x);
+        this.crackList=gu.putCRacks(id_warehouse, real_map);
+        setupCRacksGraph();
         gc = mapCanvas.getGraphicsContext2D();
-        draw(gc);
+        gu.drawVisualizationMap(gc, y, x, real_map);
     }
     
     
-    private void putCRacks(Session session) {      
-        Criteria criteria =  session.createCriteria(Rack.class);
-        criteria.add(Restrictions.eq("id_warehouse",this.id_warehouse));
-        List racks = criteria.list();
-        for (int i = 0; i < racks.size(); i++) {
-            this.crackList.add(new CRack((Rack) racks.get(i)));
-        }
-        
+    private void setupCRacksGraph() {      
         for (CRack rack : this.crackList) {
-            int rack_y = rack.getPos_y();
-            int rack_x = rack.getPos_x();
-            int rack_length = rack.getN_columns();
-            for (int i = 0; i < 2; i++) {
-                for (int j = 0; j < rack_length; j++) {
-                    this.real_map[i+rack_y][j+rack_x]=1;
-                }
-            }
             for (int i = 0; i < 4; i++) {
                 Coord corner = rack.getCorner(i);
                 this.routesGraph.addNode(new CNode(corner));
@@ -241,58 +217,7 @@ public class RouteMoveController implements Initializable{
         
     }
 
-    @FXML
-    private void draw(GraphicsContext gc){
-        
-        // First we will draw the warehouse without racks
-        
-       
-       float canvas_height=(float) gc.getCanvas().getHeight();
-       float canvas_width =(float) gc.getCanvas().getWidth();
-
-       
-       if (canvas_width/x > canvas_height/y){
-           this.mult = (int) canvas_height/y;
-           //mult = (int) canvas_height/x;
-       }else{
-           this.mult = (int) canvas_width/x;
-           //mult = (int) canvas_width/y;
-       }
-       
-       this.padding_y=(int)(((int)canvas_height)-mult*y)/4;
-       this.padding_x=(int)(((int)canvas_width)-mult*x)/4;
-       
-       if (padding_y>0){
-           padding_y+=mult/2;
-       }
-       if (padding_x>0){
-           padding_x+=mult/2;
-       }
-       
-       System.out.println(padding_x);
-       System.out.println(padding_y);
-       System.out.println(mult);
-       
-        for (int j = 0; j < y; j++) {
-            for (int i = 0; i < x; i++) {
-                if (this.real_map[j][i]==1){
-                   gc.setFill(Color.BLACK); 
-                   gc.fillRect(i*mult+padding_x, j*mult+padding_y, mult, mult);
-                }
-                if (this.real_map[j][i]==0){
-                    gc.setFill(Color.WHITE);
-                    gc.setStroke(Color.BLACK);
-                    gc.strokeRect(i*mult+padding_x, j*mult+padding_y, mult, mult);
-                }
-                if (this.real_map[j][i]==2){
-                    gc.setFill(Color.RED); 
-                    gc.fillRect(i*mult+padding_x, j*mult+padding_y, mult, mult);
-                }
-                 
-               
-            }
-        }
-    }
+   
 
     private ArrayList<Coord> readPositions() {
         ObservableList<BatchWH_Move> aux_list = batchTable.getItems();

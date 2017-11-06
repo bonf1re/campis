@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.WarehouseMovesController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.EntryMoveListController">
    <center>
       <Pane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
@@ -17,7 +17,7 @@
                   <Font size="28.0" />
                </font>
             </Text>
-            <TableView fx:id="warehouseMovesTable" layoutX="79.0" layoutY="142.0" prefHeight="337.0" prefWidth="711.0">
+            <TableView fx:id="whEntryMoveTable" layoutX="79.0" layoutY="142.0" prefHeight="337.0" prefWidth="711.0">
                <columns>
                   <TableColumn fx:id="idCol" prefWidth="75.0" text="ID" />
                   <TableColumn fx:id="dateCol" prefWidth="75.0" text="Fecha" />
@@ -37,14 +37,14 @@
    <right>
       <Pane prefHeight="600.0" prefWidth="174.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="20.0" layoutY="205.0" mnemonicParsing="false" onAction="#goCreateMove" text="Crear Movimiento" />
+            <Button layoutX="20.0" layoutY="205.0" mnemonicParsing="false" onAction="#goWhEntryMoveCreate" text="Crear Movimiento" />
          </children>
       </Pane>
    </right>
    <bottom>
       <Pane prefHeight="116.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="423.0" layoutY="45.0" mnemonicParsing="false" onAction="#goListWarehouse" text="Regresar" />
+            <Button layoutX="423.0" layoutY="45.0" mnemonicParsing="false" onAction="#goWhList" text="Regresar" />
          </children>
       </Pane>
    </bottom>

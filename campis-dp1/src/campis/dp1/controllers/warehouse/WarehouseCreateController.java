@@ -22,7 +22,7 @@ import org.hibernate.cfg.Configuration;
  *
  * @author Gina Bustamante
  */
-public class CreateWarehouseController implements Initializable{
+public class WarehouseCreateController implements Initializable{
     private Main main;
     
     @FXML
@@ -35,8 +35,8 @@ public class CreateWarehouseController implements Initializable{
     private JFXComboBox statusCb;
     
     @FXML
-    private void goListWarehouse() throws IOException{
-        main.showListWarehouse();
+    private void goWhList() throws IOException{
+        main.showWhList();
     }
     
     @FXML
@@ -59,7 +59,7 @@ public class CreateWarehouseController implements Initializable{
         session.getTransaction().commit();
 
         sessionFactory.close();
-        this.goListWarehouse();
+        this.goWhList();
     }
     
     
