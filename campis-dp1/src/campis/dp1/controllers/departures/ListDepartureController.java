@@ -36,7 +36,7 @@ public class ListDepartureController implements Initializable {
     private int selected_id;
     private ObservableList<DispatchMove> dispatch;
     private ObservableList<DispatchMoveDisplay> dispatchView = FXCollections.observableArrayList();
-    
+
     @FXML
     private TableView<DispatchMoveDisplay> departureTable;
     @FXML
@@ -47,45 +47,57 @@ public class ListDepartureController implements Initializable {
     private TableColumn<DispatchMoveDisplay, String> departureDateColumn;
     @FXML
     private TableColumn<DispatchMoveDisplay, Integer> reasonColumn;
-    
+
     @FXML
     private void goVisualizeDeparture() throws IOException {
         ContextFX.getInstance().setId(selected_id);
         main.showVisualizeDeparture();
     }
-    
+
     @FXML
     private void goNewDeparture() throws IOException {
         main.showNewDeparture();
     }
     
+    @FXML
+    private void goNormalDispatch() throws IOException {
+        main.showNewNormalDeparture();
+    }
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        departureTable.getSelectionModel().selectedItemProperty().addListener(
-        (observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                return;
-            }
-            this.selected_id = newValue.id_group_batchProperty().getValue().intValue();
-            }
-        );
-        idDepartureColumn.setCellValueFactory(cellData -> cellData.getValue().id_group_batchProperty().asObject());
-        typeColumn.setCellValueFactory(cellData -> cellData.getValue().type_ownerProperty().asObject());
-        departureDateColumn.setCellValueFactory(cellData -> cellData.getValue().arrival_dateProperty());
-        reasonColumn.setCellValueFactory(cellData -> cellData.getValue().reasonProperty().asObject());
-        loadData();
-    }    
+        try {
+            departureTable.getSelectionModel().selectedItemProperty().addListener(
+                    (observable, oldValue, newValue) -> {
+                        if (newValue == null) {
+                            return;
+                        }
+                        this.selected_id = newValue.id_dispatch_moveProperty().getValue().intValue();
+                    }
+            );
+            idDepartureColumn.setCellValueFactory(cellData -> cellData.getValue().id_dispatch_moveProperty().asObject());
+            typeColumn.setCellValueFactory(cellData -> cellData.getValue().type_ownerProperty().asObject());
+            departureDateColumn.setCellValueFactory(cellData -> cellData.getValue().arrival_dateProperty());
+            reasonColumn.setCellValueFactory(cellData -> cellData.getValue().reasonProperty().asObject());
+            loadData();
+        } catch (NullPointerException e) {
+            idDepartureColumn.setCellValueFactory(cellData -> cellData.getValue().id_dispatch_moveProperty().asObject());
+            typeColumn.setCellValueFactory(cellData -> cellData.getValue().type_ownerProperty().asObject());
+            departureDateColumn.setCellValueFactory(cellData -> cellData.getValue().arrival_dateProperty());
+            reasonColumn.setCellValueFactory(cellData -> cellData.getValue().reasonProperty().asObject());
+        }
+    }
 
     private void loadData() {
         dispatch = FXCollections.observableArrayList();
         ObservableList<DispatchMove> dispatch = getDispatch();
         for (int i = 0; i < dispatch.size(); i++) {
-            DispatchMoveDisplay request = new DispatchMoveDisplay(dispatch.get(i).getId_group_batch(), 
-                                        dispatch.get(i).getTyoe_owner(),dispatch.get(i).getId_owner(),
-                                        dispatch.get(i).getArrival_date().toString(), dispatch.get(i).getReason());
+            DispatchMoveDisplay request = new DispatchMoveDisplay(dispatch.get(i).getId_dispatch_move(),
+                    dispatch.get(i).getType_owner(), dispatch.get(i).getId_owner(),
+                    dispatch.get(i).getMov_date().toString(), dispatch.get(i).getReason());
             dispatchView.add(request);
         }
         departureTable.setItems(null);
@@ -107,24 +119,23 @@ public class ListDepartureController implements Initializable {
         }
         return returnable;
     }
-    
-    
+
     private void eliminateDispatch(int selected_id) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(DispatchMove.class);
         DispatchMove dispatch = new DispatchMove();
-        dispatch.setId_group_batch(selected_id);
+        dispatch.setId_dispatch_move(selected_id);
         session.delete(dispatch);
         session.getTransaction().commit();
 
         sessionFactory.close();
     }
-    
+
     @FXML
     private void deleteDispatch(ActionEvent event) {
         ContextFX.getInstance().setId(selected_id);
@@ -132,18 +143,18 @@ public class ListDepartureController implements Initializable {
         eliminateDispatch(selected_id);
         dispatch = getDispatch();
         for (int i = 0; i < dispatch.size(); i++) {
-            if(dispatch.get(i).getId_group_batch().compareTo(id_dispatch)==0){
+            if (dispatch.get(i).getId_dispatch_move().compareTo(id_dispatch) == 0) {
                 dispatch.remove(i);
             }
         }
         for (int i = 0; i < dispatch.size(); i++) {
-            DispatchMoveDisplay request = new DispatchMoveDisplay(dispatch.get(i).getId_group_batch(), 
-                                        dispatch.get(i).getTyoe_owner(),dispatch.get(i).getId_owner(),
-                                        dispatch.get(i).getArrival_date().toString(), dispatch.get(i).getReason());
+            DispatchMoveDisplay request = new DispatchMoveDisplay(dispatch.get(i).getId_dispatch_move(),
+                    dispatch.get(i).getType_owner(), dispatch.get(i).getId_owner(),
+                    dispatch.get(i).getMov_date().toString(), dispatch.get(i).getReason());
             dispatchView.add(request);
         }
         departureTable.setItems(null);
-        departureTable.setItems(dispatchView);      
+        departureTable.setItems(dispatchView);
     }
-    
+
 }

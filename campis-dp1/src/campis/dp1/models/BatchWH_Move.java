@@ -32,7 +32,6 @@ public class BatchWH_Move extends Batch {
                 batch.getExpiration_date(),
                 batch.getId_product(),
                 batch.getType_batch(),
-                batch.getId_group_batch(),
                 batch.getLocation(),
                 batch.isState());
         pos_x=new SimpleIntegerProperty(-1);

@@ -88,10 +88,10 @@ public class ListEntryController implements Initializable {
         
         for (int i = 0; i < entries.size(); i++) {
             
-            DispatchMoveDisplay e = new DispatchMoveDisplay(entries.get(i).getId_group_batch(), 
-                                              entries.get(i).getTyoe_owner(),
+            DispatchMoveDisplay e = new DispatchMoveDisplay(entries.get(i).getId_dispatch_move(), 
+                                              entries.get(i).getType_owner(),
                                               entries.get(i).getId_owner(),
-                                              entries.get(i).getArrival_date().toString(),
+                                              entries.get(i).getMov_date().toString(),
                                               entries.get(i).getReason());
             
             //System.out.println("campis.dp1.controllers.entries.ListEntryController.loadData()");
@@ -112,12 +112,12 @@ public class ListEntryController implements Initializable {
         tablaEntries.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> {
                 if (newValue == null) return;
-                this.selected_id = newValue.id_group_batchProperty().getValue();
+                this.selected_id = newValue.id_dispatch_moveProperty().getValue();
             }
         );
         
         try {
-            idIngresCol.setCellValueFactory(cellData -> cellData.getValue().id_group_batchProperty().asObject());
+            idIngresCol.setCellValueFactory(cellData -> cellData.getValue().id_dispatch_moveProperty().asObject());
             prov_AlmCol.setCellValueFactory(cellData -> cellData.getValue().id_ownerProperty().asObject());
             dateCol.setCellValueFactory(cellData -> cellData.getValue().arrival_dateProperty());
             reasonsCol.setCellValueFactory(cellData -> cellData.getValue().reasonProperty().asObject());

@@ -76,12 +76,12 @@ public class ViewDepartureController implements Initializable {
         batch = FXCollections.observableArrayList();
         batch = getBatch(selected_id);
         DispatchMove disp = getDispatch(selected_id);
-        if (disp.getTyoe_owner().compareTo(1) == 0) {
+        if (disp.getType_owner().compareTo(1) == 0) {
             destinyName = getZone(disp.getId_owner());
-        } else if (disp.getTyoe_owner().compareTo(2) == 0) {
+        } else if (disp.getType_owner().compareTo(2) == 0) {
             destinyName = getNomCli(disp.getId_owner());
         }
-        String depart = disp.getArrival_date().toString();
+        String depart = disp.getMov_date().toString();
         idbatchColumn.setCellValueFactory(cellData -> cellData.getValue().getId_batch().asObject());
         prodColumn.setCellValueFactory(cellData -> cellData.getValue().getHeritage());
         quantityColumn.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
@@ -178,7 +178,7 @@ public class ViewDepartureController implements Initializable {
             String exp = batch.get(i).getExpiration_date().toString();
             BatchDisplay batchdisp = new BatchDisplay(batch.get(i).getId_batch(),quantity,
                                         batch.get(i).getBatch_cost(),measure,exp,batch.get(i).getId_product(),
-                                        idMeasure,batch.get(i).getId_group_batch(),batch.get(i).getLocation(),
+                                        idMeasure,batch.get(i).getLocation(),
                                         Boolean.toString(batch.get(i).isState()),nameProd);
             batchView.add(batchdisp);
         }

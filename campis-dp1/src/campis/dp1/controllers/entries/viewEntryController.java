@@ -3,15 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1.controllers.entries;
+/*package campis.dp1.controllers.entries;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.controllers.products.ListController;
 import campis.dp1.models.DispatchMove;
-import campis.dp1.models.BatchEntry;
 import campis.dp1.models.Batch;
-import campis.dp1.models.BatchEntryDisplay;
 import campis.dp1.models.Rack;
 import campis.dp1.models.RackDisplay;
 import com.jfoenix.controls.JFXTextField;
@@ -33,13 +31,13 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
-
+*/
 /**
  * FXML Controller class
  *
  * @author david
  */
-public class viewEntryController implements Initializable {
+/*public class viewEntryController implements Initializable {
     Integer id;
     private Main main;
     private ObservableList<BatchEntry> batchEntries;
@@ -130,10 +128,10 @@ public class viewEntryController implements Initializable {
     /**
      * Initializes the controller class.
      */
-    @Override
+/*    @Override
     public void initialize(URL url, ResourceBundle rb) {
         /*Obtemos el id del group entry*/
-        id = ContextFX.getInstance().getId();
+/*        id = ContextFX.getInstance().getId();
         
         System.out.println("campis.dp1.controllers.racks.EditRackController.initialize()");
         System.out.println(id);
@@ -170,4 +168,4 @@ public class viewEntryController implements Initializable {
         }
     }    
     
-}
+}*/

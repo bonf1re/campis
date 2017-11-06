@@ -324,9 +324,16 @@ public class Main extends Application {
     
     public static void showNewDeparture() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/departures/create.fxml"));
+        loader.setLocation(Main.class.getResource("views/departures/specialCreate.fxml"));
         BorderPane newDeparture = loader.load();
         mainLayout.setCenter(newDeparture);
+     }
+    
+    public static void showNewNormalDeparture() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/departures/normalCreate.fxml"));
+        BorderPane newNormalDeparture = loader.load();
+        mainLayout.setCenter(newNormalDeparture);
      }
     
     /* RequestOrder */

@@ -13,11 +13,14 @@ import campis.dp1.models.Batch;
 import campis.dp1.models.BatchDisplay;
 import campis.dp1.models.Client;
 import campis.dp1.models.DispatchMove;
+import campis.dp1.models.DispatchOrder;
+import campis.dp1.models.DispatchOrderLine;
 import campis.dp1.models.Product;
 import campis.dp1.models.UnitOfMeasure;
 import campis.dp1.models.Warehouse;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.Timestamp;
@@ -43,14 +46,16 @@ import org.hibernate.criterion.Restrictions;
  *
  * @author david
  */
-public class CreateDepartureController implements Initializable {
+public class CreateNormalDepartureController implements Initializable {
 
     private Main main;
     Integer id_selected, selected_id;
     private ObservableList<Batch> batch;
     private ObservableList<BatchDisplay> batchView;
     private ObservableList<BatchDisplay> batchView2 = FXCollections.observableArrayList();
-
+    private ObservableList<DispatchOrder> dispatchOr = FXCollections.observableArrayList();
+    private ObservableList<DispatchOrderLine> dispatchOrLine = FXCollections.observableArrayList();
+    
     @FXML
     private TableView<BatchDisplay> departureZoneTable;
     @FXML
@@ -76,15 +81,15 @@ public class CreateDepartureController implements Initializable {
     @FXML
     private TableColumn<BatchDisplay, String> expColumn2;
     @FXML
-    private JFXCheckBox checkboxClient;
+    private JFXTextField reasonField;
     @FXML
-    private JFXCheckBox checkboxZone;
+    private Button addButton;
     @FXML
-    private JFXComboBox<String> reasonField;
+    private Button lessButton;
     @FXML
-    private JFXComboBox<String> clientField;
+    private JFXCheckBox checkboxDispatch;
     @FXML
-    private JFXComboBox<String> zoneField;
+    private JFXComboBox<String> dispatchField;
 
     @FXML
     private void goListDepartures() throws IOException {
@@ -96,9 +101,10 @@ public class CreateDepartureController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        reasonField.getItems().addAll("Rompimiento de Productos", "Producto Vencido", "Para Ventas", "Traslado de Almacén");
+        reasonField.setText("Para Venta");
+        dispatchOr = getDispatchOrders();
         batch = FXCollections.observableArrayList();
-        batch = getListBatch();
+        
         /* First Table */
         departureZoneTable.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
@@ -127,10 +133,44 @@ public class CreateDepartureController implements Initializable {
         quantityColumn2.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
         measureColumn2.setCellValueFactory(cellData -> cellData.getValue().getHeritage());
         expColumn2.setCellValueFactory(cellData -> cellData.getValue().getExpiration_date());
-        loadData(batch);
 
     }
-
+    
+    @FXML
+    private void generateList(ActionEvent event) {
+        int cod = Integer.parseInt(dispatchField.getValue());
+        dispatchOrLine = getListDisp(cod);
+        ObservableList<Batch> batchAux = FXCollections.observableArrayList();
+        batchAux = getListBatch();
+        for (int i = 0; i < dispatchOrLine.size(); i++) {
+            for (int j = 0; j < batchAux.size(); j++) {
+                int a = dispatchOrLine.get(i).getId_prod(); 
+                int b = batchAux.get(j).getId_product();
+                if(a == b){
+                    batch.add(batchAux.get(j));
+                }
+            }
+        }
+        loadData(batch);
+    }
+    
+    private ObservableList<DispatchOrderLine> getListDisp(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(DispatchOrderLine.class);
+        criteria.add(Restrictions.eq("id_dispatch_order", cod));
+        ObservableList<DispatchOrderLine> returnable = FXCollections.observableArrayList();
+        List list = criteria.list();
+        for (int i = 0; i < list.size(); i++) {
+            returnable.add((DispatchOrderLine) list.get(i));
+        }
+        return returnable;
+    }
+    
     private ObservableList<Batch> getListBatch() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -139,6 +179,7 @@ public class CreateDepartureController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Batch.class);
+        criteria.add(Restrictions.eq("type_batch", 1));
         ObservableList<Batch> returnable = FXCollections.observableArrayList();
         List list = criteria.list();
         for (int i = 0; i < list.size(); i++) {
@@ -156,7 +197,7 @@ public class CreateDepartureController implements Initializable {
             BatchDisplay batchDisp = new BatchDisplay(batch.get(i).getId_batch(), batch.get(i).getQuantity(),
                     batch.get(i).getBatch_cost(), batch.get(i).getArrival_date().toString(),
                     batch.get(i).getExpiration_date().toString(), batch.get(i).getId_product(),
-                    batch.get(i).getType_batch(), batch.get(i).getId_group_batch(), nameProd,
+                    batch.get(i).getType_batch(), nameProd,
                     Boolean.toString(batch.get(i).isState()), measure);
             batchView.add(batchDisp);
         }
@@ -203,7 +244,7 @@ public class CreateDepartureController implements Initializable {
                 BatchDisplay batchDisp = new BatchDisplay(batch.get(i).getId_batch(), batch.get(i).getQuantity(),
                         batch.get(i).getBatch_cost(), batch.get(i).getArrival_date().toString(),
                         batch.get(i).getExpiration_date().toString(), batch.get(i).getId_product(),
-                        batch.get(i).getType_batch(), batch.get(i).getId_group_batch(), nameProd,
+                        batch.get(i).getType_batch(), nameProd,
                         Boolean.toString(batch.get(i).isState()), measure);
                 batchView2.add(batchDisp);
                 for (int j = 0; j < batchView.size(); j++) {
@@ -231,7 +272,7 @@ public class CreateDepartureController implements Initializable {
                 BatchDisplay batchDisp = new BatchDisplay(batch.get(i).getId_batch(), batch.get(i).getQuantity(),
                         batch.get(i).getBatch_cost(), batch.get(i).getArrival_date().toString(),
                         batch.get(i).getExpiration_date().toString(), batch.get(i).getId_product(),
-                        batch.get(i).getType_batch(), batch.get(i).getId_group_batch(), nameProd,
+                        batch.get(i).getType_batch(), nameProd,
                         Boolean.toString(batch.get(i).isState()), measure);
                 batchView.add(batchDisp);
                 for (int j = 0; j < batchView2.size(); j++) {
@@ -248,39 +289,14 @@ public class CreateDepartureController implements Initializable {
     }
 
     @FXML
-    private void checkboxZoneAction(ActionEvent event) {
-        if (checkboxZone.isSelected()) {
-            List<Warehouse> warehouses = getWarehouse();
-            for (int i = 0; i < warehouses.size(); i++) {
-                zoneField.getItems().add(warehouses.get(i).getName());
+    private void checkboxDispatchAction(ActionEvent event) {
+        if (checkboxDispatch.isSelected()) {
+            for (int i = 0; i < dispatchOr.size(); i++) {
+                dispatchField.getItems().add(Integer.toString(dispatchOr.get(i).getId_dispatch_order()));
             }
         } else {
-            zoneField.getItems().clear();
+            dispatchField.getItems().clear();
         }
-    }
-
-    @FXML
-    private void checkboxClientAction(ActionEvent event) {
-        if (checkboxClient.isSelected()) {
-            List<Client> clients = getClients();
-            for (int i = 0; i < clients.size(); i++) {
-                clientField.getItems().add(clients.get(i).getName());
-            }
-        } else {
-            clientField.getItems().clear();
-        }
-    }
-
-    private List<Client> getClients() {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(Client.class);
-        List<Client> list = criteria.list();
-        return list;
     }
 
     private List<Warehouse> getWarehouse() {
@@ -297,65 +313,38 @@ public class CreateDepartureController implements Initializable {
 
     @FXML
     private void goCreateDeparture(ActionEvent event) throws IOException {
-        String client = this.clientField.getValue();
-        String zone = this.zoneField.getValue();
-        String reason = this.reasonField.getValue();
-
-        if (client.compareTo("") != 0) {
-            Integer id_owner = getIdClient(client);
-            Integer id_type_owner = 2;
-            Integer idReason = 0;
-            if (reason.compareTo("Rompimiento de Productos") == 0 || reason.compareTo("Producto Vencido") == 0
-                    || reason.compareTo("Traslado de Almacén") == 0) {
-                idReason = 2;
-            } else if (reason.compareTo("Para Ventas") == 0) {
-                idReason = 1;
-            }
-            createDeparture(id_type_owner, id_owner, idReason);
-        } else if (zone.compareTo("") != 0) {
-            Integer id_owner = getIdZone(zone);
+        String zone = this.dispatchField.getValue();
+        String reason = this.reasonField.getText();
+        if (zone != null) {
+            Integer id_owner = 3;  //getIdClient(zone);
             Integer id_type_owner = 1;
             Integer idReason = 0;
-            if (reason.compareTo("Rompimiento de Productos") == 0 || reason.compareTo("Producto Vencido") == 0
-                    || reason.compareTo("Traslado de Almacén") == 0) {
+            Integer id_batch = 0;
+            if (reason.compareTo("Traslado de Almacén") == 0) {
                 idReason = 2;
-            } else if (reason.compareTo("Para Ventas") == 0) {
+            }
+            for (int i = 0; i < batchDepartureTable.getItems().size(); i++) {
+                id_batch = batchDepartureTable.getItems().get(i).getId_batch().getValue();
+                createDeparture(id_type_owner, id_owner, idReason, id_batch);
+            }
+            this.goListDepartures();
+        } else {
+            Integer id_owner = 0;
+            Integer id_type_owner = 0;
+            Integer idReason = 0;
+            Integer id_batch = 0;
+            if(reason.compareTo("Producto Dañado")==0 || reason.compareTo("Producto Vencido")==0){
                 idReason = 1;
             }
-            createDeparture(id_type_owner, id_owner, idReason);
+            for (int i = 0; i < batchDepartureTable.getItems().size(); i++) {
+                id_batch = batchDepartureTable.getItems().get(i).getId_batch().getValue();
+                createDeparture(id_type_owner, id_owner, idReason, id_batch);
+            }
+            this.goListDepartures();
         }
-        this.goListDepartures();
     }
 
-    private Integer getIdClient(String client) {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(Client.class);
-        criteria.add(Restrictions.eq("name", client));
-        List<Client> list = criteria.list();
-        Integer idcli = list.get(0).getId_client();
-        return idcli;
-    }
-
-    private Integer getIdZone(String zone) {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(Warehouse.class);
-        criteria.add(Restrictions.eq("name", zone));
-        List<Warehouse> list = criteria.list();
-        Integer idzone = list.get(0).getId();
-        return idzone;
-    }
-
-    private void createDeparture(Integer id_type_owner, Integer id_owner, Integer idReason) {
+    private void createDeparture(Integer id_type_owner, Integer id_owner, Integer idReason, Integer idBatch) {
         Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -363,7 +352,7 @@ public class CreateDepartureController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        DispatchMove dispatch = new DispatchMove(id_type_owner, id_owner, currentTimestamp, idReason);
+        DispatchMove dispatch = new DispatchMove(id_type_owner, id_owner, currentTimestamp, idReason, idBatch);
         session.save(dispatch);
         session.getTransaction().commit();
         session.close();
@@ -381,6 +370,22 @@ public class CreateDepartureController implements Initializable {
         List<Product> list = criteria.list();
         Integer meas = list.get(0).getId_unit_of_measure();
         return meas;
+    }
+
+    private ObservableList<DispatchOrder> getDispatchOrders() {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(DispatchOrder.class);
+        ObservableList<DispatchOrder> returnable = FXCollections.observableArrayList();
+        List list = criteria.list();
+        for (int i = 0; i < list.size(); i++) {
+            returnable.add((DispatchOrder) list.get(i));
+        }
+        return returnable;
     }
 
 }
