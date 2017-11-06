@@ -121,7 +121,7 @@ public class ListDepartureController implements Initializable {
         dispatch.setId_group_batch(selected_id);
         session.delete(dispatch);
         session.getTransaction().commit();
-
+        session.close();
         sessionFactory.close();
     }
     

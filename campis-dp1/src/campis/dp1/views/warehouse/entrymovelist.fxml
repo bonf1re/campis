@@ -32,7 +32,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <JFXButton layoutX="61.0" layoutY="61.0" prefHeight="55.0" prefWidth="459.0" text="Movimientos de Salida en Almacén" underline="true">
+            <JFXButton layoutX="61.0" layoutY="61.0" onAction="#goDepartureMoveList" prefHeight="55.0" prefWidth="459.0" text="Movimientos de Salida en Almacén" underline="true">
                <font>
                   <Font size="24.0" />
                </font>

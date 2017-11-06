@@ -54,7 +54,7 @@ public class CreateController implements Initializable {
         session.beginTransaction();
         session.save(client);
         session.getTransaction().commit();
-
+        session.close();
         sessionFactory.close();
         main.showListClient();
     } 

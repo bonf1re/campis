@@ -85,8 +85,7 @@ public class DepartureMoveListController implements Initializable {
     }
 
     @FXML
-    void goWhList() throws IOException {
-        System.out.println("ptm");
+    void goWhList() throws IOException {        
         main.showWhList();
     }
     
@@ -143,11 +142,13 @@ public class DepartureMoveListController implements Initializable {
         System.out.println(this.warehouse_id);
         
         criteria.add(Restrictions.eq("id_warehouse",this.warehouse_id));
+        criteria.add(Restrictions.eq("mov_type", 2));
         List whList = criteria.list();
         ObservableList<WarehouseMove> returnable=FXCollections.observableArrayList();
         for (int i = 0; i < whList.size(); i++) {
             returnable.add((WarehouseMove) whList.get(i));
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }

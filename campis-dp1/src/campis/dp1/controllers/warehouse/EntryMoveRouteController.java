@@ -143,7 +143,6 @@ public class EntryMoveRouteController implements Initializable{
             
             batchLoadData(session);
             drawMap(session);
-            
             session.close();;
             sessionFactory.close();
             

@@ -457,4 +457,8 @@ public class Main extends Application {
         BorderPane routeMove = loader.load();
         mainLayout.setCenter(routeMove);
     }
+
+    public void showWhEntryMoveSpecialCreate() {
+        
+    }
 }
