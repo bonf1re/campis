@@ -25,6 +25,11 @@ public class WarehouseSidebarController {
     private void goListProduct() throws IOException {
         main.showListProduct();
     }
+    
+    @FXML
+    private void goListProductTypes() throws IOException {
+        main.showListProductType();
+    }
      
     @FXML
     private void goListRacks() throws IOException {

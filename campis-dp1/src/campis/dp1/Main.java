@@ -157,6 +157,20 @@ public class Main extends Application {
         BorderPane listProd = loader.load();
         mainLayout.setCenter(listProd);
     }
+    
+    public static void showListProductType() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/productTypes/list.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
+    
+    public static void showEditProductType() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/productTypes/edit.fxml"));
+        BorderPane editProd = loader.load();
+        mainLayout.setCenter(editProd);
+    }
 
     public static void showListProduct() throws IOException {
         FXMLLoader loader = new FXMLLoader();
