@@ -488,6 +488,13 @@ public class Main extends Application {
         mainLayout.setCenter(listComplaint);  
     }
 
+    public static void showEditRefund() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/refunds/edit.fxml"));
+        BorderPane newClient = loader.load();
+        mainLayout.setCenter(newClient);    
+    }
+
     /* End RequestOrder*/
     
     /**  
