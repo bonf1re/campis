@@ -47,7 +47,7 @@
         <mapping class="campis.dp1.models.UnitOfMeasure"/>
         <mapping class="campis.dp1.models.Vehicle"/>
         <mapping class="campis.dp1.models.WarehouseMove"/>
-	<mapping class="campis.dp1.models.DispatchMove"/>		
+	<mapping class="campis.dp1.models.DispatchMove"/>
         <mapping class="campis.dp1.models.Batch"/>
         <mapping class="campis.dp1.models.RequestOrder"/>
         <mapping class="campis.dp1.models.Client"/>
@@ -55,6 +55,9 @@
         <mapping class="campis.dp1.models.Refund"/>
         <mapping class="campis.dp1.models.RequestStatus"/>
         <mapping class="campis.dp1.models.RequestOrderLine"/>
+        <mapping class="campis.dp1.models.Campaign"/>
+        <mapping class="campis.dp1.models.SaleCondition"/>
+        <mapping class="campis.dp1.models.SaleConditionType"/>
         
     </session-factory>
 

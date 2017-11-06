@@ -27,9 +27,15 @@ public class CommerceSidebarController {
     }
 
     @FXML
+    private void goListSaleConditions() throws IOException{
+        main.showListSaleConditions();
+    }
+    
+    @FXML
     private void goListRequestStatuses() throws IOException {
         main.showListRequestStatuses();
     }
+
 
     @FXML
     private void goListComplaint() throws IOException {
@@ -40,4 +46,5 @@ public class CommerceSidebarController {
     private void goListRefund() throws IOException {
         main.showListRefund();
     }
+
 }
