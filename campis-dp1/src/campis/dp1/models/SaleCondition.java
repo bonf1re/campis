@@ -29,6 +29,16 @@ public class SaleCondition {
     private Integer limits;
     private Integer id_to_take;
     private Integer id_campaign;
+
+    public SaleCondition(Timestamp initial_date, Timestamp final_date, Float amount, Integer id_sale_condition_type, Integer limits, Integer id_to_take, Integer id_campaign) {
+        this.initial_date = initial_date;
+        this.final_date = final_date;
+        this.amount = amount;
+        this.id_sale_condition_type = id_sale_condition_type;
+        this.limits = limits;
+        this.id_to_take = id_to_take;
+        this.id_campaign = id_campaign;
+    }
     
 
     /**
