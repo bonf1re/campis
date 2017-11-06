@@ -114,6 +114,8 @@ public class CreateSaleConditionController implements Initializable {
                 .add(Projections.property("description"),"description"))
                 .setResultTransformer(Transformers.aliasToBean(SaleConditionType.class));
         List<SaleConditionType> types = criteria.list();
+        session.close();
+        sessionFactory.close();
         return types;
     }
     
@@ -129,6 +131,8 @@ public class CreateSaleConditionController implements Initializable {
                 .add(Projections.property("name"),"name"))
                 .setResultTransformer(Transformers.aliasToBean(Campaign.class));
         List<Campaign> types = criteria.list();
+        session.close();
+        sessionFactory.close();
         return types;
     }
     
@@ -144,6 +148,8 @@ public class CreateSaleConditionController implements Initializable {
                 .add(Projections.property("name"),"name"))
                 .setResultTransformer(Transformers.aliasToBean(Product.class));
         List<Product> ps = criteria.list();
+        session.close();
+        sessionFactory.close();
         return ps;
     }
     
@@ -160,6 +166,8 @@ public class CreateSaleConditionController implements Initializable {
                 .add(Projections.property("description"),"description"))
                 .setResultTransformer(Transformers.aliasToBean(ProductType.class));
         List<ProductType> types = criteria.list();
+        session.close();
+        sessionFactory.close();
         return types;
     }
     
@@ -202,6 +210,8 @@ public class CreateSaleConditionController implements Initializable {
         List rsCampaign = criteria.list();
         Campaign result = (Campaign)rsCampaign.get(0);
         cod = result.getId_campaign();
+        session.close();
+        sessionFactory.close();
         return cod;
     }
     
@@ -218,6 +228,8 @@ public class CreateSaleConditionController implements Initializable {
         List rsSCT = criteria.list();
         SaleConditionType result = (SaleConditionType)rsSCT.get(0);
         cod = result.getId_sale_condition_type();
+        session.close();
+        sessionFactory.close();
         return cod;
     }
     
@@ -235,6 +247,8 @@ public class CreateSaleConditionController implements Initializable {
         List rsProduct = criteria.list();
         Product result = (Product)rsProduct.get(0);
         cod = result.getId_product();
+        session.close();
+        sessionFactory.close();
         return cod;
     }
     
@@ -251,6 +265,8 @@ public class CreateSaleConditionController implements Initializable {
         List rsProductT = criteria.list();
         ProductType result = (ProductType)rsProductT.get(0);
         cod = result.getId_prodType();
+        session.close();
+        sessionFactory.close();
         return cod;
     }
     
@@ -292,7 +308,7 @@ public class CreateSaleConditionController implements Initializable {
         
         session.save(sc);
         session.getTransaction().commit();
-
+        session.close();
         sessionFactory.close(); 
         this.goListSaleConditions();
     }
