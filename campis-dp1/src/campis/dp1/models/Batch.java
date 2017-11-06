@@ -32,7 +32,6 @@ public class Batch {
     private Timestamp expiration_date;
     private int id_product;
     private int type_batch;
-    private int id_group_batch;
     private String location;
     private boolean state;
     private String heritage=null;
@@ -41,14 +40,13 @@ public class Batch {
         super();
     }
 
-    public Batch(int quantity, float batch_cost, Timestamp arrival_date, Timestamp expiration_date, int id_product, int type_batch, int id_group_batch, String location, boolean state) {
+    public Batch(int quantity, float batch_cost, Timestamp arrival_date, Timestamp expiration_date, int id_product, int type_batch, String location, boolean state) {
         this.quantity = quantity;
         this.batch_cost = batch_cost;
         this.arrival_date = arrival_date;
         this.expiration_date = expiration_date;
         this.id_product = id_product;
-        this.type_batch = type_batch;
-        this.id_group_batch = id_group_batch;
+        this.type_batch = type_batch;        
         this.location = location;
         this.state = state;
     }
@@ -110,13 +108,6 @@ public class Batch {
         this.type_batch = type_batch;
     }
 
-    public int getId_group_batch() {
-        return id_group_batch;
-    }
-
-    public void setId_group_batch(int id_group_batch) {
-        this.id_group_batch = id_group_batch;
-    }
 
     public String getLocation() {
         return location;

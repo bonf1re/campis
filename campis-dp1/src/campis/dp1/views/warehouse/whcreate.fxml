@@ -8,7 +8,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.CreateWarehouseController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.WarehouseCreateController">
    <center>
       <Pane prefHeight="350.0" prefWidth="700.0" BorderPane.alignment="CENTER">
          <children>
@@ -37,12 +37,12 @@
                   <Font size="16.0" />
                </font>
             </Text>
-          <Button layoutX="362.0" layoutY="406.0" mnemonicParsing="false" onAction="#insertWarehouse" prefHeight="35.0" prefWidth="85.0" text="Grabar">
+          <Button layoutX="362.0" layoutY="406.0" mnemonicParsing="false" onAction="#whInsert" prefHeight="35.0" prefWidth="85.0" text="Grabar">
                <font>
                   <Font size="17.0" />
                </font>
             </Button>
-            <Button layoutX="495.0" layoutY="406.0" mnemonicParsing="false" onAction="#goListWarehouse" prefHeight="38.0" prefWidth="97.0" text="Cancelar">
+            <Button layoutX="495.0" layoutY="406.0" mnemonicParsing="false" onAction="#goWhList" prefHeight="38.0" prefWidth="97.0" text="Cancelar">
                <font>
                   <Font size="17.0" />
                </font>
