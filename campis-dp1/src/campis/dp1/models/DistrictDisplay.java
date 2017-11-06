@@ -9,8 +9,8 @@ import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
-import javafx.beans.property.DoubleProperty;
-import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.FloatProperty;
+import javafx.beans.property.SimpleFloatProperty;
 
 /**
  *
@@ -19,12 +19,12 @@ import javafx.beans.property.SimpleDoubleProperty;
 public class DistrictDisplay {
     private final IntegerProperty id_district;
     private final StringProperty name;
-    private final DoubleProperty freight;
+    private final FloatProperty freight;
     
-    public DistrictDisplay(int id, String name, Double freight) {
+    public DistrictDisplay(int id, String name, Float freight) {
         this.id_district = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
-        this.freight = new SimpleDoubleProperty(freight);
+        this.freight = new SimpleFloatProperty(freight);
     }
 
     public IntegerProperty idDistrictProperty() {
@@ -35,7 +35,7 @@ public class DistrictDisplay {
         return name;
     }
 
-    public DoubleProperty freightProperty() {
+    public FloatProperty freightProperty() {
         return freight;
     }
 }

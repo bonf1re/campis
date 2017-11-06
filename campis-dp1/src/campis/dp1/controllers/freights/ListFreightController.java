@@ -44,7 +44,7 @@ public class ListFreightController implements Initializable {
     @FXML
     private TableColumn<DistrictDisplay,String> nameColumn;
     @FXML
-    private TableColumn<DistrictDisplay,Double> freightColumn;
+    private TableColumn<DistrictDisplay,Float> freightColumn;
 
     @FXML
     private void goEditFreight() throws IOException {
