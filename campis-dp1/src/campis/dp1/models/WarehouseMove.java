@@ -29,7 +29,6 @@ public class WarehouseMove {
     private int id_vehicle;
     private int mov_type;
     private int id_warehouse;
-    
     public WarehouseMove(){
         super();
     }
