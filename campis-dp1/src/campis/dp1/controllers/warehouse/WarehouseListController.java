@@ -83,6 +83,13 @@ public class WarehouseListController implements Initializable {
         main.showWhVisualize();
     }
     
+    @FXML 
+    private void goAreaList() throws IOException{
+        System.out.println(selected_id);
+        ContextFX.getInstance().setId(selected_id);
+        main.showAreaList();
+    }
+    
     /**
      * Initializes the controller class.
      */

@@ -158,6 +158,13 @@ public class Main extends Application {
         mainLayout.setCenter(listProd);
     }
     
+    public static void showAreaList() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/areas/list.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
+    
     public static void showCreateProductType() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/productTypes/create.fxml"));
