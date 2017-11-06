@@ -85,6 +85,7 @@ public class EditController implements Initializable{
         List rsType = criteria.list();
         ProductType result = (ProductType) rsType.get(0);
         codType = result.getId_prodType();
+        session.close();
         sessionFactory.close();
         return codType;
     }
@@ -119,7 +120,7 @@ public class EditController implements Initializable{
         session.save(product);*/
         
         session.getTransaction().commit();
-
+        session.close();
         sessionFactory.close();
         this.goListProduct();
     }
@@ -151,6 +152,7 @@ public class EditController implements Initializable{
         List rsType = criteria.list();
         ProductType result = (ProductType) rsType.get(0);
         descripType = result.getDescription();
+        session.close();
         sessionFactory.close();
         return descripType;
     }

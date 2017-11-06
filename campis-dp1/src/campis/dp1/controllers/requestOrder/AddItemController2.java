@@ -98,6 +98,7 @@ public class AddItemController2 implements Initializable{
                 returnable.add(list.get(i));
             }
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }
@@ -115,6 +116,7 @@ public class AddItemController2 implements Initializable{
         List rsType = criteria.list();
         ProductType result = (ProductType) rsType.get(0);
         codType = result.getId_prodType();
+        session.close();
         sessionFactory.close();
         return codType;
     }
@@ -160,6 +162,7 @@ public class AddItemController2 implements Initializable{
         for (int i = 0; i < list.size(); i++) {
             returnable.add((Product)list.get(i));
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }

@@ -60,6 +60,7 @@ public class AttendComplaintController implements Initializable {
             session.save(refund);
         }
         session.getTransaction().commit();
+        session.close();
         sessionFactory.close();
         this.goListComplaint();
     }

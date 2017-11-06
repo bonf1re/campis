@@ -77,6 +77,7 @@ public class ListRackController implements Initializable{
         for (int i = 0; i < lista.size(); i++) {
             returnable.add((Rack)lista.get(i));
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }
@@ -114,7 +115,7 @@ public class ListRackController implements Initializable{
         r.setId_rack(cod);
         session.delete(r);
         session.getTransaction().commit();
-
+        session.close();
         sessionFactory.close();
     }
           

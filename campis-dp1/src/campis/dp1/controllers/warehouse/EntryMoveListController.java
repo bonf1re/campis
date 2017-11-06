@@ -23,6 +23,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import jdk.nashorn.internal.runtime.Context;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -63,9 +64,21 @@ public class EntryMoveListController implements Initializable {
     }
     
     @FXML
+    private void goDepartureMoveList() throws IOException{
+        ContextFX.getInstance().setId(this.warehouse_id);
+        main.showWhDepartureMoveList();
+    }
+    
+    @FXML
     private void goWhEntryMoveCreate() throws IOException{
         ContextFX.getInstance().setId(warehouse_id);
         main.showWhEntryMoveCreate();
+    }
+    
+    @FXML
+    private void goWhEntryMoveSpecialCreate() throws IOException{
+        ContextFX.getInstance().setId(this.warehouse_id);
+        main.showWhEntryMoveSpecialCreate();
     }
     
     @Override
@@ -118,11 +131,13 @@ public class EntryMoveListController implements Initializable {
         System.out.println(this.warehouse_id);
         
         criteria.add(Restrictions.eq("id_warehouse",this.warehouse_id));
+        criteria.add(Restrictions.eq("mov_type", 1));
         List whList = criteria.list();
         ObservableList<WarehouseMove> returnable=FXCollections.observableArrayList();
         for (int i = 0; i < whList.size(); i++) {
             returnable.add((WarehouseMove) whList.get(i));
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }

@@ -136,6 +136,7 @@ public class EntryMoveCreateController implements Initializable{
         for (int i = 0; i < batchList.size(); i++) {
             returnable.add((Batch)batchList.get(i));
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }

@@ -95,6 +95,7 @@ public class ListController implements Initializable {
         for (int i = 0; i < lista.size(); i++) {
             returnable.add((Complaint)lista.get(i));
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }
@@ -123,6 +124,7 @@ public class ListController implements Initializable {
         complaint.setId_complaint(cod);
         session.delete(complaint);
         session.getTransaction().commit();
+        session.close();
         sessionFactory.close();
     }
 

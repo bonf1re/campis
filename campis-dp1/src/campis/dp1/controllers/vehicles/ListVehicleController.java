@@ -124,6 +124,7 @@ public class ListVehicleController implements Initializable {
         for (int i = 0; i < lista.size(); i++) {
             returnable.add((Vehicle) lista.get(i));
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }
@@ -141,6 +142,7 @@ public class ListVehicleController implements Initializable {
         List rsType = criteria.list();
         Warehouse result = (Warehouse) rsType.get(0);
         descripType = result.getName();
+        session.close();
         sessionFactory.close();
 
         return descripType;
@@ -188,7 +190,7 @@ public class ListVehicleController implements Initializable {
         veh.setId_vehicle(cod);
         session.delete(veh);
         session.getTransaction().commit();
-
+        session.close();
         sessionFactory.close();
     }
 }

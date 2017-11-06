@@ -53,6 +53,7 @@ public class EditRoleController implements Initializable{
         query.setParameter("oldIdRole", id);
         int result = query.executeUpdate();
         session.getTransaction().commit();
+        session.close();
         sessionFactory.close();
         this.goListRoles();
     }
@@ -71,6 +72,7 @@ public class EditRoleController implements Initializable{
         List rsType = criteria.list();
         Role result = (Role)rsType.get(0);
         this.descriptionField.setText(result.getDescription());
+        session.close();
         sessionFactory.close();
     } 
 }

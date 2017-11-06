@@ -72,7 +72,7 @@ public class CreateController implements Initializable {
         session.beginTransaction();
         session.save(complaint);
         session.getTransaction().commit();
-
+        session.close();    
         sessionFactory.close();
         main.showListComplaint();      
     }

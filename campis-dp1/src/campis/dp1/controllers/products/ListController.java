@@ -113,6 +113,7 @@ public class ListController implements Initializable {
         for (int i = 0; i < lista.size(); i++) {
             returnable.add((Product) lista.get(i));
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }
@@ -148,6 +149,7 @@ public class ListController implements Initializable {
                 returnable.add(list.get(i));
             }
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }
@@ -206,7 +208,7 @@ public class ListController implements Initializable {
         prod.setId_product(cod);
         session.delete(prod);
         session.getTransaction().commit();
-
+        session.close();
         sessionFactory.close();
     }
 
