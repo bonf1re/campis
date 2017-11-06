@@ -59,8 +59,12 @@ public class AreaListController implements Initializable {
     
     @FXML
     private void goWhList() throws IOException{
-        System.out.println("ptm");
         main.showWhList();
+    }
+    
+    @FXML
+    private void goAreaCreate() throws IOException{
+        //main.showWhList();
     }
     
     @Override
@@ -82,7 +86,6 @@ public class AreaListController implements Initializable {
             widthCol.setCellValueFactory(cellData -> cellData.getValue().getWidth().asObject());
             posXCol.setCellValueFactory(cellData -> cellData.getValue().getPos_x().asObject());
             posYCol.setCellValueFactory(cellData -> cellData.getValue().getPos_y().asObject());
-            idWhCol.setCellValueFactory(cellData -> cellData.getValue().getId_warehouse().asObject());
             areasLoadData();
         } catch(SQLException | ClassNotFoundException ex){
             Logger.getLogger(AreaListController.class.getName()).log(Level.SEVERE, null, ex);

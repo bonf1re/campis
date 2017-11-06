@@ -160,7 +160,7 @@ public class Main extends Application {
     
     public static void showAreaList() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/areas/list.fxml"));
+        loader.setLocation(Main.class.getResource("views/warehouse/arealist.fxml"));
         BorderPane listProd = loader.load();
         mainLayout.setCenter(listProd);
     }
