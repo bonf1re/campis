@@ -112,7 +112,7 @@ public class CreateController implements Initializable {
                                     Integer.parseInt(codClientField.getText()));
         session.save(requestOrder);
         session.getTransaction().commit();
-        
+        session.close();
         sessionFactory.close();
         createRequestOrderLine(requestOrder.getId_request_order());
         this.goListRequestOrder();
@@ -208,6 +208,7 @@ public class CreateController implements Initializable {
             session.save(reqOrdLine);
         }
         session.getTransaction().commit();
+        session.close();
         sessionFactory.close();
     }
 

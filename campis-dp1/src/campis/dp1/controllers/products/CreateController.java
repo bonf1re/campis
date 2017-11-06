@@ -93,6 +93,7 @@ public class CreateController implements Initializable {
         List rsType = criteria.list();
         ProductType result = (ProductType) rsType.get(0);
         codType = result.getId_prodType();
+        session.close();
         sessionFactory.close();
         return codType;
     }
@@ -114,7 +115,7 @@ public class CreateController implements Initializable {
         
         session.save(product);
         session.getTransaction().commit();
-
+        session.close();
         sessionFactory.close();
         this.goListProduct();
     }

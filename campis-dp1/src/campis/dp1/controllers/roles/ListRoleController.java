@@ -97,6 +97,7 @@ public class ListRoleController implements Initializable{
         for (int i = 0; i < lista.size(); i++) {
             returnable.add((Role)lista.get(i));
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     } 

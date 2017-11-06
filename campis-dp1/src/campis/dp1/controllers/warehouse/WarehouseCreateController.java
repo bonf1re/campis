@@ -57,7 +57,7 @@ public class WarehouseCreateController implements Initializable{
                                             Integer.parseInt(widthField.getText()), insert_status);
         session.save(warehouse);
         session.getTransaction().commit();
-
+        session.close();
         sessionFactory.close();
         this.goWhList();
     }

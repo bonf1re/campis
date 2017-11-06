@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
+<?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -12,7 +13,7 @@
    <center>
       <Pane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
-            <Text layoutX="79.0" layoutY="75.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Movimientos en Almacén" wrappingWidth="359.8330078125">
+            <Text layoutX="79.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Movimientos de Entrada en Almacén" wrappingWidth="687.8330078125">
                <font>
                   <Font size="28.0" />
                </font>
@@ -31,20 +32,26 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
+            <JFXButton layoutX="61.0" layoutY="61.0" onAction="#goDepartureMoveList" prefHeight="55.0" prefWidth="459.0" text="Movimientos de Salida en Almacén" underline="true">
+               <font>
+                  <Font size="24.0" />
+               </font>
+            </JFXButton>
          </children>
       </Pane>
    </center>
    <right>
       <Pane prefHeight="600.0" prefWidth="174.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="20.0" layoutY="205.0" mnemonicParsing="false" onAction="#goWhEntryMoveCreate" text="Crear Movimiento" />
+            <Button layoutX="20.0" layoutY="205.0" mnemonicParsing="false" onAction="#goWhEntryMoveCreate" text="Agregar Entrada" />
+            <Button layoutX="20.0" layoutY="242.0" mnemonicParsing="false" onAction="#goWhEntryMoveSpecialCreate" prefHeight="53.0" prefWidth="127.0" text="Agregar entrada especial" textAlignment="CENTER" wrapText="true" />
          </children>
       </Pane>
    </right>
    <bottom>
       <Pane prefHeight="116.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="423.0" layoutY="45.0" mnemonicParsing="false" onAction="#goWhList" text="Regresar" />
+            <Button layoutX="423.0" layoutY="45.0" mnemonicParsing="false" onAction="#goWhList" prefHeight="35.0" prefWidth="100.0" text="Regresar" />
          </children>
       </Pane>
    </bottom>

@@ -111,6 +111,7 @@ public class ListController implements Initializable{
         for (int i = 0; i < list.size(); i++) {
             returnable.add((RequestOrder) list.get(i));
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }
@@ -128,6 +129,7 @@ public class ListController implements Initializable{
         List rsName = criteria.list();
         Client result = (Client) rsName.get(0);
         nameCli = result.getName();
+        session.close();
         sessionFactory.close();
         return nameCli;
     }
@@ -169,7 +171,7 @@ public class ListController implements Initializable{
         request.setId_request_order(id_request);
         session.delete(request);
         session.getTransaction().commit();
-        
+        session.close();
         sessionFactory.close();
     }
     
@@ -215,6 +217,7 @@ public class ListController implements Initializable{
                 returnable.add(list.get(i));
             }
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }

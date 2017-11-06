@@ -59,7 +59,7 @@ public class CreateRackController implements Initializable{
         session.beginTransaction();
         session.save(r);
         session.getTransaction().commit();
-
+        session.close();
         sessionFactory.close();
         this.goListRacks();
     }

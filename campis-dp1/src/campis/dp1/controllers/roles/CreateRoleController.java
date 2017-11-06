@@ -45,7 +45,7 @@ public class CreateRoleController implements Initializable{
         session.beginTransaction();
         session.save(role);
         session.getTransaction().commit();
-
+        session.close();
         sessionFactory.close();
         main.showListRoles();
     }
