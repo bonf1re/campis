@@ -31,7 +31,7 @@
             <Label layoutX="220.0" layoutY="368.0" text="Fecha de Inicio:" />
 
             <JFXDatePicker fx:id="pckBegin" layoutX="381.0" layoutY="363.0" prefHeight="26.0" prefWidth="175.0" />
-            <JFXComboBox fx:id="typeCB" editable="true" layoutX="383.0" layoutY="125.0" prefHeight="24.0" prefWidth="172.0" />
+            <JFXComboBox fx:id="typeCB" editable="true" onAction="#loadObjectives" layoutX="383.0" layoutY="125.0" prefHeight="24.0" prefWidth="172.0" />
             <JFXComboBox fx:id="objectiveCB" editable="true" layoutX="383.0" layoutY="176.0" prefHeight="24.0" prefWidth="172.0" />
             <JFXTextField fx:id="limitField" layoutX="381.0" layoutY="295.0" prefHeight="26.0" prefWidth="176.0" />
             <JFXDatePicker fx:id="pckEnd" layoutX="381.0" layoutY="431.0" prefHeight="26.0" prefWidth="175.0" />

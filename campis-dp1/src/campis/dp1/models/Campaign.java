@@ -75,4 +75,8 @@ public class Campaign {
         this.initial_date = initial_date;
         this.final_date = final_date;
     }
+    
+    public Campaign() {
+        super();
+    }
 }
