@@ -4,6 +4,7 @@ import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Complaint;
 import campis.dp1.models.Refund;
+import campis.dp1.models.RefundLine;
 import campis.dp1.models.RequestOrder;
 import campis.dp1.models.RequestOrderLine;
 import com.jfoenix.controls.JFXComboBox;
@@ -63,7 +64,10 @@ public class AttendComplaintController implements Initializable {
             Refund refund = new Refund(typeField.getValue(), id);
             session.save(refund);
 
-
+            for (int i = 0; i < request_order_lines.size(); i++) {
+                RefundLine refund_line = new RefundLine(request_order_lines.get(i).getId_request_order_line(), refund.getId_refund());
+                session.save(refund_line);
+            }
         }
         session.getTransaction().commit();
         session.close();
