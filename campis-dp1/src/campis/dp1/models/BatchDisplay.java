@@ -26,7 +26,6 @@ public class BatchDisplay {
     private final StringProperty expiration_date;
     private final IntegerProperty id_product;
     private final IntegerProperty type_batch;
-    private final IntegerProperty id_group_batch;
     private final StringProperty location;
     private final StringProperty state;
     private final StringProperty heritage;
@@ -41,7 +40,6 @@ public class BatchDisplay {
         this.expiration_date = new SimpleStringProperty(whMove.getExpiration_date().toString());
         this.id_product = new SimpleIntegerProperty(whMove.getId_product());
         this.type_batch = new SimpleIntegerProperty(whMove.getType_batch());
-        this.id_group_batch = new SimpleIntegerProperty(whMove.getId_group_batch());
         this.location = new SimpleStringProperty(whMove.getLocation());
         this.state = new SimpleStringProperty(Boolean.toString(whMove.isState()));
         this.heritage = new SimpleStringProperty(whMove.getHeritage());
@@ -49,7 +47,7 @@ public class BatchDisplay {
     }
     
     public BatchDisplay(int id_batch, int quantity, float cost, String arrivalDate, String expirationDate,
-                        int id_product, int type, int idGroupBatch, String location, String state, String heritage) {
+                        int id_product, int type, String location, String state, String heritage) {
         
         this.id_batch = new SimpleIntegerProperty(id_batch);
         this.quantity = new SimpleIntegerProperty(quantity);
@@ -58,7 +56,6 @@ public class BatchDisplay {
         this.expiration_date = new SimpleStringProperty(expirationDate);
         this.id_product = new SimpleIntegerProperty(id_product);
         this.type_batch = new SimpleIntegerProperty(type);
-        this.id_group_batch = new SimpleIntegerProperty(idGroupBatch);
         this.location = new SimpleStringProperty(location);
         this.state = new SimpleStringProperty(state);
         this.heritage = new SimpleStringProperty(heritage);
@@ -96,10 +93,6 @@ public class BatchDisplay {
 
     public IntegerProperty getType_batch() {
         return type_batch;
-    }
-
-    public IntegerProperty getId_group_batch() {
-        return id_group_batch;
     }
 
     public StringProperty getLocation() {

@@ -33,7 +33,7 @@ import org.hibernate.criterion.Restrictions;
  *
  * @author sergio
  */
-public class WarehouseMovesController implements Initializable {
+public class DepartureMoveListController implements Initializable {
     private Main main;
     private ObservableList<WarehouseMove> whMoves;
     private ObservableList<WarehouseMoveDisplay> whMovesView;
@@ -57,15 +57,15 @@ public class WarehouseMovesController implements Initializable {
     private TableColumn<WarehouseMoveDisplay, Integer> movCol;
     
     @FXML
-    private void goListWarehouse() throws IOException{
+    private void goWhList() throws IOException{
         System.out.println("ptm");
-        main.showListWarehouse();
+        main.showWhList();
     }
     
     @FXML
-    private void goCreateMove() throws IOException{
+    private void goWhEntryMoveCreate() throws IOException{
         ContextFX.getInstance().setId(warehouse_id);
-        main.showWarehouseCreateMove();
+        main.showWhEntryMoveCreate();
     }
     
     @Override
@@ -90,7 +90,7 @@ public class WarehouseMovesController implements Initializable {
             this.zoneCol.setCellValueFactory(cellData -> cellData.getValue().getId_zone().asObject());
             warehouseMovesLoadData();
         } catch(SQLException | ClassNotFoundException ex){
-            Logger.getLogger(WarehouseMovesController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(EntryMoveListController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -126,8 +126,4 @@ public class WarehouseMovesController implements Initializable {
         sessionFactory.close();
         return returnable;
     }
-    
-    
-    
-    
 }
