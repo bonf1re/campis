@@ -92,7 +92,6 @@ public class EditController implements Initializable{
     
     @FXML
     private void insertProduct (ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
-        
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
@@ -112,13 +111,6 @@ public class EditController implements Initializable{
         query.setParameter("newType", type);
         query.setParameter("oldIdProd", id);
         int result = query.executeUpdate();
-        
-        /*Product product = new Product(nameField.getText(), descripField.getText(), 1, 1, Float.parseFloat(weightField.getText()),
-                                     trademarkField.getText(), Float.parseFloat(priceField.getText()), measure, type);
-        product.setId_product(this.id);
-        session.update(product);
-        session.save(product);*/
-        
         session.getTransaction().commit();
         session.close();
         sessionFactory.close();

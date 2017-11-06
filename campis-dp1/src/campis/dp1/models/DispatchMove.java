@@ -18,63 +18,67 @@ import javax.persistence.Table;
  */
 
 @Entity
-@Table(name = "group_batch")
+@Table(name = "dispatch_move")
 public class DispatchMove {
-    
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
-    private Integer id_group_batch;
+    private Integer id_dispatch_move;
     private Integer type_owner;
     private Integer id_owner;
-    private Timestamp arrival_date;
+    private Timestamp mov_date;
     private Integer reason;
-    
+    private Integer id_batch;
+    private Timestamp arrival_date;
+
     public DispatchMove(){
         super();
     }
     
-    public DispatchMove(Integer type_owner, Integer id_owner, Timestamp arrival_date, 
-                 Integer reason){
+    public DispatchMove(Integer type_owner, Integer id_owner, Timestamp mov_date, 
+                 Integer reason, Integer id_batch, Timestamp arrival_date){
         
         this.type_owner = type_owner;
         this.id_owner = id_owner;
-        this.arrival_date = arrival_date;
+        this.mov_date = mov_date;
         this.reason =  reason;
+        this.id_batch = id_batch;
+        this.arrival_date = arrival_date;
     }
     
     public DispatchMove(Integer type_owner, Integer id_owner, 
-                 Integer reason){
+                 Integer reason, Integer id_batch){
         
         this.type_owner = type_owner;
         this.id_owner = id_owner;
         this.reason =  reason;
+        this.id_batch = id_batch;
     }
     
     /**
      * @return the id_group_batch
      */
-    public Integer getId_group_batch() {
-        return id_group_batch;
+    public Integer getId_dispatch_move() {
+        return id_dispatch_move;
     }
 
     /**
      * @param id_group_batch the id_group_batch to set
      */
-    public void setId_group_batch(Integer id_group_batch) {
-        this.id_group_batch = id_group_batch;
+    public void setId_dispatch_move(Integer id_dispatch_move) {
+        this.id_dispatch_move = id_dispatch_move;
     }
 
     /**
      * @return the tyoe_owner
      */
-    public Integer getTyoe_owner() {
+    public Integer getType_owner() {
         return type_owner;
     }
 
     /**
      * @param tyoe_owner the tyoe_owner to set
      */
-    public void setTyoe_owner(Integer tyoe_owner) {
+    public void setType_owner(Integer tyoe_owner) {
         this.type_owner = tyoe_owner;
     }
 
@@ -95,15 +99,15 @@ public class DispatchMove {
     /**
      * @return the arrival_date
      */
-    public Timestamp getArrival_date() {
-        return arrival_date;
+    public Timestamp getMov_date() {
+        return mov_date;
     }
 
     /**
      * @param arrival_date the arrival_date to set
      */
-    public void setArrival_date(Timestamp arrival_date) {
-        this.arrival_date = arrival_date;
+    public void setMov_date(Timestamp mov_date) {
+        this.mov_date = mov_date;
     }
 
     /**
@@ -119,5 +123,20 @@ public class DispatchMove {
     public void setReason(Integer reason) {
         this.reason = reason;
     }
-                   
+    
+    public Integer getId_batch() {
+        return id_batch;
+    }
+
+    public void setId_batch(Integer id_batch) {
+        this.id_batch = id_batch;
+    }
+   
+    public Timestamp getArrival_date() {
+        return arrival_date;
+    }
+
+    public void setArrival_date(Timestamp arrival_date) {
+        this.arrival_date = arrival_date;
+    }
 }

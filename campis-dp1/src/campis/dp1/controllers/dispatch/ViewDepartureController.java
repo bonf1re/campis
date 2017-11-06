@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1.controllers.departures;
+package campis.dp1.controllers.dispatch;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
@@ -74,14 +74,14 @@ public class ViewDepartureController implements Initializable {
         selected_id = ContextFX.getInstance().getId();
         String destinyName = "";
         batch = FXCollections.observableArrayList();
-        batch = getBatch(selected_id);
         DispatchMove disp = getDispatch(selected_id);
-        if (disp.getTyoe_owner().compareTo(1) == 0) {
+        batch = getBatch(disp.getId_batch());
+        if (disp.getType_owner().compareTo(1) == 0) {
             destinyName = getZone(disp.getId_owner());
-        } else if (disp.getTyoe_owner().compareTo(2) == 0) {
+        } else if (disp.getType_owner().compareTo(2) == 0) {
             destinyName = getNomCli(disp.getId_owner());
         }
-        String depart = disp.getArrival_date().toString();
+        String depart = disp.getMov_date().toString();
         idbatchColumn.setCellValueFactory(cellData -> cellData.getValue().getId_batch().asObject());
         prodColumn.setCellValueFactory(cellData -> cellData.getValue().getHeritage());
         quantityColumn.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
@@ -100,9 +100,11 @@ public class ViewDepartureController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(DispatchMove.class);
-        criteria.add(Restrictions.eq("id_group_batch", selected_id));
+        criteria.add(Restrictions.eq("id_dispatch_move", selected_id));
         List<DispatchMove> list = criteria.list();
         DispatchMove returnable = list.get(0);
+        session.close();
+        sessionFactory.close();
         return returnable;
     }
 
@@ -114,13 +116,15 @@ public class ViewDepartureController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Batch.class);
-        criteria.add(Restrictions.eq("id_group_batch", selected_id));
+        criteria.add(Restrictions.eq("id_batch", selected_id));
         List<Batch> list = criteria.list();
         ObservableList<Batch> returnable;
         returnable = FXCollections.observableArrayList();
         for (int i = 0; i < list.size(); i++) {
             returnable.add(list.get(i));
         }
+        session.close();
+        sessionFactory.close();
         return returnable;
     }
 
@@ -154,7 +158,7 @@ public class ViewDepartureController implements Initializable {
         return nom;
     }
 
-    private String getProd(int id_product) {
+    private Product getProd(int id_product) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
@@ -165,15 +169,17 @@ public class ViewDepartureController implements Initializable {
         criteria.add(Restrictions.eq("id_product", id_product));
         List<Product> list = criteria.list();
         Product prod = (Product) list.get(0);
-        String nom = prod.getName();
-        return nom;
+        session.close();
+        sessionFactory.close();
+        return prod;
     }
 
     private void loadData() {
         for (int i = 0; i < batch.size(); i++) {
-            String nameProd = getProd(batch.get(i).getId_product());
+            Product prod = getProd(batch.get(i).getId_product());
+            String nameProd = prod.getName();
             int quantity = batch.get(i).getQuantity();
-            int idMeasure = batch.get(i).getType_batch();
+            int idMeasure = prod.getId_unit_of_measure();
             String measure = getMeasure(idMeasure);
             String exp = batch.get(i).getExpiration_date().toString();
             BatchDisplay batchdisp = new BatchDisplay(batch.get(i).getId_batch(),quantity,
