@@ -19,6 +19,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
@@ -39,40 +40,61 @@ public class DepartureMoveListController implements Initializable {
     private ObservableList<WarehouseMoveDisplay> whMovesView;
     private int selected_id;
     private int warehouse_id;
+
+
     @FXML
-    private TableView<WarehouseMoveDisplay> warehouseMovesTable;
+    private ResourceBundle resources;
+
+    @FXML
+    private URL location;
+
+    @FXML
+    private TableView<WarehouseMoveDisplay> whDepartureMoveTable;
+
     @FXML
     private TableColumn<WarehouseMoveDisplay, Integer> idCol;
+
     @FXML
     private TableColumn<WarehouseMoveDisplay, String> dateCol;
+
     @FXML
-    private TableColumn<WarehouseMoveDisplay, Integer> userCol;
+    private TableColumn<WarehouseMoveDisplay, String> userCol;
+
     @FXML
     private TableColumn<WarehouseMoveDisplay, Integer> qtCol;
+
     @FXML
-    private TableColumn<WarehouseMoveDisplay, Integer> zoneCol;
+    private TableColumn<WarehouseMoveDisplay, String> zoneCol;
+
     @FXML
-    private TableColumn<WarehouseMoveDisplay, Integer> vehiCol;
+    private TableColumn<WarehouseMoveDisplay, String> vehiCol;
+
     @FXML
     private TableColumn<WarehouseMoveDisplay, Integer> movCol;
-    
+
     @FXML
-    private void goWhList() throws IOException{
+    void goWhDepartureMoveCreate() throws IOException {
+        ContextFX.getInstance().setId(warehouse_id);
+        main.showWhDepartureMoveCreate();
+    }
+
+    @FXML
+    void goWhEntryMoveList() throws IOException {
+        ContextFX.getInstance().setId(warehouse_id);
+        main.showWhEntryMoveList();
+    }
+
+    @FXML
+    void goWhList() throws IOException {
         System.out.println("ptm");
         main.showWhList();
-    }
-    
-    @FXML
-    private void goWhEntryMoveCreate() throws IOException{
-        ContextFX.getInstance().setId(warehouse_id);
-        main.showWhEntryMoveCreate();
     }
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.warehouse_id=ContextFX.getInstance().getId();
         
-        warehouseMovesTable.getSelectionModel().selectedItemProperty().addListener(
+        whDepartureMoveTable.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {
                 return;
@@ -85,9 +107,12 @@ public class DepartureMoveListController implements Initializable {
             dateCol.setCellValueFactory(cellData -> cellData.getValue().getMov_date());
             movCol.setCellValueFactory(cellData -> cellData.getValue().getMov_type().asObject());
             this.qtCol.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
-            this.userCol.setCellValueFactory(cellData -> cellData.getValue().getId_user().asObject());
-            this.vehiCol.setCellValueFactory(cellData -> cellData.getValue().getId_vehicle().asObject());
-            this.zoneCol.setCellValueFactory(cellData -> cellData.getValue().getId_zone().asObject());
+            // should look up for user name
+            this.userCol.setCellValueFactory(cellData -> cellData.getValue().getId_user().asObject().asString());
+            // should look up for vehicle name
+            this.vehiCol.setCellValueFactory(cellData -> cellData.getValue().getId_vehicle().asObject().asString());
+            // should look up for zone String
+            this.zoneCol.setCellValueFactory(cellData -> cellData.getValue().getId_zone().asObject().asString());
             warehouseMovesLoadData();
         } catch(SQLException | ClassNotFoundException ex){
             Logger.getLogger(EntryMoveListController.class.getName()).log(Level.SEVERE, null, ex);
@@ -103,8 +128,8 @@ public class DepartureMoveListController implements Initializable {
             WarehouseMoveDisplay whMov_display = new WarehouseMoveDisplay(whMov);
             whMovesView.add(whMov_display);
         }
-        warehouseMovesTable.setItems(null);
-        warehouseMovesTable.setItems(whMovesView);
+        whDepartureMoveTable.setItems(null);
+        whDepartureMoveTable.setItems(whMovesView);
     }
 
     private ObservableList<WarehouseMove> getWhMoves() {

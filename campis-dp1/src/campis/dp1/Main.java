@@ -436,4 +436,18 @@ public class Main extends Application {
         BorderPane routeMove = loader.load();
         mainLayout.setCenter(routeMove);
     }
+
+    public void showWhDepartureMoveCreate() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/departuremovecreate.fxml"));
+        BorderPane routeMove = loader.load();
+        mainLayout.setCenter(routeMove);
+    }
+
+    public void showWhDepartureMoveList() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/departuremovelist.fxml"));
+        BorderPane routeMove = loader.load();
+        mainLayout.setCenter(routeMove);
+    }
 }
