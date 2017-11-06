@@ -25,11 +25,15 @@ public class ContextFX {
     Integer id = null;
     private User user;
     List aux_list = null;   // Abstract so it can take any kind of arraylist
+    List aux_2nd_list = null;
+    List aux_3rd_list = null;
     Integer quantity = null;
     Float totAmount = 0.0f;
     Integer num = 0; // Useful to save any integer variable.
     Integer var = 0;
     ObservableList<ProductDisplay> tempList = FXCollections.observableArrayList();
+    int id_user;
+   
     
     public Integer getNum() {
         Integer returnable = new Integer(this.num);
@@ -57,6 +61,16 @@ public class ContextFX {
     
     public void setList(List aux_list){
         this.aux_list = new ArrayList<>(aux_list);
+    }
+    
+    public List get2ndList(){
+        List returnable = new ArrayList<>(this.aux_2nd_list);
+        this.aux_2nd_list = null;
+        return returnable;
+    }
+    
+    public void set2ndList(List aux_2nd_list){
+        this.aux_2nd_list = new ArrayList<>(aux_2nd_list);
     }
 
     public Integer getId() {
@@ -103,5 +117,23 @@ public class ContextFX {
 
     public void setUser(User user) {
         this.user = user;
+        setId_User(user.getId_user());
+    }
+    
+    public List get3rdList(){
+        List returnable = new ArrayList<>(this.aux_3rd_list);
+        this.aux_3rd_list = null;
+        return returnable;
+    }
+
+    public void set3rdList(List num_list) {
+        this.aux_3rd_list=new ArrayList<>(num_list);
+    }
+
+    public int getId_User() {
+        return this.id_user;
+    }
+    public void setId_User(int user){
+        this.id_user = user;
     }
 }

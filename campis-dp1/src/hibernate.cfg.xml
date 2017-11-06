@@ -62,6 +62,7 @@
         <mapping class="campis.dp1.models.Campaign"/>
         <mapping class="campis.dp1.models.SaleCondition"/>
         <mapping class="campis.dp1.models.SaleConditionType"/>
+        <mapping class="campis.dp1.models.WarehouseZone"/>
         
     </session-factory>
 

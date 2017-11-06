@@ -32,8 +32,8 @@
       <Pane prefHeight="600.0" prefWidth="616.0" BorderPane.alignment="CENTER">
          <children>
             <Canvas fx:id="mapCanvas" height="376.0" layoutX="34.0" layoutY="91.0" width="544.0" />
-            <Button layoutX="233.0" layoutY="537.0" mnemonicParsing="false" onAction="#saveEntryMoveNormal" text="Grabar" />
-            <Button layoutX="330.0" layoutY="537.0" mnemonicParsing="false" onAction="#goEntryMoveCreateNormal" text="Cancelar" />
+            <Button layoutX="233.0" layoutY="537.0" mnemonicParsing="false" onAction="#saveDepartureMove" text="Grabar" />
+            <Button layoutX="330.0" layoutY="537.0" mnemonicParsing="false" onAction="#goDeparteMoveList" text="Cancelar" />
             <Text layoutX="281.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mapa" />
          </children>
       </Pane>
