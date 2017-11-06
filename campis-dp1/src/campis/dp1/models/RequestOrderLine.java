@@ -5,11 +5,17 @@
  */
 package campis.dp1.models;
 
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -77,5 +83,20 @@ public class RequestOrderLine {
     public void setId_product(Integer id_product) {
         this.id_product = id_product;
     }
-    
+
+    public static RequestOrderLine getRequestOrderLine(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(RequestOrderLine.class);
+        criteria.add(Restrictions.eq("id_request_order_line", cod));
+        String descrip;
+        List rsMeasure = criteria.list();
+        RequestOrderLine result = (RequestOrderLine)rsMeasure.get(0);
+        sessionFactory.close();
+
+        return result;
+    }
 }
