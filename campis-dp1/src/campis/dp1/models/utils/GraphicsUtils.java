@@ -63,10 +63,6 @@ public class GraphicsUtils {
                     real_map[i+rack_y][j+rack_x]=1;
                 }
             }
-            for (int i = 0; i < 4; i++) {
-                Coord corner = rack.getCorner(i);
-                real_map[corner.y][corner.x] = 2;
-            }
         }
         return crackList;
     }
@@ -135,8 +131,6 @@ public class GraphicsUtils {
                 }
                 if (map[j][i]==0){
                     gc.setFill(Color.WHITE);
-                    //gc.setStroke(Color.BLACK);
-                    //gc.strokeRect(i*mult+padding_x, j*mult+padding_y, mult, mult);
                     gc.fillRect(i*mult/scaling_factor_x+padding_x, j*mult/scaling_factor_y+padding_y, mult, mult);
                 }  
             }
