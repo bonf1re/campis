@@ -6,6 +6,7 @@
 package campis.dp1.controllers.warehouse;
 
 import campis.dp1.ContextFX;
+import javafx.event.ActionEvent;
 import campis.dp1.Main;
 import campis.dp1.models.Warehouse;
 import campis.dp1.models.Area;
@@ -124,5 +125,29 @@ public class AreaListController implements Initializable {
         session.close();
         sessionFactory.close();
         return returnable;
+    }
+    
+    private void deleteArea(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Area.class);
+        Area area = new Area();
+        area.setId_area(cod);
+        session.delete(area);
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
+    }
+
+    @FXML
+    private void deleteArea(ActionEvent event) throws SQLException, ClassNotFoundException {
+        ContextFX.getInstance().setId(selected_id);
+        Integer id_area = ContextFX.getInstance().getId();
+        deleteArea(selected_id);
+        areasLoadData();
     }
 }

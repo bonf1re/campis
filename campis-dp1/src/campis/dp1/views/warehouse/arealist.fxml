@@ -37,6 +37,7 @@
       <Pane prefHeight="600.0" prefWidth="174.0" BorderPane.alignment="CENTER">
          <children>
             <Button layoutX="20.0" layoutY="205.0" mnemonicParsing="false" onAction="#goAreaCreate" text="Agregar Área" />
+            <Button layoutX="36.0" layoutY="262.0" mnemonicParsing="false" onAction="#deleteArea" text="Eliminar" />
          </children>
       </Pane>
    </right>
