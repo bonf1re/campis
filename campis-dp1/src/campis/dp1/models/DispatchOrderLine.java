@@ -22,7 +22,7 @@ public class DispatchOrderLine {
     @GeneratedValue(strategy=GenerationType.AUTO)
     Integer id_dispatch_order_line;
     Integer id_dispatch_order;
-    Integer id_prod;
+    Integer id_product;
     Integer quantity;
     
     public DispatchOrderLine() {
@@ -32,7 +32,7 @@ public class DispatchOrderLine {
     public DispatchOrderLine(int id_dispatch_order_line,int id_dispatch_order, int id_prod, int quantity) {
         this.id_dispatch_order_line = id_dispatch_order_line;
         this.id_dispatch_order = id_dispatch_order;
-        this.id_prod = id_prod;
+        this.id_product = id_prod;
         this.quantity = quantity;
     }
     
@@ -53,11 +53,11 @@ public class DispatchOrderLine {
     }
 
     public Integer getId_prod() {
-        return id_prod;
+        return id_product;
     }
 
     public void setId_prod(Integer id_prod) {
-        this.id_prod = id_prod;
+        this.id_product = id_prod;
     }
 
     public Integer getQuantity() {

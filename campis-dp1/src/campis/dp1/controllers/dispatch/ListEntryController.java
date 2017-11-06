@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1.controllers.entries;
+package campis.dp1.controllers.dispatch;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;

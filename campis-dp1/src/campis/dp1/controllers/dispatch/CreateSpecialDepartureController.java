@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1.controllers.departures;
+package campis.dp1.controllers.dispatch;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
@@ -324,7 +324,7 @@ public class CreateSpecialDepartureController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        DispatchMove dispatch = new DispatchMove(id_type_owner, id_owner, currentTimestamp, idReason, idBatch);
+        DispatchMove dispatch = new DispatchMove(id_type_owner, id_owner, currentTimestamp, idReason, idBatch, currentTimestamp);
         session.save(dispatch);
         session.getTransaction().commit();
         session.close();

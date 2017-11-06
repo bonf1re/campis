@@ -28,19 +28,21 @@ public class DispatchMove {
     private Timestamp mov_date;
     private Integer reason;
     private Integer id_batch;
+    private Timestamp arrival_date;
 
     public DispatchMove(){
         super();
     }
     
     public DispatchMove(Integer type_owner, Integer id_owner, Timestamp mov_date, 
-                 Integer reason, Integer id_batch){
+                 Integer reason, Integer id_batch, Timestamp arrival_date){
         
         this.type_owner = type_owner;
         this.id_owner = id_owner;
         this.mov_date = mov_date;
         this.reason =  reason;
         this.id_batch = id_batch;
+        this.arrival_date = arrival_date;
     }
     
     public DispatchMove(Integer type_owner, Integer id_owner, 
@@ -128,5 +130,13 @@ public class DispatchMove {
 
     public void setId_batch(Integer id_batch) {
         this.id_batch = id_batch;
+    }
+   
+    public Timestamp getArrival_date() {
+        return arrival_date;
+    }
+
+    public void setArrival_date(Timestamp arrival_date) {
+        this.arrival_date = arrival_date;
     }
 }
