@@ -185,6 +185,10 @@ public class CreateSaleConditionController implements Initializable {
         return calendar.getTime();
     }
     
+    
+    
+    
+    
     public static Integer searchCodCampaign(String campaign) throws SQLException, ClassNotFoundException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");

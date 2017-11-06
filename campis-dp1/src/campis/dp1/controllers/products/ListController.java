@@ -148,6 +148,7 @@ public class ListController implements Initializable {
                 returnable.add(list.get(i));
             }
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }
