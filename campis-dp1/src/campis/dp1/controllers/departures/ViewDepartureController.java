@@ -178,7 +178,7 @@ public class ViewDepartureController implements Initializable {
             String exp = batch.get(i).getExpiration_date().toString();
             BatchDisplay batchdisp = new BatchDisplay(batch.get(i).getId_batch(),quantity,
                                         batch.get(i).getBatch_cost(),measure,exp,batch.get(i).getId_product(),
-                                        idMeasure,batch.get(i).getId_group_batch(),batch.get(i).getLocation(),
+                                        idMeasure,batch.get(i).getLocation(),
                                         Boolean.toString(batch.get(i).isState()),nameProd);
             batchView.add(batchdisp);
         }
