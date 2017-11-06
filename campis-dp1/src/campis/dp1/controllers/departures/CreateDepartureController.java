@@ -156,7 +156,7 @@ public class CreateDepartureController implements Initializable {
             BatchDisplay batchDisp = new BatchDisplay(batch.get(i).getId_batch(), batch.get(i).getQuantity(),
                     batch.get(i).getBatch_cost(), batch.get(i).getArrival_date().toString(),
                     batch.get(i).getExpiration_date().toString(), batch.get(i).getId_product(),
-                    batch.get(i).getType_batch(), batch.get(i).getId_group_batch(), nameProd,
+                    batch.get(i).getType_batch(), nameProd,
                     Boolean.toString(batch.get(i).isState()), measure);
             batchView.add(batchDisp);
         }
@@ -203,7 +203,7 @@ public class CreateDepartureController implements Initializable {
                 BatchDisplay batchDisp = new BatchDisplay(batch.get(i).getId_batch(), batch.get(i).getQuantity(),
                         batch.get(i).getBatch_cost(), batch.get(i).getArrival_date().toString(),
                         batch.get(i).getExpiration_date().toString(), batch.get(i).getId_product(),
-                        batch.get(i).getType_batch(), batch.get(i).getId_group_batch(), nameProd,
+                        batch.get(i).getType_batch(), nameProd,
                         Boolean.toString(batch.get(i).isState()), measure);
                 batchView2.add(batchDisp);
                 for (int j = 0; j < batchView.size(); j++) {
@@ -231,7 +231,7 @@ public class CreateDepartureController implements Initializable {
                 BatchDisplay batchDisp = new BatchDisplay(batch.get(i).getId_batch(), batch.get(i).getQuantity(),
                         batch.get(i).getBatch_cost(), batch.get(i).getArrival_date().toString(),
                         batch.get(i).getExpiration_date().toString(), batch.get(i).getId_product(),
-                        batch.get(i).getType_batch(), batch.get(i).getId_group_batch(), nameProd,
+                        batch.get(i).getType_batch(), nameProd,
                         Boolean.toString(batch.get(i).isState()), measure);
                 batchView.add(batchDisp);
                 for (int j = 0; j < batchView2.size(); j++) {

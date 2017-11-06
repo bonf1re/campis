@@ -33,17 +33,17 @@ public class MainViewController {
 
     @FXML
     private void goListWarehouse() throws IOException{
-        main.showListWarehouse();
+        main.showWhList();
     }
     
     @FXML
     private void goCreateWarehouse() throws IOException{
-        main.showNewWarehouse();
+        main.showWhCreate();
     }
     
     @FXML
     private void goEditWarehouse() throws IOException{
-        main.showEditWarehouse();
+        main.showWhEdit();
     }
     
     @FXML
