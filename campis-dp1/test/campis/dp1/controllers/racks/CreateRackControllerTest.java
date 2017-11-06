@@ -48,21 +48,6 @@ public class CreateRackControllerTest {
     @After
     public void tearDown() {
     }
-
-//    /**
-//     * Test of initialize method, of class CreateRackController.
-//     */
-//    @Test
-//    public void testInitialize() {
-//        System.out.println("initialize");
-//        URL url = null;
-//        ResourceBundle rb = null;
-//        CreateRackController instance = new CreateRackController();
-//        instance.initialize(url, rb);
-//        // TODO review the generated test code and remove the default call to fail.
-//        fail("The test case is a prototype.");
-//    }
-//    
     
     /**
      * Test of insertRack method, of class CreateRackController.
@@ -71,9 +56,7 @@ public class CreateRackControllerTest {
     public void testInsertRack() {
         System.out.println("insert rack");
         CreateRackController instance = new CreateRackController();
-        
-        // TODO review the generated test code and remove the default call to fail.
-        
+ 
         //Creamos un nuevo rack
         Rack nRack = new Rack(1, 10, 10, 12, 4, 0);
         
@@ -84,21 +67,5 @@ public class CreateRackControllerTest {
             Logger.getLogger(CreateRackControllerTest.class.getName()).log(Level.SEVERE, null, ex);
             fail("No se pudo insertar correctamente el rack");
         }     
-    }
-    
-//    private Rack getRack(Integer id){
-//        Configuration configuration = new Configuration();
-//        configuration.configure("hibernate.cfg.xml");
-//        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-//        SessionFactory sessionFactory = configuration.buildSessionFactory();
-//        Session session = sessionFactory.openSession();
-//        session.beginTransaction();
-//        Criteria criteria = session.createCriteria(Rack.class);
-//        criteria.add(Restrictions.eq("id_rack",id));
-//        List rsType = criteria.list();
-//        Rack result = (Rack)rsType.get(0);
-//        
-//        return result;
-//    }
-    
+    }  
 }
