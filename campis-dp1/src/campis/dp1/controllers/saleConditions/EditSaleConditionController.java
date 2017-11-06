@@ -7,8 +7,6 @@ package campis.dp1.controllers.saleConditions;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
-import static campis.dp1.controllers.products.EditController.searchCodMeasure;
-import static campis.dp1.controllers.products.EditController.searchCodType;
 import static campis.dp1.controllers.saleConditions.CreateSaleConditionController.getCampaigns;
 import static campis.dp1.controllers.saleConditions.CreateSaleConditionController.getConditionTypes;
 import static campis.dp1.controllers.saleConditions.CreateSaleConditionController.getProductTypes;
@@ -25,6 +23,8 @@ import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Date;
@@ -91,6 +91,7 @@ public class EditSaleConditionController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         id = ContextFX.getInstance().getId();
         listCampaigns = getCampaigns();
         listSaleConditionTypes = getConditionTypes();
@@ -105,6 +106,7 @@ public class EditSaleConditionController implements Initializable {
         
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -116,15 +118,25 @@ public class EditSaleConditionController implements Initializable {
         this.limitField.setText(result.getLimits().toString());
         this.typeCB.setValue(getType(result.getId_sale_condition_type()));
         this.campaignCB.setValue(getCampaign(result.getId_campaign()));
+        this.pckBegin.setValue(result.getInitial_date().toLocalDateTime().toLocalDate());
+        this.pckEnd.setValue(result.getFinal_date().toLocalDateTime().toLocalDate());
+        
+        if (result.getId_sale_condition_type() == 1){
+            this.objectiveCB.setValue(getProduct(result.getId_to_take()));
+        }else{
+            this.objectiveCB.setValue(getProductType(result.getId_to_take()));
+        }
+        
+        loadObjectives();
         session.close();
         sessionFactory.close();
 
     }    
     
-    
     public static String getType(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -139,9 +151,46 @@ public class EditSaleConditionController implements Initializable {
         return descripType;
     }
     
+    public static String getProduct(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Product.class);
+        criteria.add(Restrictions.eq("id_product",cod));
+        String descripType;
+        List rsType = criteria.list();
+        Product result = (Product) rsType.get(0);
+        descripType = result.getName();
+        session.close();
+        sessionFactory.close();
+        return descripType;
+    }
+    
+    public static String getProductType(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(ProductType.class);
+        criteria.add(Restrictions.eq("id_product",cod));
+        String descripType;
+        List rsType = criteria.list();
+        ProductType result = (ProductType) rsType.get(0);
+        descripType = result.getDescription();
+        session.close();
+        sessionFactory.close();
+        return descripType;
+    }
+    
     public static String getCampaign(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -248,16 +297,17 @@ public class EditSaleConditionController implements Initializable {
         
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         
-        Query query = session.createQuery("update Sale_condition set initial_date = :newinDate, final_date = :newenDate,"
+        Query query = session.createQuery("update SaleCondition set initial_date = :newinDate, final_date = :newenDate,"
                 + "amount=:newAmount,id_sale_condition_type=:newIDT, limits=:newLimits, "
                 + "id_to_take=:newITT,id_campaign=:newCamp where id_sale_condition = :oldIdSC");
         
-        query.setParameter("newinDate", date_init.toString());
-        query.setParameter("newenDate", date_end.toString());
+        query.setParameter("newinDate", date_init);
+        query.setParameter("newenDate", date_end);
         query.setParameter("newAmount", Float.parseFloat(amountField.getText()));
         query.setParameter("newIDT", id_type);
         query.setParameter("newLimits", Integer.parseInt(limitField.getText()));
