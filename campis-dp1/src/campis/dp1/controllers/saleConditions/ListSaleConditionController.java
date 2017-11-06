@@ -7,8 +7,12 @@ package campis.dp1.controllers.saleConditions;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
+import campis.dp1.models.Campaign;
+import campis.dp1.models.Product;
+import campis.dp1.models.ProductType;
 import campis.dp1.models.SaleCondition;
 import campis.dp1.models.SaleConditionDisplay;
+import campis.dp1.models.SaleConditionType;
 import com.jfoenix.controls.JFXDatePicker;
 import java.io.IOException;
 import java.net.URL;
@@ -28,6 +32,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * FXML Controller class
@@ -43,6 +48,8 @@ public class ListSaleConditionController implements Initializable {
     private Main main;
     private ObservableList<SaleCondition> condiciones;
     private ObservableList<SaleConditionDisplay> condicionesView;
+
+    
     private int selected_id;
     
      @FXML
@@ -106,22 +113,95 @@ public class ListSaleConditionController implements Initializable {
     
     
     private void cargarData() throws SQLException, ClassNotFoundException {
+        String campaign, type, objective;
+        int id_type;
+        
         condiciones = FXCollections.observableArrayList();
         condicionesView = FXCollections.observableArrayList();
         condiciones = getSaleConditions();
+        
         for (int i = 0; i < condiciones.size(); i++) {
-            //wITHOUT SEARCH BY IDS !!!!!!!!!!!!!
+
             SaleConditionDisplay sc = new SaleConditionDisplay(condiciones.get(i).getId_sale_condition(), condiciones.get(i).getInitial_date().toString(),
-                    condiciones.get(i).getFinal_date().toString(), condiciones.get(i).getAmount(), condiciones.get(i).getId_sale_condition_type().toString(), 
-                    condiciones.get(i).getLimits(),condiciones.get(i).getId_to_take().toString(),
-                    condiciones.get(i).getId_campaign().toString());
+                    condiciones.get(i).getFinal_date().toString(), condiciones.get(i).getAmount(), getType(condiciones.get(i).getId_sale_condition_type()), 
+                    condiciones.get(i).getLimits(),getObjective(condiciones.get(i).getId_to_take(),condiciones.get(i).getId_sale_condition_type()),
+                    getCampaign(condiciones.get(i).getId_campaign()));
             condicionesView.add(sc);
         }
         saleCondTable.setItems(null);
         saleCondTable.setItems(condicionesView);
     }
     
+    
+    public static String getCampaign(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Campaign.class);
+        criteria.add(Restrictions.eq("id_campaign",cod));
+        String descripType;
+        List rsType = criteria.list();
+        Campaign result = (Campaign) rsType.get(0);
+        descripType = result.getName();
+        sessionFactory.close();
+
+        return descripType;
+    }
+    
+    public static String getType(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(SaleConditionType.class);
+        criteria.add(Restrictions.eq("id_sale_condition_type",cod));
+        String descripType;
+        List rsType = criteria.list();
+        SaleConditionType result = (SaleConditionType) rsType.get(0);
+        descripType = result.getDescription();
+        session.close();
+        sessionFactory.close();
+
+        return descripType;
+    }
+    
+    public static String getObjective(int cod, int type) {
+        String descripType;
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        if (type == 1){
+            Criteria criteria = session.createCriteria(Product.class);
+            criteria.add(Restrictions.eq("id_product",cod));
+            
+            List rsType = criteria.list();
+            Product result = (Product) rsType.get(0);
+            descripType = result.getName();
+        }else{
+            Criteria criteria = session.createCriteria(ProductType.class);
+            criteria.add(Restrictions.eq("id_product_type",cod));
+            
+            List rsType = criteria.list();
+            ProductType result = (ProductType) rsType.get(0);
+            descripType = result.getDescription();
+        }
+        session.close();
+        sessionFactory.close();
+
+        return descripType;
+    }
+    
+    
     private ObservableList<SaleCondition> getSaleConditions() {
+
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
@@ -135,6 +215,7 @@ public class ListSaleConditionController implements Initializable {
         for (int i = 0; i < lista.size(); i++) {
             returnable.add((SaleCondition) lista.get(i));
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }
