@@ -40,7 +40,7 @@ public class WarehouseCreateController implements Initializable{
     }
     
     @FXML
-    private void insertWarehouse() throws IOException {
+    private void whInsert() throws IOException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");

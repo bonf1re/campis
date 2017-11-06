@@ -16,12 +16,11 @@
               <columns>
                 <TableColumn fx:id="idCol" prefWidth="32.0" text="ID" />
                   <TableColumn fx:id="prodCol" prefWidth="126.0" text="Producto" />
-                <TableColumn fx:id="qtCol" prefWidth="86.0" text="N de Lotes" />
-                  <TableColumn fx:id="arrCol" prefWidth="121.0" text="Llegada" />
-                  <TableColumn fx:id="expCol" prefWidth="126.0" text="Vencimiento" />
-                  <TableColumn fx:id="herCol" prefWidth="122.0" text="Lote/s Padre/s" />
-                  <TableColumn fx:id="selCol" prefWidth="105.0" text="Seleccionado" />
-                  <TableColumn fx:id="numCol" minWidth="0.0" prefWidth="156.0" text="N de Lotes a Mover" />
+                <TableColumn fx:id="qtCol" prefWidth="86.0" text="Cantidad" />
+                  <TableColumn fx:id="arrCol" prefWidth="191.0" text="Llegada" />
+                  <TableColumn fx:id="expCol" prefWidth="197.0" text="Vencimiento" />
+                  <TableColumn fx:id="herCol" prefWidth="125.0" text="Lote/s Padre/s" />
+                  <TableColumn fx:id="selCol" prefWidth="116.0" text="Seleccionado" />
               </columns>
             </TableView>
             <Text layoutX="71.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Entrada a almacén / Seleccionar lotes">

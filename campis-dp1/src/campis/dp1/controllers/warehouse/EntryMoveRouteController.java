@@ -14,19 +14,27 @@ import campis.dp1.models.CNode;
 import campis.dp1.models.CRack;
 import campis.dp1.models.Coord;
 import campis.dp1.models.Coordinates;
+import campis.dp1.models.Product;
 import campis.dp1.models.Rack;
 import campis.dp1.models.TabuProblem;
 import campis.dp1.models.TabuSolution;
 import campis.dp1.models.utils.GraphicsUtils;
 import campis.dp1.models.Warehouse;
+import campis.dp1.models.WarehouseMove;
+import campis.dp1.models.WarehouseZone;
 import campis.dp1.models.routing.Grasp;
 import campis.dp1.models.routing.GraspResults;
 import campis.dp1.models.routing.RouteGen;
 import campis.dp1.models.utils.RoutingUtils;
 import campis.dp1.services.TabuSearchService;
+import java.io.IOException;
+import java.lang.reflect.Array;
 import java.net.URL;
+import java.sql.Date;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -45,6 +53,7 @@ import javafx.scene.control.TextField;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
+import javax.persistence.Query;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -60,9 +69,13 @@ public class EntryMoveRouteController implements Initializable{
     private int id_warehouse;
     private Warehouse wh;
     private ArrayList<Integer> id_batchesList = new ArrayList<>();
+//    private ArrayList<Integer> numList = new ArrayList<>();
+    private ArrayList<WarehouseZone> zoneList = new ArrayList<>();
     private ObservableList<BatchWH_Move> batchesList;
     private ArrayList<CRack> crackList = new ArrayList<>();
     private CGraph routesGraph = new CGraph();
+    ArrayList<Product> product_names = new ArrayList<>();
+    ArrayList<Batch> save_batches = new ArrayList<>();
     //private ArrayList<Coord> batchesCoords = new ArrayList<>();
     //private ArrayList<Coord> routeGenerated;
     
@@ -77,16 +90,14 @@ public class EntryMoveRouteController implements Initializable{
     
     @FXML
     private TableView<BatchWH_Move> batchTable;
-    @FXML
-    private TableColumn<BatchWH_Move,Integer> idCol;
+   
     @FXML
     private TableColumn<BatchWH_Move, Integer> qtCol;
     @FXML
-    private TableColumn<BatchWH_Move, Integer> prodCol;
+    private TableColumn<BatchWH_Move, String> prodCol;
     @FXML
-    private TableColumn<BatchWH_Move, Integer> posX;
-    @FXML
-    private TableColumn<BatchWH_Move, Integer> posY;
+    private TableColumn<BatchWH_Move, String> zoneCol;
+
     
     
     @Override
@@ -94,43 +105,42 @@ public class EntryMoveRouteController implements Initializable{
         this.id_warehouse = ContextFX.getInstance().getId();
 
         try{
-            idCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId_batch()).asObject());
             qtCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getQuantity()).asObject());            
-            prodCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId_product()).asObject());
-            
-            // set column for pos_x
-            posX.setCellFactory(
-                TextFieldTableCell.<BatchWH_Move,Integer>forTableColumn(new StringConverter<Integer>(){
-                    @Override
-                    public String toString(Integer value){
-                        return value.toString();
-                    }
-                    @Override
-                    public Integer fromString(String string){
-                        return Integer.parseInt(string);
-                    }
-                }));
-            posX.setCellValueFactory(
-                    cellData->cellData.getValue().getPos_x().asObject()
-            );
-            // set column for pos_y
-            posY.setCellFactory(
-                TextFieldTableCell.<BatchWH_Move,Integer>forTableColumn(new StringConverter<Integer>(){
-                    @Override
-                    public String toString(Integer value){
-                        return value.toString();
-                    }
-                    @Override
-                    public Integer fromString(String string){
-                        return Integer.parseInt(string);
-                    }
-                }));
-            posY.setCellValueFactory(
-                    cellData->cellData.getValue().getPos_y().asObject()
-            );
-            
+            prodCol.setCellValueFactory(cellData -> new SimpleStringProperty(getNameProduct(cellData.getValue().getId_product())));
+            zoneCol.setCellValueFactory(cellData -> cellData.getValue().getZoneStr());
+//            // set column for pos_x
+//            posX.setCellFactory(
+//                TextFieldTableCell.<BatchWH_Move,Integer>forTableColumn(new StringConverter<Integer>(){
+//                    @Override
+//                    public String toString(Integer value){
+//                        return value.toString();
+//                    }
+//                    @Override
+//                    public Integer fromString(String string){
+//                        return Integer.parseInt(string);
+//                    }
+//                }));
+//            posX.setCellValueFactory(
+//                    cellData->cellData.getValue().getPos_x().asObject()
+//            );
+//            // set column for pos_y
+//            posY.setCellFactory(
+//                TextFieldTableCell.<BatchWH_Move,Integer>forTableColumn(new StringConverter<Integer>(){
+//                    @Override
+//                    public String toString(Integer value){
+//                        return value.toString();
+//                    }
+//                    @Override
+//                    public Integer fromString(String string){
+//                        return Integer.parseInt(string);
+//                    }
+//                }));
+//            posY.setCellValueFactory(
+//                    cellData->cellData.getValue().getPos_y().asObject()
+//            );
+//            
             // make sure table is editable so fields can be edited
-            batchTable.setEditable(true);
+//            batchTable.setEditable(true);
             
             
             Configuration configuration = new Configuration();
@@ -145,10 +155,43 @@ public class EntryMoveRouteController implements Initializable{
             drawMap(session);
             session.close();;
             sessionFactory.close();
+            generateRoute();
             
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(WarehouseListController.class.getName()).log(Level.SEVERE, null, ex);
         }
+    }
+    
+    @FXML
+    private void saveEntryMove() throws IOException{
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        for (int i=0; i<batchesList.size();i++) {
+            Batch batch = this.save_batches.get(i);
+            Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+            WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), batchesList.get(i).getZone().getId_zone(), 2, 1, id_warehouse);
+            batch.setType_batch(3);
+            Query query = session.createQuery(
+                "update Batch set type_batch = :t_batch " + " where id_batch = :batchId ");
+            query.setParameter("t_batch", 3);
+            query.setParameter("batchId", batch.getId_batch());
+            query.executeUpdate();
+            session.save(move);
+        }
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
+        goEntryMoveList();
+    }
+    
+    @FXML
+    private void goEntryMoveList() throws IOException{
+        ContextFX.getInstance().setId(this.id_warehouse);
+        main.showWhEntryMoveList();
     }
     
     @FXML
@@ -176,11 +219,16 @@ public class EntryMoveRouteController implements Initializable{
         // we need to get each batch selected and add it to the table
         this.batchesList = FXCollections.observableArrayList();
         this.id_batchesList=(ArrayList<Integer>) ContextFX.getInstance().getList();
-        for (Integer integer : id_batchesList) {
+        this.zoneList=(ArrayList<WarehouseZone>) ContextFX.getInstance().get2ndList();
+//        this.numList=(ArrayList<Integer>) ContextFX.getInstance().get3rdList();
+        for (int i=0; i< id_batchesList.size(); i++) {
             Criteria criteria = session.createCriteria(Batch.class);
-            criteria.add(Restrictions.eq("id_batch",integer));
+            criteria.add(Restrictions.eq("id_batch",id_batchesList.get(i)));
             List rs = criteria.list();
-            this.batchesList.add(new BatchWH_Move((Batch)rs.get(0)));
+            Batch batch = (Batch)rs.get(0);
+//            batch.setQuantity(numList.get(i));
+            this.save_batches.add(batch);
+            this.batchesList.add(new BatchWH_Move(batch,zoneList.get(i)));
         }
         batchTable.setItems(null);
         batchTable.setItems(batchesList);
@@ -216,15 +264,22 @@ public class EntryMoveRouteController implements Initializable{
         
     }
 
-   
+   private String getNameProduct(int get) {
+        for (Product prod: product_names) {
+            if (prod.getId_product() == get){
+                return prod.getName();
+            }
+        }
+        return " ";
+    }
 
     private ArrayList<Coord> readPositions() {
         ObservableList<BatchWH_Move> aux_list = batchTable.getItems();
         ArrayList<Coord> returnable = new ArrayList<>();
         int list_size = aux_list.size();
         for (int i = 0; i < list_size; i++) {
-            int pos_y = aux_list.get(i).getPos_y().get();
-            int pos_x = aux_list.get(i).getPos_x().get();
+            int pos_y = aux_list.get(i).getZone().getPos_y();
+            int pos_x = aux_list.get(i).getZone().getPos_x();
             System.out.println("[ "+pos_y+", "+pos_x+"]");
             if (pos_y != -1 && pos_x != -1){
                 returnable.add(new Coord(pos_y,pos_x));

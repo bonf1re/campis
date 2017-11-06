@@ -145,6 +145,11 @@ public class RouteGen {
             //System.out.println("dict is working");
             return this.retrieve(c_origin, c_destiny);
         }
+        if (c_destiny.y==c_origin.y && c_destiny.x == c_origin.x){
+            returnable.addPath(c_origin);
+            returnable.addPath(c_destiny);
+            return returnable;
+        }
         // Will calculate route backwards
         ArrayList<CNode> destiny_nodes= new ArrayList<>();
         ArrayList<CNode> origin_nodes= new ArrayList<>();
