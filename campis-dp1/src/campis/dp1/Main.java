@@ -397,10 +397,41 @@ public class Main extends Application {
     public static void showViewRequest() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/requestOrder/view.fxml"));
-        BorderPane viewRequestOrder = loader.load();
-        mainLayout.setCenter(viewRequestOrder);
+        BorderPane RequestOrder = loader.load();
+        mainLayout.setCenter(RequestOrder);
     }
     
+
+    public static void showListSaleConditions() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/saleConditions/list.fxml"));
+        BorderPane saleConditions = loader.load();
+        mainLayout.setCenter(saleConditions);
+    }
+    
+    public static void showNewSaleCondition() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/saleConditions/create.fxml"));
+        BorderPane newClient = loader.load();
+        mainLayout.setCenter(newClient);    
+    }
+
+    public static void showEditSaleCondition() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/saleConditions/edit.fxml"));
+        BorderPane newClient = loader.load();
+        mainLayout.setCenter(newClient);    
+    }
+
+    public static void showViewSaleCondition() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/saleConditions/show.fxml"));
+        BorderPane newClient = loader.load();
+        mainLayout.setCenter(newClient);    
+    }
+    
+    
+
     public static void showListComplaint() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/complaints/list.fxml"));
@@ -428,6 +459,7 @@ public class Main extends Application {
         BorderPane listComplaint = loader.load();
         mainLayout.setCenter(listComplaint);  
     }
+
     /* End RequestOrder*/
     
     /**  
