@@ -11,7 +11,7 @@ import campis.dp1.models.CRack;
 import campis.dp1.models.Coord;
 import campis.dp1.models.Rack;
 import campis.dp1.models.Warehouse;
-import campis.dp1.models.Utils.GraphicsUtils;
+import campis.dp1.models.utils.GraphicsUtils;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.io.File;

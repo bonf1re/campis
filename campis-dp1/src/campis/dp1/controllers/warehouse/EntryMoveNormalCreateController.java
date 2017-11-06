@@ -9,6 +9,7 @@ import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Batch;
 import campis.dp1.models.BatchDisplay;
+import campis.dp1.models.Product;
 import campis.dp1.models.WarehouseMoveDisplay;
 import java.awt.Checkbox;
 import java.io.IOError;
@@ -20,6 +21,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -28,6 +30,8 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.CheckBoxTableCell;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.StringConverter;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -38,12 +42,12 @@ import org.hibernate.criterion.Restrictions;
  *
  * @author sergio
  */
-public class EntryMoveCreateController implements Initializable{
+public class EntryMoveNormalCreateController implements Initializable{
     private Main main;
     private int id_warehouse_back;
     ObservableList<Batch> batches;
     ObservableList<BatchDisplay> batchesView;
-    
+    ArrayList<Product> product_names = new ArrayList<>();
     
     
     @FXML
@@ -53,10 +57,10 @@ public class EntryMoveCreateController implements Initializable{
     private TableColumn<BatchDisplay, Integer> idCol;
 
     @FXML
-    private TableColumn<BatchDisplay, Integer> qtCol;
-
+    private TableColumn<BatchDisplay, String> prodCol;
+     
     @FXML
-    private TableColumn<BatchDisplay, Float> costCol;
+    private TableColumn<BatchDisplay, Integer> qtCol;
 
     @FXML
     private TableColumn<BatchDisplay, String> arrCol;
@@ -65,13 +69,14 @@ public class EntryMoveCreateController implements Initializable{
     private TableColumn<BatchDisplay, String> expCol;
 
     @FXML
-    private TableColumn<BatchDisplay, Integer> prodCol;
-
-    @FXML
     private TableColumn<BatchDisplay, String> herCol;
 
     @FXML
     private TableColumn<BatchDisplay, Boolean> selCol;
+    
+    @FXML
+    private TableColumn<BatchDisplay, Integer> numCol;
+        
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -87,11 +92,11 @@ public class EntryMoveCreateController implements Initializable{
 //        );
         try{
             idCol.setCellValueFactory(cellData -> cellData.getValue().getId_batch().asObject());
+            prodCol.setCellValueFactory(cellData -> new SimpleStringProperty(getNameProduct(cellData.getValue().getId_product().get())));
             qtCol.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
-            costCol.setCellValueFactory(cellData -> cellData.getValue().getBatch_cost().asObject());
             arrCol.setCellValueFactory(cellData -> cellData.getValue().getArrival_date());
             expCol.setCellValueFactory(cellData -> cellData.getValue().getExpiration_date());
-            prodCol.setCellValueFactory(cellData -> cellData.getValue().getId_product().asObject());
+            
             herCol.setCellValueFactory(cellData-> cellData.getValue().getHeritage());
             // set column for checkbox
             selCol.setCellFactory(
@@ -100,6 +105,20 @@ public class EntryMoveCreateController implements Initializable{
             selCol.setCellValueFactory(
                     cellData->cellData.getValue().getSelected()
             );
+            numCol.setCellFactory(
+                TextFieldTableCell.<BatchDisplay,Integer>forTableColumn(new StringConverter<Integer>(){
+                    @Override
+                    public String toString(Integer value){
+                        return value.toString();
+                    }
+                    @Override
+                    public Integer fromString(String string){
+                        return Integer.parseInt(string);
+                    }
+                }));
+            numCol.setCellValueFactory(
+                    cellData->cellData.getValue().getNumMove().asObject()
+            );;
             // make sure table is editable so checkbox can be checked n unchecked   
             batchTable.setEditable(true);
             batchLoadData();
@@ -136,6 +155,16 @@ public class EntryMoveCreateController implements Initializable{
         for (int i = 0; i < batchList.size(); i++) {
             returnable.add((Batch)batchList.get(i));
         }
+        
+        // To fill products names
+        for (Object batch : batchList) {
+            Criteria criteria_name = session.createCriteria(Product.class);
+            Batch batch_casted = (Batch) batch;
+            criteria_name.add(Restrictions.eq("id_product", batch_casted.getId_product()));
+            List prodList=criteria_name.list();
+            this.product_names.add((Product) prodList.get(0));
+        }
+        
         session.close();
         sessionFactory.close();
         return returnable;
@@ -155,9 +184,9 @@ public class EntryMoveCreateController implements Initializable{
     }
     
     @FXML
-    private void goWhEntryMoveCreate() throws IOException{
+    private void goWhEntryMoveNormalCreate() throws IOException{
         ContextFX.getInstance().setId(id_warehouse_back);
-        main.showWhEntryMoveCreate();
+        main.showWhEntryMoveNormalCreate();
         
     }
     
@@ -167,6 +196,15 @@ public class EntryMoveCreateController implements Initializable{
         ContextFX.getInstance().setList(aux);
         ContextFX.getInstance().setId(id_warehouse_back);
         main.showWhEntryMoveRoute();
+    }
+
+    private String getNameProduct(int get) {
+        for (Product prod: product_names) {
+            if (prod.getId_product() == get){
+                return prod.getName();
+            }
+        }
+        return " ";
     }
     
 }

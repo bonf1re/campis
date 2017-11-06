@@ -90,9 +90,9 @@ public class ListRackController implements Initializable{
         for (int i = 0; i < racks.size(); i++) {
             
             RackDisplay r = new RackDisplay(racks.get(i).getId_rack(), 
+                                            racks.get(i).getId_warehouse(),                        
                                             racks.get(i).getPos_x(),
                                             racks.get(i).getPos_y(),
-                                            racks.get(i).getId_warehouse(),
                                             racks.get(i).getN_columns(),
                                             racks.get(i).getN_floors(),
                                             racks.get(i).getOrientation());

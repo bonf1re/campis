@@ -121,9 +121,9 @@ public class Main extends Application {
          mainLayout.setCenter(warehouseMoves);
      }
      
-     public static void showWhEntryMoveCreate() throws IOException{
+     public static void showWhEntryMoveNormalCreate() throws IOException{
          FXMLLoader loader = new FXMLLoader();
-         loader.setLocation(Main.class.getResource("views/warehouse/entrymovecreate.fxml"));
+         loader.setLocation(Main.class.getResource("views/warehouse/entrymovenormalcreate.fxml"));
          BorderPane creamove = loader.load();
          mainLayout.setCenter(creamove);
      }
@@ -156,6 +156,27 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("views/users/show.fxml"));
         BorderPane listProd = loader.load();
         mainLayout.setCenter(listProd);
+    }
+    
+    public static void showCreateProductType() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/productTypes/create.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
+    
+    public static void showListProductType() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/productTypes/list.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
+    
+    public static void showEditProductType() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/productTypes/edit.fxml"));
+        BorderPane editProd = loader.load();
+        mainLayout.setCenter(editProd);
     }
 
     public static void showListProduct() throws IOException {
@@ -497,7 +518,7 @@ public class Main extends Application {
         mainLayout.setCenter(routeMove);
     }
 
-    public void showWhEntryMoveSpecialCreate() {
+    public static void showWhEntryMoveSpecialCreate() {
         
     }
 }
