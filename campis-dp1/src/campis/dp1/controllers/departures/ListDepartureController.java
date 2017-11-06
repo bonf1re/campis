@@ -132,7 +132,7 @@ public class ListDepartureController implements Initializable {
         dispatch.setId_dispatch_move(selected_id);
         session.delete(dispatch);
         session.getTransaction().commit();
-
+        session.close();
         sessionFactory.close();
     }
 

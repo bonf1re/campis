@@ -38,9 +38,8 @@ public class BatchWH_Move extends Batch {
         pos_y=new SimpleIntegerProperty(-1);
     }
 
-    public BatchWH_Move(int quantity, float batch_cost, Timestamp arrival_date, Timestamp expiration_date, int id_product, int type_batch, int id_group_batch, String location, boolean state) {
-        
-    }
-    
+    public BatchWH_Move(){
+        super();
+    }    
     
 }

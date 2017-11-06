@@ -86,7 +86,7 @@ public class LoginController {
         criteria.add(Restrictions.eq("username",usernameField.getText()));
         criteria.add(Restrictions.eq("password",passwordField.getText()));
         List<User> users = criteria.list();
-        
+        session.close();
         sessionFactory.close();
         ContextFX.getInstance().setUser((users.size() > 0 ? users.get(0) : null));
 

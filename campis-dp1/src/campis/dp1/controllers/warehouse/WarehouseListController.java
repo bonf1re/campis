@@ -35,7 +35,7 @@ import org.hibernate.cfg.Configuration;
  *
  * @author Gina Bustamante
  */
-public class ListWarehouseController implements Initializable {
+public class WarehouseListController implements Initializable {
     private Main main;
     private ObservableList<Warehouse> warehouses;
     private ObservableList<WarehouseDisplay> warehousesView;
@@ -59,28 +59,28 @@ public class ListWarehouseController implements Initializable {
     
     
     @FXML
-    private void goNewWarehouse() throws IOException {
-        main.showNewWarehouse();
+    private void goWhCreate() throws IOException {
+        main.showWhCreate();
     }
     
     @FXML
-    private void goEditWarehouse() throws IOException {
+    private void goWhEdit() throws IOException {
         ContextFX.getInstance().setId(selected_id);
         
-        main.showEditWarehouse();
+        main.showWhEdit();
     }
     
     @FXML
-    private void goWarehouseMoves() throws IOException{
+    private void goWhEntryMoveList() throws IOException{
         ContextFX.getInstance().setId(selected_id);
-        main.showWarehouseMoves();
+        main.showWhEntryMoveList();
     }
     
     @FXML 
-    private void goVisualizeWarehouse() throws IOException{
+    private void goWhVisualize() throws IOException{
         System.out.println(selected_id);
         ContextFX.getInstance().setId(selected_id);
-        main.showVisualizeWarehouse();
+        main.showWhVisualize();
     }
     
     /**
@@ -106,7 +106,7 @@ public class ListWarehouseController implements Initializable {
             statusCol.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
             warehouseLoadData();
         } catch (SQLException | ClassNotFoundException ex) {
-            Logger.getLogger(ListWarehouseController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(WarehouseListController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
@@ -137,6 +137,7 @@ public class ListWarehouseController implements Initializable {
         for (int i = 0; i < whList.size(); i++) {
             returnable.add((Warehouse) whList.get(i));
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }

@@ -168,6 +168,7 @@ public class EditController implements Initializable {
 
         session.getTransaction().commit();
 
+        session.close();
         sessionFactory.close();
         createRequestOrderLine(codGen);
         this.goListRequestOrder();
@@ -199,6 +200,7 @@ public class EditController implements Initializable {
             }
         }
         session.getTransaction().commit();
+        session.close();
         sessionFactory.close();
     }
 

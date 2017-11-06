@@ -31,6 +31,7 @@ public class ListController implements Initializable {
     private ObservableList<Complaint> complaints;
     private ObservableList<ComplaintDisplay> complaintsView;
     private int selected_id;
+    private String selected_status;
 
     @FXML
     private Button searchButton;
@@ -51,9 +52,11 @@ public class ListController implements Initializable {
     }
 
     @FXML
-    private void goEditComplaint(ActionEvent event) throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showEditComplaint();
+    private void goAttendComplaint(ActionEvent event) throws IOException {
+        if (selected_status.equals("En trámite")) {
+            ContextFX.getInstance().setId(selected_id);
+            main.goAttendComplaint(); 
+        }
     }
 
     @Override
@@ -64,6 +67,7 @@ public class ListController implements Initializable {
                 return;
             }
             this.selected_id = newValue.getId_complaint().getValue().intValue();
+            this.selected_status = newValue.getStatus().getValue().toString();
             }
         );
         try {
@@ -91,6 +95,7 @@ public class ListController implements Initializable {
         for (int i = 0; i < lista.size(); i++) {
             returnable.add((Complaint)lista.get(i));
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     }
@@ -119,6 +124,7 @@ public class ListController implements Initializable {
         complaint.setId_complaint(cod);
         session.delete(complaint);
         session.getTransaction().commit();
+        session.close();
         sessionFactory.close();
     }
 

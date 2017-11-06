@@ -69,6 +69,7 @@ public class PermissionDisplay {
         List rsType = criteria.list();
         View result = (View) rsType.get(0);
         descrip = result.getDescription();
+        session.close();
         sessionFactory.close();
 
         return descrip;

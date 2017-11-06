@@ -68,6 +68,7 @@ public class EditController implements Initializable{
         query.setParameter("oldIdClient", id);
         int result = query.executeUpdate();
         session.getTransaction().commit();
+        session.close();
         sessionFactory.close();
         this.goListClient();
     }
@@ -91,6 +92,7 @@ public class EditController implements Initializable{
         this.phoneField.setText(result.getPhone());
         this.emailField.setText(result.getEmail());
         this.addressField.setText(result.getAddress());
+        session.close();
         sessionFactory.close();
     } 
 }

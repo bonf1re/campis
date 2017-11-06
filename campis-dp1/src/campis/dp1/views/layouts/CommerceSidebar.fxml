@@ -7,8 +7,10 @@
     <children>
       <JFXButton prefHeight="61.0" prefWidth="95.0" styleClass="option" text="Órdenes de Compra" textAlignment="CENTER" wrapText="true" />
       <JFXButton onAction="#goListRequestOrder" prefHeight="61.0" prefWidth="95.0" styleClass="option" text="Órdenes de Venta" textAlignment="CENTER" wrapText="true" />
+      <JFXButton onAction="#goListSaleConditions" prefHeight="61.0" prefWidth="95.0" styleClass="option" text="Condiciones de Venta" textAlignment="CENTER" wrapText="true" />
       <JFXButton onAction="#goListRequestStatuses" prefHeight="61.0" prefWidth="95.0" styleClass="option" text="Estados de Orden" textAlignment="CENTER" wrapText="true" />
       <JFXButton onAction="#goListClient" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Cliente" />
       <JFXButton onAction="#goListComplaint" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Reclamos" />
+      <JFXButton onAction="#goListRefund" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Devoluciones" />
    </children>
 </VBox>

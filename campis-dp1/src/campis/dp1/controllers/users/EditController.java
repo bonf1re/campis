@@ -67,6 +67,7 @@ public class EditController implements Initializable {
         List rsType = criteria.list();
         Role result = (Role) rsType.get(0);
         codType = result.getId_role();
+        session.close();
         sessionFactory.close();
 
         return codType;
@@ -85,6 +86,7 @@ public class EditController implements Initializable {
         List rsType = criteria.list();
         Role result = (Role) rsType.get(0);
         descripType = result.getDescription();
+        session.close();
         sessionFactory.close();
 
         return descripType;

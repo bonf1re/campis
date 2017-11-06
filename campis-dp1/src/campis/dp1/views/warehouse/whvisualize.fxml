@@ -9,11 +9,11 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.EditWarehouseController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.WarehouseVisualizeController">
    <center>
       <Pane prefHeight="350.0" prefWidth="700.0" BorderPane.alignment="CENTER">
          <children>
-            <Text layoutX="40.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Modificación de Almacén">
+            <Text layoutX="40.0" layoutY="55.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Visualización de Almacén">
                <font>
                   <Font size="28.0" />
                </font>
@@ -38,21 +38,21 @@
                   <Font size="16.0" />
                </font>
             </Text>
-          <Button layoutX="353.0" layoutY="495.0" mnemonicParsing="false" onAction="#updateWarehouse" prefHeight="35.0" prefWidth="106.0" text="Grabar">
+          <Button layoutX="353.0" layoutY="495.0" mnemonicParsing="false" onAction="#whEdit" prefHeight="35.0" prefWidth="106.0" text="Modificar">
                <font>
                   <Font size="17.0" />
                </font>
             </Button>
-            <Button layoutX="486.0" layoutY="495.0" mnemonicParsing="false" onAction="#goListWarehouse" prefHeight="38.0" prefWidth="108.0" text="Regresar">
+            <Button layoutX="486.0" layoutY="495.0" mnemonicParsing="false" onAction="#goWhList" prefHeight="38.0" prefWidth="108.0" text="Regresar">
                <font>
                   <Font size="17.0" />
                </font>
             </Button>
-            <JFXTextField fx:id="nameField" layoutX="143.0" layoutY="100.0" />
-            <JFXTextField fx:id="lengthField" layoutX="143.0" layoutY="192.0" prefHeight="26.0" prefWidth="47.0" />
-            <JFXTextField fx:id="widthField" layoutX="316.0" layoutY="199.0" prefHeight="26.0" prefWidth="47.0" />
-            <JFXComboBox fx:id="statusCb" editable="true" layoutX="143.0" layoutY="303.0" prefHeight="26.0" prefWidth="154.0" />
-            <Canvas fx:id="mapCanvas" height="376.0" layoutX="472.0" layoutY="64.0" width="474.0" />
+            <JFXTextField fx:id="nameField" disable="true" layoutX="143.0" layoutY="100.0" />
+            <JFXTextField fx:id="lengthField" disable="true" layoutX="143.0" layoutY="192.0" prefHeight="26.0" prefWidth="47.0" />
+            <JFXTextField fx:id="widthField" disable="true" layoutX="316.0" layoutY="199.0" prefHeight="26.0" prefWidth="47.0" />
+            <JFXComboBox fx:id="statusCb" disable="true" editable="true" layoutX="143.0" layoutY="303.0" prefHeight="26.0" prefWidth="154.0" />
+            <Canvas fx:id="mapCanvas" height="376.0" layoutX="403.0" layoutY="64.0" width="544.0" />
          </children>
       </Pane>
    </center>

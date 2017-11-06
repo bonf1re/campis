@@ -14,9 +14,8 @@ import javafx.fxml.FXML;
  * @author Marco
  */
 public class CommerceSidebarController {
-    
     private Main main;
-    
+
     @FXML
     private void goListRequestOrder() throws IOException{
         main.showListRequestOrder();
@@ -26,14 +25,26 @@ public class CommerceSidebarController {
     private void goListClient() throws IOException {
         main.showListClient();
     }
+
+    @FXML
+    private void goListSaleConditions() throws IOException{
+        main.showListSaleConditions();
+    }
     
     @FXML
     private void goListRequestStatuses() throws IOException {
         main.showListRequestStatuses();
     }
 
+
     @FXML
     private void goListComplaint() throws IOException {
         main.showListComplaint();
     }
+
+    @FXML
+    private void goListRefund() throws IOException {
+        main.showListRefund();
+    }
+
 }
