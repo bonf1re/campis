@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1.models.Utils;
+package campis.dp1.models.utils;
 
 import campis.dp1.models.CRack;
 import campis.dp1.models.Coord;
@@ -62,10 +62,6 @@ public class GraphicsUtils {
                 for (int j = 0; j < rack_length; j++) {
                     real_map[i+rack_y][j+rack_x]=1;
                 }
-            }
-            for (int i = 0; i < 4; i++) {
-                Coord corner = rack.getCorner(i);
-                real_map[corner.y][corner.x] = 2;
             }
         }
         return crackList;
@@ -135,8 +131,6 @@ public class GraphicsUtils {
                 }
                 if (map[j][i]==0){
                     gc.setFill(Color.WHITE);
-                    //gc.setStroke(Color.BLACK);
-                    //gc.strokeRect(i*mult+padding_x, j*mult+padding_y, mult, mult);
                     gc.fillRect(i*mult/scaling_factor_x+padding_x, j*mult/scaling_factor_y+padding_y, mult, mult);
                 }  
             }

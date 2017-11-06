@@ -70,9 +70,9 @@ public class EntryMoveListController implements Initializable {
     }
     
     @FXML
-    private void goWhEntryMoveCreate() throws IOException{
+    private void goWhEntryMoveNormalCreate() throws IOException{
         ContextFX.getInstance().setId(warehouse_id);
-        main.showWhEntryMoveCreate();
+        main.showWhEntryMoveNormalCreate();
     }
     
     @FXML

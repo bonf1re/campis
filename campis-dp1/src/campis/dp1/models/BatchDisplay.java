@@ -30,6 +30,7 @@ public class BatchDisplay {
     private final StringProperty state;
     private final StringProperty heritage;
     private final BooleanProperty selected;
+    private final SimpleIntegerProperty numMove;
     
 
     public BatchDisplay(Batch whMove) {
@@ -44,6 +45,7 @@ public class BatchDisplay {
         this.state = new SimpleStringProperty(Boolean.toString(whMove.isState()));
         this.heritage = new SimpleStringProperty(whMove.getHeritage());
         this.selected = new SimpleBooleanProperty(false);
+        this.numMove = new SimpleIntegerProperty(0);
     }
     
     public BatchDisplay(int id_batch, int quantity, float cost, String arrivalDate, String expirationDate,
@@ -60,6 +62,7 @@ public class BatchDisplay {
         this.state = new SimpleStringProperty(state);
         this.heritage = new SimpleStringProperty(heritage);
         this.selected = new SimpleBooleanProperty(false);
+        this.numMove = new SimpleIntegerProperty(0);
     }
 
     public BooleanProperty getSelected() {
@@ -105,6 +108,10 @@ public class BatchDisplay {
 
     public StringProperty getHeritage() {
         return heritage;
+    }
+
+    public IntegerProperty getNumMove() {
+        return numMove;
     }
     
     

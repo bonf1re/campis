@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1.models.Utils;
+package campis.dp1.models.utils;
 
 import campis.dp1.models.Coord;
 import campis.dp1.models.Coordinates;
