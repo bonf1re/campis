@@ -75,6 +75,7 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("views/layouts/DispatchSidebar.fxml"));
         VBox dispatchSidebar = loader.load();
         mainLayout.setLeft(dispatchSidebar);
+        mainLayout.setCenter(null);
     }
     
     public static void showCommerceSidebar() throws IOException {
@@ -82,6 +83,14 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("views/layouts/CommerceSidebar.fxml"));
         VBox commerceSidebar = loader.load();
         mainLayout.setLeft(commerceSidebar);
+        mainLayout.setCenter(null);
+    }
+    
+    public static void showReportSidebar() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/layouts/ReportSidebar.fxml"));
+        VBox reportSidebar = loader.load();
+        mainLayout.setLeft(reportSidebar);
         mainLayout.setCenter(null);
     }
     
@@ -249,6 +258,22 @@ public class Main extends Application {
         BorderPane editRequestStatus = loader.load();
         mainLayout.setCenter(editRequestStatus);
     }
+    
+    /* Freights */
+    
+    public static void showListFreights() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/freights/list.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
+    
+    public static void showEditFreight() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/freights/edit.fxml"));
+        BorderPane editFreight = loader.load();
+        mainLayout.setCenter(editFreight);
+    }
 
     /* Roles */
     public static void showListRoles() throws IOException {
@@ -309,6 +334,9 @@ public class Main extends Application {
         BorderPane editVehicle = loader.load();
         mainLayout.setCenter(editVehicle);
     }
+    
+    /* Entries */
+    
     public static void showVisualizeEntry() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/dispatch/viewEntry.fxml"));
@@ -336,6 +364,8 @@ public class Main extends Application {
         BorderPane listEntries = loader.load();
         mainLayout.setCenter(listEntries);
      }
+    
+    /* Departures */
     
     public static void showListDepartures() throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -539,10 +569,17 @@ public class Main extends Application {
         mainLayout.setCenter(addItem);
     }
     
-    
+
     public static void showWhDepartureMoveAddProd() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/warehouse/whdeparturemoveadditem.fxml"));
+        BorderPane addItem = loader.load();
+        mainLayout.setCenter(addItem);
+    }
+    
+    public static void showKardexReportConf() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/reports/KardexConf.fxml"));
         BorderPane addItem = loader.load();
         mainLayout.setCenter(addItem);
     }
@@ -553,4 +590,14 @@ public class Main extends Application {
         BorderPane addItem = loader.load();
         mainLayout.setCenter(addItem);
     }
+
+            
+    public static void showGenerateKardexReport() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/reports/KardexReport.fxml"));
+        BorderPane addItem = loader.load();
+        mainLayout.setCenter(addItem);
+    }
+    
+
 }

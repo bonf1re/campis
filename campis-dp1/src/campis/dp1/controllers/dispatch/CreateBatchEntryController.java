@@ -5,15 +5,22 @@
  */
 package campis.dp1.controllers.dispatch;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Batch;
 import campis.dp1.models.Product;
-import campis.dp1.models.Rack;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -24,6 +31,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * FXML Controller class
@@ -31,11 +39,11 @@ import org.hibernate.cfg.Configuration;
  * @author david
  */
 public class CreateBatchEntryController implements Initializable {
-    
+
     private Main main;
     ObservableList<Product> products;
     Batch batch;
-    
+
     @FXML
     private JFXComboBox<String> prodField;
     @FXML
@@ -44,37 +52,68 @@ public class CreateBatchEntryController implements Initializable {
     private JFXDatePicker arrivalDateField;
     @FXML
     private JFXDatePicker expDateField;
-    
+    @FXML
+    private JFXTextField batchPriceField;
+    @FXML
+    private JFXComboBox<String> currencyField;
+
     @FXML
     private void goNewEntry() throws IOException {
         main.showNewEntry();
     }
     
-    @FXML
-    private void insertBatchEntry() throws IOException {
-       String prod = prodField.getValue();
+    private Date getDate(LocalDate value) {
         
-        /*
-        Rack r = new Rack(1, Integer.parseInt(x_Field.getText()), Integer.parseInt(y_Field.getText()), 
-                            Integer.parseInt(columnsField.getText()), Integer.parseInt(floorsField.getText()),
-                            0);
-        
+        Calendar calendar = new GregorianCalendar(value.getYear(),
+                                                    value.getMonthValue(),
+                                                    value.getDayOfMonth());
+        return calendar.getTime();
+    }
+    
+    private Integer getIdProd(String prod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Product.class);
+        criteria.add(Restrictions.eq("name", prod));
+        List<Product> list = criteria.list();
+        Integer id = list.get(0).getId_product();
+        session.close();
+        sessionFactory.close();
+        return id;
+    }
+
+    @FXML
+    private void insertBatchEntry() throws IOException {
+        SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        String prod = prodField.getValue();
+        Integer quantity = Integer.parseInt(quantityField.getText());
+        Date date_creation = getDate(arrivalDateField.getValue());
+        Date date_exp = getDate(expDateField.getValue());
+        float batchPrice = Float.parseFloat(batchPriceField.getText());
+        Integer idprod = getIdProd(prod);
+        
+        Batch b = new Batch(quantity, batchPrice, Timestamp.valueOf((String)formatIn.format(date_creation)), 
+                            Timestamp.valueOf((String)formatIn.format(date_exp)), idprod, 4, "-1", true);
+
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
 
         session.beginTransaction();
-        session.save(r);
+        session.save(b);
         session.getTransaction().commit();
 
         sessionFactory.close();
-        */
-        
+        ContextFX.getInstance().setId(b.getId_batch());
         this.goNewEntry();
     }
-    
+
     /**
      * Initializes the controller class.
      */
@@ -84,12 +123,13 @@ public class CreateBatchEntryController implements Initializable {
         for (int i = 0; i < products.size(); i++) {
             prodField.getItems().add(products.get(i).getName());
         }
-    }    
+        currencyField.getItems().addAll("S/.","$","€");
+    }
 
     private ObservableList<Product> getProducts() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -99,7 +139,9 @@ public class CreateBatchEntryController implements Initializable {
         for (int i = 0; i < list.size(); i++) {
             returnable.add(list.get(i));
         }
+        session.close();
+        sessionFactory.close();
         return returnable;
     }
-    
+
 }
