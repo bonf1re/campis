@@ -11,6 +11,7 @@ import campis.dp1.models.User;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -42,6 +43,14 @@ public class ContextFX {
     int id_user;
     // Es un desmadre este contexto
     Integer whMoveType = null;
+    // why r u like dis
+    private Integer id_type;
+    private Integer id_objective;
+    //usen esto para pasar fechas
+    private Date init_date;
+    private Date end_date;
+    //y para pasar un string cualquiera
+    private String labeltoPrint;
     
     public Integer getWhMoveType(){
         Integer returnable = new Integer(this.whMoveType);
@@ -181,5 +190,75 @@ public class ContextFX {
     }
     public void setId_User(int user){
         this.id_user = user;
+    }
+
+    /**
+     * @return the id_type
+     */
+    public Integer getId_type() {
+        return id_type;
+    }
+
+    /**
+     * @param id_type the id_type to set
+     */
+    public void setId_type(Integer id_type) {
+        this.id_type = id_type;
+    }
+
+    /**
+     * @return the id_objective
+     */
+    public Integer getId_objective() {
+        return id_objective;
+    }
+
+    /**
+     * @param id_objective the id_objective to set
+     */
+    public void setId_objective(Integer id_objective) {
+        this.id_objective = id_objective;
+    }
+
+    /**
+     * @return the init_date
+     */
+    public Date getInit_date() {
+        return init_date;
+    }
+
+    /**
+     * @param init_date the init_date to set
+     */
+    public void setInit_date(Date init_date) {
+        this.init_date = init_date;
+    }
+
+    /**
+     * @return the end_date
+     */
+    public Date getEnd_date() {
+        return end_date;
+    }
+
+    /**
+     * @param end_date the end_date to set
+     */
+    public void setEnd_date(Date end_date) {
+        this.end_date = end_date;
+    }
+
+    /**
+     * @return the labeltoPrint
+     */
+    public String getLabeltoPrint() {
+        return labeltoPrint;
+    }
+
+    /**
+     * @param labeltoPrint the labeltoPrint to set
+     */
+    public void setLabeltoPrint(String labeltoPrint) {
+        this.labeltoPrint = labeltoPrint;
     }
 }

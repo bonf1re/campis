@@ -32,6 +32,11 @@ public class MainViewController {
     }
 
     @FXML
+    private void goReport() throws IOException {
+        main.showReportSidebar();
+    }
+    
+    @FXML
     private void goListWarehouse() throws IOException{
         main.showWhList();
     }

@@ -75,6 +75,7 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("views/layouts/DispatchSidebar.fxml"));
         VBox dispatchSidebar = loader.load();
         mainLayout.setLeft(dispatchSidebar);
+        mainLayout.setCenter(null);
     }
     
     public static void showCommerceSidebar() throws IOException {
@@ -82,6 +83,14 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("views/layouts/CommerceSidebar.fxml"));
         VBox commerceSidebar = loader.load();
         mainLayout.setLeft(commerceSidebar);
+        mainLayout.setCenter(null);
+    }
+    
+    public static void showReportSidebar() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/layouts/ReportSidebar.fxml"));
+        VBox reportSidebar = loader.load();
+        mainLayout.setLeft(reportSidebar);
         mainLayout.setCenter(null);
     }
     
@@ -559,4 +568,20 @@ public class Main extends Application {
         BorderPane addItem = loader.load();
         mainLayout.setCenter(addItem);
     }
+    
+    public static void showKardexReportConf() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/reports/KardexConf.fxml"));
+        BorderPane addItem = loader.load();
+        mainLayout.setCenter(addItem);
+    }
+
+            
+    public static void showGenerateKardexReport() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/reports/KardexReport.fxml"));
+        BorderPane addItem = loader.load();
+        mainLayout.setCenter(addItem);
+    }
+    
 }
