@@ -154,10 +154,11 @@ public class EntryMoveRouteController implements Initializable{
             query.setParameter("t_batch", 3);
             query.setParameter("batchId", batch.getId_batch());
             query.executeUpdate();
-            Query zone_q = session.createQuery(""
-                    + "update Zone set free = : s_status "+" where id_zone = :zoneId");
+            Query zone_q = session.createQuery(
+                    "update WarehouseZone set free = :s_status "+" where id_zone = :zoneId");
             zone_q.setParameter("s_status",false);
             zone_q.setParameter("zoneId", batchesList.get(i).getZone().getId_zone());
+            zone_q.executeUpdate();
             session.save(move);
         }
         session.getTransaction().commit();

@@ -34,7 +34,7 @@ public class Batch {
     private int type_batch;
     private String location;
     private boolean state;
-    private Integer[] heritage=new Integer[0];
+    private String heritage="--";
     
     public Batch(){
         super();
@@ -135,11 +135,11 @@ public class Batch {
         this.state = state;
     }
 
-    public Integer[] getHeritage() {
+    public String getHeritage() {
         return heritage;
     }
 
-    public void setHeritage(Integer[] heritage) {
+    public void setHeritage(String heritage) {
         this.heritage = heritage;
     }
     

@@ -43,7 +43,7 @@ public class BatchDisplay {
         this.type_batch = new SimpleIntegerProperty(whMove.getType_batch());
         this.location = new SimpleStringProperty(whMove.getLocation());
         this.state = new SimpleStringProperty(Boolean.toString(whMove.isState()));
-        this.heritage = new SimpleStringProperty(whMove.getHeritage().toString());
+        this.heritage = new SimpleStringProperty(whMove.getHeritage());
         this.selected = new SimpleBooleanProperty(false);
         this.numMove = new SimpleIntegerProperty(0);
     }
