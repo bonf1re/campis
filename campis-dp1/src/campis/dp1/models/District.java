@@ -68,4 +68,9 @@ public class District {
         this.name = name;
         this.freight = freight;
     }
+    
+    public District(String name, Float freight) {
+        this.name = name;
+        this.freight = freight;
+    }
 }

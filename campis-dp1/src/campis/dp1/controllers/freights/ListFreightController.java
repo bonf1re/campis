@@ -36,7 +36,7 @@ import org.hibernate.cfg.Configuration;
 public class ListFreightController implements Initializable {
     private Main main;
     private ObservableList<District> districts;
-    private ObservableList<DistrictDisplay> districtsView;
+    private ObservableList<DistrictDisplay> districtsView = FXCollections.observableArrayList();
     private int selected_id;
 
     @FXML
@@ -49,7 +49,7 @@ public class ListFreightController implements Initializable {
     @FXML
     private void goEditFreight() throws IOException {
         ContextFX.getInstance().setId(selected_id);
-        //main.showEditFreight();
+        main.showEditFreight();
     }
 
     /**
@@ -71,6 +71,8 @@ public class ListFreightController implements Initializable {
             /**/
             loadData();
         } catch (SQLException | ClassNotFoundException ex) {
+            nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+            freightColumn.setCellValueFactory(cellData -> cellData.getValue().freightProperty().asObject());
             Logger.getLogger(ListController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
@@ -89,17 +91,17 @@ public class ListFreightController implements Initializable {
         for (int i = 0; i < lista.size(); i++) {
             returnable.add((District)lista.get(i));
         }
+        session.close();
         sessionFactory.close();
         return returnable;
     } 
 
     private void loadData() throws SQLException, ClassNotFoundException {
         districts = FXCollections.observableArrayList();
-        districtsView = FXCollections.observableArrayList();
         districts = getDistricts();
         for (int i = 0; i < districts.size(); i++) {
-            DistrictDisplay prod = new DistrictDisplay(districts.get(i).getId_district(), districts.get(i).getName(), districts.get(i).getFreight());
-            districtsView.add(prod);
+            DistrictDisplay district = new DistrictDisplay(districts.get(i).getId_district(), districts.get(i).getName(), districts.get(i).getFreight());
+            districtsView.add(district);
         }
         tableDistrict.setItems(null);
         tableDistrict.setItems(districtsView);

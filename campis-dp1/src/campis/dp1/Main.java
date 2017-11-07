@@ -250,6 +250,8 @@ public class Main extends Application {
         mainLayout.setCenter(editRequestStatus);
     }
     
+    /* Freights */
+    
     public static void showListFreights() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/freights/list.fxml"));
