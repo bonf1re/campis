@@ -16,8 +16,7 @@
             <Label layoutX="220.0" layoutY="230.0" text="Ancho :" />
             <Label layoutX="220.0" layoutY="289.0" text="Posición inicial X :" />
             <Label layoutX="219.0" layoutY="350.0" text="Posición inicial Y :" />
-            <Button layoutX="373.0" layoutY="534.0" mnemonicParsing="false" onAction="#insertArea" prefHeight="21.0" prefWidth="72.0" text="Guardar" />
-            <Button layoutX="574.0" layoutY="534.0" mnemonicParsing="false" onAction="#goListArea" prefHeight="25.0" prefWidth="74.0" text="Cancelar" />
+            <Button layoutX="470.0" layoutY="470.0" mnemonicParsing="false" onAction="#insertArea" prefHeight="26.0" prefWidth="90.0" text="Guardar" />
             <Label layoutX="51.0" layoutY="37.0" text="Crear área">
                <font>
                   <Font size="20.0" />

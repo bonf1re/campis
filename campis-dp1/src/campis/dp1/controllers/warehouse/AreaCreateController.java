@@ -5,6 +5,7 @@
  */
 package campis.dp1.controllers.warehouse;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Product;
 
@@ -37,6 +38,8 @@ import org.hibernate.transform.Transformers;
 public class AreaCreateController implements Initializable {
     private Main main;
     
+    private int warehouse_id;
+    
     @FXML
     private JFXTextField nameField;
     @FXML
@@ -50,6 +53,7 @@ public class AreaCreateController implements Initializable {
     
     @FXML
     private void goListArea() throws IOException{
+        ContextFX.getInstance().setId(this.warehouse_id);
         main.showAreaList();
     }
     
@@ -62,7 +66,7 @@ public class AreaCreateController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         
-        Area area = new Area(nameField.getText(), 1, Integer.parseInt(lengthField.getText()), Integer.parseInt(widthField.getText()),
+        Area area = new Area(nameField.getText(), this.warehouse_id, Integer.parseInt(lengthField.getText()), Integer.parseInt(widthField.getText()),
                                      Integer.parseInt(posXField.getText()), Integer.parseInt(posYField.getText()));
         
         session.save(area);
@@ -74,5 +78,6 @@ public class AreaCreateController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.warehouse_id=ContextFX.getInstance().getId();
     }
 }

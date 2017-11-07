@@ -65,6 +65,7 @@ public class AreaListController implements Initializable {
     
     @FXML
     private void goAreaCreate() throws IOException{
+        ContextFX.getInstance().setId(this.warehouse_id);
         main.showAreaCreate();
     }
     
