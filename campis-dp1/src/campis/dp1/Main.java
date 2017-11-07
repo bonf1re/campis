@@ -258,6 +258,22 @@ public class Main extends Application {
         BorderPane editRequestStatus = loader.load();
         mainLayout.setCenter(editRequestStatus);
     }
+    
+    /* Freights */
+    
+    public static void showListFreights() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/freights/list.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
+    
+    public static void showEditFreight() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/freights/edit.fxml"));
+        BorderPane editFreight = loader.load();
+        mainLayout.setCenter(editFreight);
+    }
 
     /* Roles */
     public static void showListRoles() throws IOException {

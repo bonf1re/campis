@@ -10,10 +10,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-/**
- *
- * @author david
- */
 
 @Entity
 @Table(name="district")
@@ -23,20 +19,6 @@ public class District {
     private Integer id_district;
     private String name;
     private Float freight;
-
-    /**
-     * @return the id_district
-     */
-    public Integer getId_district() {
-        return id_district;
-    }
-
-    /**
-     * @param id_district the id_district to set
-     */
-    public void setId_district(Integer id_district) {
-        this.id_district = id_district;
-    }
 
     /**
      * @return the name
@@ -53,19 +35,29 @@ public class District {
     }
 
     /**
-     * @return the freight
+     * @return the id_district
      */
+    public int getId_district() {
+        return id_district;
+    }
+
+    /**
+     * @param id_district the id_district to set
+     */
+    public void setId_district(int id_district) {
+        this.id_district = id_district;
+    }
+
     public Float getFreight() {
         return freight;
     }
-
+    
     /**
      * @param freight the freight to set
      */
     public void setFreight(Float freight) {
         this.freight = freight;
     }
-    
     
     public District() {
         super();
@@ -77,4 +69,8 @@ public class District {
         this.freight = freight;
     }
     
+    public District(String name, Float freight) {
+        this.name = name;
+        this.freight = freight;
+    }
 }
