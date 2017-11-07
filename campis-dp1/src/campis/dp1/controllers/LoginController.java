@@ -65,7 +65,7 @@ public class LoginController {
             }));
         timeline.play();
         } else {
-            message.setText("Contraseña incorrecta");
+            message.setText("Acceso denegado");
         }
     }
 
