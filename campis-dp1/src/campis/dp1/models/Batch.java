@@ -34,7 +34,7 @@ public class Batch {
     private int type_batch;
     private String location;
     private boolean state;
-    private String heritage=null;
+    private Integer[] heritage=new Integer[0];
     
     public Batch(){
         super();
@@ -49,6 +49,17 @@ public class Batch {
         this.type_batch = type_batch;        
         this.location = location;
         this.state = state;
+    }
+
+    public Batch(BatchWH_Move get) {
+        this.quantity = get.getQuantity();
+        this.batch_cost = get.getBatch_cost();
+        this.arrival_date = get.getArrival_date();
+        this.expiration_date = get.getExpiration_date();
+        this.id_product = get.getId_product();
+        this.type_batch = get.getType_batch();
+        this.location = get.getLocation();
+        this.state = get.isState();
     }
     
     
@@ -125,11 +136,11 @@ public class Batch {
         this.state = state;
     }
 
-    public String getHeritage() {
+    public Integer[] getHeritage() {
         return heritage;
     }
 
-    public void setHeritage(String heritage) {
+    public void setHeritage(Integer[] heritage) {
         this.heritage = heritage;
     }
     

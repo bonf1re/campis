@@ -27,13 +27,38 @@ public class ContextFX {
     List aux_list = null;   // Abstract so it can take any kind of arraylist
     List aux_2nd_list = null;
     List aux_3rd_list = null;
+    List whMovesProdList = null;
     Integer quantity = null;
     Float totAmount = 0.0f;
     Integer num = 0; // Useful to save any integer variable.
     Integer var = 0;
     ObservableList<ProductDisplay> tempList = FXCollections.observableArrayList();
     int id_user;
+    // Es un desmadre este contexto
+    Integer whMoveType = null;
+    
+    public Integer getWhMoveType(){
+        Integer returnable = new Integer(this.whMoveType);
+        this.whMoveType=null;
+        return returnable;
+    }
+    
+    public void setWhMoveType(int aux){
+        this.whMoveType = new Integer(aux);
+    }
    
+    
+    
+    
+    
+    public List getWhMovesProdList(){
+        List returnable = new ArrayList<>(this.whMovesProdList);
+        this.whMovesProdList=null;
+        return returnable;
+    }
+    public void setWhMovesProdList(List aux_list){
+        this.whMovesProdList = new ArrayList<>(aux_list);
+    }
     
     public Integer getNum() {
         Integer returnable = new Integer(this.num);

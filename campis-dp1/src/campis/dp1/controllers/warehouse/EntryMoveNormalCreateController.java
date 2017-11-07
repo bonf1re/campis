@@ -104,22 +104,7 @@ public class EntryMoveNormalCreateController implements Initializable{
             );
             selCol.setCellValueFactory(
                     cellData->cellData.getValue().getSelected()
-            );
-//            numCol.setCellFactory(
-//                TextFieldTableCell.<BatchDisplay,Integer>forTableColumn(new StringConverter<Integer>(){
-//                    @Override
-//                    public String toString(Integer value){
-//                        return value.toString();
-//                    }
-//                    @Override
-//                    public Integer fromString(String string){
-//                        return Integer.parseInt(string);
-//                    }
-//                }));
-//            numCol.setCellValueFactory(
-//                    cellData->cellData.getValue().getNumMove().asObject()
-//            );;
-            // make sure table is editable so checkbox can be checked n unchecked   
+            ); 
             batchTable.setEditable(true);
             batchLoadData();
         } catch (SQLException | ClassNotFoundException ex) {
@@ -183,20 +168,7 @@ public class EntryMoveNormalCreateController implements Initializable{
         
         return returnable;
     }
-    
-//    private ArrayList<Integer> getMarkedNum(){
-//        ArrayList<Integer> returnable = new ArrayList<>();
-//        // TODO
-//        for (int i=0; i<batchTable.getItems().size();i++) {
-//            BatchDisplay item = batchTable.getItems().get(i);
-//            boolean selected = item.getSelected().getValue();
-//            if (selected ==  true){
-//                returnable.add(item.getNumMove().get());
-//            }
-//        }
-//        
-//        return returnable;
-//    }
+
     
     
     @FXML

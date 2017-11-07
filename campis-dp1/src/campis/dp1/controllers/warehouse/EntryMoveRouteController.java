@@ -54,6 +54,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.paint.Color;
 import javafx.util.StringConverter;
 import javax.persistence.Query;
+import oracle.jrockit.jfr.tools.ConCatRepository;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -76,6 +77,7 @@ public class EntryMoveRouteController implements Initializable{
     private CGraph routesGraph = new CGraph();
     ArrayList<Product> product_names = new ArrayList<>();
     ArrayList<Batch> save_batches = new ArrayList<>();
+    private int mode=0;
     //private ArrayList<Coord> batchesCoords = new ArrayList<>();
     //private ArrayList<Coord> routeGenerated;
     
@@ -102,46 +104,17 @@ public class EntryMoveRouteController implements Initializable{
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        this.id_warehouse = ContextFX.getInstance().getId();
-
+        this.id_warehouse=ContextFX.getInstance().getId();
+        try{
+            int m_test = ContextFX.getInstance().getWhMoveType() + 1;
+            this.mode=1;
+        }catch(Exception e){
+            this.mode=0;
+        }
         try{
             qtCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getQuantity()).asObject());            
             prodCol.setCellValueFactory(cellData -> new SimpleStringProperty(getNameProduct(cellData.getValue().getId_product())));
             zoneCol.setCellValueFactory(cellData -> cellData.getValue().getZoneStr());
-//            // set column for pos_x
-//            posX.setCellFactory(
-//                TextFieldTableCell.<BatchWH_Move,Integer>forTableColumn(new StringConverter<Integer>(){
-//                    @Override
-//                    public String toString(Integer value){
-//                        return value.toString();
-//                    }
-//                    @Override
-//                    public Integer fromString(String string){
-//                        return Integer.parseInt(string);
-//                    }
-//                }));
-//            posX.setCellValueFactory(
-//                    cellData->cellData.getValue().getPos_x().asObject()
-//            );
-//            // set column for pos_y
-//            posY.setCellFactory(
-//                TextFieldTableCell.<BatchWH_Move,Integer>forTableColumn(new StringConverter<Integer>(){
-//                    @Override
-//                    public String toString(Integer value){
-//                        return value.toString();
-//                    }
-//                    @Override
-//                    public Integer fromString(String string){
-//                        return Integer.parseInt(string);
-//                    }
-//                }));
-//            posY.setCellValueFactory(
-//                    cellData->cellData.getValue().getPos_y().asObject()
-//            );
-//            
-            // make sure table is editable so fields can be edited
-//            batchTable.setEditable(true);
-            
             
             Configuration configuration = new Configuration();
             configuration.configure("hibernate.cfg.xml");
@@ -153,7 +126,7 @@ public class EntryMoveRouteController implements Initializable{
             
             batchLoadData(session);
             drawMap(session);
-            session.close();;
+            session.close();
             sessionFactory.close();
             generateRoute();
             
@@ -170,16 +143,21 @@ public class EntryMoveRouteController implements Initializable{
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
+        if (this.mode==1) saveBatches(session);
         for (int i=0; i<batchesList.size();i++) {
             Batch batch = this.save_batches.get(i);
             Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-            WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), batchesList.get(i).getZone().getId_zone(), 2, 1, id_warehouse);
+            WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), batchesList.get(i).getZone().getId_zone(), 2, 1, id_warehouse,batch.getId_batch());
             batch.setType_batch(3);
             Query query = session.createQuery(
                 "update Batch set type_batch = :t_batch " + " where id_batch = :batchId ");
             query.setParameter("t_batch", 3);
             query.setParameter("batchId", batch.getId_batch());
             query.executeUpdate();
+            Query zone_q = session.createQuery(""
+                    + "update Zone set free = : s_status "+" where id_zone = :zoneId");
+            zone_q.setParameter("s_status",false);
+            zone_q.setParameter("zoneId", batchesList.get(i).getZone().getId_zone());
             session.save(move);
         }
         session.getTransaction().commit();
@@ -218,18 +196,26 @@ public class EntryMoveRouteController implements Initializable{
     private void batchLoadData(Session session) throws SQLException, ClassNotFoundException{
         // we need to get each batch selected and add it to the table
         this.batchesList = FXCollections.observableArrayList();
-        this.id_batchesList=(ArrayList<Integer>) ContextFX.getInstance().getList();
-        this.zoneList=(ArrayList<WarehouseZone>) ContextFX.getInstance().get2ndList();
-//        this.numList=(ArrayList<Integer>) ContextFX.getInstance().get3rdList();
-        for (int i=0; i< id_batchesList.size(); i++) {
-            Criteria criteria = session.createCriteria(Batch.class);
-            criteria.add(Restrictions.eq("id_batch",id_batchesList.get(i)));
-            List rs = criteria.list();
-            Batch batch = (Batch)rs.get(0);
-//            batch.setQuantity(numList.get(i));
-            this.save_batches.add(batch);
-            this.batchesList.add(new BatchWH_Move(batch,zoneList.get(i)));
+        if (this.mode==0){
+            this.id_batchesList=(ArrayList<Integer>) ContextFX.getInstance().getList();
+            this.zoneList=(ArrayList<WarehouseZone>) ContextFX.getInstance().get2ndList();    
+            for (int i=0; i< id_batchesList.size(); i++) {
+                Criteria criteria = session.createCriteria(Batch.class);
+                criteria.add(Restrictions.eq("id_batch",id_batchesList.get(i)));
+                List rs = criteria.list();
+                Batch batch = (Batch)rs.get(0);
+                this.save_batches.add(batch);
+                this.batchesList.add(new BatchWH_Move(batch,zoneList.get(i)));
+            }
+        }else{ // special move
+            ArrayList<BatchWH_Move> aux_list = (ArrayList<BatchWH_Move>) ContextFX.getInstance().getList();
+            this.zoneList=new ArrayList<WarehouseZone>();
+            for (int i = 0; i < aux_list.size(); i++) {
+                this.zoneList.add(aux_list.get(i).getZone());
+                this.batchesList.add(aux_list.get(i));
+            }
         }
+        
         batchTable.setItems(null);
         batchTable.setItems(batchesList);
     }
@@ -297,5 +283,16 @@ public class EntryMoveRouteController implements Initializable{
             returnable.add(new Coordinates(aux.x,aux.y));
         }
         return returnable;
+    }
+
+    private void saveBatches(Session session) {
+        for (int i = 0; i < this.batchesList.size(); i++) {
+            Batch batch = new Batch(this.batchesList.get(i));
+            this.id_batchesList.add((Integer) session.save(batch));
+        }
+        for (int i=0; i<this.batchesList.size();i++){
+            this.batchesList.get(i).setId_batch(this.id_batchesList.get(i));
+            this.save_batches.add(this.batchesList.get(i));
+        }
     }
 }

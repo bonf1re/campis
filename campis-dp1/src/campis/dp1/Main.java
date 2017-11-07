@@ -128,6 +128,13 @@ public class Main extends Application {
          mainLayout.setCenter(creamove);
      }
      
+     public static void showWhEntryMoveSpecialCreate() throws IOException{
+         FXMLLoader loader = new FXMLLoader();
+         loader.setLocation(Main.class.getResource("views/warehouse/entrymovespecialcreate.fxml"));
+         BorderPane creamove = loader.load();
+         mainLayout.setCenter(creamove);
+     }
+     
     /* End Warehouse */
 
     public static void showListUser() throws IOException {
@@ -511,7 +518,10 @@ public class Main extends Application {
         mainLayout.setCenter(routeMove);
     }
 
-    public static void showWhEntryMoveSpecialCreate() {
-        
+    public static void showWhEntryMoveAddProd() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/whentrymoveadditem.fxml"));
+        BorderPane addItem = loader.load();
+        mainLayout.setCenter(addItem);
     }
 }
