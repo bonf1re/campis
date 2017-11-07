@@ -27,6 +27,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * FXML Controller class
@@ -68,7 +69,12 @@ public class ListEntryController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
+        int typeOwner1 = 3;
+        int typeOwner2 = 4;
         Criteria criteria = session.createCriteria(DispatchMove.class);
+        criteria.add(Restrictions.disjunction()
+                .add(Restrictions.eq("type_owner", typeOwner1))
+                .add(Restrictions.eq("type_owner", typeOwner2)));
         
         List lista = criteria.list();
         
@@ -94,9 +100,6 @@ public class ListEntryController implements Initializable {
                                               entries.get(i).getId_owner(),
                                               entries.get(i).getMov_date().toString(),
                                               entries.get(i).getReason());
-            
-            //System.out.println("campis.dp1.controllers.entries.ListEntryController.loadData()");
-            //System.out.println(entries.get(i).getId_group_batch());
             entriesView.add(e);
         }
         

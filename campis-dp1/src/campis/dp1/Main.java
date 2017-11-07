@@ -318,6 +318,9 @@ public class Main extends Application {
         BorderPane editVehicle = loader.load();
         mainLayout.setCenter(editVehicle);
     }
+    
+    /* Entries */
+    
     public static void showVisualizeEntry() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/dispatch/viewEntry.fxml"));
@@ -345,6 +348,8 @@ public class Main extends Application {
         BorderPane listEntries = loader.load();
         mainLayout.setCenter(listEntries);
      }
+    
+    /* Departures */
     
     public static void showListDepartures() throws IOException {
         FXMLLoader loader = new FXMLLoader();
