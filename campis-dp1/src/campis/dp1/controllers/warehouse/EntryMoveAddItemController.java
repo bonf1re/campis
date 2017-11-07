@@ -39,7 +39,7 @@ import org.hibernate.transform.Transformers;
  *
  * @author Eddy
  */
-public class AddItemController implements Initializable{
+public class EntryMoveAddItemController implements Initializable{
     
     Main main;
     private ObservableList<ProductDisplay> productsView;
