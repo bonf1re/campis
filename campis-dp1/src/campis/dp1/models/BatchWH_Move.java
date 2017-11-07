@@ -24,7 +24,7 @@ public class BatchWH_Move extends Batch {
                 batch.getArrival_date(),
                 batch.getExpiration_date(),
                 batch.getId_product(),
-                batch.getType_batch(),                
+                batch.getType_batch(),
                 batch.getLocation(),
                 batch.isState());
         this.zone =  zone;

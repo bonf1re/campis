@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.departures.CreateDepartureController">
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.dispatch.CreateSpecialDepartureController">
     <stylesheets>
         <URL value="@/campis/dp1/assets/css/listentries.css" />
     </stylesheets>
@@ -66,10 +66,8 @@
                   <Font size="16.0" />
                </font>
             </Label>
-            <JFXCheckBox fx:id="checkboxZone" layoutX="191.0" layoutY="88.0" onAction="#checkboxZoneAction" text="Zona" />
-            <JFXCheckBox fx:id="checkboxClient" layoutX="448.0" layoutY="88.0" onAction="#checkboxClientAction" text="Cliente" />
+            <JFXCheckBox fx:id="checkboxZone" layoutX="191.0" layoutY="88.0" onAction="#checkboxZoneAction" text="Ubicación" />
             <JFXComboBox fx:id="zoneField" layoutX="327.0" layoutY="84.0" />
-            <JFXComboBox fx:id="clientField" layoutX="580.0" layoutY="84.0" />
             <Label layoutX="44.0" layoutY="453.0" text="Motivo:">
                <font>
                   <Font size="16.0" />

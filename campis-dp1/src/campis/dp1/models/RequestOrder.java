@@ -6,14 +6,17 @@
 package campis.dp1.models;
 
 import java.sql.Timestamp;
-import javax.persistence.Column;
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
-import javax.persistence.Temporal;
-import javax.persistence.TemporalType;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -102,5 +105,19 @@ public class RequestOrder {
     public void setId_client(Integer id_client) {
         this.id_client = id_client;
     }
-    
+
+    public static List<RequestOrderLine> getRequestOrderLines(Integer id) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(RequestOrderLine.class)
+                .add(Restrictions.eq("id_request_order", id));
+        List<RequestOrderLine> request_ordes_lines = criteria.list();
+        sessionFactory.close();
+
+        return request_ordes_lines;
+    }
 }

@@ -7,20 +7,21 @@
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
+<?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
+<?import com.jfoenix.controls.JFXComboBox?>
 
-<BorderPane prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.refunds.ListController">
+<BorderPane prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.refunds.EditController">
    <opaqueInsets>
       <Insets />
    </opaqueInsets>
    <center>
-      <TableView fx:id="tableRefund" prefHeight="335.0" prefWidth="737.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tableRefundLine" prefHeight="335.0" prefWidth="737.0" BorderPane.alignment="CENTER">
         <columns>
-          <TableColumn fx:id="idRequestOrderColumn" prefWidth="75.0" text="ID Orden de Venta" />
-            <TableColumn fx:id="idComplaintColumn" prefWidth="75.0" text="ID Reclamo" />
-            <TableColumn fx:id="statusColumn" prefWidth="75.0" text="Estado" />
-            <TableColumn fx:id="typeRefundColumn" prefWidth="75.0" text="Tipo Reclamo" />
+         <TableColumn fx:id="productColumn" prefWidth="75.0" text="Producto" />
+         <TableColumn fx:id="orderRequestQuantityColumn" prefWidth="75.0" text="Cantidad de la Orden" />
+         <TableColumn fx:id="quantityColumn" prefWidth="75.0" text="Cantidad Devoluciòn" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
@@ -30,17 +31,10 @@
          </BorderPane.margin>
       </TableView>
    </center>
-   <bottom>
-      <HBox alignment="CENTER" prefHeight="44.0" prefWidth="967.0" BorderPane.alignment="CENTER">
-         <BorderPane.margin>
-            <Insets />
-         </BorderPane.margin>
-      </HBox>
-   </bottom>
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Lista de Devoluciones">
+            <Label text="Editar Devolución">
                <font>
                   <Font size="18.0" />
                </font>
@@ -48,16 +42,32 @@
                   <Insets left="20.0" top="20.0" />
                </HBox.margin>
             </Label>
+            <Label text="Estado :">
+               <font>
+                  <Font size="13.0" />
+               </font>
+               <HBox.margin>
+                  <Insets left="10.0" top="70.0" />
+               </HBox.margin>
+            </Label>
+            <JFXComboBox fx:id="statusField" editable="true" layoutX="510.0" layoutY="124.0" prefHeight="21.0" prefWidth="292.0" >
+               <HBox.margin>
+                  <Insets left="30.0" top="60.0" />
+               </HBox.margin>
+            </JFXComboBox>
          </children>
       </HBox>
    </top>
    <right>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="58.0" layoutY="161.0" mnemonicParsing="false" onAction="#goEditRefund" prefHeight="35.0" prefWidth="85.0" text="Editar" />
+            <Button layoutX="58.0" layoutY="161.0" mnemonicParsing="false" onAction="#editRefund" prefHeight="35.0" prefWidth="85.0" text="Editar" />
             <Button layoutX="58.0" layoutY="224.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
             <Button layoutX="58.0" layoutY="38.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Visualizar" />
          </children>
       </AnchorPane>
    </right>
+   <bottom>
+      <HBox prefHeight="37.0" prefWidth="967.0" BorderPane.alignment="CENTER" />
+   </bottom>
 </BorderPane>

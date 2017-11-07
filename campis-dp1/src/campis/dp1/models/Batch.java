@@ -46,7 +46,7 @@ public class Batch {
         this.arrival_date = arrival_date;
         this.expiration_date = expiration_date;
         this.id_product = id_product;
-        this.type_batch = type_batch;        
+        this.type_batch = type_batch;
         this.location = location;
         this.state = state;
     }
@@ -118,8 +118,7 @@ public class Batch {
     public void setType_batch(int type_batch) {
         this.type_batch = type_batch;
     }
-
-
+    
     public String getLocation() {
         return location;
     }
