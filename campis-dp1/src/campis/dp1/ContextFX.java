@@ -28,6 +28,9 @@ public class ContextFX {
     Integer id = null;
     private User user;
     List aux_list = null;   // Abstract so it can take any kind of arraylist
+    List aux_2nd_list = null;
+    List aux_3rd_list = null;
+    List whMovesProdList = null;
     Integer quantity = null;
     Float totAmount = 0.0f;
     Integer num = 0; // Useful to save any integer variable.
@@ -36,6 +39,29 @@ public class ContextFX {
     ObservableList<ProductDisplay> tempList = FXCollections.observableArrayList();
     ObservableList<BatchDisplay> tempBatchList = FXCollections.observableArrayList();
 
+    int id_user;
+    // Es un desmadre este contexto
+    Integer whMoveType = null;
+    
+    public Integer getWhMoveType(){
+        Integer returnable = new Integer(this.whMoveType);
+        this.whMoveType=null;
+        return returnable;
+    }
+    
+    public void setWhMoveType(int aux){
+        this.whMoveType = new Integer(aux);
+    }
+   
+    public List getWhMovesProdList(){
+        List returnable = new ArrayList<>(this.whMovesProdList);
+        this.whMovesProdList=null;
+        return returnable;
+    }
+    public void setWhMovesProdList(List aux_list){
+        this.whMovesProdList = new ArrayList<>(aux_list);
+    }
+    
     public Integer getNum() {
         Integer returnable = new Integer(this.num);
         return returnable;
@@ -72,6 +98,16 @@ public class ContextFX {
 
     public void setList(List aux_list) {
         this.aux_list = new ArrayList<>(aux_list);
+    }
+    
+    public List get2ndList(){
+        List returnable = new ArrayList<>(this.aux_2nd_list);
+        this.aux_2nd_list = null;
+        return returnable;
+    }
+    
+    public void set2ndList(List aux_2nd_list){
+        this.aux_2nd_list = new ArrayList<>(aux_2nd_list);
     }
 
     public Integer getId() {
@@ -127,5 +163,23 @@ public class ContextFX {
 
     public void setUser(User user) {
         this.user = user;
+        setId_User(user.getId_user());
+    }
+    
+    public List get3rdList(){
+        List returnable = new ArrayList<>(this.aux_3rd_list);
+        this.aux_3rd_list = null;
+        return returnable;
+    }
+
+    public void set3rdList(List num_list) {
+        this.aux_3rd_list=new ArrayList<>(num_list);
+    }
+
+    public int getId_User() {
+        return this.id_user;
+    }
+    public void setId_User(int user){
+        this.id_user = user;
     }
 }

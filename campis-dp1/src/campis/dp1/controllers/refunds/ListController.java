@@ -51,7 +51,7 @@ public class ListController implements Initializable {
             if (newValue == null) {
                 return;
             }
-            this.selected_id = newValue.getId_complaint().getValue().intValue();
+            this.selected_id = newValue.getId_refund().getValue().intValue();
             this.selected_status = newValue.getStatus().getValue().toString();
             }
         );
@@ -97,5 +97,11 @@ public class ListController implements Initializable {
         }
         tableRefund.setItems(null);
         tableRefund.setItems(refundsView);
+    }
+
+    @FXML
+    private void goEditRefund(ActionEvent event) throws IOException {
+        ContextFX.getInstance().setId(selected_id);
+        main.showEditRefund();
     }
 }

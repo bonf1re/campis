@@ -19,6 +19,7 @@ import campis.dp1.models.TabuProblem;
 import campis.dp1.models.TabuSolution;
 import campis.dp1.models.utils.GraphicsUtils;
 import campis.dp1.models.Warehouse;
+import campis.dp1.models.WarehouseZone;
 import campis.dp1.models.routing.Grasp;
 import campis.dp1.models.routing.GraspResults;
 import campis.dp1.models.routing.RouteGen;
@@ -60,6 +61,7 @@ public class DepartureMoveRouteController implements Initializable{
     private int id_warehouse;
     private Warehouse wh;
     private ArrayList<Integer> id_batchesList = new ArrayList<>();
+    private ArrayList<WarehouseZone> zoneList = new ArrayList<>();
     private ObservableList<BatchWH_Move> batchesList;
     private ArrayList<CRack> crackList = new ArrayList<>();
     private CGraph routesGraph = new CGraph();
@@ -92,7 +94,8 @@ public class DepartureMoveRouteController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.id_warehouse = ContextFX.getInstance().getId();
-
+        this.id_batchesList=(ArrayList<Integer>) ContextFX.getInstance().getList();
+        this.zoneList=(ArrayList<WarehouseZone>) ContextFX.getInstance().get2ndList();
         try{
             idCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId_batch()).asObject());
             qtCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getQuantity()).asObject());            
@@ -110,27 +113,7 @@ public class DepartureMoveRouteController implements Initializable{
                         return Integer.parseInt(string);
                     }
                 }));
-            posX.setCellValueFactory(
-                    cellData->cellData.getValue().getPos_x().asObject()
-            );
-            // set column for pos_y
-            posY.setCellFactory(
-                TextFieldTableCell.<BatchWH_Move,Integer>forTableColumn(new StringConverter<Integer>(){
-                    @Override
-                    public String toString(Integer value){
-                        return value.toString();
-                    }
-                    @Override
-                    public Integer fromString(String string){
-                        return Integer.parseInt(string);
-                    }
-                }));
-            posY.setCellValueFactory(
-                    cellData->cellData.getValue().getPos_y().asObject()
-            );
             
-            // make sure table is editable so fields can be edited
-            batchTable.setEditable(true);
             
             
             Configuration configuration = new Configuration();
@@ -176,12 +159,11 @@ public class DepartureMoveRouteController implements Initializable{
     private void batchLoadData(Session session) throws SQLException, ClassNotFoundException{
         // we need to get each batch selected and add it to the table
         this.batchesList = FXCollections.observableArrayList();
-        this.id_batchesList=(ArrayList<Integer>) ContextFX.getInstance().getList();
-        for (Integer integer : id_batchesList) {
+        for (int i=0;i<this.id_batchesList.size();i++) {
             Criteria criteria = session.createCriteria(Batch.class);
-            criteria.add(Restrictions.eq("id_batch",integer));
+            criteria.add(Restrictions.eq("id_batch",id_batchesList.get(i)));
             List rs = criteria.list();
-            this.batchesList.add(new BatchWH_Move((Batch)rs.get(0)));
+            this.batchesList.add(new BatchWH_Move((Batch)rs.get(0),this.zoneList.get(i)));
         }
         batchTable.setItems(null);
         batchTable.setItems(batchesList);
@@ -224,8 +206,8 @@ public class DepartureMoveRouteController implements Initializable{
         ArrayList<Coord> returnable = new ArrayList<>();
         int list_size = aux_list.size();
         for (int i = 0; i < list_size; i++) {
-            int pos_y = aux_list.get(i).getPos_y().get();
-            int pos_x = aux_list.get(i).getPos_x().get();
+            int pos_y = aux_list.get(i).getZone().getPos_y();
+            int pos_x = aux_list.get(i).getZone().getPos_x();   
             System.out.println("[ "+pos_y+", "+pos_x+"]");
             if (pos_y != -1 && pos_x != -1){
                 returnable.add(new Coord(pos_y,pos_x));

@@ -48,6 +48,12 @@
                </font>
             </Label>
             <JFXComboBox fx:id="providerField" layoutX="215.0" layoutY="84.0" prefHeight="26.0" prefWidth="168.0" />
+            <Label layoutX="46.0" layoutY="447.0" text="Motivos:">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
+            <JFXComboBox fx:id="reasonField" layoutX="131.0" layoutY="447.0" prefHeight="26.0" prefWidth="168.0" />
          </children>
       </AnchorPane>
    </right>

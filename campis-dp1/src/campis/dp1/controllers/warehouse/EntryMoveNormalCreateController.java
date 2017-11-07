@@ -11,6 +11,7 @@ import campis.dp1.models.Batch;
 import campis.dp1.models.BatchDisplay;
 import campis.dp1.models.Product;
 import campis.dp1.models.WarehouseMoveDisplay;
+import campis.dp1.models.WarehouseZone;
 import java.awt.Checkbox;
 import java.io.IOError;
 import java.io.IOException;
@@ -74,8 +75,7 @@ public class EntryMoveNormalCreateController implements Initializable{
     @FXML
     private TableColumn<BatchDisplay, Boolean> selCol;
     
-    @FXML
-    private TableColumn<BatchDisplay, Integer> numCol;
+    
         
     
     @Override
@@ -104,22 +104,7 @@ public class EntryMoveNormalCreateController implements Initializable{
             );
             selCol.setCellValueFactory(
                     cellData->cellData.getValue().getSelected()
-            );
-            numCol.setCellFactory(
-                TextFieldTableCell.<BatchDisplay,Integer>forTableColumn(new StringConverter<Integer>(){
-                    @Override
-                    public String toString(Integer value){
-                        return value.toString();
-                    }
-                    @Override
-                    public Integer fromString(String string){
-                        return Integer.parseInt(string);
-                    }
-                }));
-            numCol.setCellValueFactory(
-                    cellData->cellData.getValue().getNumMove().asObject()
-            );;
-            // make sure table is editable so checkbox can be checked n unchecked   
+            ); 
             batchTable.setEditable(true);
             batchLoadData();
         } catch (SQLException | ClassNotFoundException ex) {
@@ -173,7 +158,8 @@ public class EntryMoveNormalCreateController implements Initializable{
     private ArrayList<Integer> getMarked(){
         ArrayList<Integer> returnable = new ArrayList<>();
         // TODO
-        for (BatchDisplay item : batchTable.getItems()) {
+        for (int i=0; i<batchTable.getItems().size();i++) {
+            BatchDisplay item = batchTable.getItems().get(i);
             boolean selected = item.getSelected().getValue();
             if (selected ==  true){
                 returnable.add(item.getId_batch().get());
@@ -182,6 +168,8 @@ public class EntryMoveNormalCreateController implements Initializable{
         
         return returnable;
     }
+
+    
     
     @FXML
     private void goWhEntryMoveNormalCreate() throws IOException{
@@ -193,7 +181,11 @@ public class EntryMoveNormalCreateController implements Initializable{
     @FXML
     private void goWhEntryMoveRoute() throws IOException{
         List aux = getMarked();
+        List zone_sel = getZones(aux.size());
+//        List num_list = getMarkedNum();
         ContextFX.getInstance().setList(aux);
+        ContextFX.getInstance().set2ndList(zone_sel);
+//        ContextFX.getInstance().set3rdList(num_list);
         ContextFX.getInstance().setId(id_warehouse_back);
         main.showWhEntryMoveRoute();
     }
@@ -205,6 +197,50 @@ public class EntryMoveNormalCreateController implements Initializable{
             }
         }
         return " ";
+    }
+
+    private ArrayList<WarehouseZone> getZones(int batch_list_size) {
+        // insert where free
+        // then will add filter per area
+        ArrayList<WarehouseZone> returnable =  new ArrayList<>();
+        // For the moment, we will use pitagoric distance to select the top areas
+        // sorted insert
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(WarehouseZone.class);
+        criteria.add(Restrictions.eq("free",true));
+        List zones = criteria.list();
+        
+        for (int i = 0; i < zones.size(); i++) {
+            WarehouseZone zz = (WarehouseZone) zones.get(i);
+            for (int j = i; j >= 0; j--) {
+                if (j==0){
+                    returnable.add(zz);
+                    break;
+                }
+                int previous = returnable.get(j-1).getPos_x()+returnable.get(j-1).getPos_y();
+                int actual = zz.getPos_x()+zz.getPos_y();
+                if (previous<actual){
+                    returnable.add(j,zz);
+                    break;
+                }
+                if (j==1){
+                    returnable.add(0,zz);
+                    break;
+                }
+            }
+        }
+        session.close();
+        sessionFactory.close();
+//        try{
+        return new ArrayList<WarehouseZone>(returnable.subList(0, batch_list_size));
+//        }catch(Exception e){
+//            return new ArrayList<WarehouseZone>();
+//        }
     }
     
 }

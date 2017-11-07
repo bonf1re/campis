@@ -7,6 +7,7 @@ package campis.dp1.controllers.racks;
 
 import campis.dp1.Main;
 import campis.dp1.models.Rack;
+import campis.dp1.models.WarehouseZone;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
@@ -58,6 +59,29 @@ public class CreateRackController implements Initializable{
 
         session.beginTransaction();
         session.save(r);
+        // create a zone for each column and floor
+        int orientation = r.getOrientation();
+        int init_y = r.getPos_y();
+        int init_x = r.getPos_x();
+        for (int i = 0; i < r.getN_columns(); i++) {
+            for (int j = 0; j < r.getN_floors(); j++) {
+                for (int k = 0; k < 2; k++) {
+                    int y=init_y;
+                    int x=init_x;
+                    int z = j;
+                    if (orientation==0){
+                        x+=i;
+                        y+=k;
+                    }else{
+                        y+=1;
+                        x+=k;
+                    }
+                    WarehouseZone zone =  new WarehouseZone(r.getId_warehouse(), r.getId_rack(), x, y, z, true);
+                    //session.beginTransaction();
+                    session.save(zone);
+                }
+            }
+        }
         session.getTransaction().commit();
         session.close();
         sessionFactory.close();

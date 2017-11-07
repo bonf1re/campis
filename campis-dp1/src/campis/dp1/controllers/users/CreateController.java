@@ -22,6 +22,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -47,6 +48,8 @@ public class CreateController implements Initializable {
     private JFXPasswordField passwordField;
     @FXML
     private JFXComboBox roleField;
+    @FXML
+    private Label passMessage;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         List<Role> roleList = campis.dp1.controllers.users.CreateController.getRoles(); 
@@ -77,23 +80,27 @@ public class CreateController implements Initializable {
  
     @FXML
     public void insertUser() throws IOException {
-        Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-        User user = new User(nameField.getText(), lastnameField.getText(), passwordField.getText(), emailField.getText(),currentTimestamp,true,1,currentTimestamp, usernameField.getText());
-          
-        System.out.print(user.getLastname());
-        System.out.println(user.getCreated_at());
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
+        if (passwordField.getText().length() < 6) {
+            passMessage.setText("Contraseña debe tener mínimo 6 caracteres");
+        } else {
+            Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+            User user = new User(nameField.getText(), lastnameField.getText(), passwordField.getText(), emailField.getText(),currentTimestamp,true,1,currentTimestamp, usernameField.getText());
 
-        session.beginTransaction();
-        session.save(user);
-        session.getTransaction().commit();
-        session.close();
-        sessionFactory.close();
-        main.showListUser();      
+            System.out.print(user.getLastname());
+            System.out.println(user.getCreated_at());
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+
+            session.beginTransaction();
+            session.save(user);
+            session.getTransaction().commit();
+            session.close();
+            sessionFactory.close();
+            main.showListUser();
+        }
     }
 
 }

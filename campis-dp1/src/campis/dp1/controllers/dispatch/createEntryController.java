@@ -64,6 +64,8 @@ public class createEntryController implements Initializable {
     private TableColumn<BatchDisplay, String> expColumn;
     @FXML
     private JFXComboBox<String> providerField;
+    @FXML
+    private JFXComboBox<String> reasonField;
 
     @FXML
     private void goListEntries() throws IOException {
@@ -82,6 +84,7 @@ public class createEntryController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         providerField.getItems().addAll("Ladrillos REX", "Cementos SOL", "Ceramicos CELIMA", "Constructores PEPITO");
+        reasonField.getItems().addAll("Hallazgos", "Devoluciones");
         try {
             id_batch = ContextFX.getInstance().getId();
             batchView = ContextFX.getInstance().getTempBatchList();
@@ -165,16 +168,27 @@ public class createEntryController implements Initializable {
     @FXML
     private void saveBatchEntries(ActionEvent event) throws IOException {
         Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-        String provider = providerField.getValue();
-        ContextFX.getInstance().setWord(provider);
-        int typeOwner = 3;
-        int reason = 3; // Razón de que ha entrado por parte de un proveedor
-        for (int i = 0; i < batchTable.getItems().size(); i++) {
-            int idBatch = batchTable.getItems().get(i).getId_batch().get();
-            Batch b = getBatch(idBatch);
-            updateBatch(idBatch);
-            DispatchMove dispMove = new DispatchMove(typeOwner, 0,currentTimestamp, reason, id_batch, b.getArrival_date());
-            insertDispatchMove(dispMove);
+        provider = providerField.getValue();
+        if (provider == null) {
+            int typeOwner = 4;
+            int reason = 4; // Razón de que ha entrado por parte de hallazgo o devolucion
+            for (int i = 0; i < batchTable.getItems().size(); i++) {
+                int idBatch = batchTable.getItems().get(i).getId_batch().get();
+                Batch b = getBatch(idBatch);
+                updateBatch(idBatch);
+                DispatchMove dispMove = new DispatchMove(typeOwner, 1, currentTimestamp, reason, id_batch, b.getArrival_date());
+                insertDispatchMove(dispMove);
+            }
+        } else {
+            int typeOwner = 3;
+            int reason = 3; // Razón de que ha entrado por parte de un proveedor
+            for (int i = 0; i < batchTable.getItems().size(); i++) {
+                int idBatch = batchTable.getItems().get(i).getId_batch().get();
+                Batch b = getBatch(idBatch);
+                updateBatch(idBatch);
+                DispatchMove dispMove = new DispatchMove(typeOwner, 0, currentTimestamp, reason, id_batch, b.getArrival_date());
+                insertDispatchMove(dispMove);
+            }
         }
         this.goListEntries();
     }
@@ -198,7 +212,7 @@ public class createEntryController implements Initializable {
     private void insertDispatchMove(DispatchMove dispMove) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
