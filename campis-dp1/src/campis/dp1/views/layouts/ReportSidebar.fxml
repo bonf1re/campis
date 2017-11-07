@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.net.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import com.jfoenix.controls.JFXButton?>
+
+
+
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="95.0" styleClass="container" stylesheets="@../../assets/css/sidebar.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.ReportSidebarController">
+    <stylesheets>
+        <URL value="@/campis/dp1/assets/css/kardexconf.css" />
+    </stylesheets>
+    <children>
+      <JFXButton onAction="#goKardexReport" prefHeight="51.0" prefWidth="95.0" styleClass="option" text="Kardex" />
+     
+   </children>
+</VBox>
