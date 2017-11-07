@@ -48,5 +48,4 @@ public class BatchWH_Move extends Batch {
     public BatchWH_Move(){
         super();
     }    
-    
 }
