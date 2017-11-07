@@ -35,19 +35,21 @@ public class RequestOrder {
     Float base_amount;
     Float total_amount;
     Integer id_client;
-    
+    Integer priority;
+
     public RequestOrder() {
         super();
     }
     
     public RequestOrder(Timestamp creation_date, Timestamp delivery_date,
-                        float base_amount, float total_amount, String status, int id_client) {
+                        float base_amount, float total_amount, String status, int id_client,int priority) {
         this.creation_date = creation_date;
         this.delivery_date = delivery_date;
         this.status = status;
         this.base_amount = base_amount;
         this.total_amount = total_amount;
         this.id_client = id_client;
+        this.priority = priority;
     }
     
     public Integer getId_request_order() {
@@ -105,6 +107,15 @@ public class RequestOrder {
     public void setId_client(Integer id_client) {
         this.id_client = id_client;
     }
+    
+    public Integer getPriority() {
+        return priority;
+    }
+
+    public void setPriority(Integer priority) {
+        this.priority = priority;
+    }
+    
 
     public static List<RequestOrderLine> getRequestOrderLines(Integer id) {
         Configuration configuration = new Configuration();

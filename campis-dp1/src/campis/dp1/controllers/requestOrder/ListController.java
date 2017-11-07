@@ -56,6 +56,8 @@ public class ListController implements Initializable{
     private TableColumn<RequestDisplay, Float> amountColumn;
     @FXML
     private TableColumn<RequestDisplay, String> stateColumn;
+    @FXML
+    private TableColumn<RequestDisplay, Integer> priorityColumn;
     
     @FXML
     private void goCreateRequestOrder() throws IOException {
@@ -76,6 +78,7 @@ public class ListController implements Initializable{
         clientColumn.setCellValueFactory(cellData -> cellData.getValue().nomClient());
         amountColumn.setCellValueFactory(cellData -> cellData.getValue().totalAmountProperty().asObject());
         stateColumn.setCellValueFactory(cellData -> cellData.getValue().statusProperty());
+        priorityColumn.setCellValueFactory(cellData -> cellData.getValue().priority().asObject());
         loadData();
         } catch(NullPointerException ex) {
             Logger.getLogger(ListController.class.getName()).log(Level.SEVERE, null, ex);
@@ -90,7 +93,7 @@ public class ListController implements Initializable{
             name = getName(requestList.get(i).getId_client());
             RequestDisplay request = new RequestDisplay(requestList.get(i).getId_request_order(), 
                                     name, requestList.get(i).getTotal_amount(), 
-                                    requestList.get(i).getStatus());
+                                    requestList.get(i).getStatus(),requestList.get(i).getPriority());
             requestView.add(request);
         }
         requestTable.setItems(null);
@@ -191,7 +194,7 @@ public class ListController implements Initializable{
                     name = getName(requestList.get(i).getId_client());
                     RequestDisplay request = new RequestDisplay(requestList.get(i).getId_request_order(), 
                                     name, requestList.get(i).getTotal_amount(), 
-                                    requestList.get(i).getStatus());
+                                    requestList.get(i).getStatus(),requestList.get(i).getPriority());
                     requestView.add(request);
                 }
             }
