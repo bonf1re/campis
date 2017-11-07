@@ -24,6 +24,7 @@
                 <TableColumn fx:id="clientColumn" prefWidth="75.0" text="Cliente" />
                   <TableColumn fx:id="amountColumn" prefWidth="75.0" text="Monto Final" />
                   <TableColumn fx:id="stateColumn" prefWidth="75.0" text="Estado" />
+                  <TableColumn fx:id="priorityColumn" prefWidth="75.0" text="Prioridad" />
               </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
