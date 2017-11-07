@@ -53,11 +53,16 @@
         <mapping class="campis.dp1.models.Client"/>
         <mapping class="campis.dp1.models.Complaint"/>
         <mapping class="campis.dp1.models.Refund"/>
+        <mapping class="campis.dp1.models.RefundLine"/>
         <mapping class="campis.dp1.models.RequestStatus"/>
         <mapping class="campis.dp1.models.RequestOrderLine"/>
+        <mapping class="campis.dp1.models.DispatchMove"/>
+        <mapping class="campis.dp1.models.DispatchOrder"/>
+        <mapping class="campis.dp1.models.DispatchOrderLine"/>
         <mapping class="campis.dp1.models.Campaign"/>
         <mapping class="campis.dp1.models.SaleCondition"/>
         <mapping class="campis.dp1.models.SaleConditionType"/>
+        <mapping class="campis.dp1.models.WarehouseZone"/>
         
     </session-factory>
 

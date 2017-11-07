@@ -28,7 +28,7 @@
                      <Shadow />
                   </effect>
                </JFXButton>
-               <JFXButton styleClass="option" text="Reportes">
+               <JFXButton onAction="#goReport" styleClass="option" text="Reportes">
                   <effect>
                      <Shadow />
                   </effect>

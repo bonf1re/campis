@@ -5,11 +5,17 @@
  */
 package campis.dp1.models;
 
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.Criteria;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -140,6 +146,22 @@ public class Product {
 
     public void setId_product_type(Integer id_product_type) {
         this.id_product_type = id_product_type;
+    }
+
+    public static Product getProduct(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Product.class);
+        criteria.add(Restrictions.eq("id_product",cod));
+        String descrip;
+        List rsMeasure = criteria.list();
+        Product result = (Product)rsMeasure.get(0);
+        sessionFactory.close();
+
+        return result;
     }
     
 }

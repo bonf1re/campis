@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.EntryMoveNormalCreateController">
+   <center>
+      <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <TableView fx:id="batchTable" layoutX="48.0" layoutY="140.0" prefHeight="340.0" prefWidth="875.0">
+              <columns>
+                <TableColumn fx:id="idCol" prefWidth="32.0" text="ID" />
+                  <TableColumn fx:id="prodCol" prefWidth="126.0" text="Producto" />
+                <TableColumn fx:id="qtCol" prefWidth="86.0" text="Cantidad" />
+                  <TableColumn fx:id="arrCol" prefWidth="191.0" text="Llegada" />
+                  <TableColumn fx:id="expCol" prefWidth="197.0" text="Vencimiento" />
+                  <TableColumn fx:id="herCol" prefWidth="125.0" text="Lote/s Padre/s" />
+                  <TableColumn fx:id="selCol" prefWidth="116.0" text="Seleccionado" />
+              </columns>
+            </TableView>
+            <Text layoutX="71.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Entrada a almacén / Seleccionar lotes">
+               <font>
+                  <Font size="28.0" />
+               </font>
+            </Text>
+         </children>
+      </Pane>
+   </center>
+   <bottom>
+      <Pane prefHeight="121.0" prefWidth="967.0" BorderPane.alignment="CENTER">
+         <children>
+            <Button layoutX="441.0" layoutY="48.0" mnemonicParsing="false" onAction="#goWhEntryMoveRoute" text="Siguiente" />
+         </children>
+      </Pane>
+   </bottom>
+</BorderPane>

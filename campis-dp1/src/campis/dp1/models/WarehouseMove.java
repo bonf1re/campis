@@ -29,12 +29,21 @@ public class WarehouseMove {
     private int id_vehicle;
     private int mov_type;
     private int id_warehouse;
+    private int id_batch;
+    
+    public int getId_batch() {
+        return id_batch;
+    }
+
+    public void setId_batch(int id_batch) {
+        this.id_batch = id_batch;
+    }
     
     public WarehouseMove(){
         super();
     }
 
-    public WarehouseMove(Timestamp mov_date, int id_user, int quantity, int id_zone, int id_vehicle, int mov_type, int id_warehouse) {
+    public WarehouseMove(Timestamp mov_date, int id_user, int quantity, int id_zone, int id_vehicle, int mov_type, int id_warehouse,int id_batch) {
         this.mov_date = mov_date;
         this.id_user = id_user;
         this.quantity = quantity;
@@ -42,6 +51,7 @@ public class WarehouseMove {
         this.id_vehicle = id_vehicle;
         this.mov_type = mov_type;
         this.id_warehouse = id_warehouse;
+        this.id_batch=id_batch;
     }
 
     public int getId_warehouse() {
