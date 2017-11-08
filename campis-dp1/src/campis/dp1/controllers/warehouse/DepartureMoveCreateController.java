@@ -148,11 +148,12 @@ public class DepartureMoveCreateController implements Initializable {
     }
     
     public void goWhDepartureMoveRoute() throws IOException{
-        ContextFX.getInstance().setWhMoveType(1);
+        ContextFX.getInstance().setWhMoveType(0);
         List aux_list = getLocations();
         try{
             Batch batch = (Batch) aux_list.get(0);
             System.out.println(batch.getId_batch());
+            System.out.println("raro");
             ContextFX.getInstance().setList(aux_list);
             ContextFX.getInstance().setId(this.id_warehouse);
             main.showWhDepartureMoveRoute();
@@ -200,45 +201,6 @@ public class DepartureMoveCreateController implements Initializable {
     }
 
     private List getLocations() {
-        //ArrayList<Product> prod_ver = new ArrayList<>();
-        
-        // Verification step
-//        for (ProductWH_Move productM : prodList) {
-//            if (prod_ver.size() == 0){
-//                prod_ver.add(productM);
-//                int newStock = prod_ver.get(0).getP_stock()-productM.getQtLt().get()*productM.getNum().get();
-//                if (newStock < 0){
-//                    System.out.println("No hay stock suficiente 1");
-//                    return null;
-//                }
-//                prod_ver.get(0).setP_stock(newStock);
-//            }
-//            else{
-//                int found = 0;
-//                for (Product product : prod_ver) {
-//                    if (product.getId_product() == productM.getId_product()){
-//                        int newStock = product.getP_stock()-productM.getQtLt().get()*productM.getNum().get();
-//                        if (newStock < 0){
-//                            System.out.println("No hay stock suficiente 1");
-//                            return null;
-//                        }
-//                        product.setP_stock(newStock);
-//                        found=1;
-//                    }
-//                }
-//                if (found==0){
-//                    prod_ver.add(productM);
-//                    Product product = prod_ver.get(prod_ver.size()-1);
-//                    int newStock = product.getP_stock()-productM.getQtLt().get()*productM.getNum().get();
-//                        if (newStock < 0){
-//                            System.out.println("No hay stock suficiente 1");
-//                            return null;
-//                        }
-//                        product.setP_stock(newStock);
-//                }
-//            }
-//        }
-        
         ArrayList<BatchWH_Move> returnable = new ArrayList<>();        
         //Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
         Configuration configuration = new Configuration();
@@ -252,6 +214,7 @@ public class DepartureMoveCreateController implements Initializable {
         for (int i = 1; i <= qt_per_prod_size; i++) {
             // Pile up batches until we satisfy the quantity needs of each product
             int prod_id = qt_per_prod[i][0];
+            int prod_num = qt_per_prod[i][1];
             SQLQuery query = session.createSQLQuery(" WITH b as (\n" +
                     "        SELECT * from campis.batch b\n" +
                     "        where type_batch = 3 AND\n" +
@@ -274,7 +237,31 @@ public class DepartureMoveCreateController implements Initializable {
                 int batchQt = Integer.parseInt(row[1].toString());
                 Batch batch = new Batch();
                 batch.setId_batch(Integer.parseInt(row[0].toString()));
+                batch.setId_product(prod_id);
+                batch.setArrival_date(null);
+                batch.setExpiration_date(null);
+                batch.setBatch_cost(Float.parseFloat(row[2].toString()));
+                batch.setQuantity(batchQt);
+                batch.setLocation(" ");
+                batch.setType_batch(3);
+                batch.setState(true);
+                batch.setHeritage(" ");
                 
+                WarehouseZone zone = new WarehouseZone();
+                zone.setFree(false);
+                zone.setId_zone(Integer.parseInt(row[11].toString()));
+                zone.setId_rack(Integer.parseInt(row[12].toString()));
+                zone.setId_warehouse(id_warehouse);
+                zone.setPos_x(Integer.parseInt(row[13].toString()));
+                zone.setPos_y(Integer.parseInt(row[14].toString()));
+                zone.setPos_z(Integer.parseInt(row[15].toString()));
+                
+                int diff = prod_num-batchQt;
+                //save on list
+                returnable.add(new BatchWH_Move(batch,zone));
+                if (diff <= 0){
+                    break;
+                }
             }
             
         }
@@ -282,7 +269,34 @@ public class DepartureMoveCreateController implements Initializable {
     }
 
     private int[][] qtPerProduct() {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        int[][] returnable= new int[100][100];
+        int counter = 0;
+        for (ProductWH_Move productWH_Move : prodList) {
+            if (counter==0){
+                counter++;
+                returnable[counter][0] = productWH_Move.getId_product();
+                returnable[counter][1] = productWH_Move.getNum().get()*productWH_Move.getQtLt().get();
+            }else{
+                counter++;
+                int found=0;
+                for (int i = 1; i < counter; i++) {
+                    if (returnable[i][0]==productWH_Move.getId_product()){
+                        returnable[i][1]+=productWH_Move.getNum().get()*productWH_Move.getQtLt().get();
+                        found=1;
+                        break;
+                    }
+                }
+                if (found==0){
+                    // not found
+                    returnable[counter][0]=productWH_Move.getId_product();
+                    returnable[counter][1]=productWH_Move.getNum().get()*productWH_Move.getQtLt().get();
+                }
+                
+            }
+            
+        }
+        returnable[0][0]=counter;
+        return returnable;
     }
     
     

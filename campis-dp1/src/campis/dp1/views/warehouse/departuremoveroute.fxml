@@ -9,7 +9,7 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.EntryMoveRouteController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.DepartureMoveRouteController">
    <center>
       <Pane prefHeight="200.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
@@ -33,7 +33,7 @@
          <children>
             <Canvas fx:id="mapCanvas" height="376.0" layoutX="34.0" layoutY="91.0" width="544.0" />
             <Button layoutX="233.0" layoutY="537.0" mnemonicParsing="false" onAction="#saveDepartureMove" text="Grabar" />
-            <Button layoutX="330.0" layoutY="537.0" mnemonicParsing="false" onAction="#goDeparteMoveList" text="Cancelar" />
+            <Button layoutX="330.0" layoutY="537.0" mnemonicParsing="false" onAction="#goDepartureMoveList" text="Cancelar" />
             <Text layoutX="281.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mapa" />
          </children>
       </Pane>
