@@ -118,6 +118,7 @@ public class CreateController implements Initializable {
         session.close();
         sessionFactory.close();
         createRequestOrderLine(requestOrder.getId_request_order());
+        //ContextFX.getInstance().setTempList(null);
         this.goListRequestOrder();
     }
     
@@ -203,7 +204,7 @@ public class CreateController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        for (int i = 0; i < num; i++) {
+        for (int i = 0; i < num-1; i++) {
             ProductDisplay prod = tablaProd.getItems().get(i);
             Integer idprod = prod.codProdProperty().getValue();
             Integer quant = prod.cStockProperty().getValue();
