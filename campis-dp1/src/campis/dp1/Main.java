@@ -583,5 +583,18 @@ public class Main extends Application {
         BorderPane addItem = loader.load();
         mainLayout.setCenter(addItem);
     }
-    
+
+    public static void showExpirationReportConf() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/reports/ExpirationConfig.fxml"));
+        BorderPane addItem = loader.load();
+        mainLayout.setCenter(addItem);
+    }
+
+    public static void showGenerateExpirationReport() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/reports/ExpirationReport.fxml"));
+        BorderPane addItem = loader.load();
+        mainLayout.setCenter(addItem);
+    }
 }
