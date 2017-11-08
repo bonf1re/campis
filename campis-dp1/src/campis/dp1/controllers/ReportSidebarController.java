@@ -26,6 +26,10 @@ public class ReportSidebarController implements Initializable {
         main.showKardexReportConf();
     }
     
+    @FXML
+    private void goExpirationReport() throws IOException {
+        main.showExpirationReportConf();
+    }
     /**
      * Initializes the controller class.
      */

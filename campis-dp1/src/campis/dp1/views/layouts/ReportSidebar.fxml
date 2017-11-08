@@ -15,7 +15,7 @@
         <URL value="@/campis/dp1/assets/css/kardexconf.css" />
     </stylesheets>
     <children>
-      <JFXButton onAction="#goKardexReport" prefHeight="51.0" prefWidth="95.0" styleClass="option" text="Kardex" />
-     
+      	<JFXButton onAction="#goKardexReport" prefHeight="51.0" prefWidth="95.0" styleClass="option" text="Kardex" />
+     	<JFXButton onAction="#goExpirationReport" prefHeight="51.0" prefWidth="95.0" styleClass="option" text="Expiración" />
    </children>
 </VBox>
