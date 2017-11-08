@@ -69,6 +69,12 @@ public class AreaListController implements Initializable {
         main.showAreaCreate();
     }
     
+    @FXML
+    private void goAreaEdit() throws IOException{
+        ContextFX.getInstance().setId(this.warehouse_id);
+        main.showAreaEdit();
+    }
+    
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.warehouse_id=ContextFX.getInstance().getId();
