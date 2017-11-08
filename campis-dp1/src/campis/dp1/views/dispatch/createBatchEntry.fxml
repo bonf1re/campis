@@ -9,41 +9,48 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.dispatch.CreateBatchEntryController">
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.dispatch.CreateBatchEntryController">
    <center>
-      <AnchorPane prefHeight="3.0" prefWidth="160.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
             <Label layoutX="45.0" layoutY="54.0" text="Nuevo Lote">
                <font>
                   <Font size="25.0" />
                </font>
             </Label>
-            <Label layoutX="116.0" layoutY="148.0" text="Producto:">
+            <Label layoutX="277.0" layoutY="150.0" text="Producto:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="116.0" layoutY="205.0" prefHeight="21.0" prefWidth="101.0" text="Cantidad:">
+            <Label layoutX="277.0" layoutY="207.0" prefHeight="21.0" prefWidth="101.0" text="Cantidad:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="112.0" layoutY="337.0" text="Fecha de expiracion:">
+            <Label layoutX="277.0" layoutY="394.0" text="Fecha de expiracion:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button layoutX="225.0" layoutY="431.0" mnemonicParsing="false" onAction="#insertBatchEntry" prefHeight="35.0" prefWidth="85.0" text="Guardar" />
-            <Button layoutX="371.0" layoutY="431.0" mnemonicParsing="false" onAction="#goNewEntry" prefHeight="35.0" prefWidth="85.0" text="Cancelar" />
-            <JFXComboBox fx:id="prodField" layoutX="363.0" layoutY="130.0" prefHeight="31.0" prefWidth="169.0" />
-            <JFXTextField fx:id="quantityField" layoutX="363.0" layoutY="187.0" prefHeight="31.0" prefWidth="168.0" />
-            <Label layoutX="116.0" layoutY="266.0" prefHeight="27.0" prefWidth="144.0" text="Fecha de ingreso:">
+            <Button layoutX="386.0" layoutY="502.0" mnemonicParsing="false" onAction="#insertBatchEntry" prefHeight="35.0" prefWidth="85.0" text="Guardar" />
+            <Button layoutX="532.0" layoutY="502.0" mnemonicParsing="false" onAction="#goNewEntry" prefHeight="35.0" prefWidth="85.0" text="Cancelar" />
+            <JFXComboBox fx:id="prodField" layoutX="524.0" layoutY="148.0" prefHeight="31.0" prefWidth="169.0" />
+            <JFXTextField fx:id="quantityField" layoutX="525.0" layoutY="205.0" prefHeight="31.0" prefWidth="168.0" />
+            <Label layoutX="277.0" layoutY="323.0" prefHeight="27.0" prefWidth="144.0" text="Fecha de ingreso:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <JFXDatePicker fx:id="arrivalDateField" layoutX="363.0" layoutY="248.0" />
-            <JFXDatePicker fx:id="expDateField" layoutX="363.0" layoutY="319.0" />
+            <JFXDatePicker fx:id="arrivalDateField" layoutX="529.0" layoutY="324.0" prefHeight="25.0" prefWidth="193.0" />
+            <JFXDatePicker fx:id="expDateField" layoutX="527.0" layoutY="390.0" prefHeight="30.0" prefWidth="197.0" />
+            <Label layoutX="277.0" layoutY="273.0" prefHeight="27.0" prefWidth="135.0" text="Precio del Lote:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Label>
+            <JFXTextField fx:id="batchPriceField" layoutX="609.0" layoutY="271.0" prefHeight="31.0" prefWidth="84.0" />
+            <JFXComboBox fx:id="currencyField" layoutX="525.0" layoutY="271.0" prefHeight="31.0" prefWidth="56.0" />
          </children>
       </AnchorPane>
    </center>

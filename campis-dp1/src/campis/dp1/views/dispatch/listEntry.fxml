@@ -32,9 +32,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button layoutX="842.0" layoutY="294.0" mnemonicParsing="false" onAction="#goNewEntry" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
-            <Button layoutX="832.0" layoutY="201.0" mnemonicParsing="false" onAction="#goVisualizeEntry" prefHeight="35.0" prefWidth="105.0" text="Ver detalle" />
-            <Button layoutX="842.0" layoutY="387.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
+            <Button layoutX="842.0" layoutY="266.0" mnemonicParsing="false" onAction="#goNewEntry" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
          </children>
       </AnchorPane>
    </center>

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-/*package campis.dp1.controllers.entries;
+package campis.dp1.controllers.entries;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
@@ -31,7 +31,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
-*/
+
 /**
  * FXML Controller class
  *
