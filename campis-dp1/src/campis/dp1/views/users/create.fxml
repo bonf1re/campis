@@ -56,8 +56,6 @@
                   <Font size="16.0" />
                </font>
             </JFXTextField>
-            <JFXComboBox fx:id="roleField" editable="true" layoutX="384.0" layoutY="434.0" prefHeight="37.0" prefWidth="399.0" />
-            <JFXPasswordField fx:id="passwordField" layoutX="386.0" layoutY="305.0" prefHeight="25.0" prefWidth="400.0" />
             <JFXTextField fx:id="lastnameField" layoutX="387.0" layoutY="184.0" prefHeight="21.0" prefWidth="399.0">
                <font>
                   <Font size="16.0" />
@@ -68,16 +66,18 @@
                   <Font size="16.0" />
                </font>
             </JFXTextField>
-            <Label layoutX="204.0" layoutY="370.0" text="Correo">
-               <font>
-                  <Font size="16.0" />
-               </font>
-            </Label>
+            <JFXPasswordField fx:id="passwordField" layoutX="386.0" layoutY="305.0" prefHeight="25.0" prefWidth="400.0" />
             <JFXTextField fx:id="emailField" layoutX="384.0" layoutY="370.0" prefHeight="21.0" prefWidth="399.0">
                <font>
                   <Font size="16.0" />
                </font>
             </JFXTextField>
+            <JFXComboBox fx:id="roleField" editable="true" layoutX="384.0" layoutY="434.0" prefHeight="37.0" prefWidth="399.0" />
+            <Label layoutX="204.0" layoutY="370.0" text="Correo">
+               <font>
+                  <Font size="16.0" />
+               </font>
+            </Label>
             <Label fx:id="passMessage" layoutX="392.0" layoutY="346.0" prefHeight="17.0" prefWidth="395.0" textFill="#f80000" />
          </children>
       </AnchorPane>
