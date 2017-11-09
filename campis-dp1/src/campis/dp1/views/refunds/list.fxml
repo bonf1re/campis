@@ -56,7 +56,6 @@
          <children>
             <Button layoutX="58.0" layoutY="161.0" mnemonicParsing="false" onAction="#goEditRefund" prefHeight="35.0" prefWidth="85.0" text="Editar" />
             <Button layoutX="58.0" layoutY="224.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
-            <Button layoutX="58.0" layoutY="38.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Visualizar" />
          </children>
       </AnchorPane>
    </right>

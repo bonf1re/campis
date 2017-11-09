@@ -72,13 +72,13 @@
             </Button>
          </children>
       </HBox>
-   </top>
+   </top> 
    <right>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
             <Button layoutX="58.0" layoutY="101.0" mnemonicParsing="false" onAction="#goCreateClient" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
             <Button layoutX="58.0" layoutY="161.0" mnemonicParsing="false" onAction="#goEditClient" prefHeight="35.0" prefWidth="85.0" text="Editar" />
-            <Button layoutX="58.0" layoutY="224.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
+            <Button layoutX="58.0" layoutY="224.0" mnemonicParsing="false" onAction="#deleteClient" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
             <Button layoutX="58.0" layoutY="38.0" mnemonicParsing="false" onAction="#goShowClient" prefHeight="35.0" prefWidth="85.0" text="Visualizar" />
          </children>
       </AnchorPane>
