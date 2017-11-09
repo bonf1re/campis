@@ -82,6 +82,8 @@ public class CreateController implements Initializable {
     private JFXTextField codClientField;
     @FXML
     private JFXComboBox<String> statesField;
+    @FXML
+    private JFXComboBox<String> priorityField;
 
     @FXML
     private void goAddItem() throws IOException {
@@ -98,6 +100,7 @@ public class CreateController implements Initializable {
         SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date_creation = getDate(creationDate.getValue());
         Date date_delivery = getDate(deliveryDate.getValue());
+        int prior =  Integer.parseInt(priorityField.getValue());
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
@@ -109,12 +112,13 @@ public class CreateController implements Initializable {
                                     Float.parseFloat(amountField.getText()), 
                                     Float.parseFloat(amountField.getText()),
                                     (String)statesField.getValue(), 
-                                    Integer.parseInt(codClientField.getText()));
+                                    Integer.parseInt(codClientField.getText()),prior);
         session.save(requestOrder);
         session.getTransaction().commit();
         session.close();
         sessionFactory.close();
         createRequestOrderLine(requestOrder.getId_request_order());
+        //ContextFX.getInstance().setTempList(null);
         this.goListRequestOrder();
     }
     
@@ -160,6 +164,7 @@ public class CreateController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         try {
             statesField.getItems().addAll("ENTREGADO","CANCELADO","EN PROGRESO");
+            priorityField.getItems().addAll("1","2","3");
             id = ContextFX.getInstance().getId();
             quantity = ContextFX.getInstance().getQuantity();
             num = ContextFX.getInstance().getNum();
@@ -199,7 +204,7 @@ public class CreateController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        for (int i = 0; i < num; i++) {
+        for (int i = 0; i < num-1; i++) {
             ProductDisplay prod = tablaProd.getItems().get(i);
             Integer idprod = prod.codProdProperty().getValue();
             Integer quant = prod.cStockProperty().getValue();

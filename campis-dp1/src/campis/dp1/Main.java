@@ -174,6 +174,27 @@ public class Main extends Application {
         mainLayout.setCenter(listProd);
     }
     
+    public static void showAreaCreate() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/areacreate.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
+    
+    public static void showAreaEdit() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/areaedit.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
+    
+    public static void showAreaList() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/arealist.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
+    
     public static void showCreateProductType() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/productTypes/create.fxml"));
@@ -598,6 +619,20 @@ public class Main extends Application {
         BorderPane addItem = loader.load();
         mainLayout.setCenter(addItem);
     }
-    
+
+
+    public static void showExpirationReportConf() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/reports/ExpirationConfig.fxml"));
+        BorderPane addItem = loader.load();
+        mainLayout.setCenter(addItem);
+    }
+
+    public static void showGenerateExpirationReport() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/reports/ExpirationReport.fxml"));
+        BorderPane addItem = loader.load();
+        mainLayout.setCenter(addItem);
+    }
 
 }
