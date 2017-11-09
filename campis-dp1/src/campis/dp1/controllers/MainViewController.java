@@ -1,16 +1,32 @@
 package campis.dp1.controllers;
 
+import campis.dp1.ContextFX;
 import javafx.fxml.FXML;
 import campis.dp1.Main;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 
 
 /**
  *
  * @author Marco
  */
-public class MainViewController {
+public class MainViewController implements Initializable {
     private Main main;
+    @FXML
+    private Label user_name;
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        try {
+            user_name.setText(ContextFX.getInstance().getUser().getFirstname());
+        } catch(NullPointerException e) {
+        }
+    }
+
     @FXML
     private void goSecurity() throws IOException {
         main.showSecuritySidebar();
@@ -100,5 +116,10 @@ public class MainViewController {
     @FXML
     private void goListRequestStatuses() throws IOException {
         main.showListRequestStatuses();
+    }
+
+    @FXML
+    private void goLogin() throws IOException {
+        main.showLogin();
     }
 }
