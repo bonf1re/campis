@@ -36,6 +36,7 @@ public class Product {
     Float base_price;
     Integer id_unit_of_measure;
     Integer id_product_type;
+    Integer max_qt=40;
     
     public Product() {
         super();
@@ -147,6 +148,16 @@ public class Product {
     public void setId_product_type(Integer id_product_type) {
         this.id_product_type = id_product_type;
     }
+
+    public Integer getMax_qt() {
+        return max_qt;
+    }
+
+    public void setMax_qt(Integer max_qt) {
+        this.max_qt = max_qt;
+    }
+    
+    
 
     public static Product getProduct(int cod) {
         Configuration configuration = new Configuration();
