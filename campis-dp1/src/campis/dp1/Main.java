@@ -618,4 +618,12 @@ public class Main extends Application {
         BorderPane addItem = loader.load();
         mainLayout.setCenter(addItem);
     }
+    
+    public static void showListCampaigns() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/campaigns/list.fxml"));
+        BorderPane listCampaigns = loader.load();
+        mainLayout.setCenter(listCampaigns);
+    }
+    
 }

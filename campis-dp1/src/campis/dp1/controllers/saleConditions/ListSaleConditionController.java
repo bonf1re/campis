@@ -361,6 +361,11 @@ public class ListSaleConditionController implements Initializable {
     }
     
     @FXML
+    private void goCampaigns(ActionEvent event) throws IOException {
+        main.showListCampaigns();
+    }
+    
+    @FXML
     private void goViewSaleCondition(ActionEvent event) throws IOException {
         ContextFX.getInstance().setId(selected_id);
         main.showViewSaleCondition();
