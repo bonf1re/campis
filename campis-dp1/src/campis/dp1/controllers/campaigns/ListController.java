@@ -72,6 +72,11 @@ public class ListController implements Initializable {
         main.showListSaleConditions();
     }
     
+    @FXML
+    private void goCreateCampaign(ActionEvent event) throws IOException {
+        main.showCreateCampaign();
+    }
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         // TODO
@@ -108,9 +113,17 @@ public class ListController implements Initializable {
         camps = getCampaigns();
         
         for (int i = 0; i < camps.size(); i++) {
-
+            String dI,dF;
+            if (camps.get(i).getId_campaign() == 0){
+                dI="";
+                dF="";
+            }else{
+                dI=camps.get(i).getInitial_date().toString();
+                dF=camps.get(i).getFinal_date().toString();
+            }
+                          
             CampaignDisplay campD = new CampaignDisplay(camps.get(i).getId_campaign(), camps.get(i).getName() ,
-                    camps.get(i).getDescription(), camps.get(i).getInitial_date().toString(), camps.get(i).getFinal_date().toString());
+                    camps.get(i).getDescription(), dI, dF);
             campsView.add(campD);
         }
         CampaignsTable.setItems(null);

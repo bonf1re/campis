@@ -5,12 +5,13 @@
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.layout.AnchorPane?>
-<?import javafx.scene.text.Font?>
 <?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
 
-
-<BorderPane prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.campaigns.ListController">
-   <children>
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.campaigns.ListController">
+   <center>
+      <AnchorPane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
+    <children>
       <Label layoutX="77.0" layoutY="43.0" text="Campañas">
          <font>
             <Font size="20.0" />
@@ -22,12 +23,17 @@
           <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Nombre" />
             <TableColumn fx:id="descriptionColumn" prefWidth="75.0" text="Descripción" />
             <TableColumn fx:id="initColumn" prefWidth="75.0" text="Fecha Inicial" />
-            <TableColumn fx:id="endColumn" prefWidth="75.0" text="Fecha FInal" />
+            <TableColumn fx:id="endColumn" prefWidth="75.0" text="Fecha Final" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
          </columnResizePolicy>
       </TableView>
       <Button layoutX="382.0" layoutY="513.0" mnemonicParsing="false" onAction="#goSaleConditions" prefHeight="35.0" prefWidth="88.0" text="Regresar" />
+            <Button layoutX="801.0" layoutY="348.0" mnemonicParsing="false"  prefHeight="35.0" prefWidth="88.0" text="Eliminar" />
+            <Button layoutX="801.0" layoutY="265.0" mnemonicParsing="false"  prefHeight="35.0" prefWidth="88.0" text="Editar" />
+            <Button layoutX="801.0" layoutY="177.0" mnemonicParsing="false" onAction="#goCreateCampaign" prefHeight="35.0" prefWidth="88.0" text="Nuevo" />
    </children>
+   </AnchorPane>
+   </center>
 </BorderPane>

@@ -626,4 +626,13 @@ public class Main extends Application {
         mainLayout.setCenter(listCampaigns);
     }
     
+    public static void showCreateCampaign() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/campaigns/create.fxml"));
+        BorderPane newCampaign = loader.load();
+        mainLayout.setCenter(newCampaign);
+    }
+    
+    
+    
 }
