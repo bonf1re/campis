@@ -11,6 +11,7 @@ import campis.dp1.models.ReportKardexDisplay;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -123,6 +124,8 @@ public class KardexReportController implements Initializable {
     
     
     private void cargarData() throws SQLException, ClassNotFoundException {
+        Date i = ContextFX.getInstance().getInit_date();
+        Date e = ContextFX.getInstance().getEnd_date();
         
         //prep
         Configuration configuration = new Configuration();
@@ -133,13 +136,13 @@ public class KardexReportController implements Initializable {
         session.beginTransaction();
         
         
-        SQLQuery query = session.createSQLQuery(""
+        String queryStr = ""
                 + "WITH movs as (\n" +
                 "        SELECT id_movement,mov_date,id_user,quantity,id_vehicle,mov_type,id_warehouse,id_zone,id_batch\n" +
-                "        FROM campis.movement\n" +
-             /*   "        WHERE\n" +
-                "          mov_date >= now() - '100 days'::interval AND\n" +
-                "          mov_date <= now() + '100 days'::interval\n" + */
+                "        FROM campis.movement\n";
+        queryStr +="        WHERE\n" +
+                "          mov_date >= '"+i.toGMTString()+"' AND\n" +
+                "          mov_date <= '"+e.toGMTString()+"'\n" +
                 "), movs_users_products as (\n" +
                 "        SELECT \n" +
                 "               movs.id_movement,\n" +
@@ -185,9 +188,18 @@ public class KardexReportController implements Initializable {
                 "                ELSE 'Salida'\n" +
                 "        END AS mov_type\n" +
                 "    from movs_users_products mup, movs_location ml\n" +
-                "    where mup.id_movement = ml.id_movement" +
-                "    order by mov_date");
+                "    where mup.id_movement = ml.id_movement\n";
+        if (ContextFX.getInstance().getId_type() == 1){
+            queryStr += "and mup.id_product_type = " + ContextFX.getInstance().getId_objective().toString();
+        }else if (ContextFX.getInstance().getId_type() == 2){
+            queryStr += "and mup.id_product = " + ContextFX.getInstance().getId_objective().toString();
+        }
         
+        queryStr +=" order by mov_date";
+        
+        
+        
+        SQLQuery query = session.createSQLQuery(queryStr);
         List<Object[]> rows = query.list();
         
         
