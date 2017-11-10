@@ -245,7 +245,8 @@ public class EditController implements Initializable {
             ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
                     products.get(0).getDescription(), products.get(0).getP_stock(), list.get(i).getQuantity(),
                     amount, state, products.get(0).getBase_price(),
-                    products.get(0).getId_unit_of_measure(), products.get(0).getId_product_type());
+                    products.get(0).getId_unit_of_measure(), 
+                    products.get(0).getId_product_type(), products.get(0).getMax_qt());
             productsView.add(prod);
         }
         ContextFX.getInstance().setTempList(productsView);
@@ -268,7 +269,8 @@ public class EditController implements Initializable {
         ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
                 products.get(0).getDescription(), products.get(0).getP_stock(), quantity,
                 amount, state, products.get(0).getBase_price(),
-                products.get(0).getId_unit_of_measure(), products.get(0).getId_product_type());
+                products.get(0).getId_unit_of_measure(), 
+                products.get(0).getId_product_type(), products.get(0).getMax_qt());
         productsView.add(prod);
         ContextFX.getInstance().setTempList(productsView);
         productsView = ContextFX.getInstance().getTempList();
