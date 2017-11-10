@@ -30,13 +30,15 @@
             <JFXComboBox fx:id="currencyType" editable="true" layoutX="393.0" layoutY="235.0" prefHeight="22.0" prefWidth="78.0" />
             <JFXTextField fx:id="nameField" layoutX="393.0" layoutY="72.0" prefHeight="21.0" prefWidth="399.0" />
             <JFXTextField fx:id="priceField" layoutX="487.0" layoutY="235.0" prefHeight="22.0" prefWidth="129.0" />
-            <JFXComboBox fx:id="measureField" editable="true" layoutX="505.0" layoutY="120.0" prefHeight="26.0" prefWidth="292.0" />
+            <JFXComboBox fx:id="measureField" editable="true" layoutX="466.0" layoutY="120.0" prefHeight="26.0" prefWidth="127.0" />
             <JFXComboBox fx:id="typeField" editable="true" layoutX="393.0" layoutY="292.0" prefHeight="24.0" prefWidth="399.0" />
             <JFXTextArea fx:id="descripField" layoutX="392.0" layoutY="414.0" prefHeight="62.0" prefWidth="402.0" />
             <Label layoutX="213.0" layoutY="364.0" prefHeight="25.0" prefWidth="163.0" text="Fecha de Vencimiento :" />
             <JFXDatePicker layoutX="393.0" layoutY="364.0" prefHeight="19.0" prefWidth="283.0" />
-            <JFXTextField fx:id="weightField" layoutX="396.0" layoutY="119.0" prefHeight="28.0" prefWidth="91.0" />
+            <JFXTextField fx:id="weightField" layoutX="396.0" layoutY="119.0" prefHeight="28.0" prefWidth="49.0" />
             <JFXTextField fx:id="trademarkField" layoutX="394.0" layoutY="176.0" prefHeight="21.0" prefWidth="399.0" />
+            <Label layoutX="622.0" layoutY="120.0" prefHeight="25.0" prefWidth="108.0" text="Cantidad máxima:" />
+            <JFXTextField fx:id="maxQTField" layoutX="745.0" layoutY="119.0" prefHeight="28.0" prefWidth="49.0" />
          </children>
       </AnchorPane>
    </center>

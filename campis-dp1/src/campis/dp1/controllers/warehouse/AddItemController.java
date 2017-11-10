@@ -129,7 +129,7 @@ public class AddItemController implements Initializable{
                     ProductDisplay prod = new ProductDisplay(products.get(i).getId_product(), products.get(i).getName(),
                             products.get(i).getDescription(), products.get(i).getP_stock(), products.get(i).getC_stock(),
                             products.get(i).getWeight(), products.get(i).getTrademark(), products.get(i).getBase_price(),
-                            products.get(i).getId_unit_of_measure(), products.get(i).getId_product_type());
+                            products.get(i).getId_unit_of_measure(), products.get(i).getId_product_type(), products.get(i).getMax_qt());
                     productsView.add(prod);
                 }
                tableProd.setItems(null);

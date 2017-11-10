@@ -28,9 +28,10 @@ public class ProductDisplay {
     private final FloatProperty base_price;
     private final IntegerProperty id_unit_of_measure;
     private final IntegerProperty id_product_type;
+    private final IntegerProperty max_qt;
     
     public ProductDisplay(Integer codProd, String nombre, String descripcion, int phy_stock, int comm_stock,
-                    float peso, String marca, float precio_base, int medida, int type) {
+                    float peso, String marca, float precio_base, int medida, int type, int max_qt) {
         this.id_product = new SimpleIntegerProperty(codProd);
         this.name = new SimpleStringProperty(nombre);
         this.description = new SimpleStringProperty(descripcion);
@@ -41,6 +42,7 @@ public class ProductDisplay {
         this.base_price = new SimpleFloatProperty(precio_base);
         this.id_unit_of_measure = new SimpleIntegerProperty(medida);
         this.id_product_type = new SimpleIntegerProperty(type);
+        this.max_qt = new SimpleIntegerProperty(max_qt);
     }
     
     public IntegerProperty codProdProperty() {
@@ -83,4 +85,7 @@ public class ProductDisplay {
         return id_product_type;
     }
     
+    public IntegerProperty max_qtProperty() {
+        return max_qt;
+    }
 }

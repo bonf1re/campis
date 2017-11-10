@@ -126,7 +126,7 @@ public class ListController implements Initializable {
             ProductDisplay prod = new ProductDisplay(productos.get(i).getId_product(), productos.get(i).getName(),
                     productos.get(i).getDescription(), productos.get(i).getP_stock(), productos.get(i).getC_stock(),
                     productos.get(i).getWeight(), productos.get(i).getTrademark(), productos.get(i).getBase_price(),
-                    productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type());
+                    productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type(),productos.get(i).getMax_qt());
             productosView.add(prod);
         }
         tablaProd.setItems(null);
@@ -170,7 +170,7 @@ public class ListController implements Initializable {
                     ProductDisplay prod = new ProductDisplay(productos.get(i).getId_product(), productos.get(i).getName(),
                             productos.get(i).getDescription(), productos.get(i).getP_stock(), productos.get(i).getC_stock(),
                             productos.get(i).getWeight(), productos.get(i).getTrademark(), productos.get(i).getBase_price(),
-                            productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type());
+                            productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type(), productos.get(i).getMax_qt());
                     productosView.add(prod);
                 }
             }

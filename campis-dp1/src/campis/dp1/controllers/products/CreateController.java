@@ -54,6 +54,8 @@ public class CreateController implements Initializable {
     private JFXTextArea descripField;
     @FXML
     private JFXComboBox currencyType;
+    @FXML
+    private JFXTextField maxQtField;
     
     @FXML
     private void goListProduct() throws IOException{
@@ -111,7 +113,7 @@ public class CreateController implements Initializable {
         int type = searchCodType(typeField.getEditor().getText());
         
         Product product = new Product(nameField.getText(), descripField.getText(), 1, 1, Float.parseFloat(weightField.getText()),
-                                     trademarkField.getText(), Float.parseFloat(priceField.getText()), measure, type);
+                                     trademarkField.getText(), Float.parseFloat(priceField.getText()), measure, type, Integer.parseInt(maxQtField.getText()));
         
         session.save(product);
         session.getTransaction().commit();
