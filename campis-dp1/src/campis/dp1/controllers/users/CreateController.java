@@ -28,6 +28,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Projections;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.transform.Transformers;
 
 /**
@@ -50,6 +51,14 @@ public class CreateController implements Initializable {
     private JFXComboBox roleField;
     @FXML
     private Label passMessage;
+    @FXML
+    private Label emailMessage;
+    @FXML
+    private Label roleMessage;
+    @FXML
+    private Label userMessage;
+    @FXML
+    private Label nameMessage;
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         List<Role> roleList = campis.dp1.controllers.users.CreateController.getRoles(); 
@@ -77,17 +86,59 @@ public class CreateController implements Initializable {
         List<Role> types = criteria.list();
         return types;
     }
+
+    public static Integer searchCodRole(String type) throws SQLException, ClassNotFoundException {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Role.class);
+        criteria.add(Restrictions.eq("description",type));
+        Integer codType;
+        List rsType = criteria.list();
+        Role result = (Role) rsType.get(0);
+        codType = result.getId_role();
+        session.close();
+        sessionFactory.close();
+        return codType;
+    }
+
+    public boolean validation() {
+        boolean nameValid = nameField.getText().length() == 0;
+        boolean passValid = passwordField.getText().length() < 6;
+        boolean userValid = usernameField.getText().length() == 0;
+        boolean emailValid = emailField.getText().length() == 0;
+        boolean roleValid = roleField.getEditor().getText().length() == 0;
+        
+        passMessage.setText("");
+        nameMessage.setText("");
+        userMessage.setText("");
+        emailMessage.setText("");
+        roleMessage.setText("");
+
+        if (passValid)
+            passMessage.setText("Contraseña debe tener mínimo 6 caracteres");
+        if (nameValid)
+            nameMessage.setText("Campo obligatorio");
+        if (userValid)
+            userMessage.setText("Campo obligatorio");
+        if(emailValid)
+            emailMessage.setText("Campo obligatorio");
+        if(roleValid)
+            roleMessage.setText("Campo obligatorio");
+
+        return (!nameValid && !passValid && !userValid && !emailValid && !roleValid);
+    }
  
     @FXML
-    public void insertUser() throws IOException {
-        if (passwordField.getText().length() < 6) {
-            passMessage.setText("Contraseña debe tener mínimo 6 caracteres");
-        } else {
+    public void insertUser() throws IOException, SQLException, ClassNotFoundException {
+        if (validation()) {
             Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-            User user = new User(nameField.getText(), lastnameField.getText(), passwordField.getText(), emailField.getText(),currentTimestamp,true,1,currentTimestamp, usernameField.getText());
+            int id_role = searchCodRole(roleField.getEditor().getText());
+            User user = new User(nameField.getText(), lastnameField.getText(), passwordField.getText(), emailField.getText(), currentTimestamp, true, id_role, currentTimestamp, usernameField.getText());
 
-            System.out.print(user.getLastname());
-            System.out.println(user.getCreated_at());
             Configuration configuration = new Configuration();
             configuration.configure("hibernate.cfg.xml");
             configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
