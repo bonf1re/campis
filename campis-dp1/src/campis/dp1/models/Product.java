@@ -36,13 +36,14 @@ public class Product {
     Float base_price;
     Integer id_unit_of_measure;
     Integer id_product_type;
+    Integer max_qt;
     
     public Product() {
         super();
     }
     
     public Product(String nombre, String descripcion, int phy_stock, int comm_stock,
-                    float peso, String marca, float precio_base, int medida, int type) {
+                    float peso, String marca, float precio_base, int medida, int type, int max_qt) {
         this.name = nombre;
         this.description = descripcion;
         this.p_stock = phy_stock;
@@ -52,6 +53,7 @@ public class Product {
         this.base_price = precio_base;
         this.id_unit_of_measure = medida;
         this.id_product_type = type;
+        this.max_qt = max_qt;
     }
     
     public Product(Integer codProd , String nombre, String descripcion, int phy_stock, int comm_stock,
@@ -146,6 +148,14 @@ public class Product {
 
     public void setId_product_type(Integer id_product_type) {
         this.id_product_type = id_product_type;
+    }
+    
+    public Integer getMax_qt() {
+        return max_qt;
+    }
+
+    public void setMax_qt(Integer max_qt) {
+        this.max_qt = max_qt;
     }
 
     public static Product getProduct(int cod) {

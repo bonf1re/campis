@@ -7,6 +7,7 @@ package campis.dp1.controllers.requestOrder;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
+import campis.dp1.models.Client;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.RequestOrder;
@@ -15,6 +16,8 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.text.ParseException;
@@ -30,8 +33,10 @@ import java.util.ResourceBundle;
 import java.util.TimeZone;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
@@ -49,13 +54,13 @@ public class CreateController implements Initializable {
     Main main;
     Integer id, quantity;
     Integer num = 0;
-    float totalAmount = 0; 
+    float totalAmount = 0;
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView = FXCollections.observableArrayList();
-       
+
     @FXML
     private JFXTextField amountField;
-    
+
     @FXML
     private TableView<ProductDisplay> tablaProd;
     @FXML
@@ -79,11 +84,19 @@ public class CreateController implements Initializable {
     @FXML
     private JFXDatePicker deliveryDate;
     @FXML
-    private JFXTextField codClientField;
-    @FXML
     private JFXComboBox<String> statesField;
     @FXML
     private JFXComboBox<String> priorityField;
+    @FXML
+    private JFXTextField subtotalField;
+    @FXML
+    private JFXTextField discountField;
+    @FXML
+    private JFXComboBox<Integer> clientField;
+    @FXML
+    private Label messageField1;
+    @FXML
+    private Label messageField2;
 
     @FXML
     private void goAddItem() throws IOException {
@@ -94,38 +107,44 @@ public class CreateController implements Initializable {
     private void goListRequestOrder() throws IOException {
         main.showListRequestOrder();
     }
-    
+
     @FXML
     private void createRequestOrder() throws IOException, ParseException {
         SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date_creation = getDate(creationDate.getValue());
         Date date_delivery = getDate(deliveryDate.getValue());
-        int prior =  Integer.parseInt(priorityField.getValue());
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        RequestOrder requestOrder = new RequestOrder(Timestamp.valueOf(formatIn.format(date_creation)), 
-                                    Timestamp.valueOf((String)formatIn.format(date_delivery)), 
-                                    Float.parseFloat(amountField.getText()), 
-                                    Float.parseFloat(amountField.getText()),
-                                    (String)statesField.getValue(), 
-                                    Integer.parseInt(codClientField.getText()),prior);
-        session.save(requestOrder);
-        session.getTransaction().commit();
-        session.close();
-        sessionFactory.close();
-        createRequestOrderLine(requestOrder.getId_request_order());
-        //ContextFX.getInstance().setTempList(null);
-        this.goListRequestOrder();
+        Boolean verify = verifyDates(date_creation, date_delivery);
+        if (verify == TRUE) {
+            int prior = Integer.parseInt(priorityField.getValue());
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+            RequestOrder requestOrder = new RequestOrder(Timestamp.valueOf(formatIn.format(date_creation)),
+                    Timestamp.valueOf((String) formatIn.format(date_delivery)),
+                    Float.parseFloat(subtotalField.getText()),
+                    Float.parseFloat(amountField.getText()),
+                    (String) statesField.getValue(),
+                    clientField.getValue(), prior);
+            session.save(requestOrder);
+            session.getTransaction().commit();
+            session.close();
+            sessionFactory.close();
+            createRequestOrderLine(requestOrder.getId_request_order());
+            ContextFX.getInstance().setTempList(null);
+            this.goListRequestOrder();
+        } else {
+            messageField1.setText("Fecha debe ser mayor a la actual");
+            messageField2.setText("Fecha debe ser mayor a la fecha de creación");
+        }
     }
-    
+
     private ObservableList<Product> getProduct(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -135,6 +154,8 @@ public class CreateController implements Initializable {
         ObservableList<Product> returnable;
         returnable = FXCollections.observableArrayList();
         returnable.add(list.get(0));
+        session.close();
+        sessionFactory.close();
         return returnable;
     }
 
@@ -142,17 +163,19 @@ public class CreateController implements Initializable {
         products = FXCollections.observableArrayList();
         productsView = ContextFX.getInstance().getTempList();
         products = getProduct(cod);
-        Float amount = quant*products.get(0).getBase_price();
+        Float amount = quant * products.get(0).getBase_price();
         String state = "ENTREGA";
         totalAmount = ContextFX.getInstance().getTotAmount();
         totalAmount = totalAmount + amount;
         ContextFX.getInstance().setTotAmount(totalAmount);
+        this.subtotalField.setText(Float.toString(totalAmount));
         this.amountField.setText(Float.toString(totalAmount));
-        
+
         ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
                 products.get(0).getDescription(), products.get(0).getP_stock(), quantity,
                 amount, state, products.get(0).getBase_price(),
-                products.get(0).getId_unit_of_measure(), products.get(0).getId_product_type());
+                products.get(0).getId_unit_of_measure(), products.get(0).getId_product_type(),
+                products.get(0).getMax_qt());
         productsView.add(prod);
         ContextFX.getInstance().setTempList(productsView);
         productsView = ContextFX.getInstance().getTempList();
@@ -160,11 +183,34 @@ public class CreateController implements Initializable {
         tablaProd.setItems(productsView);
     }
 
+    private List<Client> getClients() {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Client.class);
+        List<Client> list = criteria.list();
+        List<Client> returnable;
+        returnable = FXCollections.observableArrayList();
+        for (int i = 0; i < list.size(); i++) {
+            returnable.add(list.get(i));
+        }
+        session.close();
+        sessionFactory.close();
+        return returnable;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            statesField.getItems().addAll("ENTREGADO","CANCELADO","EN PROGRESO");
-            priorityField.getItems().addAll("1","2","3");
+            statesField.getItems().addAll("ENTREGADO", "CANCELADO", "EN PROGRESO");
+            priorityField.getItems().addAll("1", "2", "3");
+            List<Client> clients = getClients();
+            for (int i = 0; i < clients.size(); i++) {
+                clientField.getItems().add(clients.get(i).getId_client());
+            }
             id = ContextFX.getInstance().getId();
             quantity = ContextFX.getInstance().getQuantity();
             num = ContextFX.getInstance().getNum();
@@ -177,7 +223,7 @@ public class CreateController implements Initializable {
             unitaryAmountColumn.setCellValueFactory(cellData -> cellData.getValue().precioBProperty().asObject());
             finalAmountColumn.setCellValueFactory(cellData -> cellData.getValue().pesoProperty().asObject());
             stateColumn.setCellValueFactory(cellData -> cellData.getValue().marcaProperty());
-            loadData(id,quantity);
+            loadData(id, quantity);
         } catch (NullPointerException e) {
             idColumn.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
             nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
@@ -190,21 +236,21 @@ public class CreateController implements Initializable {
     }
 
     private Date getDate(LocalDate value) {
-        
+
         Calendar calendar = new GregorianCalendar(value.getYear(),
-                                                    value.getMonthValue(),
-                                                    value.getDayOfMonth());
+                value.getMonthValue(),
+                value.getDayOfMonth());
         return calendar.getTime();
     }
 
     private void createRequestOrderLine(int codReqOrd) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        for (int i = 0; i < num-1; i++) {
+        for (int i = 0; i < tablaProd.getItems().size(); i++) {
             ProductDisplay prod = tablaProd.getItems().get(i);
             Integer idprod = prod.codProdProperty().getValue();
             Integer quant = prod.cStockProperty().getValue();
@@ -215,6 +261,40 @@ public class CreateController implements Initializable {
         session.getTransaction().commit();
         session.close();
         sessionFactory.close();
+    }
+
+    @FXML
+    private void setNameClientAction(ActionEvent event) {
+        int codCli = clientField.getValue();
+        String name = getClient(codCli);
+        nameClientField.setText(name);
+    }
+
+    private String getClient(int codCli) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(Client.class);
+        criteria.add(Restrictions.eq("id_client", codCli));
+        List<Client> list = criteria.list();
+        String returnable = list.get(0).getName();
+        session.close();
+        sessionFactory.close();
+        return returnable;
+    }
+
+    private Boolean verifyDates(Date creation, Date delivery) {
+        Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+        Boolean flag = TRUE;
+        if (creation.compareTo(currentTimestamp) <= 0) {
+            flag = FALSE;
+        }
+        if (delivery.compareTo(creation) < 0) {
+            flag = FALSE;
+        }
+        return flag;
     }
 
 }

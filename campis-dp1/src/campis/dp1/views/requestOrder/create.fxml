@@ -48,7 +48,6 @@
             <Button layoutX="840.0" layoutY="356.0" mnemonicParsing="false" onAction="#createRequestOrder" prefHeight="35.0" prefWidth="85.0" text="Crear" />
             <Button layoutX="839.0" layoutY="408.0" mnemonicParsing="false" onAction="#goListRequestOrder" prefHeight="35.0" prefWidth="87.0" text="Cancelar" />
             <Label layoutX="515.0" layoutY="73.0" text="Código Cliente:" />
-            <JFXTextField fx:id="codClientField" layoutX="632.0" layoutY="73.0" prefHeight="25.0" prefWidth="82.0" />
             <Label layoutX="156.0" layoutY="177.0" text="Estado:" />
             <JFXComboBox fx:id="statesField" layoutX="273.0" layoutY="173.0" prefHeight="25.0" prefWidth="167.0" />
             <Label layoutX="504.0" layoutY="177.0" text="Prioridad:" />
@@ -57,6 +56,9 @@
             <Label layoutX="555.0" layoutY="495.0" text="Cargos / Descuentos:" />
             <JFXTextField fx:id="amountField" layoutX="678.0" layoutY="524.0" />
             <Label layoutX="599.0" layoutY="528.0" text="Monto Total:" />
+            <JFXComboBox fx:id="clientField" layoutX="633.0" layoutY="73.0" onAction="#setNameClientAction" />
+            <Label fx:id="messageField1" layoutX="271.0" layoutY="165.0" prefHeight="17.0" prefWidth="165.0" textFill="RED" />
+            <Label fx:id="messageField2" layoutX="596.0" layoutY="165.0" prefHeight="17.0" prefWidth="165.0" textFill="#fc0000" />
          </children>
       </AnchorPane>
    </bottom>
