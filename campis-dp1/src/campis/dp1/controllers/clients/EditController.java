@@ -19,6 +19,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import javafx.scene.control.Label;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
@@ -43,34 +44,68 @@ public class EditController implements Initializable{
     private JFXTextField emailField;
     @FXML
     private JFXTextField addressField;
+    @FXML
+    private Label nameMessage;
+    @FXML
+    private Label emailMessage;
+    @FXML
+    private Label dniMessage;
+    @FXML
+    private Label rucMessage;
 
     @FXML
     private void goListClient() throws IOException {
         main.showListClient();
     }
 
+    public boolean validation() {
+        boolean nameValid = nameField.getText().length() == 0;
+        boolean docValid = (dniField.getText().length() == 0) && (rucField.getText().length() == 0);
+        boolean emailValid = emailField.getText().length() == 0;
+        
+        dniMessage.setText("");
+        nameMessage.setText("");
+        rucMessage.setText("");
+        emailMessage.setText("");
+
+        if (nameValid)
+            nameMessage.setText("Campo obligatorio");
+
+        if (docValid) {
+            dniMessage.setText("DNI o RUC obligatorio");
+            rucMessage.setText("DNI o RUC obligatorio");
+        }
+
+        if(emailValid)
+            emailMessage.setText("Campo obligatorio");
+
+        return (!nameValid && !docValid && !emailValid);
+    }
+
     @FXML
     private void updateClient (ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Query query = session.createQuery("update Client set name = :newDescription, dni = :newDni, ruc = :newRuc"
-                + " , phone = :newPhone, email = :newEmail, address = :newAddress where id_client = :oldIdClient");
-        query.setParameter("newDescription", nameField.getText());
-        query.setParameter("newDni", dniField.getText());
-        query.setParameter("newRuc", rucField.getText());
-        query.setParameter("newPhone", phoneField.getText());
-        query.setParameter("newEmail", emailField.getText());
-        query.setParameter("newAddress", addressField.getText());
-        query.setParameter("oldIdClient", id);
-        int result = query.executeUpdate();
-        session.getTransaction().commit();
-        session.close();
-        sessionFactory.close();
-        this.goListClient();
+        if (validation()) {
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+            Query query = session.createQuery("update Client set name = :newDescription, dni = :newDni, ruc = :newRuc"
+                    + " , phone = :newPhone, email = :newEmail, address = :newAddress where id_client = :oldIdClient");
+            query.setParameter("newDescription", nameField.getText());
+            query.setParameter("newDni", dniField.getText());
+            query.setParameter("newRuc", rucField.getText());
+            query.setParameter("newPhone", phoneField.getText());
+            query.setParameter("newEmail", emailField.getText());
+            query.setParameter("newAddress", addressField.getText());
+            query.setParameter("oldIdClient", id);
+            int result = query.executeUpdate();
+            session.getTransaction().commit();
+            session.close();
+            sessionFactory.close();
+            this.goListClient();
+        }
     }
 
     @Override

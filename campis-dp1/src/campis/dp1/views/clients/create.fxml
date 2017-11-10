@@ -30,6 +30,10 @@
             <JFXTextField fx:id="phoneField" layoutX="398.0" layoutY="230.0" prefHeight="21.0" prefWidth="399.0" />
             <JFXTextField fx:id="addressField" layoutX="400.0" layoutY="288.0" prefHeight="21.0" prefWidth="399.0" />
             <JFXTextField fx:id="emailField" layoutX="398.0" layoutY="344.0" prefHeight="21.0" prefWidth="399.0" />
+            <Label fx:id="nameMessage" layoutX="400.0" layoutY="96.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />
+            <Label fx:id="emailMessage" layoutX="400.0" layoutY="377.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />
+            <Label fx:id="dniMessage" layoutX="400.0" layoutY="149.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />
+            <Label fx:id="rucMessage" layoutX="400.0" layoutY="206.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />
          </children>
       </AnchorPane>
    </center>
