@@ -633,6 +633,17 @@ public class Main extends Application {
         mainLayout.setCenter(newCampaign);
     }
     
+    public static void showEditCampaign() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/campaigns/edit.fxml"));
+        BorderPane campaign = loader.load();
+        mainLayout.setCenter(campaign);
+    }
+    
+    public static void showViewCampaign() throws IOException {
+
+    }
+    
     
     
 }

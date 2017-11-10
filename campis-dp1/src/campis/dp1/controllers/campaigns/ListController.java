@@ -5,10 +5,12 @@
  */
 package campis.dp1.controllers.campaigns;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.controllers.saleConditions.ListSaleConditionController;
 import campis.dp1.models.Campaign;
 import campis.dp1.models.CampaignDisplay;
+import campis.dp1.models.Product;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -75,6 +77,19 @@ public class ListController implements Initializable {
     @FXML
     private void goCreateCampaign(ActionEvent event) throws IOException {
         main.showCreateCampaign();
+    }
+    
+
+    @FXML
+    private void goEditCampaign(ActionEvent event) throws IOException {
+        ContextFX.getInstance().setId(selected_id);
+        main.showEditCampaign();
+    }
+    
+    @FXML
+    private void goViewCampaign(ActionEvent event) throws IOException {
+        ContextFX.getInstance().setId(selected_id);
+        main.showViewCampaign();
     }
     
     @Override
@@ -148,4 +163,24 @@ public class ListController implements Initializable {
         sessionFactory.close();
         return returnable;
     }
+    
+    @FXML
+    private void deleteCampaign(ActionEvent event) throws SQLException, ClassNotFoundException {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Campaign.class);
+        Campaign c = new Campaign();
+        c.setId_campaign(selected_id);
+        session.delete(c);
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
+        
+        cargarData();
+    }
+    
 }

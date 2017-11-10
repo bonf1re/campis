@@ -30,8 +30,8 @@
          </columnResizePolicy>
       </TableView>
       <Button layoutX="382.0" layoutY="513.0" mnemonicParsing="false" onAction="#goSaleConditions" prefHeight="35.0" prefWidth="88.0" text="Regresar" />
-            <Button layoutX="801.0" layoutY="348.0" mnemonicParsing="false"  prefHeight="35.0" prefWidth="88.0" text="Eliminar" />
-            <Button layoutX="801.0" layoutY="265.0" mnemonicParsing="false"  prefHeight="35.0" prefWidth="88.0" text="Editar" />
+            <Button layoutX="801.0" layoutY="348.0" mnemonicParsing="false" onAction="#deleteCampaign" prefHeight="35.0" prefWidth="88.0" text="Eliminar" />
+            <Button layoutX="801.0" layoutY="265.0" mnemonicParsing="false" onAction="#goEditCampaign" prefHeight="35.0" prefWidth="88.0" text="Editar" />
             <Button layoutX="801.0" layoutY="177.0" mnemonicParsing="false" onAction="#goCreateCampaign" prefHeight="35.0" prefWidth="88.0" text="Nuevo" />
    </children>
    </AnchorPane>
