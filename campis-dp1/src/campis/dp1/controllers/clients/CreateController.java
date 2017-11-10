@@ -9,6 +9,7 @@ import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import org.hibernate.Session;
+import javafx.scene.control.Label;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -45,21 +46,47 @@ public class CreateController implements Initializable {
         main.showListClient();
     }
     
+    public boolean validation() {
+        boolean nameValid = nameField.getText().length() == 0;
+        boolean docValid = (dniField.getText().length() == 0) && (rucField.getText().length() == 0);
+        boolean emailValid = emailField.getText().length() == 0;
+        
+        dniMessage.setText("");
+        nameMessage.setText("");
+        rucMessage.setText("");
+        emailMessage.setText("");
+
+        if (nameValid)
+            nameMessage.setText("Campo obligatorio");
+
+        if (docValid) {
+            dniMessage.setText("DNI o RUC obligatorio");
+            rucMessage.setText("DNI o RUC obligatorio");
+        }
+
+        if(emailValid)
+            emailMessage.setText("Campo obligatorio");
+
+        return (!nameValid && !docValid && !emailValid);
+    }
+
     @FXML
     private void insertClient() throws IOException {
-        Client client = new Client(nameField.getText(), dniField.getText(), rucField.getText(), phoneField.getText(), emailField.getText(), addressField.getText());
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
+        if (validation()) {
+            Client client = new Client(nameField.getText(), dniField.getText(), rucField.getText(), addressField.getText(), phoneField.getText(), emailField.getText());
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
 
-        session.beginTransaction();
-        session.save(client);
-        session.getTransaction().commit();
-        session.close();
-        sessionFactory.close();
-        main.showListClient();
+            session.beginTransaction();
+            session.save(client);
+            session.getTransaction().commit();
+            session.close();
+            sessionFactory.close();
+            main.showListClient();
+        }
     } 
     
     /**
