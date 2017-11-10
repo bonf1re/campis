@@ -32,7 +32,7 @@ public class User {
     Integer id_role;
     Timestamp updated_at;
     String username;
-    
+
     public User(){
         super();
     }
