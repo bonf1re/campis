@@ -67,6 +67,10 @@
                   <Font size="15.0" />
                </font>
             </Label>
+            <Label fx:id="emailMessage" layoutX="449.0" layoutY="442.0" prefHeight="17.0" prefWidth="395.0" textFill="#f80000" />
+            <Label fx:id="roleMessage" layoutX="449.0" layoutY="377.0" prefHeight="17.0" prefWidth="395.0" textFill="#f80000" />
+            <Label fx:id="userMessage" layoutX="449.0" layoutY="325.0" prefHeight="17.0" prefWidth="395.0" textFill="#f80000" />
+            <Label fx:id="nameMessage" layoutX="451.0" layoutY="216.0" prefHeight="17.0" prefWidth="395.0" textFill="#f80000" />
             <JFXTextField fx:id="emailField" layoutX="449.0" layoutY="395.0" prefHeight="21.0" prefWidth="399.0">
                <font>
                   <Font size="16.0" />

@@ -56,7 +56,7 @@
           <TableColumn fx:id="namesColumn" prefWidth="75.0" text="Nombres" />
             <TableColumn fx:id="usernameColumn" prefWidth="75.0" text="Usuario" />
             <TableColumn fx:id="emailColumn" prefWidth="75.0" text="Correo" />
-            <TableColumn prefWidth="75.0" text="Acciones" />
+            <TableColumn fx:id="statusColumn" prefWidth="75.0" text="Estado" />
         </columns>
          <BorderPane.margin>
             <Insets bottom="10.0" left="20.0" right="10.0" top="20.0" />
