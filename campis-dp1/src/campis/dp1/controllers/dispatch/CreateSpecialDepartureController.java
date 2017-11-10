@@ -32,6 +32,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javax.persistence.Query;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -284,6 +285,7 @@ public class CreateSpecialDepartureController implements Initializable {
             for (int i = 0; i < batchDepartureTable.getItems().size(); i++) {
                 id_batch = batchDepartureTable.getItems().get(i).getId_batch().getValue();
                 createDeparture(id_type_owner, id_owner, idReason, id_batch);
+                if (idReason==2) updateBatch(id_batch,idReason);
             }
             this.goListDepartures();
         } else {
@@ -295,8 +297,8 @@ public class CreateSpecialDepartureController implements Initializable {
                 idReason = 1;
             }
             for (int i = 0; i < batchDepartureTable.getItems().size(); i++) {
-                id_batch = batchDepartureTable.getItems().get(i).getId_batch().getValue();
-                createDeparture(id_type_owner, id_owner, idReason, id_batch);
+                id_batch = batchDepartureTable.getItems().get(i).getId_batch().getValue();                
+                int newType = 1;                
             }
             this.goListDepartures();
         }
@@ -342,6 +344,21 @@ public class CreateSpecialDepartureController implements Initializable {
         List<Product> list = criteria.list();
         Integer meas = list.get(0).getId_unit_of_measure();
         return meas;
+    }
+    
+    private void updateBatch(int idBatch,int newType) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("update Batch set type_batch = :newTypeBatch where id_batch = :oldIdBatch");
+        query.setParameter("newTypeBatch", newType);
+        query.setParameter("oldIdBatch", idBatch);
+        int result = query.executeUpdate();
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
     }
 
 }

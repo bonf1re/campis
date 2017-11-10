@@ -175,7 +175,7 @@ public class createEntryController implements Initializable {
             for (int i = 0; i < batchTable.getItems().size(); i++) {
                 int idBatch = batchTable.getItems().get(i).getId_batch().get();
                 Batch b = getBatch(idBatch);
-                int newType = 2;
+                int newType = 1;
                 updateBatch(idBatch,newType);
                 DispatchMove dispMove = new DispatchMove(typeOwner, 1, currentTimestamp, reason, id_batch, b.getArrival_date());
                 insertDispatchMove(dispMove);
