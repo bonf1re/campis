@@ -43,6 +43,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Conjunction;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -150,13 +151,15 @@ public class CreateNormalDepartureController implements Initializable {
         int cod = Integer.parseInt(dispatchField.getValue());
         dispatchOrLine = getListDisp(cod);
         for (int i = 0; i < dispatchOrLine.size(); i++) {
-            Batch batchAux = getBatch(dispatchOrLine.get(i).getId_prod());
-            batch.add(batchAux);
+            List<Batch> batchAux = getBatch(dispatchOrLine.get(i).getId_prod());
+            for (int j = 0; j < batchAux.size(); j++) {
+                batch.add(batchAux.get(j));
+            }
         }
         loadData(batch);
     }
 
-    private Batch getBatch(int codBatch) {
+    private List<Batch> getBatch(int codProd) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
@@ -164,9 +167,15 @@ public class CreateNormalDepartureController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Batch.class);
-        criteria.add(Restrictions.eq("id_product", codBatch));
-        List list = criteria.list();
-        Batch returnable = (Batch) list.get(0);
+        Conjunction objCriteria = Restrictions.conjunction();
+        objCriteria.add(Restrictions.eq("id_product", codProd));
+        objCriteria.add(Restrictions.eq("type_batch", 1));
+        criteria.add(objCriteria);
+        List<Batch> list = criteria.list();
+        List<Batch> returnable = FXCollections.observableArrayList();
+        for (int i = 0; i < list.size(); i++) {
+            returnable.add(list.get(i));
+        }
         session.close();
         sessionFactory.close();
         return returnable;
@@ -212,28 +221,27 @@ public class CreateNormalDepartureController implements Initializable {
 
     private void loadData(ObservableList<Batch> batch) {
         batchView = FXCollections.observableArrayList();
-        batchListAux = getListBatch();
-        for (int i = 0; i < batch.size(); i++) {
-            String nameProd = getNameProd(batch.get(i).getId_product());
-            int meas = getIntMeasure(batch.get(i).getId_product());
-            String measure = getMeasure(meas);
-            for (int j = 0; j < batchListAux.size(); j++) {
-                if (batchListAux.get(j).getId_product() == batch.get(i).getId_product()) {
-                    batch.get(i).setQuantity(batchListAux.get(j).getQuantity());
-                    BatchDisplay batchDisp = new BatchDisplay(batch.get(i).getId_product(), batch.get(i).getQuantity(),
+        //batchListAux = getListBatch();
+        for (int j = 0; j < dispatchOrLine.size(); j++) {
+            for (int i = 0; i < batch.size(); i++) {
+                String nameProd = getNameProd(batch.get(i).getId_product());
+                int meas = getIntMeasure(batch.get(i).getId_product());
+                String measure = getMeasure(meas);
+                if (dispatchOrLine.get(j).getId_prod() == batch.get(i).getId_product()) {
+                    BatchDisplay batchDisp = new BatchDisplay(batch.get(i).getId_batch(), dispatchOrLine.get(j).getQuantity(),
                             batch.get(i).getBatch_cost(), batch.get(i).getArrival_date().toString(),
-                            batch.get(i).getExpiration_date().toString(), batchListAux.get(j).getQuantity(),
+                            batch.get(i).getExpiration_date().toString(), batch.get(i).getQuantity(),
                             batch.get(i).getType_batch(), nameProd,
                             Boolean.toString(batch.get(i).isState()), measure);
                     batchView.add(batchDisp);
-                } else {
+                }/* else {
                     BatchDisplay batchDisp = new BatchDisplay(batch.get(i).getId_product(), batch.get(i).getQuantity(),
                             batch.get(i).getBatch_cost(), batch.get(i).getArrival_date().toString(),
                             batch.get(i).getExpiration_date().toString(), 0,
                             batch.get(i).getType_batch(), nameProd,
                             Boolean.toString(batch.get(i).isState()), measure);
                     batchView.add(batchDisp);
-                }
+                }*/
             }
         }
         departureZoneTable.setItems(null);
@@ -247,8 +255,7 @@ public class CreateNormalDepartureController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Criteria criteria = session.createCriteria(Product.class
-        );
+        Criteria criteria = session.createCriteria(Product.class);
         criteria.add(Restrictions.eq("id_product", id_product));
         List list = criteria.list();
         Product prod = (Product) list.get(0);
@@ -263,13 +270,30 @@ public class CreateNormalDepartureController implements Initializable {
         ContextFX.getInstance().setId(id_selected);
         addBatch();
     }
-
+    
+    private Batch getOneBatch(int idBatch) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Batch.class);
+        criteria.add(Restrictions.eq("id_batch", idBatch));
+        List list = criteria.list();
+        Batch returnable = (Batch) list.get(0);
+        session.close();
+        sessionFactory.close();
+        return returnable;
+    }
+    
     private void addBatch() {
-        Integer idProd = ContextFX.getInstance().getId();
+        Integer idBatch = ContextFX.getInstance().getId();
+        Batch auxi = getOneBatch(idBatch);
         batch = FXCollections.observableArrayList();
         batch = getListBatch();
         for (int i = 0; i < batch.size(); i++) {
-            if (idProd.compareTo(batch.get(i).getId_product()) == 0) {
+            if (auxi.getId_batch() == batch.get(i).getId_batch()) {
                 String nameProd = getNameProd(batch.get(i).getId_product());
                 int meas = getIntMeasure(batch.get(i).getId_product());
                 String measure = getMeasure(meas);
@@ -281,12 +305,13 @@ public class CreateNormalDepartureController implements Initializable {
                 batchView2.add(batchDisp);
                 num = num + 1;
                 for (int j = 0; j < batchView.size(); j++) {
-                    if (idProd.compareTo(batchView.get(j).getId_batch().getValue()) == 0) {
+                    if (auxi.getId_batch() == batchView.get(j).getId_batch().getValue()) {
                         batchView.remove(j);
                     }
                 }
             }
         }
+        
         batchDepartureTable.setItems(null);
         batchDepartureTable.setItems(batchView2);
         departureZoneTable.setItems(null);
@@ -303,7 +328,7 @@ public class CreateNormalDepartureController implements Initializable {
             dispatchField.getItems().clear();
         }
     }
-    
+
     private Integer getCli(int codRequest) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -314,11 +339,11 @@ public class CreateNormalDepartureController implements Initializable {
         Criteria criteria = session.createCriteria(RequestOrder.class);
         criteria.add(Restrictions.eq("id_request_order", codRequest));
         List list = criteria.list();
-        RequestOrder rq = (RequestOrder)list.get(0);
+        RequestOrder rq = (RequestOrder) list.get(0);
         Integer returnable = rq.getId_client();
         return returnable;
     }
-    
+
     private Integer getIdClient(int codDispatch) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -329,13 +354,13 @@ public class CreateNormalDepartureController implements Initializable {
         Criteria criteria = session.createCriteria(DispatchOrder.class);
         criteria.add(Restrictions.eq("id_dispatch_order", codDispatch));
         List list = criteria.list();
-        DispatchOrder disp = (DispatchOrder)list.get(0);
+        DispatchOrder disp = (DispatchOrder) list.get(0);
         session.close();
         sessionFactory.close();
         Integer idClient = getCli(disp.getId_request_order());
         return idClient;
     }
-    
+
     private void updateBatch(int codBatch) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -350,7 +375,7 @@ public class CreateNormalDepartureController implements Initializable {
         session.close();
         sessionFactory.close();
     }
-    
+
     @FXML
     private void goCreateDeparture(ActionEvent event) throws IOException {
         String dispatchOrder = this.dispatchField.getValue();
@@ -383,7 +408,7 @@ public class CreateNormalDepartureController implements Initializable {
         session.close();
         //createDispatchOrderLine(dispatch.getId_dispatch_move());
     }
-    
+
     /*private void createDispatchOrderLine(int codDispathMove) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -396,7 +421,6 @@ public class CreateNormalDepartureController implements Initializable {
             
         }
     }*/
-
     private Integer getIntMeasure(int id_product) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -421,8 +445,7 @@ public class CreateNormalDepartureController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Criteria criteria = session.createCriteria(DispatchOrder.class
-        );
+        Criteria criteria = session.createCriteria(DispatchOrder.class);
         ObservableList<DispatchOrder> returnable = FXCollections.observableArrayList();
         List list = criteria.list();
         for (int i = 0; i < list.size(); i++) {
