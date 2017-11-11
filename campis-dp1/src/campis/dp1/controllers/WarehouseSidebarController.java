@@ -5,16 +5,31 @@
  */
 package campis.dp1.controllers;
 
+import campis.dp1.ContextFX;
 import javafx.fxml.FXML;
 import campis.dp1.Main;
+import campis.dp1.models.Permission;
+import campis.dp1.models.View;
 import java.io.IOException;
+import java.net.URL;
+import java.util.ResourceBundle;
+import javafx.fxml.Initializable;
 
 /**
  *
  * @author Gina Bustamante
  */
-public class WarehouseSidebarController {
+public class WarehouseSidebarController implements Initializable {
     private Main main;
+    private int id_role;
+
+    @Override
+    public void initialize(URL url, ResourceBundle rb) {
+        try {
+            id_role = (ContextFX.getInstance().getUser().getId_role());
+        } catch(NullPointerException e) {
+        }
+    }
     
     @FXML
     private void goWhList() throws IOException{
@@ -23,7 +38,9 @@ public class WarehouseSidebarController {
     
     @FXML
     private void goListProduct() throws IOException {
-        main.showListProduct();
+        View view = View.getView("products");
+        if (Permission.canVisualize(id_role, view.getId_view()))
+            main.showListProduct();
     }
     
     @FXML
