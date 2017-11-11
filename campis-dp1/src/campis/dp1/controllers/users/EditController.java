@@ -24,6 +24,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -48,6 +49,14 @@ public class EditController implements Initializable {
     private JFXTextField emailField;
     @FXML
     private JFXComboBox roleField;
+    @FXML
+    private Label emailMessage;
+    @FXML
+    private Label roleMessage;
+    @FXML
+    private Label userMessage;
+    @FXML
+    private Label nameMessage;
     
     @FXML
     private void goListUser() throws IOException {
@@ -92,30 +101,54 @@ public class EditController implements Initializable {
         return descripType;
     }
 
+    public boolean validation() {
+        boolean nameValid = nameField.getText().length() == 0;
+        boolean userValid = usernameField.getText().length() == 0;
+        boolean emailValid = emailField.getText().length() == 0;
+        boolean roleValid = roleField.getEditor().getText().length() == 0;
+
+        nameMessage.setText("");
+        userMessage.setText("");
+        emailMessage.setText("");
+        roleMessage.setText("");
+
+        if (nameValid)
+            nameMessage.setText("Campo obligatorio");
+        if (userValid)
+            userMessage.setText("Campo obligatorio");
+        if(emailValid)
+            emailMessage.setText("Campo obligatorio");
+        if(roleValid)
+            roleMessage.setText("Campo obligatorio");
+
+        return (!nameValid && !userValid && !emailValid && !roleValid);
+    }
+
     @FXML
     private void editUser (ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
-        
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        int id_role = searchIdRole(roleField.getEditor().getText());
-        Query query = session.createQuery("update User set firstname = :newFirstname,lastname = :newLastname,"
-                + "email=:newEmail,username=:newUsername,id_role=:newId_role where id_user = :oldIdProd");
-        query.setParameter("newFirstname", nameField.getText());
-        query.setParameter("newLastname", lastnameField.getText());
-        query.setParameter("newEmail", emailField.getText());
-        query.setParameter("newUsername", usernameField.getText());
-        query.setParameter("newId_role", id_role);
-        query.setParameter("oldIdProd", id);
-        int result = query.executeUpdate();
-        
-        session.getTransaction().commit();
+        if (validation()) {
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+            int id_role = searchIdRole(roleField.getEditor().getText());
+            Query query = session.createQuery("update User set firstname = :newFirstname,lastname = :newLastname,"
+                    + "email=:newEmail,username=:newUsername,id_role=:newId_role where id_user = :oldIdProd");
+            query.setParameter("newFirstname", nameField.getText());
+            query.setParameter("newLastname", lastnameField.getText());
+            query.setParameter("newEmail", emailField.getText());
+            query.setParameter("newUsername", usernameField.getText());
+            query.setParameter("newId_role", id_role);
+            query.setParameter("oldIdProd", id);
+            int result = query.executeUpdate();
+            
+            session.getTransaction().commit();
 
-        sessionFactory.close();
-        this.goListUser();
+            sessionFactory.close();
+            this.goListUser();
+        }
     }
     
     @Override

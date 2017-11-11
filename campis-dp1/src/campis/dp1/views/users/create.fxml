@@ -79,6 +79,10 @@
                </font>
             </Label>
             <Label fx:id="passMessage" layoutX="392.0" layoutY="346.0" prefHeight="17.0" prefWidth="395.0" textFill="#f80000" />
+            <Label fx:id="emailMessage" layoutX="384.0" layoutY="417.0" prefHeight="17.0" prefWidth="395.0" textFill="#f80000" />
+            <Label fx:id="roleMessage" layoutX="384.0" layoutY="480.0" prefHeight="17.0" prefWidth="395.0" textFill="#f80000" />
+            <Label fx:id="userMessage" layoutX="384.0" layoutY="283.0" prefHeight="17.0" prefWidth="395.0" textFill="#f80000" />
+            <Label fx:id="nameMessage" layoutX="389.0" layoutY="176.0" prefHeight="17.0" prefWidth="395.0" textFill="#f80000" />
          </children>
       </AnchorPane>
    </bottom>

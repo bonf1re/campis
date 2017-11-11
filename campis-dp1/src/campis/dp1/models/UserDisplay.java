@@ -14,13 +14,15 @@ public class UserDisplay {
     private final StringProperty names;
     private final StringProperty email;
     private final StringProperty username;
+    final StringProperty statusname;
 
-    public UserDisplay(int id, String firstname, String lastname, String email, String username) {
-        String names = firstname + ", " + lastname;
+    public UserDisplay(int id, String firstname, String lastname, String email, String username, boolean status) {
+        String names = firstname + " "  + lastname;
         this.id_user = new SimpleIntegerProperty(id);
         this.names = new SimpleStringProperty(names);
         this.email = new SimpleStringProperty(email);
         this.username = new SimpleStringProperty(username);
+        this.statusname = new SimpleStringProperty(((status) ? "Activo" : "Inactivo"));
     }
     
     public IntegerProperty idUserProperty() {
@@ -37,5 +39,12 @@ public class UserDisplay {
 
     public StringProperty usernameProperty() {
         return username;
+    }
+
+    /**
+     * @return the statusname
+     */
+    public StringProperty getStatusname() {
+        return statusname;
     }
 }
