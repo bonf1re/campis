@@ -13,6 +13,7 @@ import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.RequestDisplay;
 import campis.dp1.models.RequestOrder;
 import campis.dp1.models.RequestOrderLine;
+import campis.dp1.models.SaleCondition;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
@@ -30,8 +31,10 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javax.naming.Context;
 import javax.persistence.Query;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -50,6 +53,8 @@ public class EditController implements Initializable {
     Integer codGen = 0;
     Integer num = 0;
     float totalAmount = 0;
+    float baseTotalAmount = 0;
+    float discountTotal = 0;
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView;
 
@@ -78,9 +83,19 @@ public class EditController implements Initializable {
     @FXML
     private TableColumn<ProductDisplay, String> stateColumn;
     @FXML
-    private JFXTextField codClientField;
-    @FXML
     private JFXComboBox<String> statesField;
+    @FXML
+    private JFXTextField subtotalField;
+    @FXML
+    private JFXComboBox<Integer> priorityField;
+    @FXML
+    private JFXTextField discountField;
+    @FXML
+    private JFXTextField clientField;
+    @FXML
+    private Label messageField1;
+    @FXML
+    private Label messageField2;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -90,14 +105,16 @@ public class EditController implements Initializable {
                 id = ContextFX.getInstance().getId();
                 ContextFX.getInstance().setVar(id);
                 statesField.getItems().addAll("ENTREGADO", "CANCELADO", "EN PROGRESO");
+                priorityField.getItems().addAll(1, 2, 3);
                 List<RequestOrderLine> list = getReqOrdLine(id);
                 RequestOrder request = getRequestOrder(id);
                 String nameCli = getNameCli(request.getId_client());
                 this.nameClientField.setText(nameCli);
-                this.codClientField.setText(Integer.toString(request.getId_client()));
+                this.clientField.setText(Integer.toString(request.getId_client()));
                 this.creationDate.setValue(request.getCreation_date().toLocalDateTime().toLocalDate());
                 this.deliveryDate.setValue(request.getDelivery_date().toLocalDateTime().toLocalDate());
                 this.statesField.setValue(request.getStatus());
+                this.priorityField.setValue(request.getPriority());
                 idColumn.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
                 nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
                 typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty().asObject());
@@ -116,7 +133,7 @@ public class EditController implements Initializable {
                 RequestOrder request = getRequestOrder(codGen);
                 String nameCli = getNameCli(request.getId_client());
                 this.nameClientField.setText(nameCli);
-                this.codClientField.setText(Integer.toString(request.getId_client()));
+                this.clientField.setText(Integer.toString(request.getId_client()));
                 this.creationDate.setValue(request.getCreation_date().toLocalDateTime().toLocalDate());
                 this.deliveryDate.setValue(request.getDelivery_date().toLocalDateTime().toLocalDate());
                 this.statesField.setValue(request.getStatus());
@@ -145,7 +162,6 @@ public class EditController implements Initializable {
         main.showAddItem2();
     }
 
-    @FXML
     private void editRequestOrder(ActionEvent event) throws IOException {
         SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date_creation = getDate(creationDate.getValue());
@@ -235,17 +251,25 @@ public class EditController implements Initializable {
         productsView = ContextFX.getInstance().getTempList();
         for (int i = 0; i < list.size(); i++) {
             products = getProduct(list.get(i).getId_product());
-            Float amount = list.get(i).getQuantity() * list.get(i).getCost();
+            ObservableList<SaleCondition> discounts = getDiscount(list.get(i).getId_product());
+            Float disc = verifyConditions(discounts, products.get(0), list.get(i).getQuantity());
+            Float base_amount = list.get(i).getQuantity() * list.get(i).getCost();
             String state = "ENTREGA";
-            totalAmount = ContextFX.getInstance().getTotAmount();
-            totalAmount = totalAmount + amount;
+            baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
+            baseTotalAmount = baseTotalAmount + base_amount;
+            discountTotal = ContextFX.getInstance().getTotAmount();
+            discountTotal = discountTotal + baseTotalAmount * disc;
+            totalAmount = baseTotalAmount - discountTotal;
+            ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
             ContextFX.getInstance().setTotAmount(totalAmount);
+            //this.amountField.setText(Float.toString(totalAmount));
+            this.subtotalField.setText(Float.toString(baseTotalAmount));
+            this.discountField.setText(Float.toString(discountTotal));
             this.amountField.setText(Float.toString(totalAmount));
-
             ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
                     products.get(0).getDescription(), products.get(0).getP_stock(), list.get(i).getQuantity(),
-                    amount, state, products.get(0).getBase_price(),
-                    products.get(0).getId_unit_of_measure(), 
+                    base_amount, state, products.get(0).getBase_price(),
+                    products.get(0).getId_unit_of_measure(),
                     products.get(0).getId_product_type(), products.get(0).getMax_qt());
             productsView.add(prod);
         }
@@ -255,21 +279,71 @@ public class EditController implements Initializable {
         tablaProd.setItems(productsView);
     }
 
+    private ObservableList<SaleCondition> getDiscount(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(SaleCondition.class);
+        criteria.add(Restrictions.eq("id_to_take", cod));
+        List<SaleCondition> list = criteria.list();
+        ObservableList<SaleCondition> returnable;
+        returnable = FXCollections.observableArrayList();
+        for (int i = 0; i < list.size(); i++) {
+            returnable.add(list.get(i));
+        }
+        session.close();
+        sessionFactory.close();
+        return returnable;
+    }
+
+    private Float verifyConditions(ObservableList<SaleCondition> discounts, Product prod, int quant) {
+        Float returnable = Float.valueOf(0);
+        for (int i = 0; i < discounts.size(); i++) {
+            int type = discounts.get(i).getId_sale_condition_type();
+            if (type == 1) {
+                int maxQ = discounts.get(i).getLimits();
+                if (maxQ < quant) {
+                    returnable = returnable + discounts.get(i).getAmount() / 100;
+                }
+            } else if (type == 2) {
+                int type_prod = prod.getId_product_type();
+                if (type_prod == type) {
+                    int maxQ = discounts.get(i).getLimits();
+                    if (maxQ < quant) {
+                        returnable = returnable + discounts.get(i).getAmount() / 100;
+                    }
+                }
+            }
+        }
+        return returnable;
+    }
+
     private void loadData2(int cod, int quant) {
         products = FXCollections.observableArrayList();
         productsView = ContextFX.getInstance().getTempList();
         products = getProduct(cod);
-        Float amount = quant * products.get(0).getBase_price();
+        ObservableList<SaleCondition> discounts = getDiscount(cod);
+        Float disc = verifyConditions(discounts, products.get(0), quant);
+        Float base_amount = quant * products.get(0).getBase_price();
         String state = "ENTREGA";
-        totalAmount = ContextFX.getInstance().getTotAmount();
-        totalAmount = totalAmount + amount;
+        baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
+        baseTotalAmount = baseTotalAmount + base_amount;
+        discountTotal = ContextFX.getInstance().getTotAmount();
+        discountTotal = discountTotal + baseTotalAmount * disc;
+        totalAmount = baseTotalAmount - discountTotal;
+        ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
         ContextFX.getInstance().setTotAmount(totalAmount);
+        this.subtotalField.setText(Float.toString(baseTotalAmount));
+        this.discountField.setText(Float.toString(discountTotal));
         this.amountField.setText(Float.toString(totalAmount));
 
         ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
                 products.get(0).getDescription(), products.get(0).getP_stock(), quantity,
-                amount, state, products.get(0).getBase_price(),
-                products.get(0).getId_unit_of_measure(), 
+                base_amount, state, products.get(0).getBase_price(),
+                products.get(0).getId_unit_of_measure(),
                 products.get(0).getId_product_type(), products.get(0).getMax_qt());
         productsView.add(prod);
         ContextFX.getInstance().setTempList(productsView);
@@ -334,6 +408,14 @@ public class EditController implements Initializable {
         List<RequestOrderLine> request = criteria.list();
 
         return request;
+    }
+
+    @FXML
+    private void createRequestOrder(ActionEvent event) {
+    }
+
+    @FXML
+    private void setNameClientAction(ActionEvent event) {
     }
 
 }
