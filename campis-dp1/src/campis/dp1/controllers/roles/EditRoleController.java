@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -33,29 +34,44 @@ public class EditRoleController implements Initializable{
     Main main;
     @FXML
     private JFXTextField descriptionField;
+    @FXML
+    private Label desMessage;
 
     @FXML
     private void goListRoles() throws IOException {
         main.showListRoles();
     }
 
+    public boolean validation() {
+        boolean desValid = descriptionField.getText().length() == 0;
+
+        desMessage.setText("");
+
+        if(desValid)
+            desMessage.setText("Campo obligatorio");
+
+        return (!desValid);
+    }
+
     @FXML
     private void editRole (ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Query query = session.createQuery("update Role set description = :newDescription"
-                + " where id_role = :oldIdRole");
-        query.setParameter("newDescription", descriptionField.getText());
-        query.setParameter("oldIdRole", id);
-        int result = query.executeUpdate();
-        session.getTransaction().commit();
-        session.close();
-        sessionFactory.close();
-        this.goListRoles();
+        if (validation()) {
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+            Query query = session.createQuery("update Role set description = :newDescription"
+                    + " where id_role = :oldIdRole");
+            query.setParameter("newDescription", descriptionField.getText());
+            query.setParameter("oldIdRole", id);
+            int result = query.executeUpdate();
+            session.getTransaction().commit();
+            session.close();
+            sessionFactory.close();
+            this.goListRoles();
+        }
     }
 
     @Override
