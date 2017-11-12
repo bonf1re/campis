@@ -39,6 +39,18 @@ public class ContextFX {
     String word = null;
     ObservableList<ProductDisplay> tempList = FXCollections.observableArrayList();
     ObservableList<BatchDisplay> tempBatchList = FXCollections.observableArrayList();
+    ArrayList<Object> polymorphic_list = new ArrayList<Object>();
+    
+    public ArrayList<Object> getPolymorphic_list() {
+        ArrayList<Object> returnable = new ArrayList<>(polymorphic_list);
+        this.polymorphic_list=null;
+        return returnable;
+    }
+
+    public void setPolymorphic_list(ArrayList<Object> polymorphic_list) {
+        this.polymorphic_list = new ArrayList<>(polymorphic_list);
+    }
+     
 
     int id_user;
     // Es un desmadre este contexto

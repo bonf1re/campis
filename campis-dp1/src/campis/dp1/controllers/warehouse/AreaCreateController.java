@@ -51,6 +51,7 @@ public class AreaCreateController implements Initializable {
     @FXML
     private JFXTextField posYField;
     
+    
     @FXML
     private void goListArea() throws IOException{
         ContextFX.getInstance().setId(this.warehouse_id);
@@ -65,9 +66,9 @@ public class AreaCreateController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        
+        // Aqui deberias agregar un comboBox que agarre los tipos de producto existentes, y selecciones uno, reemplazando el 0 hardcodeado
         Area area = new Area(nameField.getText(), this.warehouse_id, Integer.parseInt(lengthField.getText()), Integer.parseInt(widthField.getText()),
-                                     Integer.parseInt(posXField.getText()), Integer.parseInt(posYField.getText()));
+                                     Integer.parseInt(posXField.getText()), Integer.parseInt(posYField.getText()),0);
         
         session.save(area);
         session.getTransaction().commit();
