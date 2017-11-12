@@ -65,29 +65,35 @@ public class WarehouseListController implements Initializable {
     
     @FXML
     private void goWhEdit() throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        
-        main.showWhEdit();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            
+            main.showWhEdit();
+        }
     }
     
     @FXML
-    private void goWhEntryMoveList() throws IOException{
-        ContextFX.getInstance().setId(selected_id);
-        main.showWhEntryMoveList();
+    private void goWhEntryMoveList() throws IOException {
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showWhEntryMoveList();
+        }
     }
     
     @FXML 
-    private void goWhVisualize() throws IOException{
-        System.out.println(selected_id);
-        ContextFX.getInstance().setId(selected_id);
-        main.showWhVisualize();
+    private void goWhVisualize() throws IOException {
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showWhVisualize();
+        }
     }
     
     @FXML 
-    private void goAreaList() throws IOException{
-        System.out.println(selected_id);
-        ContextFX.getInstance().setId(selected_id);
-        main.showAreaList();
+    private void goAreaList() throws IOException {
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showAreaList();
+        }
     }
     
     /**
@@ -95,7 +101,7 @@ public class WarehouseListController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        this.selected_id = 0;
         warehouseTable.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -148,5 +154,4 @@ public class WarehouseListController implements Initializable {
         sessionFactory.close();
         return returnable;
     }
-    
 }

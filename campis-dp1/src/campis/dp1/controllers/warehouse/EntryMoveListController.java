@@ -59,7 +59,6 @@ public class EntryMoveListController implements Initializable {
     
     @FXML
     private void goWhList() throws IOException{
-        System.out.println("ptm");
         main.showWhList();
     }
     

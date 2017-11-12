@@ -39,8 +39,6 @@ import org.hibernate.transform.Transformers;
  * 
  * 
  * 
- V 
- 
  * 
  */
 public class ListController implements Initializable {
@@ -82,20 +80,23 @@ public class ListController implements Initializable {
 
     @FXML
     private void goEditCampaign(ActionEvent event) throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showEditCampaign();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showEditCampaign();
+        }
     }
     
     @FXML
     private void goViewCampaign(ActionEvent event) throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showViewCampaign();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showViewCampaign();
+        }
     }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-        
+        this.selected_id = 0;
         CampaignsTable.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -166,21 +167,23 @@ public class ListController implements Initializable {
     
     @FXML
     private void deleteCampaign(ActionEvent event) throws SQLException, ClassNotFoundException {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(Campaign.class);
-        Campaign c = new Campaign();
-        c.setId_campaign(selected_id);
-        session.delete(c);
-        session.getTransaction().commit();
-        session.close();
-        sessionFactory.close();
-        
-        cargarData();
+        if (selected_id > 0) {
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Campaign.class);
+            Campaign c = new Campaign();
+            c.setId_campaign(selected_id);
+            session.delete(c);
+            session.getTransaction().commit();
+            session.close();
+            sessionFactory.close();
+            
+            cargarData();
+        }
     }
     
 }

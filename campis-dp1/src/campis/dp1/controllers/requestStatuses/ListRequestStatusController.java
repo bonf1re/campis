@@ -46,8 +46,10 @@ public class ListRequestStatusController implements Initializable {
 
     @FXML
     private void goEditRequestStatus() throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showEditRequestStatuses();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showEditRequestStatuses();
+        }
     }
 
     /**
@@ -55,6 +57,7 @@ public class ListRequestStatusController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.selected_id = 0;
         tableRequestStatus.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {

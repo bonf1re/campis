@@ -50,8 +50,10 @@ public class ListDepartureController implements Initializable {
 
     @FXML
     private void goVisualizeDeparture() throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showVisualizeDeparture();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showVisualizeDeparture();
+        }
     }
 
     @FXML
@@ -69,6 +71,7 @@ public class ListDepartureController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.selected_id = 0;
         try {
             departureTable.getSelectionModel().selectedItemProperty().addListener(
                     (observable, oldValue, newValue) -> {
@@ -138,23 +141,24 @@ public class ListDepartureController implements Initializable {
 
     @FXML
     private void deleteDispatch(ActionEvent event) {
-        ContextFX.getInstance().setId(selected_id);
-        Integer id_dispatch = ContextFX.getInstance().getId();
-        eliminateDispatch(selected_id);
-        dispatch = getDispatch();
-        for (int i = 0; i < dispatch.size(); i++) {
-            if (dispatch.get(i).getId_dispatch_move().compareTo(id_dispatch) == 0) {
-                dispatch.remove(i);
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            Integer id_dispatch = ContextFX.getInstance().getId();
+            eliminateDispatch(selected_id);
+            dispatch = getDispatch();
+            for (int i = 0; i < dispatch.size(); i++) {
+                if (dispatch.get(i).getId_dispatch_move().compareTo(id_dispatch) == 0) {
+                    dispatch.remove(i);
+                }
             }
+            for (int i = 0; i < dispatch.size(); i++) {
+                DispatchMoveDisplay request = new DispatchMoveDisplay(dispatch.get(i).getId_dispatch_move(),
+                        dispatch.get(i).getType_owner(), dispatch.get(i).getId_owner(),
+                        dispatch.get(i).getMov_date().toString(), dispatch.get(i).getReason());
+                dispatchView.add(request);
+            }
+            departureTable.setItems(null);
+            departureTable.setItems(dispatchView);
         }
-        for (int i = 0; i < dispatch.size(); i++) {
-            DispatchMoveDisplay request = new DispatchMoveDisplay(dispatch.get(i).getId_dispatch_move(),
-                    dispatch.get(i).getType_owner(), dispatch.get(i).getId_owner(),
-                    dispatch.get(i).getMov_date().toString(), dispatch.get(i).getReason());
-            dispatchView.add(request);
-        }
-        departureTable.setItems(null);
-        departureTable.setItems(dispatchView);
     }
-
 }
