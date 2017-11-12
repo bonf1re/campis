@@ -60,18 +60,23 @@ public class ListController implements Initializable{
 
     @FXML
     private void goEditUser(ActionEvent event) throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showEditUser();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showEditUser();
+        }
     }
 
     @FXML
     private void goShowUser() throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showViewUser();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showViewUser();
+        }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.selected_id = 0;
         tableUser.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -184,20 +189,22 @@ public class ListController implements Initializable{
     
     @FXML
     private void deleteUser(ActionEvent event) throws SQLException, ClassNotFoundException {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Query query = session.createQuery("update User set active = :newFirstname where id_user = :oldIdProd");
-        query.setParameter("newFirstname", false);
-        query.setParameter("oldIdProd", selected_id);
-        int result = query.executeUpdate();
-        
-        session.getTransaction().commit();
-        sessionFactory.close();
+        if (selected_id > 0) {
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+            Query query = session.createQuery("update User set active = :newFirstname where id_user = :oldIdProd");
+            query.setParameter("newFirstname", false);
+            query.setParameter("oldIdProd", selected_id);
+            int result = query.executeUpdate();
+            
+            session.getTransaction().commit();
+            sessionFactory.close();
 
-        loadData();
+            loadData();
+        }
     }
 }

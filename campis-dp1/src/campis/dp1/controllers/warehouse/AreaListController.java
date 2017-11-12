@@ -77,6 +77,7 @@ public class AreaListController implements Initializable {
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.selected_id = 0;
         this.warehouse_id=ContextFX.getInstance().getId();
         
         whAreaTable.getSelectionModel().selectedItemProperty().addListener(
@@ -152,9 +153,11 @@ public class AreaListController implements Initializable {
 
     @FXML
     private void deleteArea(ActionEvent event) throws SQLException, ClassNotFoundException {
-        ContextFX.getInstance().setId(selected_id);
-        Integer id_area = ContextFX.getInstance().getId();
-        deleteArea(selected_id);
-        areasLoadData();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            Integer id_area = ContextFX.getInstance().getId();
+            deleteArea(selected_id);
+            areasLoadData();
+        }
     }
 }

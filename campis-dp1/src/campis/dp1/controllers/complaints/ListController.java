@@ -53,7 +53,7 @@ public class ListController implements Initializable {
 
     @FXML
     private void goAttendComplaint(ActionEvent event) throws IOException {
-        if (selected_status.equals("En trámite")) {
+        if ((selected_id > 0) || selected_status.equals("En trámite")) {
             ContextFX.getInstance().setId(selected_id);
             main.goAttendComplaint(); 
         }
@@ -61,6 +61,7 @@ public class ListController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.selected_id = 0;
         tableComplaint.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -130,14 +131,16 @@ public class ListController implements Initializable {
 
     @FXML
     private void deleteComplaint(ActionEvent event) throws SQLException, ClassNotFoundException {
-        ContextFX.getInstance().setId(selected_id);
-        Integer id_complaint = ContextFX.getInstance().getId();
-        deleteComplaint(selected_id);
-        for (int i = 0; i < complaints.size(); i++) {
-            if (complaints.get(i).getId_complaint() == selected_id) {
-                complaints.remove(i);
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            Integer id_complaint = ContextFX.getInstance().getId();
+            deleteComplaint(selected_id);
+            for (int i = 0; i < complaints.size(); i++) {
+                if (complaints.get(i).getId_complaint() == selected_id) {
+                    complaints.remove(i);
+                }
             }
-        }
-        loadData();
+            loadData();
+        } 
     }
 }

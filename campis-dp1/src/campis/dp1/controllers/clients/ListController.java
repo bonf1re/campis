@@ -56,14 +56,18 @@ public class ListController implements Initializable {
 
     @FXML
     private void goEditClient() throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showEditClient();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showEditClient();
+        }
     }
 
     @FXML
     private void goShowClient(ActionEvent event) throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showViewClient();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showViewClient();
+        }
     }
 
     private ObservableList<Client> getClients() {
@@ -99,6 +103,7 @@ public class ListController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.selected_id = 0;
         tableClient.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -137,14 +142,16 @@ public class ListController implements Initializable {
 
     @FXML
     private void deleteClient(ActionEvent event) throws SQLException, ClassNotFoundException {
-        ContextFX.getInstance().setId(selected_id);
-        Integer id_client = ContextFX.getInstance().getId();
-        deleteClient(selected_id);
-        for (int i = 0; i < clients.size(); i++) {
-            if(clients.get(i).getId_client().compareTo(id_client) == 0){
-                clients.remove(i);
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            Integer id_client = ContextFX.getInstance().getId();
+            deleteClient(selected_id);
+            for (int i = 0; i < clients.size(); i++) {
+                if(clients.get(i).getId_client().compareTo(id_client) == 0){
+                    clients.remove(i);
+                }
             }
+            loadData();
         }
-        loadData();
     }
 }
