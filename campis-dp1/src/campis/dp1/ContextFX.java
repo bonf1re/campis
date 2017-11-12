@@ -33,7 +33,9 @@ public class ContextFX {
     List aux_3rd_list = null;
     List whMovesProdList = null;
     Integer quantity = null;
+    Float baseTotAmount = 0.0f;
     Float totAmount = 0.0f;
+    Float discount = 0.0f;
     Integer num = 0; // Useful to save any integer variable.
     Integer var = 0;
     String word = null;
@@ -150,7 +152,16 @@ public class ContextFX {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
+    
+    public Float getBaseTotAmount() {
+        Float returnable = new Float(this.baseTotAmount);
+        return returnable;
+    }
 
+    public void setBaseTotAmount(Float baseTotAmount) {
+        this.baseTotAmount = baseTotAmount;
+    }
+    
     public Float getTotAmount() {
         Float returnable = new Float(this.totAmount);
         return returnable;
@@ -158,6 +169,15 @@ public class ContextFX {
 
     public void setTotAmount(Float totAmount) {
         this.totAmount = totAmount;
+    }
+    
+    public Float getDiscount() {
+        Float returnable = new Float(this.discount);
+        return returnable;
+    }
+
+    public void setDiscount(Float discount) {
+        this.discount = discount;
     }
 
     public ObservableList<ProductDisplay> getTempList() {

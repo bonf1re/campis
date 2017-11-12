@@ -35,6 +35,7 @@ import javafx.scene.control.TableView;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -201,10 +202,11 @@ public class AddItemController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Criteria criteria = session.createCriteria(Product.class);
-        criteria.add(Restrictions.eq("id_product", id));
-        List<Product> list = criteria.list();
-        int returnable = list.get(0).getC_stock();
+        String qryStr = "SELECT c_stock FROM campis.productxwarehouse "
+                + "WHERE id_product ="+ id;
+        SQLQuery query = session.createSQLQuery(qryStr);
+        List<Integer> list = query.list();
+        int returnable = list.get(0);
         session.close();
         sessionFactory.close();
         return returnable;

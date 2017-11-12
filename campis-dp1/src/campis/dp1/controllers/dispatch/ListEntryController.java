@@ -44,8 +44,10 @@ public class ListEntryController implements Initializable {
     
     @FXML
     private void goVisualizeEntry() throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showVisualizeEntry();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showVisualizeEntry();
+        }
     }
     
     @FXML
@@ -113,7 +115,7 @@ public class ListEntryController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        this.selected_id = 0;
         tablaEntries.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> {
                 if (newValue == null) return;

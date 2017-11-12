@@ -46,8 +46,10 @@ public class ListRackController implements Initializable{
     
     @FXML
     private void goEditRack(ActionEvent event) throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showEditRack();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showEditRack();
+        }
     }
 
     @FXML
@@ -121,15 +123,17 @@ public class ListRackController implements Initializable{
           
     @FXML
     private void deleteRack(ActionEvent event) throws SQLException, ClassNotFoundException {
-        ContextFX.getInstance().setId(selected_id);
-        Integer id_rack = ContextFX.getInstance().getId();
-        deleteRack(selected_id);
-        for (int i = 0; i < racks.size(); i++) {
-            if(racks.get(i).getId_rack().compareTo(id_rack) == 0){
-                racks.remove(i);
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            Integer id_rack = ContextFX.getInstance().getId();
+            deleteRack(selected_id);
+            for (int i = 0; i < racks.size(); i++) {
+                if(racks.get(i).getId_rack().compareTo(id_rack) == 0){
+                    racks.remove(i);
+                }
             }
+            loadData();
         }
-        loadData();
     }
     
      
@@ -138,7 +142,7 @@ public class ListRackController implements Initializable{
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+        this.selected_id = 0;
         tablaRacks.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> {
                 if (newValue == null) return;
@@ -158,5 +162,4 @@ public class ListRackController implements Initializable{
             Logger.getLogger(ListController.class.getName()).log(Level.SEVERE, null, ex);
         }
     } 
-   
 }

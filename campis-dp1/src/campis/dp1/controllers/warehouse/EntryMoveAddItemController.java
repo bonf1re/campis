@@ -182,13 +182,16 @@ public class EntryMoveAddItemController implements Initializable{
     
     @FXML
     private void addItemAction() throws IOException {
-        ContextFX.getInstance().setNum(selected_id);
-        ContextFX.getInstance().setQuantity(Integer.parseInt(quantityField.getText()));
-        this.goBackCreateEntryMoveSpecial();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setNum(selected_id);
+            ContextFX.getInstance().setQuantity(Integer.parseInt(quantityField.getText()));
+            this.goBackCreateEntryMoveSpecial();
+        }
     }
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.selected_id = 0;
         this.warehouse_id = ContextFX.getInstance().getId();
         tableProd.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
@@ -212,7 +215,5 @@ public class EntryMoveAddItemController implements Initializable{
     private void goBackCreateEntryMoveSpecial() throws IOException{
         ContextFX.getInstance().setId(warehouse_id);
         main.showWhEntryMoveSpecialCreate();
-    }
-    
-    
+    }   
 }
