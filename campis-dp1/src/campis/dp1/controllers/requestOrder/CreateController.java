@@ -12,6 +12,7 @@ import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.RequestOrder;
 import campis.dp1.models.RequestOrderLine;
+import campis.dp1.models.SaleCondition;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
@@ -55,6 +56,8 @@ public class CreateController implements Initializable {
     Integer id, quantity;
     Integer num = 0;
     float totalAmount = 0;
+    float baseTotalAmount = 0;
+    float discountTotal = 0;
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView = FXCollections.observableArrayList();
 
@@ -84,7 +87,7 @@ public class CreateController implements Initializable {
     @FXML
     private JFXDatePicker deliveryDate;
     @FXML
-    private JFXComboBox<String> statesField;
+    private JFXTextField statesField;
     @FXML
     private JFXComboBox<String> priorityField;
     @FXML
@@ -126,7 +129,7 @@ public class CreateController implements Initializable {
                     Timestamp.valueOf((String) formatIn.format(date_delivery)),
                     Float.parseFloat(subtotalField.getText()),
                     Float.parseFloat(amountField.getText()),
-                    (String) statesField.getValue(),
+                    (String) statesField.getText(),
                     clientField.getValue(), prior);
             session.save(requestOrder);
             session.getTransaction().commit();
@@ -159,21 +162,69 @@ public class CreateController implements Initializable {
         return returnable;
     }
 
+    private ObservableList<SaleCondition> getDiscount(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(SaleCondition.class);
+        criteria.add(Restrictions.eq("id_to_take", cod));
+        List<SaleCondition> list = criteria.list();
+        ObservableList<SaleCondition> returnable;
+        returnable = FXCollections.observableArrayList();
+        for (int i = 0; i < list.size(); i++) {
+            returnable.add(list.get(i));
+        }
+        session.close();
+        sessionFactory.close();
+        return returnable;
+    }
+
+    private Float verifyConditions(ObservableList<SaleCondition> discounts, Product prod, int quant) {
+        Float returnable = Float.valueOf(0);
+        for (int i = 0; i < discounts.size(); i++) {
+            int type = discounts.get(i).getId_sale_condition_type();
+            if (type == 1) {
+                int maxQ = discounts.get(i).getLimits();
+                if (maxQ < quant) {
+                    returnable = returnable + discounts.get(i).getAmount() / 100;
+                }
+            } else if (type == 2) {
+                int type_prod = prod.getId_product_type();
+                if (type_prod == type) {
+                    int maxQ = discounts.get(i).getLimits();
+                    if (maxQ < quant) {
+                        returnable = returnable + discounts.get(i).getAmount() / 100;
+                    }
+                }
+            }
+        }
+        return returnable;
+    }
+
     private void loadData(int cod, int quant) {
         products = FXCollections.observableArrayList();
         productsView = ContextFX.getInstance().getTempList();
         products = getProduct(cod);
-        Float amount = quant * products.get(0).getBase_price();
+        ObservableList<SaleCondition> discounts = getDiscount(cod);
+        Float disc = verifyConditions(discounts, products.get(0), quant);
+        Float base_amount = quant * products.get(0).getBase_price();
         String state = "ENTREGA";
-        totalAmount = ContextFX.getInstance().getTotAmount();
-        totalAmount = totalAmount + amount;
+        baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
+        baseTotalAmount = baseTotalAmount + base_amount;
+        discountTotal = ContextFX.getInstance().getTotAmount();
+        discountTotal = discountTotal + baseTotalAmount * disc;
+        totalAmount = baseTotalAmount - discountTotal;
+        ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
         ContextFX.getInstance().setTotAmount(totalAmount);
-        this.subtotalField.setText(Float.toString(totalAmount));
+        this.subtotalField.setText(Float.toString(baseTotalAmount));
+        this.discountField.setText(Float.toString(discountTotal));
         this.amountField.setText(Float.toString(totalAmount));
-
         ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
                 products.get(0).getDescription(), products.get(0).getP_stock(), quantity,
-                amount, state, products.get(0).getBase_price(),
+                base_amount, state, products.get(0).getBase_price(),
                 products.get(0).getId_unit_of_measure(), products.get(0).getId_product_type(),
                 products.get(0).getMax_qt());
         productsView.add(prod);
@@ -205,7 +256,7 @@ public class CreateController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         try {
-            statesField.getItems().addAll("ENTREGADO", "CANCELADO", "EN PROGRESO");
+            statesField.setText("EN PROGRESO");
             priorityField.getItems().addAll("1", "2", "3");
             List<Client> clients = getClients();
             for (int i = 0; i < clients.size(); i++) {
