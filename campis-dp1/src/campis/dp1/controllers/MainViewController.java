@@ -122,4 +122,10 @@ public class MainViewController implements Initializable {
     private void goLogin() throws IOException {
         main.showLogin();
     }
+
+    @FXML
+    private void goShowUser() throws IOException {
+        ContextFX.getInstance().setId(ContextFX.getInstance().getUser().getId_user());
+        main.showViewUser();
+    }
 }

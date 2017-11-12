@@ -48,7 +48,7 @@
       <right>
          <HBox alignment="CENTER_RIGHT" prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER_RIGHT">
             <children>
-               <Label fx:id="user_name" alignment="CENTER" contentDisplay="CENTER" prefHeight="34.0" prefWidth="179.0" textAlignment="CENTER">
+               <Label fx:id="user_name" alignment="CENTER" contentDisplay="CENTER" onMouseClicked="#goShowUser" prefHeight="34.0" prefWidth="179.0" textAlignment="CENTER">
                   <HBox.margin>
                      <Insets right="20.0" />
                   </HBox.margin>
