@@ -22,6 +22,7 @@ public class AreaDisplay {
     private IntegerProperty pos_x;
     private IntegerProperty pos_y;
     private IntegerProperty id_warehouse;
+    private IntegerProperty product_type;
 
     public AreaDisplay(Area area) {
         this.id_area = new SimpleIntegerProperty(area.getId_area());
@@ -31,6 +32,7 @@ public class AreaDisplay {
         this.pos_x = new SimpleIntegerProperty(area.getPos_x());
         this.pos_y = new SimpleIntegerProperty(area.getPos_y());
         this.id_warehouse = new SimpleIntegerProperty(area.getId_warehouse());
+        this.product_type = new SimpleIntegerProperty(area.getProduct_type());
     }
     
     public IntegerProperty getId_area() {
@@ -59,5 +61,9 @@ public class AreaDisplay {
 
     public IntegerProperty getId_warehouse() {
         return id_warehouse;
+    }
+    
+    public IntegerProperty getProduct_type() {
+        return product_type;
     }
 }

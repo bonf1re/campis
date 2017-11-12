@@ -28,18 +28,20 @@ public class Area{
     private int width;
     private int pos_x;
     private int pos_y;
+    private int product_type;
     
     public Area(){
         super();
     }
 
-    public Area(String name, int id_warehouse, int length, int width, int pos_x, int pos_y) {
+    public Area(String name, int id_warehouse, int length, int width, int pos_x, int pos_y, int product_type) {
         this.name = name;
         this.id_warehouse = id_warehouse;
         this.length = length;
         this.width = width;
         this.pos_x = pos_x;
         this.pos_y = pos_y;
+        this.product_type = product_type;
     }
 
     public int getId_area() {
@@ -56,6 +58,14 @@ public class Area{
 
     public void setId_warehouse(int id_warehouse) {
         this.id_warehouse = id_warehouse;
+    }
+    
+    public int getProduct_type() {
+        return product_type;
+    }
+    
+    public void setProduct_type(int product_type) {
+        this.product_type = product_type;
     }
 
     

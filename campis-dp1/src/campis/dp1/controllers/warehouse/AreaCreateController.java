@@ -50,6 +50,8 @@ public class AreaCreateController implements Initializable {
     private JFXTextField posXField;
     @FXML
     private JFXTextField posYField;
+    @FXML
+    private JFXTextField productTypeField;
     
     @FXML
     private void goListArea() throws IOException{
@@ -67,7 +69,7 @@ public class AreaCreateController implements Initializable {
         session.beginTransaction();
         
         Area area = new Area(nameField.getText(), this.warehouse_id, Integer.parseInt(lengthField.getText()), Integer.parseInt(widthField.getText()),
-                                     Integer.parseInt(posXField.getText()), Integer.parseInt(posYField.getText()));
+                                     Integer.parseInt(posXField.getText()), Integer.parseInt(posYField.getText()), Integer.parseInt(productTypeField.getText()));
         
         session.save(area);
         session.getTransaction().commit();
