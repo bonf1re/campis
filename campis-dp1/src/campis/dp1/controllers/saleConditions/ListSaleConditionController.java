@@ -30,6 +30,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
+import javafx.scene.control.Button;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -61,6 +62,8 @@ public class ListSaleConditionController implements Initializable {
 
     
     private int selected_id;
+
+    private int id_role;
     
     @FXML
     private TableView<SaleConditionDisplay> saleCondTable;
@@ -104,11 +107,21 @@ public class ListSaleConditionController implements Initializable {
 
     @FXML
     private Label endend;
+
+    @FXML
+    private Button createButton;
+
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private Button deleteButton;
     //
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "sale_conditions");
         List<Campaign> cmpList = getCampaigns();
         cmbCampaign.getItems().addAll("");
         for (int i = 0; i < cmpList.size(); i++) {

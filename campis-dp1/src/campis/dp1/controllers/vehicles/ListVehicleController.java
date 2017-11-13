@@ -38,6 +38,7 @@ import org.hibernate.criterion.Restrictions;
 public class ListVehicleController implements Initializable {
     private Main main;
     private int selected_id;
+    private int id_role;
     private ObservableList<Vehicle> vehiculos;
     private ObservableList<VehicleDisplay> vehiculosView;
     
@@ -91,6 +92,7 @@ public class ListVehicleController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        ContextFX.getInstance().modifyValidation(newButton, editButton, deleteButton, id_role, "vehicles");
         tableVehicle.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {

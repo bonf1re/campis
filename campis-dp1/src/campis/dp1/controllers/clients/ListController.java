@@ -27,6 +27,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import javafx.scene.control.Button;
 
 /**
  *
@@ -37,6 +38,7 @@ public class ListController implements Initializable {
     private ObservableList<Client> clients;
     private ObservableList<ClientDisplay> clientsView;
     private int selected_id;
+    private int id_role;
 
     @FXML
     private TableView<ClientDisplay> tableClient;
@@ -48,6 +50,12 @@ public class ListController implements Initializable {
     private TableColumn<ClientDisplay,String> phoneCol;
     @FXML
     private TableColumn<ClientDisplay,String> emailCol;
+    @FXML
+    private Button createButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button deleteButton;
 
     @FXML
     private void goCreateClient() throws IOException {
@@ -104,6 +112,7 @@ public class ListController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "clients");
         tableClient.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {

@@ -10,6 +10,8 @@ import campis.dp1.Main;
 import campis.dp1.controllers.products.ListController;
 import campis.dp1.models.DispatchMoveDisplay;
 import campis.dp1.models.DispatchMove;
+import campis.dp1.models.Permission;
+import campis.dp1.models.View;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -22,6 +24,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
@@ -41,6 +44,10 @@ public class ListEntryController implements Initializable {
     private ObservableList<DispatchMove> entries;
     private ObservableList<DispatchMoveDisplay> entriesView;
     private int selected_id;
+    private int id_role;
+
+    @FXML
+    private Button createButton;
     
     @FXML
     private void goVisualizeEntry() throws IOException {
@@ -116,6 +123,12 @@ public class ListEntryController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        id_role = (ContextFX.getInstance().getUser().getId_role());
+        View whView = View.getView("entries_dispatch");
+
+        if (!Permission.canModify(id_role, whView.getId_view())) {
+            createButton.setVisible(false);
+        }
         tablaEntries.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> {
                 if (newValue == null) return;

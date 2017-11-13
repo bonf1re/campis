@@ -12,6 +12,9 @@ import campis.dp1.models.ProductTypeDisplay;
 import campis.dp1.models.ProductType;
 import campis.dp1.ContextFX;
 import java.io.IOException;
+import campis.dp1.models.Permission;
+import campis.dp1.models.View;
+import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
@@ -26,6 +29,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
+import javafx.scene.control.Button;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
@@ -38,11 +42,22 @@ public class ListProductTypeController implements Initializable {
     private ObservableList<ProductType> productTypes;
     private ObservableList<ProductTypeDisplay> productTypesView;
     private int selected_id;
+    private int id_role;
     
     @FXML
     private TableView<ProductTypeDisplay> tableProductType;
     @FXML
     private TableColumn<ProductTypeDisplay,String> descriptionColumn;
+    @FXML
+    private JFXTextField searchField;
+    @FXML
+    private Button createButton;
+
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private Button deleteButton;
 
     @FXML
     private void goCreateProductType() throws IOException {
@@ -63,6 +78,7 @@ public class ListProductTypeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "product_types");
         tableProductType.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {

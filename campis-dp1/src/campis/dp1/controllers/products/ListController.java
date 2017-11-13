@@ -1,5 +1,7 @@
 package campis.dp1.controllers.products;
 
+import campis.dp1.models.Permission;
+import campis.dp1.models.View;
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Product;
@@ -48,6 +50,7 @@ public class ListController implements Initializable {
     private ObservableList<Product> productos;
     private ObservableList<ProductDisplay> productosView;
     private int selected_id;
+    private int id_role;
 
     private void goListProduct() throws IOException {
         main.showListProduct();
@@ -73,10 +76,19 @@ public class ListController implements Initializable {
     private Button searchButton;
     @FXML
     private JFXTextField searchField;
+    @FXML
+    private Button createButton;
+
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private Button deleteButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "products");
         tablaProd.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {

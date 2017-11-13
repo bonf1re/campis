@@ -4,6 +4,8 @@ import campis.dp1.Main;
 import campis.dp1.ContextFX;
 import campis.dp1.models.Complaint;
 import campis.dp1.models.ComplaintDisplay;
+import campis.dp1.models.Permission;
+import campis.dp1.models.View;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import static java.lang.Boolean.TRUE;
@@ -31,6 +33,7 @@ public class ListController implements Initializable {
     private ObservableList<Complaint> complaints;
     private ObservableList<ComplaintDisplay> complaintsView;
     private int selected_id;
+    private int id_role;
     private String selected_status;
 
     @FXML
@@ -45,6 +48,10 @@ public class ListController implements Initializable {
     private TableColumn<ComplaintDisplay,Integer> idRequestColumn;
     @FXML
     private TableColumn<ComplaintDisplay,String> statusColumn;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button createButton;
 
     @FXML
     private void goCreateComplaint() throws IOException {
@@ -62,6 +69,13 @@ public class ListController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        id_role = (ContextFX.getInstance().getUser().getId_role());
+        View whView = View.getView("complaints");
+
+        if (!Permission.canModify(id_role, whView.getId_view())) {
+            editButton.setVisible(false);
+            createButton.setVisible(false);
+        }
         tableComplaint.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {

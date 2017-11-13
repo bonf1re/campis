@@ -23,8 +23,8 @@
             <TableColumn fx:id="orientationCol" prefWidth="133.0" text="Orientacion" />
          </columns>
       </TableView>
-      <Button layoutX="850.0" layoutY="170.0" mnemonicParsing="false" onAction="#goNewRack" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
-      <Button layoutX="850.0" layoutY="250.0" mnemonicParsing="false" onAction="#goEditRack" prefHeight="35.0" prefWidth="85.0" text="Editar" />
-      <Button fx:id="DeleteButton" layoutX="850.0" layoutY="330.0" mnemonicParsing="false" onAction="#deleteRack" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
+      <Button fx:id="createButton" layoutX="850.0" layoutY="170.0" mnemonicParsing="false" onAction="#goNewRack" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
+      <Button fx:id="editButton" layoutX="850.0" layoutY="250.0" mnemonicParsing="false" onAction="#goEditRack" prefHeight="35.0" prefWidth="85.0" text="Editar" />
+      <Button fx:id="deleteButton" layoutX="850.0" layoutY="330.0" mnemonicParsing="false" onAction="#deleteRack" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
    </children>
 </AnchorPane>

@@ -18,6 +18,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
@@ -34,6 +35,7 @@ public class ListDepartureController implements Initializable {
 
     private Main main;
     private int selected_id;
+    private int id_role;
     private ObservableList<DispatchMove> dispatch;
     private ObservableList<DispatchMoveDisplay> dispatchView = FXCollections.observableArrayList();
 
@@ -47,6 +49,12 @@ public class ListDepartureController implements Initializable {
     private TableColumn<DispatchMoveDisplay, String> departureDateColumn;
     @FXML
     private TableColumn<DispatchMoveDisplay, Integer> reasonColumn;
+    @FXML
+    private Button spButton;
+    @FXML
+    private Button deleteButton;
+    @FXML
+    private Button depButton;
 
     @FXML
     private void goVisualizeDeparture() throws IOException {
@@ -72,6 +80,7 @@ public class ListDepartureController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        ContextFX.getInstance().modifyValidation(spButton, depButton, deleteButton, id_role, "departures_dispatch");
         try {
             departureTable.getSelectionModel().selectedItemProperty().addListener(
                     (observable, oldValue, newValue) -> {

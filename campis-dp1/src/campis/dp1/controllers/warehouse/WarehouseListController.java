@@ -7,6 +7,8 @@ package campis.dp1.controllers.warehouse;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
+import campis.dp1.models.Permission;
+import campis.dp1.models.View;
 import campis.dp1.models.Warehouse;
 import campis.dp1.models.WarehouseDisplay;
 import java.io.IOException;
@@ -23,6 +25,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
@@ -31,12 +34,14 @@ import org.hibernate.SessionFactory;
 import org.hibernate.annotations.common.reflection.ClassLoadingException;
 import org.hibernate.cfg.Configuration;
 
+
 /**
  *
  * @author Gina Bustamante
  */
 public class WarehouseListController implements Initializable {
     private Main main;
+    private int id_role;
     private ObservableList<Warehouse> warehouses;
     private ObservableList<WarehouseDisplay> warehousesView;
     private int selected_id;
@@ -55,7 +60,12 @@ public class WarehouseListController implements Initializable {
     private TableColumn<WarehouseDisplay, Integer> areaCol;
     @FXML
     private TableColumn<WarehouseDisplay, String> statusCol;
-    
+    @FXML
+    private Button createButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button deleteButton;
     
     
     @FXML
@@ -102,6 +112,7 @@ public class WarehouseListController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "warehouse");
         warehouseTable.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {
