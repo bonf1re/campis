@@ -5,6 +5,7 @@
  */
 package campis.dp1.controllers.vehicles;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Vehicle;
 import campis.dp1.models.Warehouse;
@@ -15,6 +16,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -33,15 +36,13 @@ import org.hibernate.transform.Transformers;
  */
 public class CreateVehicleController implements Initializable {
     private Main main;
+    private int warehouse_id;
     
     @FXML
     private JFXTextField lblWeight;
 
     @FXML
     private JFXTextField lblSpeed;
-
-    @FXML
-    private JFXComboBox<String> cmWarehouse;
 
     @FXML
     private JFXTextField lblPlate;
@@ -53,13 +54,11 @@ public class CreateVehicleController implements Initializable {
     private Label lblSpeedMessage;
 
     @FXML
-    private Label cmWarehouseMessage;
-
-    @FXML
     private Label lblPlateMessage;
    
     @FXML
     private void goListVehicles() throws IOException {
+        ContextFX.getInstance().setId(this.warehouse_id);
         main.showListVehicle();
     }    
     
@@ -98,52 +97,39 @@ public class CreateVehicleController implements Initializable {
         boolean lblWeightValid = lblWeight.getText().length() == 0;
         boolean lblSpeedValid = lblSpeed.getText().length() == 0;
         boolean lblPlateValid = lblPlate.getText().length() == 0;
-        boolean cmWarehouseValid = cmWarehouse.getValue() == null;
         
         lblPlateMessage.setText("");
-        cmWarehouseMessage.setText("");
         lblSpeedMessage.setText("");
         lblWeightMessage.setText("");
 
         if (lblPlateValid)
             lblPlateMessage.setText("Campo obligatorio");
-        if (cmWarehouseValid)
-            cmWarehouseMessage.setText("Campo obligatorio");
         if (lblSpeedValid)
             lblSpeedMessage.setText("Campo obligatorio");
         if(lblWeightValid)
             lblWeightMessage.setText("Campo obligatorio");
 
-        return (!lblWeightValid && !lblSpeedValid && !lblPlateValid && !cmWarehouseValid);
+        return (!lblWeightValid && !lblSpeedValid && !lblPlateValid);
     }
 
     @FXML
     private void insertVehicle() throws IOException {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        int codWr=1;
-        
-        /*try
-         {
-            codWr = searchWarehouse(cmWarehouse.getValue());
-         }
-        catch (ClassNotFoundException |SQLException e)
-         {
-            e.printStackTrace();
-            //agregar error
-         }*/
-           
-        Vehicle v = new Vehicle(Double.parseDouble(lblWeight.getText()), Integer.parseInt(lblSpeed.getText()),true,
-                                            codWr, lblPlate.getText());
-        session.save(v);
-        session.getTransaction().commit();
-        session.close();
-        sessionFactory.close();
-        this.goListVehicles();
+        if (validation()) {
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+               
+            Vehicle v = new Vehicle(Double.parseDouble(lblWeight.getText()), Integer.parseInt(lblSpeed.getText()),true,
+                                                this.warehouse_id, lblPlate.getText());
+            session.save(v);
+            session.getTransaction().commit();
+            session.close();
+            sessionFactory.close();
+            this.goListVehicles();
+        }
     }
     
     
@@ -152,9 +138,25 @@ public class CreateVehicleController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        /*List<Warehouse> list = getWarehouses();
-        for (int i = 0; i < list.size(); i++) {
-            cmWarehouse.getItems().addAll(list.get(i).getName());
-        }*/
+        this.warehouse_id = ContextFX.getInstance().getId();
+        lblWeight.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    lblWeight.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+        
+        lblSpeed.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    lblSpeed.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
     } 
 }

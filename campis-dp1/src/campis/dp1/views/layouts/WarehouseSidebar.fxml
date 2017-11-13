@@ -8,7 +8,5 @@
       <JFXButton onAction="#goWhList" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Almacén" />
       <JFXButton onAction="#goListProduct" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Producto" />
       <JFXButton onAction="#goListProductTypes" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Tipo de Producto" textAlignment="CENTER" wrapText="true" />
-      <JFXButton onAction="#goListRacks" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Rack" />
-      <JFXButton onAction="#goListVehicles" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Vehículo" />
    </children>
 </VBox>

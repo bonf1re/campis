@@ -131,8 +131,7 @@ public class ListController implements Initializable {
         for (int i = 0; i < camps.size(); i++) {
             String dI,dF;
             if (camps.get(i).getId_campaign() == 0){
-                dI="";
-                dF="";
+                continue;
             }else{
                 dI=camps.get(i).getInitial_date().toString();
                 dF=camps.get(i).getFinal_date().toString();

@@ -96,6 +96,22 @@ public class WarehouseListController implements Initializable {
         }
     }
     
+    @FXML
+    private void goListVehicles() throws IOException {
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showListVehicle();
+        }
+    }
+    
+    @FXML
+    private void goListRacks() throws IOException {
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showListRacks();
+        }        
+    }
+    
     /**
      * Initializes the controller class.
      */
