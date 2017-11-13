@@ -39,6 +39,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -72,7 +73,7 @@ public class EntryMoveNormalCreateController implements Initializable{
     ObservableList<BatchDisplay> batchesView;
     ObservableList<Vehicle> vh1View;
     ObservableList<Vehicle> vh2View;
-    ArrayList<Product> product_names = new ArrayList<>();
+    ArrayList<String> product_names = new ArrayList<>();
     
     // Route Generation atributes
     private ArrayList<CRack> crackList = new ArrayList<>();
@@ -173,6 +174,8 @@ public class EntryMoveNormalCreateController implements Initializable{
             Query query = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+String.valueOf(batch.getId_product()));
             List rs = query.list();
             Double weight = batch.getQuantity()*(double) rs.get(0);
+            Query name_q = session.createSQLQuery("SELECT name FROM campis.product WHERE id_product = "+String.valueOf(batch.getId_product()));
+            this.product_names.add((String)name_q.list().get(0));
             BatchDisplay batchDisplay = new BatchDisplay(batch,weight);
             batchesView.add(batchDisplay);
         }
@@ -270,20 +273,13 @@ public class EntryMoveNormalCreateController implements Initializable{
         ContextFX.getInstance().setId(id_warehouse_back);
         
         // Dynamic route generation per vehicle
+        sortPerWeight((ArrayList<Batch>)aux,(ArrayList<WarehouseZone>)zone_sel,session);
+        
         sendBatches_n_Routes((ArrayList<Batch>)aux,(ArrayList<WarehouseZone>)zone_sel,session);
         session.close();
         sessionFactory.close();
         
         main.showWhEntryMoveRoute();
-    }
-
-    private String getNameProduct(int get) {
-        for (Product prod: product_names) {
-            if (prod.getId_product() == get){
-                return prod.getName();
-            }
-        }
-        return " ";
     }
 
     private ArrayList<WarehouseZone> getZones(ArrayList<Batch> batch_route_list, Session session) {
@@ -344,9 +340,10 @@ public class EntryMoveNormalCreateController implements Initializable{
                 continue;
             }
             boolean zoned = false;
-            for (WarehouseZone zone : returnable) {
+            for (int k =0; k<returnable.size();k++) {
+                WarehouseZone zone = returnable.get(k);
                 if (inArea(zone,curr_area)){
-                    true_returnable.add(zone);
+                    true_returnable.add(returnable.remove(k));
                     zoned=true;
                     break;
                 }
@@ -369,7 +366,7 @@ public class EntryMoveNormalCreateController implements Initializable{
 
     public void batchesTable_Setup() {
         idCol.setCellValueFactory(cellData -> cellData.getValue().getId_batch().asObject());
-            prodCol.setCellValueFactory(cellData -> new SimpleStringProperty(getNameProduct(cellData.getValue().getId_product().get())));
+            prodCol.setCellValueFactory(cellData -> new SimpleStringProperty(this.product_names.get(this.batchesView.indexOf(cellData.getValue()))));
             qtCol.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
             arrCol.setCellValueFactory(cellData -> cellData.getValue().getArrival_date());
             expCol.setCellValueFactory(cellData -> cellData.getValue().getExpiration_date());
@@ -476,6 +473,7 @@ public class EntryMoveNormalCreateController implements Initializable{
         int batches_counter=0;
         for (BatchDisplay batch : batchTable.getItems()) {
             if (batch.getSelected().get()== true){
+                System.out.println(batch.getWeight().get());
                 total_weight-=batch.getWeight().get();
                 batches_counter++;
             }
@@ -517,8 +515,11 @@ public class EntryMoveNormalCreateController implements Initializable{
         ArrayList<Object> sendable = new ArrayList<Object>();
         sendable.add(1); // index
         // the idea is to send list of zones, list of batches, vehicle and route per row
-        for (int i = 0; i < this.vh2View.size(); i++) {
-            Vehicle vh = this.vh2View.get(i);
+        ObservableList<Vehicle> vh_list = FXCollections.observableArrayList(this.vh2View);
+        sortPerCapacity(vh_list);
+        
+        for (int i = 0; i < vh_list.size(); i++) {
+            Vehicle vh = vh_list.get(i);
             double max_cp = vh.getMax_weight();
             ArrayList<WarehouseZone> r_zones = new ArrayList<>();
             ArrayList<Batch> r_batches = new ArrayList<>();
@@ -527,18 +528,19 @@ public class EntryMoveNormalCreateController implements Initializable{
                 Query query = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+String.valueOf(batch_list.get(j).getId_product()));
                 double total_batch_weight = batch_list.get(j).getQuantity()*(double)(query.list().get(0));
                 max_cp=max_cp-total_batch_weight;
-                r_zones.add(zone_list.remove(j));
-                r_batches.add(batch_list.remove(j));
                 if (max_cp<=0){
                     // here it ends
                     break;
                 }
+                r_zones.add(zone_list.remove(j));
+                r_batches.add(batch_list.remove(j));
             }
             ArrayList<Object> aux = new ArrayList<Object>();
             // 0 - batches
             // 1 - zones
             // 2 - vehicle
             // 3 - route
+            if (r_batches.size()==0) continue;
             aux.add(r_batches);
             aux.add(r_zones);
             aux.add(vh);
@@ -610,5 +612,43 @@ public class EntryMoveNormalCreateController implements Initializable{
         }
         this.routesGraph.setup(this.real_map);
         
+    }
+
+    private void sortPerWeight(ArrayList<Batch> batch_list, ArrayList<WarehouseZone> zone_list,Session session) {
+       for (int i = 0; i < batch_list.size(); i++) {
+           Batch batch_i = batch_list.get(i);
+           Query query_i = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+batch_i.getId_product());
+           double weight_i = batch_i.getQuantity()*(Double)query_i.list().get(0);
+            for (int j = 0; j < batch_list.size(); j++) {
+                Batch batch_j = batch_list.get(j);
+                Query query_j = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+batch_j.getId_product());
+                double weight_j = batch_j.getQuantity()*(Double)query_j.list().get(0);
+                if (weight_i > weight_j && j<i){
+                    // For Zone
+                    WarehouseZone swap_z = new WarehouseZone(zone_list.get(i),0);
+                    zone_list.set(i, zone_list.get(j));
+                    zone_list.set(j, swap_z);
+                    
+                    // For Batch
+                    Batch swap_b = new Batch(batch_list.get(i),0);
+                    batch_list.set(i, batch_list.get(j));
+                    batch_list.set(j, swap_b);
+                }
+            }
+        }
+       
+    }
+
+    private void sortPerCapacity(ObservableList<Vehicle> vh_list) {
+        for (int i = 0; i < vh_list.size(); i++) {
+            for (int j = 0; j < vh_list.size(); j++) {
+                if (vh_list.get(i).getMax_weight() < vh_list.get(j).getMax_weight() && j<i){
+                    // For Vehicle
+                    Vehicle swap_v = new Vehicle(vh_list.get(i),0);
+                    vh_list.set(i,vh_list.get(j));
+                    vh_list.set(j, swap_v);
+                }
+            }
+        }
     }
 }

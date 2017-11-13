@@ -18,6 +18,7 @@ import campis.dp1.models.Product;
 import campis.dp1.models.Rack;
 import campis.dp1.models.TabuProblem;
 import campis.dp1.models.TabuSolution;
+import campis.dp1.models.Vehicle;
 import campis.dp1.models.utils.GraphicsUtils;
 import campis.dp1.models.Warehouse;
 import campis.dp1.models.WarehouseMove;
@@ -103,6 +104,8 @@ public class EntryMoveRouteController implements Initializable{
     private TableColumn<BatchWH_Move, String> zoneCol;
     @FXML
     private Text pCounterField;
+    @FXML
+    private Text vhText;
 
     
     
@@ -110,6 +113,8 @@ public class EntryMoveRouteController implements Initializable{
     public void initialize(URL url, ResourceBundle rb) {
         this.id_warehouse=ContextFX.getInstance().getId();
         this.routing_data=ContextFX.getInstance().getPolymorphic_list();
+        Vehicle vh =(Vehicle) ((ArrayList<Object>) this.routing_data.get((int)this.routing_data.get(0))).get(2);
+        this.vhText.setText("Vehicle: "+ vh.getPlate() + " \nde capacidad : "+vh.getMax_weight());
         this.pCounterField.setText("<"+String.valueOf(this.routing_data.get(0))+"/"+String.valueOf(this.routing_data.size()-1)+">");
         try{
             int m_test = ContextFX.getInstance().getWhMoveType() + 1;
@@ -146,54 +151,102 @@ public class EntryMoveRouteController implements Initializable{
     
     @FXML
     private void saveEntryMove() throws IOException{
-        // Previous verification
-        ArrayList<Object> aux = (ArrayList<Object>) this.routing_data.get((int)this.routing_data.get(0));
-        boolean saved = (boolean) aux.get(4);
-        if (saved == true ){
-            System.out.println("Este movimiento ya ha sido grabado.");
-            return;
-        }
+        // Will save all
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        for (int i=0; i<batchesList.size();i++) {
-            Batch batch = new Batch(batchesList.get(i));
-            Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-            // zone update
-            Query zone_q = session.createQuery(
-                    "update WarehouseZone set free = :s_status "+" where id_zone = :zoneId");
-            zone_q.setParameter("s_status",false);
-            zone_q.setParameter("zoneId", batchesList.get(i).getZone().getId_zone());
-            zone_q.executeUpdate();
-            
-            if (batch.getId_batch()==-1){ // batch insertion
-                // batch save
-                batch.setType_batch(3);
-                int id_batch = (int) session.save(new Batch(batch));
-                // move save
-                WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), batchesList.get(i).getZone().getId_zone(), 2, 1, id_warehouse,id_batch);
-                session.save(move);
+        
+        // Previous verification
+        Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+        for (int i = 1; i < this.routing_data.size(); i++) {
+            ArrayList<Object> r_d_iterator = (ArrayList<Object>) this.routing_data.get(i);
+            boolean saved = (boolean) r_d_iterator.get(4);
+            if (saved == true ){
+                System.out.println("Este movimiento ya ha sido grabado.");
                 continue;
-            }            
-            // batch update
-            Query query = session.createQuery(
-                "update Batch set type_batch = :t_batch " + " where id_batch = :batchId ");
-            query.setParameter("t_batch", 3);
-            query.setParameter("batchId", batch.getId_batch());
-            query.executeUpdate();
-            // move save
-            WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), batchesList.get(i).getZone().getId_zone(), 2, 1, id_warehouse,batch.getId_batch());
-            session.save(move);
+            }
+            
+            ArrayList<Batch> batch_list =(ArrayList<Batch>) r_d_iterator.get(0);
+            ArrayList<WarehouseZone> zone_list = (ArrayList<WarehouseZone>) r_d_iterator.get(1);
+            Vehicle vh = (Vehicle) r_d_iterator.get(2);
+            ArrayList<Coord> route= (ArrayList<Coord>) r_d_iterator.get(3);
+            
+            for (int j = 0; j < batch_list.size(); j++) {
+                // zone update
+                Query zone_q = session.createQuery(
+                        "update WarehouseZone set free = :s_status "+" where id_zone = :zoneId");
+                zone_q.setParameter("s_status",false);
+                zone_q.setParameter("zoneId", zone_list.get(j).getId_zone());
+                zone_q.executeUpdate();
+                Batch batch = batch_list.get(j);
+                if (batch.getId_batch()==-1){ // batch insertion
+                    // batch save
+                    batch.setType_batch(3);
+                    int id_batch = (int) session.save(new Batch(batch));
+                    int id_parent_batch = singleHer(batch);
+                    Query query = session.createSQLQuery("UPDATE campis.batch SET type_batch = -1 WHERE id_batch = "+id_parent_batch);
+                    query.executeUpdate();
+                    // move save
+                    WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), zone_list.get(j).getId_zone(), vh.getId_vehicle(), 1, id_warehouse,id_batch);
+                    session.save(move);
+                    continue;
+                }            
+                // batch update
+                Query query = session.createQuery(
+                    "update Batch set type_batch = :t_batch " + " where id_batch = :batchId ");
+                query.setParameter("t_batch", 3);
+                query.setParameter("batchId", batch.getId_batch());
+                query.executeUpdate();
+                // move save
+                WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), zone_list.get(j).getId_zone(), vh.getId_vehicle(), 1, id_warehouse,batch.getId_batch());
+                session.save(move);
+            }
+            r_d_iterator.set(4, true);
+            this.routing_data.set((int)this.routing_data.get(0), r_d_iterator);
         }
+        
+        
+//        for (int i=0; i<batchesList.size();i++) {
+            //Batch batch = new Batch(batchesList.get(i));
+            //Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+            // zone update
+//            Query zone_q = session.createQuery(
+//                    "update WarehouseZone set free = :s_status "+" where id_zone = :zoneId");
+//            zone_q.setParameter("s_status",false);
+//            zone_q.setParameter("zoneId", batchesList.get(i).getZone().getId_zone());
+//            zone_q.executeUpdate();
+            
+//            if (batch.getId_batch()==-1){ // batch insertion
+//                // batch save
+//                batch.setType_batch(3);
+//                int id_batch = (int) session.save(new Batch(batch));
+//                int id_parent_batch = singleHer(batch);
+//                Query query = session.createSQLQuery("UPDATE campis.batch SET type_batch = -1 WHERE id_batch = "+id_parent_batch);
+//                query.executeUpdate();
+//                // move save
+//                WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), batchesList.get(i).getZone().getId_zone(), this.vehicle_id, 1, id_warehouse,id_batch);
+//                session.save(move);
+//                continue;
+//            }            
+//            // batch update
+//            Query query = session.createQuery(
+//                "update Batch set type_batch = :t_batch " + " where id_batch = :batchId ");
+//            query.setParameter("t_batch", 3);
+//            query.setParameter("batchId", batch.getId_batch());
+//            query.executeUpdate();
+//            // move save
+//            WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), batchesList.get(i).getZone().getId_zone(), this.vehicle_id, 1, id_warehouse,batch.getId_batch());
+//            session.save(move);
+//        }
         session.getTransaction().commit();
         session.close();
         sessionFactory.close();
         //goEntryMoveList();
-        aux.set(4, true);
-        this.routing_data.set((int)this.routing_data.get(0), aux);
+//        aux.set(4, true);
+//        this.routing_data.set((int)this.routing_data.get(0), aux);
     }
     
     @FXML
@@ -340,5 +393,14 @@ public class EntryMoveRouteController implements Initializable{
             this.batchesList.get(i).setId_batch(this.id_batchesList.get(i));
             this.save_batches.add(this.batchesList.get(i));
         }
+    }
+
+    private int singleHer(Batch batch) {
+        String her = batch.getHeritage();
+        StringBuilder str = new StringBuilder(her);
+        str.deleteCharAt(her.indexOf('['));
+        str.deleteCharAt(her.indexOf(']')-1);
+        
+        return Integer.parseInt(str.toString());
     }
 }

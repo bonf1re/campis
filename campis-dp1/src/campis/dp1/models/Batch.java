@@ -87,6 +87,19 @@ public class Batch {
         this.type_batch = batch.type_batch;
     }
     
+    public Batch(Batch batch, int r) {
+        this.arrival_date = batch.arrival_date;
+        this.batch_cost = batch.batch_cost;
+        this.expiration_date = batch.expiration_date;
+        this.heritage = batch.heritage;
+        this.id_product = batch.id_product;
+        this.location = batch.location;
+        this.quantity = batch.quantity;
+        this.state = batch.state;
+        this.type_batch = batch.type_batch;
+        this.id_batch=batch.id_batch;
+    }
+    
     
     public int getId_batch() {
         return id_batch;
