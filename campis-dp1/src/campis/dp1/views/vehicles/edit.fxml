@@ -30,16 +30,15 @@
             <JFXTextField fx:id="lblSpeed" layoutX="279.0" layoutY="226.0" />
             <Button layoutX="360.0" layoutY="416.0" mnemonicParsing="false" onAction="#updateVehicle" text="Guardar" />
             <Button layoutX="530.0" layoutY="416.0" mnemonicParsing="false" onAction="#goListVehicles" text="Cancelar" />
-            <Label layoutX="523.0" layoutY="143.0" text="Placa:">
+            <Label layoutX="517.0" layoutY="143.0" text="Placa:">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <JFXTextField fx:id="lblPlate" editable="false" layoutX="635.0" layoutY="141.0" />
+            <JFXTextField fx:id="lblPlate" layoutX="629.0" layoutY="133.0" />
             <Label fx:id="lblWeightMessage" layoutX="279.0" layoutY="175.0" prefHeight="17.0" prefWidth="139.0" textFill="RED" />
             <Label fx:id="lblSpeedMessage" layoutX="275.0" layoutY="264.0" prefHeight="17.0" prefWidth="139.0" textFill="RED" />
-            <Label fx:id="cmWarehouseMessage" layoutX="732.0" layoutY="175.0" prefHeight="17.0" prefWidth="139.0" textFill="RED" />
-            <Label fx:id="lblPlateMessage" layoutX="732.0" layoutY="273.0" prefHeight="17.0" prefWidth="139.0" textFill="RED" />
+            <Label fx:id="lblPlateMessage" layoutX="632.0" layoutY="174.0" prefHeight="17.0" prefWidth="139.0" textFill="RED" />
          </children>
       </AnchorPane>
    </center>
