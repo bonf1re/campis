@@ -108,14 +108,4 @@ public class Area{
     public void setPos_y(int pos_y) {
         this.pos_y = pos_y;
     }
-
-    public int getProduct_type() {
-        return product_type;
-    }
-
-    public void setProduct_type(int product_type) {
-        this.product_type = product_type;
-    }
-    
-    
 }
