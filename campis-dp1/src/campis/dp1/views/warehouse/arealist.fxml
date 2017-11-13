@@ -25,6 +25,7 @@
                   <TableColumn fx:id="widthCol" prefWidth="75.0" text="Ancho" />
                   <TableColumn fx:id="posXCol" prefWidth="75.0" text="Pos X" />
                   <TableColumn fx:id="posYCol" prefWidth="75.0" text="Pos Y" />
+                  <TableColumn fx:id="productTypeCol" prefWidth="75.0" text="Tipo Producto" />
                </columns>
                <columnResizePolicy>
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
