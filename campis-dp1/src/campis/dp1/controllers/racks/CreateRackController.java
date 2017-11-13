@@ -5,6 +5,7 @@
  */
 package campis.dp1.controllers.racks;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.CRack;
 import campis.dp1.models.Rack;
@@ -66,6 +67,7 @@ public class CreateRackController implements Initializable {
 
     @FXML
     private void goListRacks() throws IOException {
+        ContextFX.getInstance().setId(this.warehouse_id);
         main.showListRacks();
     }
 
@@ -153,7 +155,7 @@ public class CreateRackController implements Initializable {
         //int orientation = orientationCb.getSelectionModel().getSelectedIndex();
         boolean flag = verifyRacks();
         if (flag == TRUE) {
-            Rack r = new Rack(1, Integer.parseInt(x_Field.getText()), Integer.parseInt(y_Field.getText()),
+            Rack r = new Rack(this.warehouse_id, Integer.parseInt(x_Field.getText()), Integer.parseInt(y_Field.getText()),
                     Integer.parseInt(columnsField.getText()), Integer.parseInt(floorsField.getText()),
                     0);
 
@@ -260,6 +262,7 @@ public class CreateRackController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.warehouse_id = ContextFX.getInstance().getId();
         x_Field.textProperty().addListener(new ChangeListener<String>() {
             @Override
             public void changed(ObservableValue<? extends String> observable, String oldValue,

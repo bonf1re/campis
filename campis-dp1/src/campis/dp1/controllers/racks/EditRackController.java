@@ -8,6 +8,7 @@ package campis.dp1.controllers.racks;
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Rack;
+import campis.dp1.models.Vehicle;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
@@ -45,6 +46,19 @@ public class EditRackController implements Initializable{
     
     @FXML
     private void goListRacks() throws IOException {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Rack.class);
+        criteria.add(Restrictions.eq("id_rack",this.id));
+        List rsWarehouse = criteria.list();
+        Rack result = (Rack)rsWarehouse.get(0);
+        session.close();
+        sessionFactory.close();
+        ContextFX.getInstance().setId(result.getId_warehouse());
         main.showListRacks();
     }
     

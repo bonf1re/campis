@@ -14,7 +14,7 @@
             <Font size="28.0" />
          </font>
       </Label>
-      <TableView fx:id="tablaRacks" layoutX="50.0" layoutY="105.0" prefHeight="360.0" prefWidth="750.0">
+      <TableView fx:id="tablaRacks" layoutX="50.0" layoutY="105.0" prefHeight="314.0" prefWidth="750.0">
          <columns>
             <TableColumn fx:id="idCol" prefWidth="120.0" text="ID" />
             <TableColumn fx:id="numColumnsCol" prefWidth="158.0" text="N° Columnas" />
@@ -28,5 +28,6 @@
       <Button layoutX="850.0" layoutY="170.0" mnemonicParsing="false" onAction="#goNewRack" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
       <Button layoutX="850.0" layoutY="250.0" mnemonicParsing="false" onAction="#goEditRack" prefHeight="35.0" prefWidth="85.0" text="Editar" />
       <Button fx:id="DeleteButton" layoutX="850.0" layoutY="330.0" mnemonicParsing="false" onAction="#deleteRack" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
+      <Button fx:id="DeleteButton1" layoutX="382.0" layoutY="438.0" mnemonicParsing="false" onAction="#goWhList" prefHeight="35.0" prefWidth="85.0" text="Regresar" />
    </children>
 </AnchorPane>

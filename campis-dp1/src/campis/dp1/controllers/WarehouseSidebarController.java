@@ -47,9 +47,4 @@ public class WarehouseSidebarController implements Initializable {
     private void goListProductTypes() throws IOException {
         main.showListProductType();
     }
-     
-    @FXML
-    private void goListRacks() throws IOException {
-        main.showListRacks();
-    }
 }
