@@ -65,7 +65,7 @@ public class ExpirationConfigController implements Initializable {
     private Date getDate(LocalDate value) {
         
         Calendar calendar = new GregorianCalendar(value.getYear(),
-                                                    value.getMonthValue(),
+                                                    value.getMonthValue()-1,
                                                     value.getDayOfMonth());
         return calendar.getTime();
     }

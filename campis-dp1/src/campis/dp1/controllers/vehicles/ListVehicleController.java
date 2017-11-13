@@ -39,31 +39,22 @@ public class ListVehicleController implements Initializable {
     private Main main;
     private int selected_id;
     private int id_role;
+    private int warehouse_id;
     private ObservableList<Vehicle> vehiculos;
     private ObservableList<VehicleDisplay> vehiculosView;
     
     @FXML
     private TableView<VehicleDisplay> tableVehicle;
-
     @FXML
     private TableColumn<VehicleDisplay, Integer> idVehicleColumn;
-
     @FXML
     private TableColumn<VehicleDisplay, Double> maxWeightColumn;
-
     @FXML
     private TableColumn<VehicleDisplay, Integer> maxSpeedColumn;
-
     @FXML
     private TableColumn<VehicleDisplay, String> activeColumn;
-
-    @FXML
-    private TableColumn<VehicleDisplay, String> warehouseColumn;
-    
-    
     @FXML
     private TableColumn<VehicleDisplay, String> plateColumn;
-
     @FXML
     private Button newButton;
 
@@ -72,9 +63,9 @@ public class ListVehicleController implements Initializable {
 
     @FXML
     private Button deleteButton;
-    
     @FXML
     private void goCreateVehicle() throws IOException {
+        ContextFX.getInstance().setId(this.warehouse_id);
         main.showNewVehicle();
     } 
     
@@ -84,7 +75,12 @@ public class ListVehicleController implements Initializable {
             ContextFX.getInstance().setId(selected_id);
             main.showEditVehicle();
         }
-    } 
+    }
+    
+    @FXML
+    private void goWhList() throws IOException{
+        main.showWhList();
+    }
     
     /**
      * Initializes the controller class.
@@ -93,6 +89,7 @@ public class ListVehicleController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
         ContextFX.getInstance().modifyValidation(newButton, editButton, deleteButton, id_role, "vehicles");
+        this.warehouse_id = ContextFX.getInstance().getId();
         tableVehicle.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -106,7 +103,6 @@ public class ListVehicleController implements Initializable {
             maxWeightColumn.setCellValueFactory(cellData -> cellData.getValue().maxWeightProperty().asObject());
             maxSpeedColumn.setCellValueFactory(cellData -> cellData.getValue().speedProperty().asObject());
             activeColumn.setCellValueFactory(cellData -> cellData.getValue().activeProperty());
-            warehouseColumn.setCellValueFactory(cellData -> cellData.getValue().warehouseProperty());
             plateColumn.setCellValueFactory(cellData -> cellData.getValue().plateProperty());
             /**/
             cargarData();
@@ -123,6 +119,7 @@ public class ListVehicleController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Vehicle.class);
+        criteria.add(Restrictions.eq("id_warehouse",this.warehouse_id));
         List lista = criteria.list();
         ObservableList<Vehicle> returnable;
         returnable = FXCollections.observableArrayList();
@@ -134,26 +131,6 @@ public class ListVehicleController implements Initializable {
         return returnable;
     }
     
-    public static String getWarehouse(int cod) {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(Warehouse.class);
-        criteria.add(Restrictions.eq("id_warehouse",cod));
-        String descripType;
-        List rsType = criteria.list();
-        Warehouse result = (Warehouse) rsType.get(0);
-        descripType = result.getName();
-        session.close();
-        sessionFactory.close();
-
-        return descripType;
-    }
-    
-    
     private void cargarData() throws SQLException, ClassNotFoundException {
         vehiculos = FXCollections.observableArrayList();
         vehiculosView = FXCollections.observableArrayList();
@@ -162,8 +139,7 @@ public class ListVehicleController implements Initializable {
         for (int i = 0; i < vehiculos.size(); i++) {
  
             VehicleDisplay veh = new VehicleDisplay(vehiculos.get(i).getId_vehicle(), vehiculos.get(i).getMax_weight(),
-                    vehiculos.get(i).getSpeed(), vehiculos.get(i).isActive(), getWarehouse(vehiculos.get(i).getId_warehouse()),
-                    vehiculos.get(i).getPlate());
+                    vehiculos.get(i).getSpeed(), vehiculos.get(i).isActive(),vehiculos.get(i).getPlate());
             vehiculosView.add(veh);
         }
         tableVehicle.setItems(null);

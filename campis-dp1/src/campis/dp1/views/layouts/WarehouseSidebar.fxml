@@ -7,8 +7,6 @@
    <children>
       <JFXButton fx:id="whButton" onAction="#goWhList" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Almacén" />
       <JFXButton fx:id="productButton" onAction="#goListProduct" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Producto" />
-      <JFXButton fx:id="tipoProductButton" onAction="#goListProductTypes" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Tipo de Producto" wrapText="true" />
-      <JFXButton fx:id="rackButton" onAction="#goListRacks" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Rack" />
-      <JFXButton fx:id="vehicleButton" onAction="#goListVehicles" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Vehículo" />
+      <JFXButton fx:id="tipoProductButton" onAction="#goListProductTypes" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Tipo de Producto" textAlignment="CENTER" wrapText="true" />
    </children>
 </VBox>

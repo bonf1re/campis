@@ -31,6 +31,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import campis.dp1.models.Permission;
 import campis.dp1.models.View;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -42,9 +43,11 @@ public class ListRackController implements Initializable{
     private ObservableList<RackDisplay> racksView;
     private int selected_id;
     private int id_role;
+    private int warehouse_id;
 
     @FXML
     private void goNewRack() throws IOException {
+        ContextFX.getInstance().setId(warehouse_id);
         main.showNewRack();
     }
 
@@ -55,13 +58,16 @@ public class ListRackController implements Initializable{
             main.showEditRack();
         }
     }
+    
+    @FXML
+    private void goWhList() throws IOException{
+        main.showWhList();
+    }
 
     @FXML
     private TableView<RackDisplay> tablaRacks;
     @FXML
     private TableColumn<RackDisplay, Integer> idCol;
-    @FXML
-    private TableColumn<RackDisplay,  Integer> warehouseCol;
     @FXML
     private TableColumn<RackDisplay, Integer> numColumnsCol;
     @FXML
@@ -85,6 +91,7 @@ public class ListRackController implements Initializable{
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Rack.class);
+        criteria.add(Restrictions.eq("id_warehouse",this.warehouse_id));
         List lista = criteria.list();
         ObservableList<Rack> returnable;
         returnable = FXCollections.observableArrayList();
@@ -103,8 +110,7 @@ public class ListRackController implements Initializable{
         
         for (int i = 0; i < racks.size(); i++) {
             
-            RackDisplay r = new RackDisplay(racks.get(i).getId_rack(), 
-                                            racks.get(i).getId_warehouse(),                        
+            RackDisplay r = new RackDisplay(racks.get(i).getId_rack(),                        
                                             racks.get(i).getPos_x(),
                                             racks.get(i).getPos_y(),
                                             racks.get(i).getN_columns(),
@@ -156,6 +162,7 @@ public class ListRackController implements Initializable{
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
         ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "racks");
+        this.warehouse_id = ContextFX.getInstance().getId();
         tablaRacks.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> {
                 if (newValue == null) return;
@@ -165,7 +172,6 @@ public class ListRackController implements Initializable{
         
         try {
             idCol.setCellValueFactory(cellData -> cellData.getValue().id_rackProperty().asObject());
-            warehouseCol.setCellValueFactory(cellData -> cellData.getValue().id_warehouseProperty().asObject());
             numColumnsCol.setCellValueFactory(cellData -> cellData.getValue().n_columnsProperty().asObject());
             numFloorsCol.setCellValueFactory(cellData -> cellData.getValue().n_floorsProperty().asObject());
             orientationCol.setCellValueFactory(cellData -> cellData.getValue().orientationProperty().asObject());

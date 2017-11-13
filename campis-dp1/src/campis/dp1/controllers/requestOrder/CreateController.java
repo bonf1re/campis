@@ -8,6 +8,7 @@ package campis.dp1.controllers.requestOrder;
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Client;
+import campis.dp1.models.District;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.RequestOrder;
@@ -26,6 +27,7 @@ import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import static java.time.temporal.TemporalQueries.zoneId;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
@@ -41,6 +43,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -53,11 +56,12 @@ import org.hibernate.criterion.Restrictions;
 public class CreateController implements Initializable {
 
     Main main;
-    Integer id, quantity;
+    Integer id, quantity,selected_id;
     Integer num = 0;
     float totalAmount = 0;
     float baseTotalAmount = 0;
     float discountTotal = 0;
+    float freightTotal = 0;
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView = FXCollections.observableArrayList();
 
@@ -100,6 +104,12 @@ public class CreateController implements Initializable {
     private Label messageField1;
     @FXML
     private Label messageField2;
+    @FXML
+    private JFXTextField addressField;
+    @FXML
+    private JFXComboBox<String> districtField;
+    @FXML
+    private JFXTextField freightField;
 
     @FXML
     private void goAddItem() throws IOException {
@@ -111,11 +121,26 @@ public class CreateController implements Initializable {
         main.showListRequestOrder();
     }
 
+    private Integer getDistrict(String cad) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr = "SELECT id_district FROM campis.district WHERE name = '" + cad + "';";
+        SQLQuery query = session.createSQLQuery(qryStr);
+        List list = query.list();
+        Integer returnable = (Integer) list.get(0);
+        return returnable;
+    }
+
     @FXML
     private void createRequestOrder() throws IOException, ParseException {
         SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date_creation = getDate(creationDate.getValue());
         Date date_delivery = getDate(deliveryDate.getValue());
+        int idDist = getDistrict(this.districtField.getValue());
         Boolean verify = verifyDates(date_creation, date_delivery);
         if (verify == TRUE) {
             int prior = Integer.parseInt(priorityField.getValue());
@@ -130,7 +155,7 @@ public class CreateController implements Initializable {
                     Float.parseFloat(subtotalField.getText()),
                     Float.parseFloat(amountField.getText()),
                     (String) statesField.getText(),
-                    clientField.getValue(), prior);
+                    clientField.getValue(), prior, idDist, addressField.getText());
             session.save(requestOrder);
             session.getTransaction().commit();
             session.close();
@@ -204,6 +229,31 @@ public class CreateController implements Initializable {
         return returnable;
     }
 
+    private Float getFreight(String cad) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr = "SELECT freight FROM campis.district WHERE name = '" + cad + "';";
+        SQLQuery query = session.createSQLQuery(qryStr);
+        List list = query.list();
+        Float returnable = ((Double)list.get(0)).floatValue();
+        session.close();
+        sessionFactory.close();
+        return returnable;
+    }
+
+    @FXML
+    private void setDistrictAction() {
+        Float freight = getFreight(this.districtField.getValue());
+        freightTotal = freightTotal + baseTotalAmount * freight;
+        totalAmount = totalAmount + freightTotal;
+        this.freightField.setText(Float.toString(freightTotal));
+        this.amountField.setText(Float.toString(totalAmount));
+    }
+
     private void loadData(int cod, int quant) {
         products = FXCollections.observableArrayList();
         productsView = ContextFX.getInstance().getTempList();
@@ -214,9 +264,12 @@ public class CreateController implements Initializable {
         String state = "ENTREGA";
         baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
         baseTotalAmount = baseTotalAmount + base_amount;
-        discountTotal = ContextFX.getInstance().getTotAmount();
+        discountTotal = ContextFX.getInstance().getDiscount();
         discountTotal = discountTotal + baseTotalAmount * disc;
+        freightTotal = ContextFX.getInstance().getFreight();
         totalAmount = baseTotalAmount - discountTotal;
+        ContextFX.getInstance().setDiscount(discountTotal);
+        ContextFX.getInstance().setFreight(freightTotal);
         ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
         ContextFX.getInstance().setTotAmount(totalAmount);
         this.subtotalField.setText(Float.toString(baseTotalAmount));
@@ -253,11 +306,38 @@ public class CreateController implements Initializable {
         return returnable;
     }
 
+    private List<Object[]> getDistricts() {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr = "SELECT * FROM campis.district;";
+        SQLQuery query = session.createSQLQuery(qryStr);
+        List<Object[]> rows = query.list();
+        session.close();
+        sessionFactory.close();
+        return rows;
+    }
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.selected_id = 0;
+        tablaProd.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue == null) {
+                        return;
+                    }
+                    this.selected_id = newValue.codProdProperty().getValue().intValue();
+                });
         try {
             statesField.setText("EN PROGRESO");
             priorityField.getItems().addAll("1", "2", "3");
+            List<Object[]> dists = getDistricts();
+            for (Object[] dist : dists) {
+                districtField.getItems().add(dist[1].toString());
+            }
             List<Client> clients = getClients();
             for (int i = 0; i < clients.size(); i++) {
                 clientField.getItems().add(clients.get(i).getId_client());
@@ -289,7 +369,7 @@ public class CreateController implements Initializable {
     private Date getDate(LocalDate value) {
 
         Calendar calendar = new GregorianCalendar(value.getYear(),
-                value.getMonthValue(),
+                value.getMonthValue()-1,
                 value.getDayOfMonth());
         return calendar.getTime();
     }
@@ -347,5 +427,36 @@ public class CreateController implements Initializable {
         }
         return flag;
     }
+    
+    private void deleteItems(int codProd, int quantity, float price) {
+        float base_price = quantity*price;
+        ObservableList<SaleCondition> discounts = getDiscount(codProd);
+        Float disc = verifyConditions(discounts, products.get(0), quantity);
+        discountTotal = discountTotal - base_price * disc;
+        baseTotalAmount = baseTotalAmount - base_price;
+        totalAmount = baseTotalAmount + discountTotal + freightTotal;
+        ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
+        ContextFX.getInstance().setTotAmount(totalAmount);
+        this.subtotalField.setText(Float.toString(baseTotalAmount));
+        this.discountField.setText(Float.toString(discountTotal));
+        this.amountField.setText(Float.toString(totalAmount));
+    }
 
+    @FXML
+    private void deleteItem(ActionEvent event) {
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            Integer id_prod = ContextFX.getInstance().getId();
+            for (int i = 0; i < productsView.size(); i++) {
+                if (productsView.get(i).codProdProperty().getValue().compareTo(id_prod) == 0) {
+                    deleteItems(productsView.get(i).codProdProperty().getValue(),
+                    productsView.get(i).cStockProperty().getValue(),productsView.get(i).precioBProperty().getValue());
+                    productsView.remove(i);
+                }
+            }
+            tablaProd.setItems(null);
+            tablaProd.setItems(productsView);
+        }
+    }
+    
 }

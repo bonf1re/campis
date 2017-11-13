@@ -41,12 +41,24 @@ public class ContextFX {
     Float baseTotAmount = 0.0f;
     Float totAmount = 0.0f;
     Float discount = 0.0f;
+    Float freight = 0.0f;
     Integer num = 0; // Useful to save any integer variable.
     Integer var = 0;
     String word = null;
     ObservableList<ProductDisplay> tempList = FXCollections.observableArrayList();
     ObservableList<BatchDisplay> tempBatchList = FXCollections.observableArrayList();
     ArrayList<Object> polymorphic_list = new ArrayList<Object>();
+    Integer mode = 0;
+    
+    public Integer getMode() {
+        Integer returnable = new Integer(this.mode);
+        this.mode = null;
+        return returnable;
+    }
+
+    public void setMode(Integer mode) {
+        this.mode = mode;
+    }
     
     public ArrayList<Object> getPolymorphic_list() {
         ArrayList<Object> returnable = new ArrayList<>(polymorphic_list);
@@ -197,7 +209,16 @@ public class ContextFX {
     public void setDiscount(Float discount) {
         this.discount = discount;
     }
-
+    
+    public Float getFreight() {
+        Float returnable = new Float(this.freight);
+        return returnable;
+    }
+    
+    public void setFreight(Float freight) {
+        this.freight = freight;
+    }
+    
     public ObservableList<ProductDisplay> getTempList() {
         ObservableList<ProductDisplay> returnable = this.tempList;
         return returnable;

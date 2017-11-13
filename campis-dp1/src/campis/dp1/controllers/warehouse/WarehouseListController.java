@@ -66,6 +66,10 @@ public class WarehouseListController implements Initializable {
     private Button editButton;
     @FXML
     private Button deleteButton;
+    @FXML
+    private Button rackButton;
+    @FXML
+    private Button vehicleButton;
     
     
     @FXML
@@ -106,12 +110,35 @@ public class WarehouseListController implements Initializable {
         }
     }
     
+    @FXML
+    private void goListVehicles() throws IOException {
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showListVehicle();
+        }
+    }
+    
+    @FXML
+    private void goListRacks() throws IOException {
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showListRacks();
+        }        
+    }
+    
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        id_role = (ContextFX.getInstance().getUser().getId_role());
+        View rackView = View.getView("racks");
+        View veView = View.getView("vehicles");
+        if (!Permission.canVisualize(id_role, rackView.getId_view()))
+            rackButton.setVisible(false);
+        if (!Permission.canVisualize(id_role, veView.getId_view()))
+            vehicleButton.setVisible(false);
         ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "warehouse");
         warehouseTable.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {

@@ -27,6 +27,7 @@ public class ProductWH_Move extends Product{
         this.setP_stock(result.getP_stock());
         this.setTrademark(result.getTrademark());
         this.setWeight(result.getWeight());
+        this.setMax_qt(result.getMax_qt());
         this.qtLt = new SimpleIntegerProperty(num);
         this.num = new SimpleIntegerProperty(1);
     }

@@ -35,6 +35,8 @@ public class Main extends Application {
         Scene scene = new Scene(mainLayout);
         primaryStage.setScene(scene);
         primaryStage.show();
+        
+        
     }
     
     public static void showLogin() throws IOException {
@@ -49,9 +51,12 @@ public class Main extends Application {
     public static void showTopMenu() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/layouts/TopMenu.fxml"));
-        AnchorPane securitySidebar = loader.load();
-        mainLayout.setTop(securitySidebar);
-        mainLayout.setCenter(null);
+        AnchorPane sidebar = loader.load();
+        mainLayout.setTop(sidebar);
+        
+        //mainLayout.setCenter(null);
+        // TODO
+        if (true) showBulkLoad();
     }
 
     public static void showSecuritySidebar() throws IOException {
@@ -658,6 +663,20 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("views/reports/StocksReport.fxml"));
         BorderPane campaign = loader.load();
         mainLayout.setCenter(campaign);
+    }
+
+    public static void showWhDepartureAddItem() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/whdeparturemoveadditem.fxml"));
+        BorderPane addItem = loader.load();
+        mainLayout.setCenter(addItem);
+    }
+    
+    public static void showBulkLoad() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/bulkLoad/execute.fxml"));
+        BorderPane ex = loader.load();
+        mainLayout.setCenter(ex);
     }
     
 }

@@ -22,11 +22,10 @@ public class VehicleDisplay {
     private final DoubleProperty max_weight;
     private final IntegerProperty speed;
     private final StringProperty active;
-    private final StringProperty warehouse;
     private final StringProperty plate;
     
     
-    public VehicleDisplay(int id_vehicle, double max_weight, int speed, boolean active, String warehouse, String plate) {
+    public VehicleDisplay(int id_vehicle, double max_weight, int speed, boolean active, String plate) {
         this.id_vehicle = new SimpleIntegerProperty(id_vehicle);
         this.max_weight = new SimpleDoubleProperty(max_weight);
         this.speed = new SimpleIntegerProperty(speed);
@@ -34,7 +33,6 @@ public class VehicleDisplay {
         if (active) this.active = new SimpleStringProperty("Activo");
         else this.active = new SimpleStringProperty("No Activo");
      
-        this.warehouse = new SimpleStringProperty(warehouse);
         this.plate = new SimpleStringProperty(plate);
         
     }
@@ -64,13 +62,6 @@ public class VehicleDisplay {
      */
     public StringProperty activeProperty() {
         return active;
-    }
-
-    /**
-     * @return the warehouse
-     */
-    public StringProperty warehouseProperty() {
-        return warehouse;
     }
 
     /**

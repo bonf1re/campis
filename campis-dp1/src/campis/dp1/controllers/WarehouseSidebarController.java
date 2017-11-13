@@ -32,31 +32,19 @@ public class WarehouseSidebarController implements Initializable {
     @FXML
     private JFXButton tipoProductButton;
 
-    @FXML
-    private JFXButton rackButton;
-
-    @FXML
-    private JFXButton vehicleButton;
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
             id_role = (ContextFX.getInstance().getUser().getId_role());
             View whView = View.getView("warehouse");
             View productView = View.getView("products");
-            View rackView = View.getView("racks");
             View ptView = View.getView("product_types");
-            View veView = View.getView("vehicles");
             if (!Permission.canVisualize(id_role, whView.getId_view()))
                 whButton.setVisible(false);
             if (!Permission.canVisualize(id_role, productView.getId_view()))
                 productButton.setVisible(false);
             if (!Permission.canVisualize(id_role, ptView.getId_view()))
                 tipoProductButton.setVisible(false);
-            if (!Permission.canVisualize(id_role, rackView.getId_view()))
-                rackButton.setVisible(false);
-            if (!Permission.canVisualize(id_role, veView.getId_view()))
-                vehicleButton.setVisible(false);
         } catch(NullPointerException e) {
         }
     }
@@ -74,15 +62,5 @@ public class WarehouseSidebarController implements Initializable {
     @FXML
     private void goListProductTypes() throws IOException {
         main.showListProductType();
-    }
-     
-    @FXML
-    private void goListRacks() throws IOException {
-        main.showListRacks();
-    }
-    
-    @FXML
-    private void goListVehicles() throws IOException {
-        main.showListVehicle();
     }
 }

@@ -3,21 +3,24 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1.controllers.requestOrder;
+package campis.dp1.controllers.warehouse;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
-import static campis.dp1.controllers.products.CreateController.getTypes;
+import static campis.dp1.controllers.warehouse.EntryMoveAddItemController.getCodType;
+import static campis.dp1.controllers.warehouse.EntryMoveAddItemController.getTypes;
+import campis.dp1.models.BatchWH_Move;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.ProductType;
+import campis.dp1.models.ProductWH_Move;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
-import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -25,11 +28,9 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
-import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -39,14 +40,16 @@ import org.hibernate.transform.Transformers;
 
 /**
  *
- * @author Eddy
+ * @author sergio
  */
-public class AddItemController2 implements Initializable{
-    
+public class DepartureMoveAddItemController implements Initializable {
     Main main;
     private ObservableList<ProductDisplay> productsView;
     private ObservableList<Product> products;
     private int selected_id;
+    private int warehouse_id;
+    
+    
     
     @FXML
     private JFXTextField codField;
@@ -64,13 +67,29 @@ public class AddItemController2 implements Initializable{
     private TableColumn<ProductDisplay, Integer> typeColumn;
     @FXML
     private JFXTextField quantityField;
-    @FXML
-    private Label messageLabel;
-    
-    @FXML
-    private void goEditRequestOrder() throws IOException {
-        main.showEditRequestOrder();
+
+    @Override
+    public void initialize(URL location, ResourceBundle resources) {
+        this.selected_id = 0;
+        this.warehouse_id = ContextFX.getInstance().getId();
+        tableProd.getSelectionModel().selectedItemProperty().addListener(
+        (observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                return;
+            }
+            this.selected_id = newValue.codProdProperty().getValue().intValue();
+            }
+        );
+        codColumn.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
+        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
+        typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty().asObject());
+        
+        List<ProductType> typeList = getTypes(); 
+        for (int i = 0; i < typeList.size(); i++) {
+            typeField.getItems().addAll(typeList.get(i).getDescription());
+        }
     }
+    
     
     private ObservableList<Product> getSearchList(String text, String text2, String text3) throws SQLException, ClassNotFoundException {
         int codType = 0;
@@ -187,56 +206,34 @@ public class AddItemController2 implements Initializable{
         return types;
     }
     
-    private Integer getQuantProduct(int id) {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        String qryStr = "SELECT c_stock FROM campis.productxwarehouse "
-                + "WHERE id_product ="+ id;
-        SQLQuery query = session.createSQLQuery(qryStr);
-        List<Integer> list = query.list();
-        int returnable = list.get(0);
-        session.close();
-        sessionFactory.close();
-        return returnable;
+    @FXML
+    private void addItemAction() throws IOException {
+        if (selected_id > 0) {
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Product.class);
+            criteria.add(Restrictions.eq("id_product", selected_id));
+            Product prod =  (Product) criteria.list().get(0);
+            ProductWH_Move ppp = new ProductWH_Move(prod, Integer.parseInt(quantityField.getText()));
+            ContextFX.getInstance().setId(warehouse_id);
+            ContextFX.getInstance().setMode(1);
+            ArrayList<Object> aux_pol = ContextFX.getInstance().getPolymorphic_list();
+            ObservableList aux_prod = FXCollections.observableArrayList((ObservableList)aux_pol.get(0));
+            aux_prod.add(ppp);
+            aux_pol.set(0, aux_prod);
+            ContextFX.getInstance().setPolymorphic_list(aux_pol);
+            this.goBackCreateDepartureMove();
+        }
     }
     
     @FXML
-    private void addItemAction() throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        int cQuant = getQuantProduct(selected_id);
-        int quant = Integer.parseInt(quantityField.getText());
-        if ( quant <= cQuant && quant > 0) {
-            ContextFX.getInstance().setQuantity(quant);
-            this.goEditRequestOrder();
-        }else{
-            messageLabel.setText("La cantidad introducida es incorrecta");
-        }
+    private void goBackCreateDepartureMove() throws IOException {
+        ContextFX.getInstance().setId(warehouse_id);
+        ContextFX.getInstance().setMode(1);
+        main.showWhDepartureMoveCreate();
     }
-    
-    @Override
-    public void initialize(URL location, ResourceBundle resources) {
-        tableProd.getSelectionModel().selectedItemProperty().addListener(
-        (observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                return;
-            }
-            this.selected_id = newValue.codProdProperty().getValue().intValue();
-            }
-        );
-        codColumn.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
-        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty().asObject());
-        
-        List<ProductType> typeList = getTypes(); 
-        for (int i = 0; i < typeList.size(); i++) {
-            typeField.getItems().addAll(typeList.get(i).getDescription());
-        }
-    }
-    
-    
 }
-

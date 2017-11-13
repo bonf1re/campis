@@ -8,6 +8,7 @@ package campis.dp1.controllers.racks;
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Rack;
+import campis.dp1.models.Vehicle;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
@@ -33,8 +34,6 @@ public class EditRackController implements Initializable{
     private Main main;
     
     @FXML
-    private JFXTextField warehouseField;
-    @FXML
     private JFXTextField numColumnsField;
     @FXML
     private JFXTextField numFloorsField;
@@ -47,6 +46,19 @@ public class EditRackController implements Initializable{
     
     @FXML
     private void goListRacks() throws IOException {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Rack.class);
+        criteria.add(Restrictions.eq("id_rack",this.id));
+        List rsWarehouse = criteria.list();
+        Rack result = (Rack)rsWarehouse.get(0);
+        session.close();
+        sessionFactory.close();
+        ContextFX.getInstance().setId(result.getId_warehouse());
         main.showListRacks();
     }
     
@@ -60,12 +72,11 @@ public class EditRackController implements Initializable{
         Session session = sessionFactory.openSession();
         session.beginTransaction();
 
-        Query query = session.createQuery("update Rack set id_warehouse = :newId_warehouse," + 
+        Query query = session.createQuery("update Rack set" + 
                                           " pos_x = :newPos_x, pos_y = :newPos_y, n_columns = :newN_columns," +
                                           " n_floors = :newN_floors, orientation=:neworientation" +  
                                           " where id_rack = :id_rack");
         
-        query.setParameter("newId_warehouse", Integer.parseInt(warehouseField.getText()));
         query.setParameter("newPos_x", Integer.parseInt(pos_xField.getText()));
         query.setParameter("newPos_y",Integer.parseInt(pos_yField.getText()));
         query.setParameter("newN_floors", Integer.parseInt(numFloorsField.getText()));
@@ -104,7 +115,6 @@ public class EditRackController implements Initializable{
         
         System.out.println(result.getId_rack());
         
-        this.warehouseField.setText(result.getId_warehouse().toString());
         this.numColumnsField.setText(result.getN_columns().toString());
         this.numFloorsField.setText(result.getN_floors().toString());
         this.pos_xField.setText(result.getPos_x().toString());
