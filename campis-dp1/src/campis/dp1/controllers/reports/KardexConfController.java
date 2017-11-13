@@ -132,7 +132,7 @@ public class KardexConfController implements Initializable {
        ContextFX.getInstance().setId_objective(id_objective);
        ContextFX.getInstance().setInit_date(getDate(pckBegin.getValue()));
        ContextFX.getInstance().setEnd_date(getDate(pckEnd.getValue()));       
-       ContextFX.getInstance().setLabeltoPrint(objectiveCB.getValue());
+       ContextFX.getInstance().setLabeltoPrint1(objectiveCB.getValue());
         
     }
     

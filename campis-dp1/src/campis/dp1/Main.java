@@ -644,6 +644,20 @@ public class Main extends Application {
 
     }
     
+    public static void showStocksReportConf() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/reports/StocksConfig.fxml"));
+        BorderPane campaign = loader.load();
+        mainLayout.setCenter(campaign);
+    }
     
+    
+    
+    public static void showGenerateStocksReport() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/reports/StocksReport.fxml"));
+        BorderPane campaign = loader.load();
+        mainLayout.setCenter(campaign);
+    }
     
 }
