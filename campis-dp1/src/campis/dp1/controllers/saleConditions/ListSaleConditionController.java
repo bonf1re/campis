@@ -98,19 +98,15 @@ public class ListSaleConditionController implements Initializable {
     @FXML
     private JFXComboBox<String> cmbCampaign;
     
-    //
-    @FXML
-    private Label iniini;
 
-    @FXML
-    private Label endend;
     //
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
         List<Campaign> cmpList = getCampaigns();
-        cmbCampaign.getItems().addAll("");
+        cmbCampaign.getItems().add("");
+        cmbCampaign.setValue("");
         for (int i = 0; i < cmpList.size(); i++) {
             cmbCampaign.getItems().addAll(cmpList.get(i).getName());
         }
@@ -160,7 +156,7 @@ public class ListSaleConditionController implements Initializable {
     private Date getDate(LocalDate value) {
         
         Calendar calendar = new GregorianCalendar(value.getYear(),
-                                                    value.getMonthValue(),
+                                                    value.getMonthValue()-1,
                                                     value.getDayOfMonth());
         return calendar.getTime();
     }
@@ -170,20 +166,22 @@ public class ListSaleConditionController implements Initializable {
         String txtCampaign = this.cmbCampaign.getValue();
         int idCampaignSelected = searchCodCampaign(txtCampaign);
         
+        LocalDate initDate = pickerInitial.getValue();
+        LocalDate endDate = pickerFinal.getValue();
         
-        Date dateInit = getDate(pickerInitial.getValue());
-        Date dateEnd = getDate(pickerFinal.getValue());
-        //
-        iniini.setText(dateInit.toString());
-        endend.setText(dateEnd.toString());
-        //
-        if (txtCampaign.compareTo("") == 0) { //faltan condiciones
-            cargarData();
-        } else {
-            condiciones = FXCollections.observableArrayList();
-            condicionesView = FXCollections.observableArrayList();
-            condiciones = getSearchList(idCampaignSelected,dateInit,dateEnd);
-            
+        Date dateInit, dateEnd;
+        
+        
+        if (initDate != null) dateInit = getDate(initDate);
+        else dateInit = null;
+        if (endDate != null) dateEnd = getDate(endDate);
+        else dateEnd = null;
+
+        
+        condiciones = FXCollections.observableArrayList();
+        condicionesView = FXCollections.observableArrayList();
+        condiciones = getSearchList(idCampaignSelected,dateInit,dateEnd);
+
         
         for (int i = 0; i < condiciones.size(); i++) {
 
@@ -195,7 +193,7 @@ public class ListSaleConditionController implements Initializable {
         }
         saleCondTable.setItems(null);
         saleCondTable.setItems(condicionesView);
-        }
+        
     }
     
     private ObservableList<SaleCondition> getSearchList(int id, Date ini, Date fin) {
@@ -210,15 +208,10 @@ public class ListSaleConditionController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(SaleCondition.class);
-        List<SaleCondition> list = criteria.list();
-        for (int i = 0; i < list.size(); i++) {
-            if ((list.get(i).getId_campaign() == id) && 
-               (list.get(i).getInitial_date().compareTo(Timestamp.valueOf(formatIn.format(ini))) >= 0) &&
-               (list.get(i).getFinal_date().compareTo(Timestamp.valueOf(formatIn.format(fin))) <= 0))
-                {
-                    returnable.add(list.get(i));
-                }
-        }
+        if (id != -1) criteria.add(Restrictions.eq("id_campaign",id));
+        if (ini != null) criteria.add(Restrictions.ge("initial_date", ini));
+        if (fin != null) criteria.add(Restrictions.le("final_date", fin));
+        returnable = FXCollections.observableArrayList(criteria.list());
         session.close();
         sessionFactory.close();
         return returnable;
