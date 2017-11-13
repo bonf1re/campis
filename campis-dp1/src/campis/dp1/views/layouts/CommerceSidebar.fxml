@@ -5,7 +5,6 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="95.0" styleClass="container" stylesheets="@../../assets/css/sidebar.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.CommerceSidebarController">
     <children>
-      <JFXButton prefHeight="61.0" prefWidth="95.0" styleClass="option" text="Órdenes de Compra" textAlignment="CENTER" wrapText="true" />
       <JFXButton onAction="#goListRequestOrder" prefHeight="61.0" prefWidth="95.0" styleClass="option" text="Órdenes de Venta" textAlignment="CENTER" wrapText="true" />
       <JFXButton onAction="#goListSaleConditions" prefHeight="61.0" prefWidth="95.0" styleClass="option" text="Condiciones de Venta" textAlignment="CENTER" wrapText="true" />
       <JFXButton onAction="#goListRequestStatuses" prefHeight="61.0" prefWidth="95.0" styleClass="option" text="Estados de Orden" textAlignment="CENTER" wrapText="true" />

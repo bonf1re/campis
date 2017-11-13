@@ -47,6 +47,16 @@ public class WarehouseZone {
         this.free = free;
     }
 
+    public WarehouseZone(WarehouseZone zone, int r) {
+        this.free = zone.free;
+        this.id_rack = zone.id_rack;
+        this.id_warehouse = zone.id_warehouse;
+        this.id_zone = zone.id_zone;
+        this.pos_x = zone.pos_x;
+        this.pos_y = zone.pos_y;
+        this.pos_z = zone.pos_z;
+    }
+
     public int getId_zone() {
         return id_zone;
     }

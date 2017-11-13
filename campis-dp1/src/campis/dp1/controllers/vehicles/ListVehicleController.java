@@ -43,35 +43,17 @@ public class ListVehicleController implements Initializable {
     
     @FXML
     private TableView<VehicleDisplay> tableVehicle;
-
     @FXML
     private TableColumn<VehicleDisplay, Integer> idVehicleColumn;
-
     @FXML
     private TableColumn<VehicleDisplay, Double> maxWeightColumn;
-
     @FXML
     private TableColumn<VehicleDisplay, Integer> maxSpeedColumn;
-
     @FXML
     private TableColumn<VehicleDisplay, String> activeColumn;
-
-    @FXML
-    private TableColumn<VehicleDisplay, String> warehouseColumn;
-    
-    
     @FXML
     private TableColumn<VehicleDisplay, String> plateColumn;
-
-    @FXML
-    private Button newButton;
-
-    @FXML
-    private Button editButton;
-
-    @FXML
-    private Button deleteButton;
-    
+  
     @FXML
     private void goCreateVehicle() throws IOException {
         main.showNewVehicle();
@@ -104,7 +86,6 @@ public class ListVehicleController implements Initializable {
             maxWeightColumn.setCellValueFactory(cellData -> cellData.getValue().maxWeightProperty().asObject());
             maxSpeedColumn.setCellValueFactory(cellData -> cellData.getValue().speedProperty().asObject());
             activeColumn.setCellValueFactory(cellData -> cellData.getValue().activeProperty());
-            warehouseColumn.setCellValueFactory(cellData -> cellData.getValue().warehouseProperty());
             plateColumn.setCellValueFactory(cellData -> cellData.getValue().plateProperty());
             /**/
             cargarData();
@@ -132,26 +113,6 @@ public class ListVehicleController implements Initializable {
         return returnable;
     }
     
-    public static String getWarehouse(int cod) {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(Warehouse.class);
-        criteria.add(Restrictions.eq("id_warehouse",cod));
-        String descripType;
-        List rsType = criteria.list();
-        Warehouse result = (Warehouse) rsType.get(0);
-        descripType = result.getName();
-        session.close();
-        sessionFactory.close();
-
-        return descripType;
-    }
-    
-    
     private void cargarData() throws SQLException, ClassNotFoundException {
         vehiculos = FXCollections.observableArrayList();
         vehiculosView = FXCollections.observableArrayList();
@@ -160,8 +121,7 @@ public class ListVehicleController implements Initializable {
         for (int i = 0; i < vehiculos.size(); i++) {
  
             VehicleDisplay veh = new VehicleDisplay(vehiculos.get(i).getId_vehicle(), vehiculos.get(i).getMax_weight(),
-                    vehiculos.get(i).getSpeed(), vehiculos.get(i).isActive(), getWarehouse(vehiculos.get(i).getId_warehouse()),
-                    vehiculos.get(i).getPlate());
+                    vehiculos.get(i).getSpeed(), vehiculos.get(i).isActive(),vehiculos.get(i).getPlate());
             vehiculosView.add(veh);
         }
         tableVehicle.setItems(null);

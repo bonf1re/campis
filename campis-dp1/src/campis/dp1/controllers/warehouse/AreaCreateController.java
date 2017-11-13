@@ -58,6 +58,7 @@ public class AreaCreateController implements Initializable {
     @FXML
     private JFXComboBox cbProductType;
     
+    
     @FXML
     private void goListArea() throws IOException{
         ContextFX.getInstance().setId(this.warehouse_id);

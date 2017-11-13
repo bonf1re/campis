@@ -6,9 +6,11 @@
 package campis.dp1.models;
 
 import javafx.beans.property.BooleanProperty;
+import javafx.beans.property.DoubleProperty;
 import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
+import javafx.beans.property.SimpleDoubleProperty;
 import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
@@ -31,9 +33,10 @@ public class BatchDisplay {
     private final StringProperty heritage;
     private final BooleanProperty selected;
     private final SimpleIntegerProperty numMove;
+    private final DoubleProperty weight;
     
 
-    public BatchDisplay(Batch whMove) {
+    public BatchDisplay(Batch whMove,double weight) {
         this.id_batch = new SimpleIntegerProperty(whMove.getId_batch());
         this.quantity = new SimpleIntegerProperty(whMove.getQuantity());
         this.batch_cost = new SimpleFloatProperty(whMove.getBatch_cost());
@@ -46,6 +49,7 @@ public class BatchDisplay {
         this.heritage = new SimpleStringProperty(whMove.getHeritage());
         this.selected = new SimpleBooleanProperty(false);
         this.numMove = new SimpleIntegerProperty(0);
+        this.weight =  new  SimpleDoubleProperty(weight);
     }
     
     public BatchDisplay(int id_batch, int quantity, float cost, String arrivalDate, String expirationDate,
@@ -63,6 +67,7 @@ public class BatchDisplay {
         this.heritage = new SimpleStringProperty(heritage);
         this.selected = new SimpleBooleanProperty(false);
         this.numMove = new SimpleIntegerProperty(0);
+        this.weight =  new SimpleDoubleProperty(0);
     }
 
     public BooleanProperty getSelected() {
@@ -112,6 +117,10 @@ public class BatchDisplay {
 
     public IntegerProperty getNumMove() {
         return numMove;
+    }
+
+    public DoubleProperty getWeight() {
+        return weight;
     }
     
     

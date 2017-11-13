@@ -13,18 +13,19 @@
    <center>
       <Pane prefHeight="200.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="batchTable" layoutX="36.0" layoutY="128.0" prefHeight="390.0" prefWidth="305.0">
+            <TableView fx:id="batchTable" layoutX="36.0" layoutY="85.0" prefHeight="390.0" prefWidth="305.0">
               <columns>
                   <TableColumn fx:id="prodCol" prefWidth="82.0" text="Producto" />
                 <TableColumn fx:id="qtCol" prefWidth="142.0" text="Cantidad en Lote" />
                   <TableColumn fx:id="zoneCol" prefWidth="79.0" text="Zona" />
               </columns>
             </TableView>
-            <Text layoutX="62.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Entrada a Almacén / Enrutar Lotes" wrappingWidth="244.75390625">
+            <Text layoutX="62.0" layoutY="39.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Entrada a Almacén / Enrutar Lotes" wrappingWidth="435.75390625">
                <font>
                   <Font size="24.0" />
                </font>
             </Text>
+            <Text fx:id="vhText" layoutX="76.0" layoutY="503.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Text" wrappingWidth="130.7294921875" />
          </children>
       </Pane>
    </center>
@@ -32,9 +33,12 @@
       <Pane prefHeight="600.0" prefWidth="616.0" BorderPane.alignment="CENTER">
          <children>
             <Canvas fx:id="mapCanvas" height="376.0" layoutX="34.0" layoutY="91.0" width="544.0" />
-            <Button layoutX="233.0" layoutY="537.0" mnemonicParsing="false" onAction="#saveEntryMove" text="Grabar" />
-            <Button layoutX="330.0" layoutY="537.0" mnemonicParsing="false" onAction="#goEntryMoveList" text="Cancelar" />
-            <Text layoutX="281.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mapa" />
+            <Button layoutX="93.0" layoutY="543.0" mnemonicParsing="false" onAction="#goEntryMoveList" text="Volver" />
+            <Text layoutX="358.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mapa" />
+            <Button layoutY="543.0" mnemonicParsing="false" onAction="#saveEntryMove" text="Grabar" />
+            <Button layoutX="408.0" layoutY="543.0" mnemonicParsing="false" onAction="#nextRoute" text="&gt;" />
+            <Button layoutX="316.0" layoutY="543.0" mnemonicParsing="false" onAction="#prevRoute" text="&lt;" />
+            <Text fx:id="pCounterField" layoutX="355.0" layoutY="561.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;x/x&gt;" />
          </children>
       </Pane>
    </right>
