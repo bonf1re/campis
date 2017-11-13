@@ -17,5 +17,6 @@
     <children>
       	<JFXButton onAction="#goKardexReport" prefHeight="51.0" prefWidth="95.0" styleClass="option" text="Kardex" />
      	<JFXButton onAction="#goExpirationReport" prefHeight="51.0" prefWidth="95.0" styleClass="option" text="Expiración" />
+        <JFXButton onAction="#goStocksReport" prefHeight="51.0" prefWidth="95.0" styleClass="option" text="Stocks" />
    </children>
 </VBox>

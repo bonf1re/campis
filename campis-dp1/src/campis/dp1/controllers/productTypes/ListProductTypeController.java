@@ -46,10 +46,7 @@ public class ListProductTypeController implements Initializable {
 
     @FXML
     private void goCreateProductType() throws IOException {
-        if (selected_id > 0) {
-            ContextFX.getInstance().setId(selected_id);
-            main.showCreateProductType();
-        }
+        main.showCreateProductType();
     }
     
     @FXML

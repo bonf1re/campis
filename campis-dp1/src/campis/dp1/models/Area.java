@@ -59,6 +59,14 @@ public class Area{
     public void setId_warehouse(int id_warehouse) {
         this.id_warehouse = id_warehouse;
     }
+    
+    public int getProduct_type() {
+        return product_type;
+    }
+    
+    public void setProduct_type(int product_type) {
+        this.product_type = product_type;
+    }
 
     
     public int getLength() {

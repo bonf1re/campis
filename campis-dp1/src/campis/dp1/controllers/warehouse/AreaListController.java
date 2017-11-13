@@ -10,6 +10,7 @@ import javafx.event.ActionEvent;
 import campis.dp1.Main;
 import campis.dp1.models.Warehouse;
 import campis.dp1.models.Area;
+import campis.dp1.models.ProductType;
 import campis.dp1.models.AreaDisplay;
 import java.io.IOException;
 import java.net.URL;
@@ -56,7 +57,7 @@ public class AreaListController implements Initializable {
     @FXML
     private TableColumn<AreaDisplay, Integer> posYCol;
     @FXML
-    private TableColumn<AreaDisplay, Integer> idWhCol;
+    private TableColumn<AreaDisplay, String> productTypeCol;
     
     @FXML
     private void goWhList() throws IOException{
@@ -71,7 +72,7 @@ public class AreaListController implements Initializable {
     
     @FXML
     private void goAreaEdit() throws IOException{
-        ContextFX.getInstance().setId(this.warehouse_id);
+        ContextFX.getInstance().setId(this.selected_id);
         main.showAreaEdit();
     }
     
@@ -95,6 +96,7 @@ public class AreaListController implements Initializable {
             widthCol.setCellValueFactory(cellData -> cellData.getValue().getWidth().asObject());
             posXCol.setCellValueFactory(cellData -> cellData.getValue().getPos_x().asObject());
             posYCol.setCellValueFactory(cellData -> cellData.getValue().getPos_y().asObject());
+            productTypeCol.setCellValueFactory(cellData -> cellData.getValue().getProduct_type());
             areasLoadData();
         } catch(SQLException | ClassNotFoundException ex){
             Logger.getLogger(AreaListController.class.getName()).log(Level.SEVERE, null, ex);
@@ -107,7 +109,7 @@ public class AreaListController implements Initializable {
         whAreas = getWhAreas();
         for (int i = 0; i < whAreas.size(); i++) {
             Area whArea = (Area) whAreas.get(i);
-            AreaDisplay whArea_display = new AreaDisplay(whArea);
+            AreaDisplay whArea_display = new AreaDisplay(whArea, getProductType(whArea.getProduct_type()));
             whAreasView.add(whArea_display);
         }
         whAreaTable.setItems(null);
@@ -133,6 +135,25 @@ public class AreaListController implements Initializable {
         session.close();
         sessionFactory.close();
         return returnable;
+    }
+    
+    public static String getProductType(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(ProductType.class);
+        criteria.add(Restrictions.eq("id_product_type",cod));
+        String productTypeName;
+        List rsType = criteria.list();
+        ProductType result = (ProductType) rsType.get(0);
+        productTypeName = result.getDescription();
+        session.close();
+        sessionFactory.close();
+
+        return productTypeName;
     }
     
     private void deleteArea(int cod) {

@@ -17,6 +17,7 @@ import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -33,7 +34,6 @@ import org.hibernate.transform.Transformers;
 public class CreateVehicleController implements Initializable {
     private Main main;
     
-    
     @FXML
     private JFXTextField lblWeight;
 
@@ -45,13 +45,23 @@ public class CreateVehicleController implements Initializable {
 
     @FXML
     private JFXTextField lblPlate;
+
+    @FXML
+    private Label lblWeightMessage;
+
+    @FXML
+    private Label lblSpeedMessage;
+
+    @FXML
+    private Label cmWarehouseMessage;
+
+    @FXML
+    private Label lblPlateMessage;
    
     @FXML
     private void goListVehicles() throws IOException {
         main.showListVehicle();
     }
-    
-    
     
     public static Integer searchWarehouse(String wr) throws SQLException, ClassNotFoundException {
         Configuration configuration = new Configuration();
@@ -68,7 +78,6 @@ public class CreateVehicleController implements Initializable {
         codWr = result.getId();
         return codWr;
     }
-
         
     public static List<Warehouse> getWarehouses() {
         Configuration configuration = new Configuration();
@@ -85,34 +94,58 @@ public class CreateVehicleController implements Initializable {
         return measures;
     }
     
-    
+    public boolean validation() {
+        boolean lblWeightValid = lblWeight.getText().length() == 0;
+        boolean lblSpeedValid = lblSpeed.getText().length() == 0;
+        boolean lblPlateValid = lblPlate.getText().length() == 0;
+        boolean cmWarehouseValid = cmWarehouse.getValue() == null;
+        
+        lblPlateMessage.setText("");
+        cmWarehouseMessage.setText("");
+        lblSpeedMessage.setText("");
+        lblWeightMessage.setText("");
+
+        if (lblPlateValid)
+            lblPlateMessage.setText("Campo obligatorio");
+        if (cmWarehouseValid)
+            cmWarehouseMessage.setText("Campo obligatorio");
+        if (lblSpeedValid)
+            lblSpeedMessage.setText("Campo obligatorio");
+        if(lblWeightValid)
+            lblWeightMessage.setText("Campo obligatorio");
+
+        return (!lblWeightValid && !lblSpeedValid && !lblPlateValid && !cmWarehouseValid);
+    }
+
     @FXML
     private void insertVehicle() throws IOException {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        int codWr=0;
-        
-        try
-         {
-            codWr = searchWarehouse(cmWarehouse.getValue());
-         }
-        catch (ClassNotFoundException |SQLException e)
-         {
-            e.printStackTrace();
-            //agregar error
-         }
-           
-        Vehicle v = new Vehicle(Double.parseDouble(lblWeight.getText()), Integer.parseInt(lblSpeed.getText()),true,
-                                            codWr, lblPlate.getText());
-        session.save(v);
-        session.getTransaction().commit();
-        session.close();
-        sessionFactory.close();
-        this.goListVehicles();
+        if (validation()) {
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+            int codWr = 0;
+            
+            try
+             {
+                codWr = searchWarehouse(cmWarehouse.getValue());
+             }
+            catch (ClassNotFoundException |SQLException e)
+             {
+                e.printStackTrace();
+                //agregar error
+             }
+               
+            Vehicle v = new Vehicle(Double.parseDouble(lblWeight.getText()), Integer.parseInt(lblSpeed.getText()),true,
+                                                codWr, lblPlate.getText());
+            session.save(v);
+            session.getTransaction().commit();
+            session.close();
+            sessionFactory.close();
+            this.goListVehicles();
+        }
     }
     
     
