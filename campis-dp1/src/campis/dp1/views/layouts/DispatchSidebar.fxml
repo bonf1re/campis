@@ -9,7 +9,7 @@
         <URL value="@/campis/dp1/assets/css/dispatchsidebar.css" />
     </stylesheets>
     <children>
-      <JFXButton onAction="#goListEntries" prefHeight="51.0" prefWidth="95.0" styleClass="option" text="Entradas" />
-      <JFXButton onAction="#goListDepartures" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Salidas" />
+      <JFXButton fx:id="entriesButton" onAction="#goListEntries" prefHeight="51.0" prefWidth="95.0" styleClass="option" text="Entradas" />
+      <JFXButton fx:id="depButton" onAction="#goListDepartures" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Salidas" />
    </children>
 </VBox>
