@@ -99,7 +99,6 @@ public class CreateVehicleController implements Initializable {
         boolean lblSpeedValid = lblSpeed.getText().length() == 0;
         boolean lblPlateValid = lblPlate.getText().length() == 0;
         boolean cmWarehouseValid = cmWarehouse.getValue() == null;
-        System.out.println(cmWarehouse.getValue());
         
         lblPlateMessage.setText("");
         cmWarehouseMessage.setText("");

@@ -38,6 +38,13 @@
             <JFXDatePicker fx:id="pckEnd" layoutX="381.0" layoutY="431.0" prefHeight="26.0" prefWidth="175.0" />
             <Label layoutX="568.0" layoutY="239.0" text="\%" />
             <Label layoutX="568.0" layoutY="300.0" text="(unidades)" />
+            <Label fx:id="campaignCBMessage" layoutX="383.0" layoutY="108.0" prefHeight="17.0" prefWidth="171.0" textFill="#ee0707" />
+            <Label fx:id="typeCBMessage" layoutX="383.0" layoutY="159.0" prefHeight="17.0" prefWidth="171.0" textFill="#ee0707" />
+            <Label fx:id="objectiveCBMessage" layoutX="383.0" layoutY="210.0" prefHeight="17.0" prefWidth="171.0" textFill="#ee0707" />
+            <Label fx:id="amountFieldMessage" layoutX="384.0" layoutY="268.0" prefHeight="17.0" prefWidth="171.0" textFill="#ee0707" />
+            <Label fx:id="limitFieldMessage" layoutX="384.0" layoutY="333.0" prefHeight="17.0" prefWidth="171.0" textFill="#ee0707" />
+            <Label fx:id="pckBeginMessage" layoutX="373.0" layoutY="396.0" prefHeight="17.0" prefWidth="171.0" textFill="#ee0707" />
+            <Label fx:id="pckEndMessage" layoutX="373.0" layoutY="466.0" prefHeight="17.0" prefWidth="171.0" textFill="#ee0707" />
          </children>
       </AnchorPane>
    </center>
