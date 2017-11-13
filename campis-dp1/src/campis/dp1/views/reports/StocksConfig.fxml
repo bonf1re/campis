@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import com.jfoenix.controls.JFXComboBox?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.reports.StocksConfigController">
+   <center>
+      <AnchorPane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label layoutX="219.0" layoutY="174.0" prefHeight="25.0" prefWidth="125.0" text="Tipo de producto:" />
+            <Label layoutX="219.0" layoutY="292.0" text="Almacén:" />
+            <Button fx:id="generateBtn" layoutX="347.0" layoutY="441.0" mnemonicParsing="false" onAction="#goGenerateReport" prefHeight="21.0" prefWidth="72.0" text="Generar" />
+            <Label layoutX="51.0" layoutY="52.0" text="Crear reporte de stocks">
+               <font>
+                  <Font size="20.0" />
+               </font>
+            </Label>
+            <JFXComboBox fx:id="typeproductCB" editable="true" layoutX="383.0" layoutY="175.0" prefHeight="24.0" prefWidth="172.0" />
+            <JFXComboBox fx:id="warehouseCB" editable="true" layoutX="382.0" layoutY="288.0" prefHeight="24.0" prefWidth="172.0" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

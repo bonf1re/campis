@@ -67,8 +67,73 @@ public class GraphicsUtils {
         return crackList;
     }
     
+    
     @FXML
     public void drawVisualizationMap(GraphicsContext gc,int y, int x,int[][] map){
+        float canvas_height=(float) gc.getCanvas().getHeight();
+       float canvas_width =(float) gc.getCanvas().getWidth();
+       int mult = 1;
+       int padding_y = 0;
+       int padding_x = 0;
+       float scaling_factor_y = 1;
+       float scaling_factor_x = 1;
+       
+       
+       // Padding / Scaling 
+       if (canvas_width/x>1 && canvas_height/y>1){
+                // Padding 
+            if (canvas_width/x > canvas_height/y){
+                mult = (int) canvas_height/y;
+                //mult = (int) canvas_height/x;
+            }else{
+                mult = (int) canvas_width/x;
+                //mult = (int) canvas_width/y;
+            }
+
+            padding_y=(int)(((int)canvas_height)-mult*y)/4;
+            padding_x=(int)(((int)canvas_width)-mult*x)/4;
+
+            if (padding_y>0){
+                padding_y+=mult/2;
+            }
+            if (padding_x>0){
+                padding_x+=mult/2;
+            }
+
+            System.out.println(padding_x);
+            System.out.println(padding_y);
+            System.out.println(mult);
+       }else{
+           // Scaling
+           scaling_factor_y = y/canvas_height;
+           scaling_factor_x = x/canvas_width;
+           if (scaling_factor_y > scaling_factor_x){
+                // padding at x
+                padding_x = (int) Math.abs(canvas_width-x/scaling_factor_x)/4;
+            }else{
+               // padding at y
+                padding_y = (int) Math.abs(canvas_height-y/scaling_factor_y)/4;
+            }
+           
+       }
+        
+       
+        for (int j = 0; j < y; j+=scaling_factor_y) {
+            for (int i = 0; i < x; i+=scaling_factor_x) {
+                if (map[j][i]==1){
+                   gc.setFill(Color.BLACK); 
+                   gc.fillRect(i*mult/scaling_factor_x+padding_x, j*mult/scaling_factor_y+padding_y, mult, mult);
+                }
+                if (map[j][i]==0){
+                    gc.setFill(Color.WHITE);
+                    gc.fillRect(i*mult/scaling_factor_x+padding_x, j*mult/scaling_factor_y+padding_y, mult, mult);
+                }  
+            }
+        }
+    }
+    
+    @FXML
+    public void drawVisualizationMap(GraphicsContext gc,int y, int x,int[][] map, ArrayList<Coord> route){
         //System.out.println(ContextFX.getInstance().getId());
         // String filename = "/media/Multimedia/Projects/GitProjects/GRASP-OPT2/Inputs/map_0.txt";
         // read_map(filename);
@@ -138,6 +203,20 @@ public class GraphicsUtils {
                     gc.fillRect(i*mult/scaling_factor_x+padding_x, j*mult/scaling_factor_y+padding_y, mult, mult);
                 } 
             }
+        }
+        
+        // Draw route
+        for (int i = 0; i < route.size()-1; i++) {
+            // paint line between coord i n coord i+1
+            gc.setStroke(Color.RED);
+            int y_i = route.get(i).y;
+            int x_i = route.get(i).x;
+            int y_ii = route.get(i+1).y;
+            int x_ii = route.get(i+1).x;
+            gc.strokeLine(x_i*mult/scaling_factor_x+padding_x,
+                            y_i*mult/scaling_factor_y+padding_y,
+                            x_ii*mult/scaling_factor_x+padding_x,
+                            y_ii*mult/scaling_factor_y+padding_y);
         }
     }
 }

@@ -36,6 +36,10 @@
                </font>
             </Label>
             <JFXTextField fx:id="lblPlate" layoutX="651.0" layoutY="141.0" />
+            <Label fx:id="lblWeightMessage" layoutX="279.0" layoutY="175.0" prefHeight="17.0" prefWidth="139.0" textFill="RED" />
+            <Label fx:id="lblSpeedMessage" layoutX="275.0" layoutY="264.0" prefHeight="17.0" prefWidth="139.0" textFill="RED" />
+            <Label fx:id="cmWarehouseMessage" layoutX="732.0" layoutY="175.0" prefHeight="17.0" prefWidth="139.0" textFill="RED" />
+            <Label fx:id="lblPlateMessage" layoutX="732.0" layoutY="273.0" prefHeight="17.0" prefWidth="139.0" textFill="RED" />
          </children>
       </AnchorPane>
    </center>

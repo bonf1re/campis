@@ -181,7 +181,7 @@ public class DepartureMoveRouteController implements Initializable{
         this.crackList=gu.putCRacks(id_warehouse, real_map);
         setupCRacksGraph();
         gc = mapCanvas.getGraphicsContext2D();
-        gu.drawVisualizationMap(gc, y, x, real_map);
+        //gu.drawVisualizationMap(gc, y, x, real_map);
     }
     
     

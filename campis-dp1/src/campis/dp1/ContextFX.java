@@ -20,6 +20,8 @@ import java.util.List;
  */
 public class ContextFX {
 
+ 
+
     private final static ContextFX instance = new ContextFX();
 
     public static ContextFX getInstance() {
@@ -41,6 +43,18 @@ public class ContextFX {
     String word = null;
     ObservableList<ProductDisplay> tempList = FXCollections.observableArrayList();
     ObservableList<BatchDisplay> tempBatchList = FXCollections.observableArrayList();
+    ArrayList<Object> polymorphic_list = new ArrayList<Object>();
+    
+    public ArrayList<Object> getPolymorphic_list() {
+        ArrayList<Object> returnable = new ArrayList<>(polymorphic_list);
+        this.polymorphic_list=null;
+        return returnable;
+    }
+
+    public void setPolymorphic_list(ArrayList<Object> polymorphic_list) {
+        this.polymorphic_list = new ArrayList<>(polymorphic_list);
+    }
+     
 
     int id_user;
     // Es un desmadre este contexto
@@ -52,7 +66,10 @@ public class ContextFX {
     private Date init_date;
     private Date end_date;
     //y para pasar un string cualquiera
-    private String labeltoPrint;
+    private String labeltoPrint1;
+    private String labeltoPrint2;
+    private String labeltoPrint3;
+    
     
     public Integer getWhMoveType(){
         Integer returnable = new Integer(this.whMoveType);
@@ -271,14 +288,43 @@ public class ContextFX {
     /**
      * @return the labeltoPrint
      */
-    public String getLabeltoPrint() {
-        return labeltoPrint;
+    public String getLabeltoPrint1() {
+        return labeltoPrint1;
     }
 
     /**
      * @param labeltoPrint the labeltoPrint to set
      */
-    public void setLabeltoPrint(String labeltoPrint) {
-        this.labeltoPrint = labeltoPrint;
+    public void setLabeltoPrint1(String labeltoPrint1) {
+        this.labeltoPrint1 = labeltoPrint1;
+    }
+    
+    
+       /**
+     * @return the labeltoPrint2
+     */
+    public String getLabeltoPrint2() {
+        return labeltoPrint2;
+    }
+
+    /**
+     * @param labeltoPrint2 the labeltoPrint2 to set
+     */
+    public void setLabeltoPrint2(String labeltoPrint2) {
+        this.labeltoPrint2 = labeltoPrint2;
+    }
+
+    /**
+     * @return the labeltoPrint3
+     */
+    public String getLabeltoPrint3() {
+        return labeltoPrint3;
+    }
+
+    /**
+     * @param labeltoPrint3 the labeltoPrint3 to set
+     */
+    public void setLabeltoPrint3(String labeltoPrint3) {
+        this.labeltoPrint3 = labeltoPrint3;
     }
 }
