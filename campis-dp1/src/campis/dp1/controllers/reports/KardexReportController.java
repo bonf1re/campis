@@ -94,12 +94,12 @@ public class KardexReportController implements Initializable {
                break; // optional
 
             case 1 :
-               lbltype.setText("tipo " + ContextFX.getInstance().getLabeltoPrint());
+               lbltype.setText("tipo " + ContextFX.getInstance().getLabeltoPrint1());
                break; // optional
 
             
             default : // Optional
-                lbltype.setText(ContextFX.getInstance().getLabeltoPrint());
+                lbltype.setText(ContextFX.getInstance().getLabeltoPrint1());
         }
         
         try {

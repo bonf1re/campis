@@ -30,6 +30,11 @@ public class ReportSidebarController implements Initializable {
     private void goExpirationReport() throws IOException {
         main.showExpirationReportConf();
     }
+    
+    @FXML
+    private void goStocksReport() throws IOException {
+        main.showStocksReportConf();
+    }
     /**
      * Initializes the controller class.
      */
