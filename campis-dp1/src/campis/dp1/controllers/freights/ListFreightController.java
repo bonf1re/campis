@@ -11,6 +11,8 @@ import campis.dp1.controllers.products.ListController;
 import campis.dp1.models.DistrictDisplay;
 import campis.dp1.models.District;
 import campis.dp1.ContextFX;
+import campis.dp1.models.Permission;
+import campis.dp1.models.View;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -21,6 +23,7 @@ import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -38,7 +41,10 @@ public class ListFreightController implements Initializable {
     private ObservableList<District> districts;
     private ObservableList<DistrictDisplay> districtsView = FXCollections.observableArrayList();
     private int selected_id;
+    private int id_role;
 
+    @FXML
+    private Button editButton; 
     @FXML
     private TableView<DistrictDisplay> tableDistrict;
     @FXML
@@ -60,6 +66,12 @@ public class ListFreightController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        id_role = (ContextFX.getInstance().getUser().getId_role());
+        View whView = View.getView("districts");
+
+        if (!Permission.canModify(id_role, whView.getId_view())) {
+            editButton.setVisible(false);
+        }
         tableDistrict.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {

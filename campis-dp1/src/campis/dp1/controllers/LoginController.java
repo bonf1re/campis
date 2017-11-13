@@ -55,7 +55,7 @@ public class LoginController {
         if (VerifyUser()) {
             main.showTopMenu();
             Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(900000),
+                Duration.millis(2900000),
                 ae -> {
                 try {
                     GoLogin();

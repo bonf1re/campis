@@ -2,8 +2,10 @@ package campis.dp1.controllers.refunds;
 
 import campis.dp1.Main;
 import campis.dp1.ContextFX;
+import campis.dp1.models.Permission;
 import campis.dp1.models.Refund;
 import campis.dp1.models.RefundDisplay;
+import campis.dp1.models.View;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import static java.lang.Boolean.TRUE;
@@ -32,7 +34,10 @@ public class ListController implements Initializable {
     private ObservableList<RefundDisplay> refundsView;
     private int selected_id;
     private String selected_status;
+    private int id_role;
 
+    @FXML
+    private Button editButton;
     @FXML
     private TableView<RefundDisplay> tableRefund;
     @FXML
@@ -47,6 +52,12 @@ public class ListController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        id_role = (ContextFX.getInstance().getUser().getId_role());
+        View whView = View.getView("refunds");
+
+        if (!Permission.canModify(id_role, whView.getId_view())) {
+            editButton.setVisible(false);
+        }
         tableRefund.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {

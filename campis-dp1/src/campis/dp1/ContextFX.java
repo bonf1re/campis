@@ -13,6 +13,9 @@ import javafx.collections.ObservableList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import campis.dp1.models.Permission;
+import campis.dp1.models.View;
+import javafx.scene.control.Button;
 
 /**
  *
@@ -66,7 +69,17 @@ public class ContextFX {
     public void setPolymorphic_list(ArrayList<Object> polymorphic_list) {
         this.polymorphic_list = new ArrayList<>(polymorphic_list);
     }
-     
+
+    public void modifyValidation(Button createButton, Button editButton, Button deleteButton, int id_role, String view) {
+        id_role = (ContextFX.getInstance().getUser().getId_role());
+        View whView = View.getView(view);
+
+        if (!Permission.canModify(id_role, whView.getId_view())) {
+            createButton.setVisible(false);
+            editButton.setVisible(false);
+            deleteButton.setVisible(false);
+        }
+    } 
 
     int id_user;
     // Es un desmadre este contexto

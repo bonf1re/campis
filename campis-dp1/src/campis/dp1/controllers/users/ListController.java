@@ -37,6 +37,7 @@ public class ListController implements Initializable{
     private ObservableList<User> users;
     private ObservableList<UserDisplay> usersView;
     private int selected_id;
+    private int id_role;
     
     @FXML
     private Button searchButton;
@@ -52,6 +53,12 @@ public class ListController implements Initializable{
     private TableColumn<UserDisplay,String> emailColumn;
     @FXML
     private TableColumn<UserDisplay,String> statusColumn;
+    @FXML
+    private Button createButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button deleteButton;
 
     @FXML
     private void goCreateUser() throws IOException {
@@ -77,6 +84,7 @@ public class ListController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "users");
         tableUser.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {

@@ -13,6 +13,7 @@ import campis.dp1.models.View;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import com.jfoenix.controls.JFXButton;
 import javafx.fxml.Initializable;
 
 /**
@@ -22,25 +23,40 @@ import javafx.fxml.Initializable;
 public class WarehouseSidebarController implements Initializable {
     private Main main;
     private int id_role;
+    @FXML
+    private JFXButton whButton;
+
+    @FXML
+    private JFXButton productButton;
+
+    @FXML
+    private JFXButton tipoProductButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
             id_role = (ContextFX.getInstance().getUser().getId_role());
+            View whView = View.getView("warehouse");
+            View productView = View.getView("products");
+            View ptView = View.getView("product_types");
+            if (!Permission.canVisualize(id_role, whView.getId_view()))
+                whButton.setVisible(false);
+            if (!Permission.canVisualize(id_role, productView.getId_view()))
+                productButton.setVisible(false);
+            if (!Permission.canVisualize(id_role, ptView.getId_view()))
+                tipoProductButton.setVisible(false);
         } catch(NullPointerException e) {
         }
     }
     
     @FXML
-    private void goWhList() throws IOException{
+    private void goWhList() throws IOException {
         main.showWhList();
     }
     
     @FXML
     private void goListProduct() throws IOException {
-        View view = View.getView("products");
-        if (Permission.canVisualize(id_role, view.getId_view()))
-            main.showListProduct();
+        main.showListProduct();
     }
     
     @FXML

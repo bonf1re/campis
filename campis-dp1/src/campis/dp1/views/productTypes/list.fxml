@@ -9,7 +9,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.152" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.productTypes.ListProductTypeController">
+<BorderPane prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.productTypes.ListProductTypeController">
    <opaqueInsets>
       <Insets />
    </opaqueInsets>
@@ -32,9 +32,9 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button layoutX="840.0" layoutY="141.0" mnemonicParsing="false" onAction="#goCreateProductType" prefHeight="35.0" prefWidth="85.0" text="Crear" />
-            <Button layoutX="840.0" layoutY="191.0" mnemonicParsing="false" onAction="#goEditProductType" prefHeight="35.0" prefWidth="85.0" text="Editar" />
-            <Button layoutX="840.0" layoutY="240.0" mnemonicParsing="false" onAction="#deleteProductType" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
+            <Button fx:id="createButton" layoutX="840.0" layoutY="141.0" mnemonicParsing="false" onAction="#goCreateProductType" prefHeight="35.0" prefWidth="85.0" text="Crear" />
+            <Button fx:id="editButton" layoutX="840.0" layoutY="191.0" mnemonicParsing="false" onAction="#goEditProductType" prefHeight="35.0" prefWidth="85.0" text="Editar" />
+            <Button fx:id="deleteButton" layoutX="840.0" layoutY="240.0" mnemonicParsing="false" onAction="#deleteProductType" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
          </children>
       </AnchorPane>
    </center>

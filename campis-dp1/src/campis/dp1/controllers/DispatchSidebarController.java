@@ -5,12 +5,16 @@
  */
 package campis.dp1.controllers;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
+import campis.dp1.models.Permission;
+import campis.dp1.models.View;
 import javafx.fxml.Initializable;
+import com.jfoenix.controls.JFXButton;
 
 /**
  * FXML Controller class
@@ -18,9 +22,13 @@ import javafx.fxml.Initializable;
  * @author david
  */
 public class DispatchSidebarController implements Initializable {
-    
-    
     private Main main;
+    private int id_role;
+    @FXML
+    private JFXButton entriesButton;
+
+    @FXML
+    private JFXButton depButton;
     
     @FXML
     private void goListEntries() throws IOException {
@@ -37,7 +45,15 @@ public class DispatchSidebarController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
-    }    
-    
+        try {
+            id_role = (ContextFX.getInstance().getUser().getId_role());
+            View entView = View.getView("entries_dispatch");
+            View depView = View.getView("departures_dispatch");
+            if (!Permission.canVisualize(id_role, entView.getId_view()))
+                entriesButton.setVisible(false);
+            if (!Permission.canVisualize(id_role, depView.getId_view()))
+                depButton.setVisible(false);
+        } catch(NullPointerException e) {
+        }
+    }   
 }

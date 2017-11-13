@@ -32,7 +32,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button layoutX="842.0" layoutY="266.0" mnemonicParsing="false" onAction="#goNewEntry" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
+            <Button fx:id="createButton" layoutX="842.0" layoutY="266.0" mnemonicParsing="false" onAction="#goNewEntry" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
          </children>
       </AnchorPane>
    </center>
