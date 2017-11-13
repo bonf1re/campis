@@ -28,6 +28,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -38,9 +39,11 @@ public class ListRackController implements Initializable{
     private ObservableList<Rack> racks;
     private ObservableList<RackDisplay> racksView;
     private int selected_id;
+    private int warehouse_id;
     
     @FXML
     private void goNewRack() throws IOException {
+        ContextFX.getInstance().setId(warehouse_id);
         main.showNewRack();
     }
     
@@ -50,6 +53,11 @@ public class ListRackController implements Initializable{
             ContextFX.getInstance().setId(selected_id);
             main.showEditRack();
         }
+    }
+    
+    @FXML
+    private void goWhList() throws IOException{
+        main.showWhList();
     }
 
     @FXML
@@ -71,6 +79,7 @@ public class ListRackController implements Initializable{
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Rack.class);
+        criteria.add(Restrictions.eq("id_warehouse",this.warehouse_id));
         List lista = criteria.list();
         ObservableList<Rack> returnable;
         returnable = FXCollections.observableArrayList();
@@ -140,6 +149,7 @@ public class ListRackController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        this.warehouse_id = ContextFX.getInstance().getId();
         tablaRacks.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> {
                 if (newValue == null) return;
