@@ -53,7 +53,7 @@ public class CreateVehicleController implements Initializable {
     
     
     
-    public static Integer searchWarehouse(String wr) throws SQLException, ClassNotFoundException {
+    /*public static Integer searchWarehouse(String wr) throws SQLException, ClassNotFoundException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
@@ -67,7 +67,7 @@ public class CreateVehicleController implements Initializable {
         Warehouse result = (Warehouse)rsWarehouse.get(0);
         codWr = result.getId();
         return codWr;
-    }
+    }*/
 
         
     public static List<Warehouse> getWarehouses() {
@@ -94,9 +94,9 @@ public class CreateVehicleController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        int codWr=0;
+        int codWr=1;
         
-        try
+        /*try
          {
             codWr = searchWarehouse(cmWarehouse.getValue());
          }
@@ -104,7 +104,7 @@ public class CreateVehicleController implements Initializable {
          {
             e.printStackTrace();
             //agregar error
-         }
+         }*/
            
         Vehicle v = new Vehicle(Double.parseDouble(lblWeight.getText()), Integer.parseInt(lblSpeed.getText()),true,
                                             codWr, lblPlate.getText());
@@ -121,9 +121,9 @@ public class CreateVehicleController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        List<Warehouse> list = getWarehouses();
+        /*List<Warehouse> list = getWarehouses();
         for (int i = 0; i < list.size(); i++) {
             cmWarehouse.getItems().addAll(list.get(i).getName());
-        }
+        }*/
     } 
 }
