@@ -16,13 +16,13 @@
       <AnchorPane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
             <JFXTextField fx:id="subtotalField" layoutX="678.0" layoutY="457.0" />
-            <Label layoutX="106.0" layoutY="32.0" text="Crear Orden de Venta">
+            <Label layoutX="103.0" layoutY="14.0" text="Crear Orden de Venta">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label layoutX="156.0" layoutY="73.0" text="Nombre Cliente:" />
-            <JFXTextField fx:id="nameClientField" layoutX="273.0" layoutY="73.0" prefHeight="25.0" prefWidth="210.0" />
+            <Label layoutX="156.0" layoutY="52.0" text="Nombre Cliente:" />
+            <JFXTextField fx:id="nameClientField" layoutX="273.0" layoutY="52.0" prefHeight="25.0" prefWidth="210.0" />
             <Label layoutX="156.0" layoutY="135.0" text="Fecha Creación:" />
             <JFXDatePicker fx:id="creationDate" layoutX="273.0" layoutY="131.0" />
             <Label layoutX="504.0" layoutY="135.0" text="Fecha Delivery:" />
@@ -44,21 +44,27 @@
             <Label layoutX="156.0" layoutY="211.0" text="Productos:" />
             <Label layoutX="599.0" layoutY="461.0" prefHeight="17.0" prefWidth="62.0" text="Subtotal:" />
             <Button layoutX="839.0" layoutY="243.0" mnemonicParsing="false" onAction="#goAddItem" prefHeight="35.0" prefWidth="86.0" text="Añadir Item" />
-            <Button layoutX="838.0" layoutY="300.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="88.0" text="Eliminar Item" />
+            <Button layoutX="838.0" layoutY="300.0" mnemonicParsing="false" onAction="#deleteItem" prefHeight="35.0" prefWidth="88.0" text="Eliminar Item" />
             <Button layoutX="840.0" layoutY="356.0" mnemonicParsing="false" onAction="#createRequestOrder" prefHeight="35.0" prefWidth="85.0" text="Crear" />
             <Button layoutX="839.0" layoutY="408.0" mnemonicParsing="false" onAction="#goListRequestOrder" prefHeight="35.0" prefWidth="87.0" text="Cancelar" />
-            <Label layoutX="515.0" layoutY="73.0" text="Código Cliente:" />
+            <Label layoutX="515.0" layoutY="52.0" text="Código Cliente:" />
             <Label layoutX="156.0" layoutY="177.0" text="Estado:" />
             <Label layoutX="504.0" layoutY="177.0" text="Prioridad:" />
             <JFXComboBox fx:id="priorityField" layoutX="595.0" layoutY="173.0" prefHeight="25.0" prefWidth="75.0" />
             <JFXTextField fx:id="discountField" layoutX="678.0" layoutY="491.0" />
             <Label layoutX="599.0" layoutY="495.0" prefHeight="17.0" prefWidth="66.0" text="Descuentos:" />
-            <JFXTextField fx:id="amountField" layoutX="678.0" layoutY="524.0" />
-            <Label layoutX="599.0" layoutY="528.0" text="Monto Total:" />
-            <JFXComboBox fx:id="clientField" layoutX="633.0" layoutY="73.0" onAction="#setNameClientAction" />
+            <JFXTextField fx:id="amountField" layoutX="678.0" layoutY="553.0" />
+            <Label layoutX="599.0" layoutY="557.0" text="Monto Total:" />
+            <JFXComboBox fx:id="clientField" layoutX="633.0" layoutY="52.0" onAction="#setNameClientAction" />
             <Label fx:id="messageField1" layoutX="271.0" layoutY="165.0" prefHeight="17.0" prefWidth="165.0" textFill="RED" />
             <Label fx:id="messageField2" layoutX="596.0" layoutY="165.0" prefHeight="17.0" prefWidth="165.0" textFill="#fc0000" />
             <JFXTextField fx:id="statesField" layoutX="273.0" layoutY="173.0" prefHeight="25.0" prefWidth="136.0" unFocusColor="#4d4d4d08" />
+            <Label layoutX="156.0" layoutY="94.0" text="Dirección de Despacho:" />
+            <JFXTextField fx:id="addressField" layoutX="294.0" layoutY="94.0" prefHeight="25.0" prefWidth="189.0" />
+            <Label layoutX="515.0" layoutY="94.0" text="Distrito:" />
+            <JFXComboBox fx:id="districtField" layoutX="578.0" layoutY="94.0" onAction="#setDistrictAction" prefHeight="25.0" prefWidth="111.0" />
+            <JFXTextField fx:id="freightField" layoutX="678.0" layoutY="520.0" prefHeight="21.0" prefWidth="135.0" />
+            <Label layoutX="599.0" layoutY="524.0" text="Flete:" />
          </children>
       </AnchorPane>
    </bottom>

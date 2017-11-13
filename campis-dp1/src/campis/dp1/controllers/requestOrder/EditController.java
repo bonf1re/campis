@@ -37,6 +37,7 @@ import javafx.scene.control.TableView;
 import javax.naming.Context;
 import javax.persistence.Query;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -49,12 +50,14 @@ import org.hibernate.criterion.Restrictions;
 public class EditController implements Initializable {
 
     Main main;
-    Integer id, idProd, quantity;
+    Integer id, idProd, quantity, selected_id;
     Integer codGen = 0;
     Integer num = 0;
+    String distr;
     float totalAmount = 0;
     float baseTotalAmount = 0;
     float discountTotal = 0;
+    float freightTotal = 0;
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView;
 
@@ -91,15 +94,62 @@ public class EditController implements Initializable {
     @FXML
     private JFXTextField discountField;
     @FXML
-    private JFXTextField clientField;
-    @FXML
     private Label messageField1;
     @FXML
     private Label messageField2;
+    @FXML
+    private JFXTextField addressField;
+    @FXML
+    private JFXComboBox<String> districtField;
+    @FXML
+    private JFXTextField freightField;
+    @FXML
+    private JFXTextField clientField;
+
+    private List<Object[]> getDistricts() {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr = "SELECT * FROM campis.district;";
+        SQLQuery query = session.createSQLQuery(qryStr);
+        List<Object[]> rows = query.list();
+        session.close();
+        sessionFactory.close();
+        return rows;
+    }
+
+    private String getNameDistric(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr = "SELECT name FROM campis.district WHERE id_district=" + cod;
+        SQLQuery query = session.createSQLQuery(qryStr);
+        List list = query.list();
+        String returnable = (String) list.get(0);
+        return returnable;
+    }
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         codGen = ContextFX.getInstance().getVar();
+        List<Object[]> dists = getDistricts();
+        for (Object[] dist : dists) {
+            districtField.getItems().add(dist[1].toString());
+        }
+        this.selected_id = 0;
+        tablaProd.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> {
+                    if (newValue == null) {
+                        return;
+                    }
+                    this.selected_id = newValue.codProdProperty().getValue().intValue();
+                });
         try {
             if (codGen == 0) {
                 id = ContextFX.getInstance().getId();
@@ -109,12 +159,15 @@ public class EditController implements Initializable {
                 List<RequestOrderLine> list = getReqOrdLine(id);
                 RequestOrder request = getRequestOrder(id);
                 String nameCli = getNameCli(request.getId_client());
+                distr = getNameDistric(request.getId_district());
                 this.nameClientField.setText(nameCli);
                 this.clientField.setText(Integer.toString(request.getId_client()));
                 this.creationDate.setValue(request.getCreation_date().toLocalDateTime().toLocalDate());
                 this.deliveryDate.setValue(request.getDelivery_date().toLocalDateTime().toLocalDate());
                 this.statesField.setValue(request.getStatus());
                 this.priorityField.setValue(request.getPriority());
+                this.districtField.setValue(distr);
+                this.addressField.setText(request.getAddress());
                 idColumn.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
                 nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
                 typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty().asObject());
@@ -132,11 +185,15 @@ public class EditController implements Initializable {
                 List<RequestOrderLine> list = getReqOrdLine(codGen);
                 RequestOrder request = getRequestOrder(codGen);
                 String nameCli = getNameCli(request.getId_client());
+                String distr = getNameDistric(request.getId_district());
                 this.nameClientField.setText(nameCli);
                 this.clientField.setText(Integer.toString(request.getId_client()));
                 this.creationDate.setValue(request.getCreation_date().toLocalDateTime().toLocalDate());
                 this.deliveryDate.setValue(request.getDelivery_date().toLocalDateTime().toLocalDate());
                 this.statesField.setValue(request.getStatus());
+                this.priorityField.setValue(request.getPriority());
+                this.districtField.setValue(distr);
+                this.addressField.setText(request.getAddress());
                 idColumn.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
                 nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
                 typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty().asObject());
@@ -162,6 +219,21 @@ public class EditController implements Initializable {
         main.showAddItem2();
     }
 
+    private Integer getDistrict(String cad) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr = "SELECT id_district FROM campis.district WHERE name = '" + cad + "';";
+        SQLQuery query = session.createSQLQuery(qryStr);
+        List list = query.list();
+        Integer returnable = (Integer) list.get(0);
+        return returnable;
+    }
+
+    @FXML
     private void editRequestOrder(ActionEvent event) throws IOException {
         SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date_creation = getDate(creationDate.getValue());
@@ -171,14 +243,18 @@ public class EditController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-
+        int id_dist = getDistrict(districtField.getValue());
         Query query = session.createQuery("UPDATE RequestOrder SET creation_date=:newCreation, delivery_date=:newDelivery, base_amount=:newBase, total_amount=:newTotal, "
-                + "status=:newStatus WHERE id_request_order = :odlIdRequest");
+                + "status=:newStatus, priority=:newPrior, id_district=:newDist, address=:newAddress "
+                + "WHERE id_request_order = :odlIdRequest");
         query.setParameter("newCreation", date_creation);
         query.setParameter("newDelivery", date_delivery);
         query.setParameter("newBase", Float.parseFloat(amountField.getText()));
         query.setParameter("newTotal", Float.parseFloat(amountField.getText()));
         query.setParameter("newStatus", (String) statesField.getValue());
+        query.setParameter("newPrior", priorityField.getValue());
+        query.setParameter("id_district", id_dist);
+        query.setParameter("address", addressField.getText());
         query.setParameter("odlIdRequest", codGen);
         int result = query.executeUpdate();
 
@@ -246,9 +322,35 @@ public class EditController implements Initializable {
         return rsRequestOrderLine;
     }
 
+    private Float getFreight(String cad) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr = "SELECT freight FROM campis.district WHERE name = '" + cad + "';";
+        SQLQuery query = session.createSQLQuery(qryStr);
+        List list = query.list();
+        Float returnable = ((Double) list.get(0)).floatValue();
+        session.close();
+        sessionFactory.close();
+        return returnable;
+    }
+
+    @FXML
+    private void setDistrictAction() {
+        Float freight = getFreight(this.districtField.getValue());
+        freightTotal = freightTotal + baseTotalAmount * freight;
+        totalAmount = totalAmount + freightTotal;
+        this.freightField.setText(Float.toString(freightTotal));
+        this.amountField.setText(Float.toString(totalAmount));
+    }
+
     private void loadData(List<RequestOrderLine> list) {
         products = FXCollections.observableArrayList();
         productsView = ContextFX.getInstance().getTempList();
+        
         for (int i = 0; i < list.size(); i++) {
             products = getProduct(list.get(i).getId_product());
             ObservableList<SaleCondition> discounts = getDiscount(list.get(i).getId_product());
@@ -257,12 +359,17 @@ public class EditController implements Initializable {
             String state = "ENTREGA";
             baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
             baseTotalAmount = baseTotalAmount + base_amount;
-            discountTotal = ContextFX.getInstance().getTotAmount();
+            discountTotal = ContextFX.getInstance().getDiscount();
             discountTotal = discountTotal + baseTotalAmount * disc;
             totalAmount = baseTotalAmount - discountTotal;
+            float f = getFreight(distr);
+            freightTotal = freightTotal + baseTotalAmount * f;
+            totalAmount = totalAmount + freightTotal;
+            this.freightField.setText(Float.toString(freightTotal));
+            this.amountField.setText(Float.toString(totalAmount));
             ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
             ContextFX.getInstance().setTotAmount(totalAmount);
-            //this.amountField.setText(Float.toString(totalAmount));
+            ContextFX.getInstance().setDiscount(discountTotal);
             this.subtotalField.setText(Float.toString(baseTotalAmount));
             this.discountField.setText(Float.toString(discountTotal));
             this.amountField.setText(Float.toString(totalAmount));
@@ -331,11 +438,12 @@ public class EditController implements Initializable {
         String state = "ENTREGA";
         baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
         baseTotalAmount = baseTotalAmount + base_amount;
-        discountTotal = ContextFX.getInstance().getTotAmount();
+        discountTotal = ContextFX.getInstance().getDiscount();
         discountTotal = discountTotal + baseTotalAmount * disc;
         totalAmount = baseTotalAmount - discountTotal;
         ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
         ContextFX.getInstance().setTotAmount(totalAmount);
+        ContextFX.getInstance().setDiscount(discountTotal);
         this.subtotalField.setText(Float.toString(baseTotalAmount));
         this.discountField.setText(Float.toString(discountTotal));
         this.amountField.setText(Float.toString(totalAmount));
@@ -410,12 +518,35 @@ public class EditController implements Initializable {
         return request;
     }
 
-    @FXML
-    private void createRequestOrder(ActionEvent event) {
+    private void deleteItems(int codProd, int quantity, float price) {
+        float base_price = quantity * price;
+        ObservableList<SaleCondition> discounts = getDiscount(codProd);
+        Float disc = verifyConditions(discounts, products.get(0), quantity);
+        discountTotal = discountTotal - base_price * disc;
+        baseTotalAmount = baseTotalAmount - base_price;
+        totalAmount = baseTotalAmount + discountTotal + freightTotal;
+        ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
+        ContextFX.getInstance().setTotAmount(totalAmount);
+        this.subtotalField.setText(Float.toString(baseTotalAmount));
+        this.discountField.setText(Float.toString(discountTotal));
+        this.amountField.setText(Float.toString(totalAmount));
     }
 
     @FXML
-    private void setNameClientAction(ActionEvent event) {
+    private void deleteItem(ActionEvent event) {
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            Integer id_prod = ContextFX.getInstance().getId();
+            for (int i = 0; i < productsView.size(); i++) {
+                if (productsView.get(i).codProdProperty().getValue().compareTo(id_prod) == 0) {
+                    deleteItems(productsView.get(i).codProdProperty().getValue(),
+                            productsView.get(i).cStockProperty().getValue(), productsView.get(i).precioBProperty().getValue());
+                    productsView.remove(i);
+                }
+            }
+            tablaProd.setItems(null);
+            tablaProd.setItems(productsView);
+        }
     }
 
 }

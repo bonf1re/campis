@@ -38,6 +38,7 @@ public class ContextFX {
     Float baseTotAmount = 0.0f;
     Float totAmount = 0.0f;
     Float discount = 0.0f;
+    Float freight = 0.0f;
     Integer num = 0; // Useful to save any integer variable.
     Integer var = 0;
     String word = null;
@@ -195,7 +196,16 @@ public class ContextFX {
     public void setDiscount(Float discount) {
         this.discount = discount;
     }
-
+    
+    public Float getFreight() {
+        Float returnable = new Float(this.freight);
+        return returnable;
+    }
+    
+    public void setFreight(Float freight) {
+        this.freight = freight;
+    }
+    
     public ObservableList<ProductDisplay> getTempList() {
         ObservableList<ProductDisplay> returnable = this.tempList;
         return returnable;
