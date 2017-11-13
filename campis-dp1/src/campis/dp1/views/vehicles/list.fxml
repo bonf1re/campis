@@ -27,7 +27,6 @@
                 <TableColumn fx:id="maxWeightColumn" prefWidth="75.0" text="Peso máximo" />
                   <TableColumn fx:id="maxSpeedColumn" prefWidth="75.0" text="Velocidad máxima" />
                   <TableColumn fx:id="activeColumn" prefWidth="75.0" text="Activo" />
-                  <TableColumn fx:id="warehouseColumn" prefWidth="75.0" text="Almacén" />
                   <TableColumn fx:id="plateColumn" prefWidth="75.0" text="Placa" />
               </columns>
                <columnResizePolicy>

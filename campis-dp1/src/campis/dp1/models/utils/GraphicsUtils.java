@@ -197,7 +197,11 @@ public class GraphicsUtils {
                 if (map[j][i]==0){
                     gc.setFill(Color.WHITE);
                     gc.fillRect(i*mult/scaling_factor_x+padding_x, j*mult/scaling_factor_y+padding_y, mult, mult);
-                }  
+                }
+                if (map[j][i]==2){
+                    gc.setFill(Color.BLUE);
+                    gc.fillRect(i*mult/scaling_factor_x+padding_x, j*mult/scaling_factor_y+padding_y, mult, mult);
+                } 
             }
         }
         
