@@ -25,7 +25,11 @@ public class MainViewController implements Initializable {
             user_name.setText(ContextFX.getInstance().getUser().getFirstname());
         } catch(NullPointerException e) {
         }
+
     }
+    
+
+    
 
     @FXML
     private void goSecurity() throws IOException {
