@@ -17,6 +17,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -32,29 +33,45 @@ public class EditRequestStatusController implements Initializable{
     Main main;
     @FXML
     private JFXTextField descriptionField;
+
+    @FXML
+    private Label desMessage;
     
     @FXML
     private void goListRequestStatuses() throws IOException {
         main.showListRequestStatuses();
     }
 
+    public boolean validation() {
+        boolean desValid = descriptionField.getText().length() == 0;
+
+        desMessage.setText("");
+
+        if(desValid)
+            desMessage.setText("Campo obligatorio");
+
+        return (!desValid);
+    }
+
     @FXML
     private void editRequestStatus (ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Query query = session.createQuery("update RequestStatus set description = :newDescription"
-                + " where id_request_status = :oldIdRequestStatus");
-        query.setParameter("newDescription", descriptionField.getText());
-        query.setParameter("oldIdRequestStatus", id);
-        int result = query.executeUpdate();
-        session.getTransaction().commit();
-        session.close();
-        sessionFactory.close();
-        this.goListRequestStatuses();
+        if (validation()) {
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+            Query query = session.createQuery("update RequestStatus set description = :newDescription"
+                    + " where id_request_status = :oldIdRequestStatus");
+            query.setParameter("newDescription", descriptionField.getText());
+            query.setParameter("oldIdRequestStatus", id);
+            int result = query.executeUpdate();
+            session.getTransaction().commit();
+            session.close();
+            sessionFactory.close();
+            this.goListRequestStatuses();
+        }
     }
 
     @Override
