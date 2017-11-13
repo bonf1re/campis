@@ -29,6 +29,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -81,6 +82,62 @@ public class CreateSaleConditionController implements Initializable {
 
     @FXML
     private JFXDatePicker pckEnd;
+
+    @FXML
+    private Label campaignCBMessage;
+
+    @FXML
+    private Label amountFieldMessage;
+
+    @FXML
+    private Label pckBeginMessage;
+
+    @FXML
+    private Label typeCBMessage;
+
+    @FXML
+    private Label objectiveCBMessage;
+
+    @FXML
+    private Label limitFieldMessage;
+
+    @FXML
+    private Label pckEndMessage;
+
+    public boolean validation() {
+        boolean campaignCBValid = campaignCB.getValue() == null;
+        boolean amountFieldValid = amountField.getText().length() == 0;
+        boolean pckBeginValid = pckBegin.getValue() == null;
+        boolean typeCBValid = typeCB.getValue() == null;
+        boolean objectiveCBValid = objectiveCB.getValue() == null;
+        boolean limitFieldValid = limitField.getText().length() == 0;
+        boolean pckEndValid = pckEnd.getValue() == null;
+        
+        campaignCBMessage.setText("");
+        amountFieldMessage.setText("");
+        pckBeginMessage.setText("");
+        typeCBMessage.setText("");
+        objectiveCBMessage.setText("");
+        limitFieldMessage.setText("");
+        pckEndMessage.setText("");
+
+        if (campaignCBValid)
+            campaignCBMessage.setText("Campo obligatorio");
+        if (amountFieldValid)
+            amountFieldMessage.setText("Campo obligatorio");
+        if (pckBeginValid)
+            pckBeginMessage.setText("Campo obligatorio");
+        if(typeCBValid)
+            typeCBMessage.setText("Campo obligatorio");
+        if (objectiveCBValid)
+            objectiveCBMessage.setText("Campo obligatorio");
+        if (limitFieldValid)
+            limitFieldMessage.setText("Campo obligatorio");
+        if(pckEndValid)
+            pckEndMessage.setText("Campo obligatorio");
+
+        return (!campaignCBValid && !amountFieldValid && !pckBeginValid && !typeCBValid && !objectiveCBValid && !limitFieldValid && !pckEndValid);
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -193,10 +250,6 @@ public class CreateSaleConditionController implements Initializable {
         return calendar.getTime();
     }
     
-    
-    
-    
-    
     public static Integer searchCodCampaign(String campaign) throws SQLException, ClassNotFoundException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -283,37 +336,34 @@ public class CreateSaleConditionController implements Initializable {
     
     @FXML
     private void insertSaleCondition(ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
-        //converting to timestamps
-        SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date_init = getDate(pckBegin.getValue());
-        Date date_end = getDate(pckEnd.getValue());
-        
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        setIds(campaignCB.getValue(),typeCB.getValue(),objectiveCB.getValue());
-        
-        
-        SaleCondition sc = new SaleCondition(Timestamp.valueOf(formatIn.format(date_init)),
-                                             Timestamp.valueOf(formatIn.format(date_end)),
-                                             Float.parseFloat(amountField.getText()),
-                                             id_type,
-                                             Integer.parseInt(limitField.getText()),
-                                             id_objective,
-                                             id_campaign);
-        
-        
-        session.save(sc);
-        session.getTransaction().commit();
-        session.close();
-        sessionFactory.close(); 
-        this.goListSaleConditions();
+        if (validation()) {
+            SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date_init = getDate(pckBegin.getValue());
+            Date date_end = getDate(pckEnd.getValue());
+            
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+            setIds(campaignCB.getValue(),typeCB.getValue(),objectiveCB.getValue());
+            
+            
+            SaleCondition sc = new SaleCondition(Timestamp.valueOf(formatIn.format(date_init)),
+                                                 Timestamp.valueOf(formatIn.format(date_end)),
+                                                 Float.parseFloat(amountField.getText()),
+                                                 id_type,
+                                                 Integer.parseInt(limitField.getText()),
+                                                 id_objective,
+                                                 id_campaign);
+            
+            
+            session.save(sc);
+            session.getTransaction().commit();
+            session.close();
+            sessionFactory.close(); 
+            this.goListSaleConditions();
+        }
     }
-    
-    
-    
-    
 }

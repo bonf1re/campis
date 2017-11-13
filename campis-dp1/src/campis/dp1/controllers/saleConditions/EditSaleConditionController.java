@@ -35,6 +35,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javax.persistence.Query;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -88,6 +89,62 @@ public class EditSaleConditionController implements Initializable {
 
     @FXML
     private JFXDatePicker pckEnd;
+
+    @FXML
+    private Label campaignCBMessage;
+
+    @FXML
+    private Label amountFieldMessage;
+
+    @FXML
+    private Label pckBeginMessage;
+
+    @FXML
+    private Label typeCBMessage;
+
+    @FXML
+    private Label objectiveCBMessage;
+
+    @FXML
+    private Label limitFieldMessage;
+
+    @FXML
+    private Label pckEndMessage;
+
+    public boolean validation() {
+        boolean campaignCBValid = campaignCB.getValue() == null;
+        boolean amountFieldValid = amountField.getText().length() == 0;
+        boolean pckBeginValid = pckBegin.getValue() == null;
+        boolean typeCBValid = typeCB.getValue() == null;
+        boolean objectiveCBValid = objectiveCB.getValue() == null;
+        boolean limitFieldValid = limitField.getText().length() == 0;
+        boolean pckEndValid = pckEnd.getValue() == null;
+        
+        campaignCBMessage.setText("");
+        amountFieldMessage.setText("");
+        pckBeginMessage.setText("");
+        typeCBMessage.setText("");
+        objectiveCBMessage.setText("");
+        limitFieldMessage.setText("");
+        pckEndMessage.setText("");
+
+        if (campaignCBValid)
+            campaignCBMessage.setText("Campo obligatorio");
+        if (amountFieldValid)
+            amountFieldMessage.setText("Campo obligatorio");
+        if (pckBeginValid)
+            pckBeginMessage.setText("Campo obligatorio");
+        if(typeCBValid)
+            typeCBMessage.setText("Campo obligatorio");
+        if (objectiveCBValid)
+            objectiveCBMessage.setText("Campo obligatorio");
+        if (limitFieldValid)
+            limitFieldMessage.setText("Campo obligatorio");
+        if(pckEndValid)
+            pckEndMessage.setText("Campo obligatorio");
+
+        return (!campaignCBValid && !amountFieldValid && !pckBeginValid && !typeCBValid && !objectiveCBValid && !limitFieldValid && !pckEndValid);
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -290,42 +347,37 @@ public class EditSaleConditionController implements Initializable {
     
      @FXML
     private void saveSaleCondition (ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
-        
-        setIds(campaignCB.getValue(),typeCB.getValue(),objectiveCB.getValue());
-        Date date_init = getDate(pckBegin.getValue());
-        Date date_end = getDate(pckEnd.getValue());
-        
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        
-        Query query = session.createQuery("update SaleCondition set initial_date = :newinDate, final_date = :newenDate,"
-                + "amount=:newAmount,id_sale_condition_type=:newIDT, limits=:newLimits, "
-                + "id_to_take=:newITT,id_campaign=:newCamp where id_sale_condition = :oldIdSC");
-        
-        query.setParameter("newinDate", date_init);
-        query.setParameter("newenDate", date_end);
-        query.setParameter("newAmount", Float.parseFloat(amountField.getText()));
-        query.setParameter("newIDT", id_type);
-        query.setParameter("newLimits", Integer.parseInt(limitField.getText()));
-        query.setParameter("newITT", id_objective);
-        query.setParameter("newCamp", id_campaign);
-        query.setParameter("oldIdSC", id);
-        int result = query.executeUpdate();
-        
-        /*Product product = new Product(nameField.getText(), descripField.getText(), 1, 1, Float.parseFloat(weightField.getText()),
-                                     trademarkField.getText(), Float.parseFloat(priceField.getText()), measure, type);
-        product.setId_product(this.id);
-        session.update(product);
-        session.save(product);*/
-        
-        session.getTransaction().commit();
-        session.close();
-        sessionFactory.close();
-        this.goListSaleConditions();
+        if (validation()) {
+            setIds(campaignCB.getValue(),typeCB.getValue(),objectiveCB.getValue());
+            Date date_init = getDate(pckBegin.getValue());
+            Date date_end = getDate(pckEnd.getValue());
+            
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+            
+            Query query = session.createQuery("update SaleCondition set initial_date = :newinDate, final_date = :newenDate,"
+                    + "amount=:newAmount,id_sale_condition_type=:newIDT, limits=:newLimits, "
+                    + "id_to_take=:newITT,id_campaign=:newCamp where id_sale_condition = :oldIdSC");
+            
+            query.setParameter("newinDate", date_init);
+            query.setParameter("newenDate", date_end);
+            query.setParameter("newAmount", Float.parseFloat(amountField.getText()));
+            query.setParameter("newIDT", id_type);
+            query.setParameter("newLimits", Integer.parseInt(limitField.getText()));
+            query.setParameter("newITT", id_objective);
+            query.setParameter("newCamp", id_campaign);
+            query.setParameter("oldIdSC", id);
+            int result = query.executeUpdate();
+            
+            session.getTransaction().commit();
+            session.close();
+            sessionFactory.close();
+            this.goListSaleConditions();
+        }
     }
     
     private Date getDate(LocalDate value) {
