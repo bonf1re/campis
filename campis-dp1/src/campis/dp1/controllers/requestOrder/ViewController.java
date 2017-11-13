@@ -13,6 +13,7 @@ import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.RequestOrder;
 import campis.dp1.models.RequestOrderLine;
 import campis.dp1.models.SaleCondition;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
@@ -28,6 +29,7 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -41,9 +43,11 @@ public class ViewController implements Initializable {
 
     Main main;
     Integer id;
+    String distr;
     float totalAmount = 0;
     float baseTotalAmount = 0;
     float discountTotal = 0;
+    float freightTotal = 0;
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView;
 
@@ -72,8 +76,6 @@ public class ViewController implements Initializable {
     @FXML
     private TableColumn<ProductDisplay, String> stateColumn;
     @FXML
-    private JFXTextField stateField;
-    @FXML
     private JFXTextField subtotalField;
     @FXML
     private JFXTextField discountField;
@@ -81,6 +83,18 @@ public class ViewController implements Initializable {
     private JFXTextField clientField;
     @FXML
     private JFXTextField priorityField;
+    @FXML
+    private Label messageField1;
+    @FXML
+    private Label messageField2;
+    @FXML
+    private JFXTextField addressField;
+    @FXML
+    private JFXTextField districtField;
+    @FXML
+    private JFXTextField freightField;
+    @FXML
+    private JFXTextField stateField;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -89,12 +103,15 @@ public class ViewController implements Initializable {
         List<RequestOrderLine> list = getReqOrdLine(id);
         RequestOrder request = getRequestOrder(id);
         String nameCli = getNameCli(request.getId_client());
+        distr = getNameDistric(request.getId_district());
         this.nameClientField.setText(nameCli);
         this.clientField.setText(Integer.toString(request.getId_client()));
         this.creationDate.setValue(request.getCreation_date().toLocalDateTime().toLocalDate());
         this.deliveryDate.setValue(request.getDelivery_date().toLocalDateTime().toLocalDate());
         this.stateField.setText(request.getStatus());
         this.priorityField.setText(Integer.toString(request.getPriority()));
+        this.districtField.setText(distr);
+        this.addressField.setText(request.getAddress());
         idColumn.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty().asObject());
@@ -104,7 +121,21 @@ public class ViewController implements Initializable {
         stateColumn.setCellValueFactory(cellData -> cellData.getValue().marcaProperty());
         loadData(list);
     }
-    
+
+    private String getNameDistric(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr = "SELECT name FROM campis.district WHERE id_district=" + cod;
+        SQLQuery query = session.createSQLQuery(qryStr);
+        List list = query.list();
+        String returnable = (String) list.get(0);
+        return returnable;
+    }
+
     private String getNameCli(Integer id_client) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -118,7 +149,7 @@ public class ViewController implements Initializable {
         String name = list.get(0).getName();
         return name;
     }
-    
+
     private RequestOrder getRequestOrder(Integer id) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -133,7 +164,7 @@ public class ViewController implements Initializable {
         returnable = (RequestOrder) list.get(0);
         return returnable;
     }
-    
+
     private ObservableList<SaleCondition> getDiscount(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -161,14 +192,14 @@ public class ViewController implements Initializable {
             if (type == 1) {
                 //int maxQ = discounts.get(i).getLimits();
                 //if (maxQ < quant) {
-                    returnable = returnable + discounts.get(i).getAmount() / 100;
+                returnable = returnable + discounts.get(i).getAmount() / 100;
                 //}
             } else if (type == 2) {
                 int type_prod = prod.getId_product_type();
                 if (type_prod == type) {
                     //int maxQ = discounts.get(i).getLimits();
                     //if (maxQ < quant) {
-                        returnable = returnable + discounts.get(i).getAmount() / 100;
+                    returnable = returnable + discounts.get(i).getAmount() / 100;
                     //}
                 }
             }
@@ -176,6 +207,22 @@ public class ViewController implements Initializable {
         return returnable;
     }
     
+    private Float getFreight(String cad) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr = "SELECT freight FROM campis.district WHERE name = '" + cad + "';";
+        SQLQuery query = session.createSQLQuery(qryStr);
+        List list = query.list();
+        Float returnable = ((Double) list.get(0)).floatValue();
+        session.close();
+        sessionFactory.close();
+        return returnable;
+    }
+
     private void loadData(List<RequestOrderLine> list) {
         products = FXCollections.observableArrayList();
         productsView = ContextFX.getInstance().getTempList();
@@ -190,6 +237,11 @@ public class ViewController implements Initializable {
             discountTotal = ContextFX.getInstance().getTotAmount();
             discountTotal = discountTotal + baseTotalAmount * disc;
             totalAmount = baseTotalAmount - discountTotal;
+            float f = getFreight(distr);
+            freightTotal = freightTotal + baseTotalAmount * f;
+            totalAmount = totalAmount + freightTotal;
+            this.freightField.setText(Float.toString(freightTotal));
+            this.amountField.setText(Float.toString(totalAmount));
             ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
             ContextFX.getInstance().setTotAmount(totalAmount);
             //this.amountField.setText(Float.toString(totalAmount));
@@ -200,7 +252,7 @@ public class ViewController implements Initializable {
             ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
                     products.get(0).getDescription(), products.get(0).getP_stock(), list.get(i).getQuantity(),
                     base_amount, state, products.get(0).getBase_price(),
-                    products.get(0).getId_unit_of_measure(), 
+                    products.get(0).getId_unit_of_measure(),
                     products.get(0).getId_product_type(), products.get(0).getMax_qt());
             productsView.add(prod);
         }
@@ -239,8 +291,10 @@ public class ViewController implements Initializable {
         return rsRequestOrderLine;
     }
 
+    @FXML
     private void goListRequestOrder() throws IOException {
         main.showListRequestOrder();
     }
+
 
 }

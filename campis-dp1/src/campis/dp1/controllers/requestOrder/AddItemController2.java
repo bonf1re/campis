@@ -68,10 +68,6 @@ public class AddItemController2 implements Initializable{
     private Label messageLabel;
     
     @FXML
-    private void goCreateRequestOrder() throws IOException {
-        main.showCreateRequestOrder();
-    }
-    
     private void goEditRequestOrder() throws IOException {
         main.showEditRequestOrder();
     }
@@ -215,7 +211,7 @@ public class AddItemController2 implements Initializable{
         int quant = Integer.parseInt(quantityField.getText());
         if ( quant <= cQuant && quant > 0) {
             ContextFX.getInstance().setQuantity(quant);
-            this.goCreateRequestOrder();
+            this.goEditRequestOrder();
         }else{
             messageLabel.setText("La cantidad introducida es incorrecta");
         }

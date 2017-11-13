@@ -36,6 +36,8 @@ public class RequestOrder {
     Float total_amount;
     Integer id_client;
     Integer priority;
+    Integer id_district;
+    String address;
 
     public RequestOrder() {
         super();
@@ -50,6 +52,20 @@ public class RequestOrder {
         this.total_amount = total_amount;
         this.id_client = id_client;
         this.priority = priority;
+    }
+    
+    public RequestOrder(Timestamp creation_date, Timestamp delivery_date,
+                        float base_amount, float total_amount, String status, 
+                        int id_client,int priority,int id_district,String address) {
+        this.creation_date = creation_date;
+        this.delivery_date = delivery_date;
+        this.status = status;
+        this.base_amount = base_amount;
+        this.total_amount = total_amount;
+        this.id_client = id_client;
+        this.priority = priority;
+        this.id_district = id_district;
+        this.address =  address;
     }
     
     public Integer getId_request_order() {
@@ -114,6 +130,22 @@ public class RequestOrder {
 
     public void setPriority(Integer priority) {
         this.priority = priority;
+    }
+    
+    public Integer getId_district() {
+        return id_district;
+    }
+
+    public void setId_district(Integer id_district) {
+        this.id_district = id_district;
+    }
+
+    public String getAddress() {
+        return address;
+    }
+
+    public void setAddress(String address) {
+        this.address = address;
     }
     
 
