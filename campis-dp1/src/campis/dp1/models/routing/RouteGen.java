@@ -84,6 +84,25 @@ public class RouteGen {
         return (double) cost;
     }
     
+    public ArrayList<Route> getRoutes(ArrayList<Coordinates> prods){
+        ArrayList<Route> returnable = new ArrayList<>();
+        for (int i = 0; i < prods.size(); i++) {
+            Route route;
+            if (i==0){
+                route = this.calculateRoute(new Coord(0,0),
+                    normalize_start(new Coord(prods.get(i).getY(),prods.get(i).getX())));                
+            }else if (i<prods.size()-1){
+                route = this.calculateRoute(normalize_start(new Coord(prods.get(i-1).getY(),prods.get(i-1).getX())),
+                    normalize_start(new Coord(prods.get(i).getY(),prods.get(i).getX())));
+            }else{
+                route = this.calculateRoute(normalize_start(new Coord(prods.get(i).getY(),prods.get(i).getX())),
+                    new Coord(0,0));
+            }
+            returnable.add(route);
+        }
+        return returnable;
+    }
+    
     
     public RouteGen(int[][] real_map, CGraph routesGraph) {
         this.paths=routesGraph;
@@ -101,7 +120,11 @@ public class RouteGen {
         String key1="[ "+p1.y+", "+p1.x+"] [ "+p2.y+", "+p2.x+"]";
         String key2="[ "+p2.y+", "+p2.x+"] [ "+p1.y+", "+p1.x+"]";
         if (dict.get(key1)!=null) return dict.get(key1);
-        if (dict.get(key2)!=null) return(dict.get(key2));
+        if (dict.get(key2)!=null){
+            Route route = new Route(dict.get(key2));
+            reverseRoute(route);
+            return route;
+        }
         return null;
     }
 
@@ -123,7 +146,7 @@ public class RouteGen {
             for (int i = -1; i <2; i++) {
                 for (int j = -1; j <2; j++) {
                  try{
-                     if ((i!=j) && this.map[c_prod.y+i][c_prod.x+j]==0){
+                     if ((i!=j) && (i==0 || j==0) && this.map[c_prod.y+i][c_prod.x+j]==0){
                          retornable = new Coord(c_prod.y+i,c_prod.x+j);
                          return retornable;
                      }
@@ -148,6 +171,11 @@ public class RouteGen {
             return this.retrieve(c_origin, c_destiny);
         }
         if (c_destiny.y==c_origin.y && c_destiny.x == c_origin.x){
+            returnable.addPath(c_origin);
+            returnable.addPath(c_destiny);
+            return returnable;
+        }
+        if (frontTofront(c_origin,c_destiny)){
             returnable.addPath(c_origin);
             returnable.addPath(c_destiny);
             return returnable;
@@ -181,6 +209,7 @@ public class RouteGen {
             CNode origin_corner = origin_nodes.get(generator.nextInt(origin_nodes.size()));
             // will use pitagoric distance, only moving between nodes
             returnable.addPath(c_destiny);
+            returnable.addPath(destiny_corner.getPos());
             //System.out.println("Entering calculateRoute while loop");
             Coord previous_c = null;
             Boolean exit_loop;
@@ -315,6 +344,39 @@ public class RouteGen {
 
     private boolean same_coord(Coord c1, Coord c2) {
         return (c1.y == c2.y && c1.x == c2.x);
+    }
+
+    private boolean frontTofront(Coord c_origin, Coord c_destiny) {
+        if (c_origin.y != c_destiny.y && c_origin.x != c_destiny.x) return false;
+        if (c_origin.y == c_destiny.y){
+            int x_min;
+            int x_max;
+            if (c_origin.x>c_destiny.x){
+                x_min=c_destiny.x;
+                x_max=c_origin.x;
+            }else{
+                x_min=c_origin.x;
+                x_max=c_destiny.x;
+            }
+            
+            for (int i = 1; i <= x_max-x_min; i++) {
+                if (this.map[c_origin.y][x_min+i]!=0) return false;
+            }
+        }else{
+            int y_min;
+            int y_max;
+            if (c_origin.y>c_destiny.y){
+                y_min=c_destiny.y;
+                y_max=c_origin.y;
+            }else{
+                y_min=c_origin.y;
+                y_max=c_destiny.y;
+            }
+            for (int i = 1; i <= y_max-y_min; i++) {
+                if (this.map[y_min+i][c_origin.x]!=0) return false;
+            }
+        }
+        return true;
     }
 
 }

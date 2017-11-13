@@ -50,6 +50,19 @@ public class Batch {
         this.location = location;
         this.state = state;
     }
+    
+    public Batch(BatchDisplay batch){
+        super();
+        this.quantity = batch.getQuantity().get();
+        this.batch_cost = batch.getBatch_cost().get();
+        this.arrival_date = Timestamp.valueOf(batch.getArrival_date().get());
+        this.expiration_date = Timestamp.valueOf(batch.getExpiration_date().get());
+        this.id_product = batch.getId_product().get();
+        this.id_batch = batch.getId_batch().get();
+        this.type_batch = batch.getType_batch().get();
+        this.location = batch.getLocation().get();
+        this.state = batch.getState().get() == "true";
+    }
 
     public Batch(BatchWH_Move get) {
         this.quantity = get.getQuantity();
@@ -60,6 +73,31 @@ public class Batch {
         this.type_batch = get.getType_batch();
         this.location = get.getLocation();
         this.state = get.isState();
+    }
+
+    public Batch(Batch batch) {
+        this.arrival_date = batch.arrival_date;
+        this.batch_cost = batch.batch_cost;
+        this.expiration_date = batch.expiration_date;
+        this.heritage = batch.heritage;
+        this.id_product = batch.id_product;
+        this.location = batch.location;
+        this.quantity = batch.quantity;
+        this.state = batch.state;
+        this.type_batch = batch.type_batch;
+    }
+    
+    public Batch(Batch batch, int r) {
+        this.arrival_date = batch.arrival_date;
+        this.batch_cost = batch.batch_cost;
+        this.expiration_date = batch.expiration_date;
+        this.heritage = batch.heritage;
+        this.id_product = batch.id_product;
+        this.location = batch.location;
+        this.quantity = batch.quantity;
+        this.state = batch.state;
+        this.type_batch = batch.type_batch;
+        this.id_batch=batch.id_batch;
     }
     
     

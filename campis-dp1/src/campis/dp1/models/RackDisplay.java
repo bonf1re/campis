@@ -16,16 +16,14 @@ import javafx.beans.property.SimpleIntegerProperty;
 public class RackDisplay {
     
     private final IntegerProperty id_rack;
-    private final IntegerProperty id_warehouse;
     private final IntegerProperty pos_x;
     private final IntegerProperty pos_y;
     private final IntegerProperty n_columns;
     private final IntegerProperty n_floors;
     private final IntegerProperty orientation;
     
-    public RackDisplay(int id_rack, int id_warehouse, int pos_x, int pos_y, int n_columns, int n_floors, int orientation) {
+    public RackDisplay(int id_rack, int pos_x, int pos_y, int n_columns, int n_floors, int orientation) {
         this.id_rack = new SimpleIntegerProperty(id_rack);
-        this.id_warehouse = new SimpleIntegerProperty(id_warehouse);
         this.pos_x =  new SimpleIntegerProperty(pos_x);
         this.pos_y = new SimpleIntegerProperty(pos_y);
         this.n_columns = new SimpleIntegerProperty(n_columns);
@@ -35,10 +33,6 @@ public class RackDisplay {
     
     public IntegerProperty id_rackProperty() {
         return id_rack;
-    }
-    
-    public IntegerProperty id_warehouseProperty() {
-        return id_warehouse;
     }
     
     public IntegerProperty pos_xProperty() {

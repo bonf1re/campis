@@ -2,53 +2,38 @@
 
 <?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXTextField?>
+<?import javafx.scene.canvas.Canvas?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.racks.CreateRackController">
+<BorderPane prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.racks.CreateRackController">
    <center>
-      <AnchorPane prefHeight="500.0" prefWidth="967.0" BorderPane.alignment="CENTER">
+      <AnchorPane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
             <Label layoutX="47.0" layoutY="38.0" text="Nuevo Rack">
                <font>
                   <Font size="25.0" />
                </font>
             </Label>
-            <Label layoutX="140.0" layoutY="152.0" text="N° columnas:">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label layoutX="145.0" layoutY="216.0" text="N° de pisos:">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label layoutX="523.0" layoutY="148.0" text="Ubicación X:">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <Label layoutX="524.0" layoutY="213.0" text="Ubicación Y:">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <JFXTextField fx:id="columnsField" layoutX="291.0" layoutY="137.0" prefHeight="30.0" prefWidth="160.0" />
-            <JFXTextField fx:id="floorsField" layoutX="294.0" layoutY="203.0" prefHeight="30.0" prefWidth="160.0" />
-            <JFXTextField layoutX="678.0" layoutY="138.0" prefHeight="30.0" prefWidth="160.0" fx:id="x_Field" />
-            <JFXTextField fx:id="y_Field" layoutX="678.0" layoutY="204.0" prefHeight="30.0" prefWidth="160.0" />
-            <Button layoutX="355.0" layoutY="420.0" mnemonicParsing="false" onAction="#insertRack" prefHeight="35.0" prefWidth="85.0" text="Guardar" />
-            <Button layoutX="529.0" layoutY="420.0" mnemonicParsing="false" onAction="#goListRacks" prefHeight="35.0" prefWidth="85.0" text="Cancelar" />
-            <Label layoutX="144.0" layoutY="299.0" text="Orientacion:">
-               <font>
-                  <Font size="18.0" />
-               </font>
-            </Label>
-            <JFXComboBox fx:id="orientationField" layoutX="296.0" layoutY="288.0" prefHeight="31.0" prefWidth="156.0" />
+            <Label layoutX="62.0" layoutY="121.0" text="N° columnas:" />
+            <Label layoutX="62.0" layoutY="191.0" text="N° de pisos:" />
+            <Label layoutX="247.0" layoutY="121.0" text="Ubicación X:" />
+            <Label layoutX="248.0" layoutY="191.0" text="Ubicación Y:" />
+            <JFXTextField fx:id="columnsField" layoutX="152.0" layoutY="115.0" prefHeight="30.0" prefWidth="54.0" />
+            <JFXTextField fx:id="floorsField" layoutX="152.0" layoutY="185.0" prefHeight="30.0" prefWidth="52.0" />
+            <JFXTextField layoutX="330.0" layoutY="115.0" prefHeight="30.0" prefWidth="50.0" fx:id="x_Field" />
+            <JFXTextField fx:id="y_Field" layoutX="330.0" layoutY="185.0" prefHeight="30.0" prefWidth="50.0" />
+            <Button layoutX="356.0" layoutY="504.0" mnemonicParsing="false" onAction="#insertRack" prefHeight="35.0" prefWidth="85.0" text="Guardar" />
+            <Button layoutX="532.0" layoutY="504.0" mnemonicParsing="false" onAction="#goListRacks" prefHeight="35.0" prefWidth="85.0" text="Cancelar" />
+            <Label layoutX="62.0" layoutY="253.0" text="Orientacion:" />
+            <JFXComboBox fx:id="orientationField" layoutX="153.0" layoutY="246.0" prefHeight="31.0" prefWidth="35.0" />
+            <Canvas fx:id="mapCanvas" height="376.0" layoutX="403.0" layoutY="64.0" width="544.0" />
+            <Button layoutX="232.0" layoutY="249.0" mnemonicParsing="false" onAction="#testAction" prefHeight="25.0" prefWidth="62.0" text="Probar" />
+            <Label fx:id="messageField" layoutX="62.0" layoutY="300.0" prefHeight="54.0" prefWidth="340.0" textFill="RED" wrapText="true" />
+            <Button layoutX="313.0" layoutY="238.0" mnemonicParsing="false" onAction="#clearAction" prefHeight="47.0" prefWidth="70.0" text="Limpiar Mapa" textAlignment="CENTER" wrapText="true" />
          </children>
       </AnchorPane>
    </center>

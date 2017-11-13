@@ -8,33 +8,67 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.EntryMoveNormalCreateController">
+<BorderPane id="WHbackground" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" stylesheets="@../../assets/css/whmoves.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.EntryMoveNormalCreateController">
    <center>
       <Pane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <TableView fx:id="batchTable" layoutX="48.0" layoutY="140.0" prefHeight="340.0" prefWidth="875.0">
+            <TableView fx:id="batchTable" layoutX="27.0" layoutY="137.0" prefHeight="360.0" prefWidth="547.0" styleClass="batch_table">
               <columns>
-                <TableColumn fx:id="idCol" prefWidth="32.0" text="ID" />
-                  <TableColumn fx:id="prodCol" prefWidth="126.0" text="Producto" />
-                <TableColumn fx:id="qtCol" prefWidth="86.0" text="Cantidad" />
-                  <TableColumn fx:id="arrCol" prefWidth="191.0" text="Llegada" />
-                  <TableColumn fx:id="expCol" prefWidth="197.0" text="Vencimiento" />
-                  <TableColumn fx:id="herCol" prefWidth="125.0" text="Lote/s Padre/s" />
-                  <TableColumn fx:id="selCol" prefWidth="116.0" text="Seleccionado" />
+                <TableColumn fx:id="idCol" prefWidth="27.0" text="ID" />
+                  <TableColumn fx:id="prodCol" prefWidth="62.0" text="Producto" />
+                <TableColumn fx:id="qtCol" prefWidth="61.0" text="Cantidad" />
+                  <TableColumn fx:id="arrCol" prefWidth="83.0" text="Llegada" />
+                  <TableColumn fx:id="expCol" prefWidth="93.0" text="Vencimiento" />
+                  <TableColumn fx:id="herCol" prefWidth="91.0" text="Lote/s Padre/s" />
+                  <TableColumn fx:id="selCol" prefWidth="43.0" text="Seleccionado" />
+                  <TableColumn fx:id="weightCol" prefWidth="85.0" text="Peso" />
               </columns>
             </TableView>
-            <Text layoutX="71.0" layoutY="53.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Entrada a almacén / Seleccionar lotes">
+            <Text layoutX="71.0" layoutY="66.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Entrada a almacén / Seleccionar lotes">
                <font>
                   <Font size="28.0" />
                </font>
             </Text>
+            <TableView fx:id="vh1Table" layoutX="603.0" layoutY="138.0" prefHeight="156.0" prefWidth="341.0" styleClass="batch_table">
+              <columns>
+                <TableColumn fx:id="pc1Col" prefWidth="75.0" text="Placa" />
+                <TableColumn fx:id="cp1Col" prefWidth="75.0" text="Capacidad" />
+              </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <TableView fx:id="vh2Table" layoutX="603.0" layoutY="341.0" prefHeight="156.0" prefWidth="341.0" styleClass="batch_table">
+               <columns>
+                  <TableColumn fx:id="pc2Col" prefWidth="75.0" text="Placa" />
+                  <TableColumn fx:id="cp2Col" prefWidth="75.0" text="Capacidad" />
+               </columns>
+               <columnResizePolicy>
+                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+               </columnResizePolicy>
+            </TableView>
+            <Button fx:id="delButton" layoutX="739.0" layoutY="303.0" mnemonicParsing="false" onAction="#delVh" text="^" />
+            <Button fx:id="addButton" layoutX="800.0" layoutY="303.0" mnemonicParsing="false" onAction="#addVh" rotate="180.0" text="^" />
+            <Text layoutX="605.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vehículos">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Text>
+            <Text layoutX="52.0" layoutY="112.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lotes">
+               <font>
+                  <Font name="System Bold" size="16.0" />
+               </font>
+            </Text>
+            <Text layoutX="891.0" layoutY="110.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lista" />
+            <Text layoutX="861.0" layoutY="322.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Seleccionados" />
          </children>
       </Pane>
    </center>
    <bottom>
-      <Pane prefHeight="121.0" prefWidth="967.0" BorderPane.alignment="CENTER">
+      <Pane prefHeight="75.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="441.0" layoutY="48.0" mnemonicParsing="false" onAction="#goWhEntryMoveRoute" text="Siguiente" />
+            <Button layoutX="403.0" layoutY="14.0" mnemonicParsing="false" onAction="#goWhEntryMoveRoute" text="Siguiente" />
+            <Button layoutX="500.0" layoutY="14.0" mnemonicParsing="false" onAction="#goWhEntryMoveList" text="Cancelar" />
          </children>
       </Pane>
    </bottom>

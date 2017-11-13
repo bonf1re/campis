@@ -75,7 +75,7 @@ public class EditVehicleController implements Initializable {
     }
 
     
-    public static Integer searchWarehouse(String wr) throws SQLException, ClassNotFoundException {
+    /*public static Integer searchWarehouse(String wr) throws SQLException, ClassNotFoundException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
@@ -89,7 +89,7 @@ public class EditVehicleController implements Initializable {
         Warehouse result = (Warehouse)rsWarehouse.get(0);
         codWr = result.getId();
         return codWr;
-    }
+    }*/
     
     public boolean validation() {
         boolean lblWeightValid = lblWeight.getText().length() == 0;

@@ -40,6 +40,12 @@
             <JFXTextField fx:id="trademarkField" layoutX="397.0" layoutY="174.0" prefHeight="21.0" prefWidth="399.0" />
             <Label layoutX="611.0" layoutY="124.0" prefHeight="25.0" prefWidth="100.0" text="Cantidad máxima:" />
             <JFXTextField fx:id="maxQtField" layoutX="728.0" layoutY="124.0" prefHeight="25.0" prefWidth="72.0" />
+            <Label fx:id="nameMessage" layoutX="409.0" layoutY="97.0" prefHeight="17.0" prefWidth="389.0" textFill="RED" />
+            <Label fx:id="trademarkMessage" layoutX="396.0" layoutY="211.0" prefHeight="17.0" prefWidth="389.0" textFill="RED" />
+            <Label fx:id="typeMessage" layoutX="396.0" layoutY="333.0" prefHeight="17.0" prefWidth="389.0" textFill="RED" />
+            <Label fx:id="priceMessage" layoutX="400.0" layoutY="272.0" prefHeight="17.0" prefWidth="239.0" textFill="RED" />
+            <Label fx:id="weightMessage" layoutX="396.0" layoutY="157.0" prefHeight="17.0" prefWidth="123.0" textFill="RED" />
+            <Label fx:id="maxQTMessage" layoutX="673.0" layoutY="157.0" prefHeight="17.0" prefWidth="123.0" textFill="RED" />
          </children>
       </AnchorPane>
    </center>

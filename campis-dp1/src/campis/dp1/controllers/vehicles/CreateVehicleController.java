@@ -58,9 +58,9 @@ public class CreateVehicleController implements Initializable {
     private void goListVehicles() throws IOException {
         ContextFX.getInstance().setId(this.warehouse_id);
         main.showListVehicle();
-    }
+    }    
     
-    public static Integer searchWarehouse(String wr) throws SQLException, ClassNotFoundException {
+    /*public static Integer searchWarehouse(String wr) throws SQLException, ClassNotFoundException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
@@ -74,7 +74,7 @@ public class CreateVehicleController implements Initializable {
         Warehouse result = (Warehouse)rsWarehouse.get(0);
         codWr = result.getId();
         return codWr;
-    }
+    }*/
         
     public static List<Warehouse> getWarehouses() {
         Configuration configuration = new Configuration();
