@@ -12,7 +12,7 @@ import java.util.ArrayList;
  *
  * @author sergio
  */
-class Route {
+public class Route {
     private ArrayList<Coord> paths = new ArrayList<>();
     private int cost = 0;
     
