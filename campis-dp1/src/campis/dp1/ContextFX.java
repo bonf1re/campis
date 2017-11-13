@@ -44,6 +44,17 @@ public class ContextFX {
     ObservableList<ProductDisplay> tempList = FXCollections.observableArrayList();
     ObservableList<BatchDisplay> tempBatchList = FXCollections.observableArrayList();
     ArrayList<Object> polymorphic_list = new ArrayList<Object>();
+    Integer mode = 0;
+    
+    public Integer getMode() {
+        Integer returnable = new Integer(this.mode);
+        this.mode = null;
+        return returnable;
+    }
+
+    public void setMode(Integer mode) {
+        this.mode = mode;
+    }
     
     public ArrayList<Object> getPolymorphic_list() {
         ArrayList<Object> returnable = new ArrayList<>(polymorphic_list);
