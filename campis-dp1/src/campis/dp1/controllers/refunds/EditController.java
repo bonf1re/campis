@@ -71,9 +71,7 @@ public class EditController implements Initializable {
             query.setParameter("IdRefundLine", refundLinesView.get(i).getId_refund_line().intValue());
             int result = query.executeUpdate();
         }
-        System.out.println("===================");
-        System.out.println(statusField.getValue());
-        System.out.println(id);
+
         Query query = session.createQuery("update Refund set status= :newStatus"
                 + " where id_refund = :IdRefund");
             query.setParameter("newStatus", statusField.getValue());
@@ -95,6 +93,7 @@ public class EditController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(RefundLine.class);
+        criteria.add(Restrictions.eq("id_refund", id));
         List lista = criteria.list();
         ObservableList<RefundLine> returnable;
         returnable = FXCollections.observableArrayList();

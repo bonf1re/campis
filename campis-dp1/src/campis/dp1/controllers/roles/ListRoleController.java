@@ -51,14 +51,18 @@ public class ListRoleController implements Initializable{
 
     @FXML
     private void goEditRole() throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showEditRole();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showEditRole();
+        }
     }
 
     @FXML
     private void goShowRole() throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showViewRole();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showViewRole();
+        }
     }
 
     /**
@@ -66,6 +70,7 @@ public class ListRoleController implements Initializable{
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.selected_id = 0;
         tableRole.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -116,8 +121,10 @@ public class ListRoleController implements Initializable{
 
     @FXML
     private void goPermission(ActionEvent event) throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showPermission();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showPermission();
+        }
     }
 
     private void deleteRole(int cod) {
@@ -137,14 +144,16 @@ public class ListRoleController implements Initializable{
 
     @FXML
     private void deleteRole(ActionEvent event) throws SQLException, ClassNotFoundException {
-        ContextFX.getInstance().setId(selected_id);
-        Integer id_role = ContextFX.getInstance().getId();
-        deleteRole(selected_id);
-        for (int i = 0; i < roles.size(); i++) {
-            if(roles.get(i).getId_role() == selected_id) {
-                roles.remove(i);
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            Integer id_role = ContextFX.getInstance().getId();
+            deleteRole(selected_id);
+            for (int i = 0; i < roles.size(); i++) {
+                if(roles.get(i).getId_role() == selected_id) {
+                    roles.remove(i);
+                }
             }
+            loadData();
         }
-        loadData();
     }
 }

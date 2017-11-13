@@ -25,9 +25,11 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -62,13 +64,14 @@ public class AddItemController2 implements Initializable{
     private TableColumn<ProductDisplay, Integer> typeColumn;
     @FXML
     private JFXTextField quantityField;
+    @FXML
+    private Label messageLabel;
     
     @FXML
     private void goCreateRequestOrder() throws IOException {
         main.showCreateRequestOrder();
     }
     
-    @FXML
     private void goEditRequestOrder() throws IOException {
         main.showEditRequestOrder();
     }
@@ -137,7 +140,7 @@ public class AddItemController2 implements Initializable{
                     ProductDisplay prod = new ProductDisplay(products.get(i).getId_product(), products.get(i).getName(),
                             products.get(i).getDescription(), products.get(i).getP_stock(), products.get(i).getC_stock(),
                             products.get(i).getWeight(), products.get(i).getTrademark(), products.get(i).getBase_price(),
-                            products.get(i).getId_unit_of_measure(), products.get(i).getId_product_type());
+                            products.get(i).getId_unit_of_measure(), products.get(i).getId_product_type(), products.get(i).getMax_qt());
                     productsView.add(prod);
                 }
                tableProd.setItems(null);
@@ -188,11 +191,34 @@ public class AddItemController2 implements Initializable{
         return types;
     }
     
+    private Integer getQuantProduct(int id) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr = "SELECT c_stock FROM campis.productxwarehouse "
+                + "WHERE id_product ="+ id;
+        SQLQuery query = session.createSQLQuery(qryStr);
+        List<Integer> list = query.list();
+        int returnable = list.get(0);
+        session.close();
+        sessionFactory.close();
+        return returnable;
+    }
+    
     @FXML
     private void addItemAction() throws IOException {
         ContextFX.getInstance().setId(selected_id);
-        ContextFX.getInstance().setQuantity(Integer.parseInt(quantityField.getText()));
-        this.goEditRequestOrder();
+        int cQuant = getQuantProduct(selected_id);
+        int quant = Integer.parseInt(quantityField.getText());
+        if ( quant <= cQuant && quant > 0) {
+            ContextFX.getInstance().setQuantity(quant);
+            this.goCreateRequestOrder();
+        }else{
+            messageLabel.setText("La cantidad introducida es incorrecta");
+        }
     }
     
     @Override

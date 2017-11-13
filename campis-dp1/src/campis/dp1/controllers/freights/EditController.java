@@ -8,7 +8,6 @@ package campis.dp1.controllers.freights;
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.District;
-import campis.dp1.models.District_;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;

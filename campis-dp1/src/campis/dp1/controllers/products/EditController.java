@@ -52,6 +52,8 @@ public class EditController implements Initializable{
     private JFXTextField weightField;
     @FXML
     private JFXComboBox currencyType;
+    @FXML
+    private JFXTextField maxQTField;
     
     @FXML
     private void goListProduct() throws IOException {
@@ -61,6 +63,7 @@ public class EditController implements Initializable{
     public static Integer searchCodMeasure(String measure) throws SQLException, ClassNotFoundException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -76,6 +79,7 @@ public class EditController implements Initializable{
     public static Integer searchCodType(String type) throws SQLException, ClassNotFoundException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -94,13 +98,15 @@ public class EditController implements Initializable{
     private void insertProduct (ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         int measure = searchCodMeasure(measureField.getEditor().getText());
         int type = searchCodType(typeField.getEditor().getText());
         Query query = session.createQuery("update Product set name = :newName,description = :newDescrip,"
-                + "weight=:newWeight,trademark=:newTrademark,base_price=:newPrice,id_unit_of_measure=:newMeasure,id_product_type=:newType where id_product = :oldIdProd");
+                + "weight=:newWeight,trademark=:newTrademark,base_price=:newPrice,id_unit_of_measure=:newMeasure,"
+                + "id_product_type=:newType,max_qt=:newMaxQT where id_product = :oldIdProd");
         query.setParameter("newName", nameField.getText());
         query.setParameter("newName", nameField.getText());
         query.setParameter("newDescrip",descripField.getText());
@@ -109,6 +115,7 @@ public class EditController implements Initializable{
         query.setParameter("newPrice", Float.parseFloat(priceField.getText()));
         query.setParameter("newMeasure", measure);
         query.setParameter("newType", type);
+        query.setParameter("newMaxQT", Integer.parseInt(maxQTField.getText()));
         query.setParameter("oldIdProd", id);
         int result = query.executeUpdate();
         session.getTransaction().commit();
@@ -120,6 +127,7 @@ public class EditController implements Initializable{
     public static String getMeasure(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -135,6 +143,7 @@ public class EditController implements Initializable{
     public static String getType(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -163,6 +172,7 @@ public class EditController implements Initializable{
         }
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();

@@ -24,10 +24,18 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
 import javafx.fxml.Initializable;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.stage.Modality;
+import javafx.stage.Stage;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -39,13 +47,13 @@ import org.hibernate.transform.Transformers;
  *
  * @author Eddy
  */
-public class AddItemController implements Initializable{
-    
+public class AddItemController implements Initializable {
+
     Main main;
     private ObservableList<ProductDisplay> productsView;
     private ObservableList<Product> products;
     private int selected_id;
-    
+
     @FXML
     private JFXTextField codField;
     @FXML
@@ -62,34 +70,36 @@ public class AddItemController implements Initializable{
     private TableColumn<ProductDisplay, Integer> typeColumn;
     @FXML
     private JFXTextField quantityField;
-    
+    @FXML
+    private Label messageLabel;
+
     @FXML
     private void goCreateRequestOrder() throws IOException {
         main.showCreateRequestOrder();
     }
-    
+
     private ObservableList<Product> getSearchList(String text, String text2, String text3) throws SQLException, ClassNotFoundException {
         int codType = 0;
-        if(text3.compareTo("")!=0){
+        if (text3.compareTo("") != 0) {
             codType = getCodType(text3);
         }
-        ObservableList<Product>  returnable;
+        ObservableList<Product> returnable;
         returnable = FXCollections.observableArrayList();
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Product.class);
         List<Product> list = criteria.list();
         for (int i = 0; i < list.size(); i++) {
-            if((text.compareTo("")!=0) && (list.get(i).getId_product().equals(Integer.parseInt(text)))) {
+            if ((text.compareTo("") != 0) && (list.get(i).getId_product().equals(Integer.parseInt(text)))) {
                 returnable.add(list.get(i));
                 break;
-            }else if((text2.compareTo("")!=0) && (list.get(i).getName().contains(text2)==TRUE)){
+            } else if ((text2.compareTo("") != 0) && (list.get(i).getName().contains(text2) == TRUE)) {
                 returnable.add(list.get(i));
-            }else if((text3.compareTo("")!=0) && (text2.compareTo("")==0) && (list.get(i).getId_product_type().equals(codType))){
+            } else if ((text3.compareTo("") != 0) && (text2.compareTo("") == 0) && (list.get(i).getId_product_type().equals(codType))) {
                 returnable.add(list.get(i));
             }
         }
@@ -97,16 +107,16 @@ public class AddItemController implements Initializable{
         sessionFactory.close();
         return returnable;
     }
-    
+
     public static Integer getCodType(String type) throws SQLException, ClassNotFoundException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(ProductType.class);
-        criteria.add(Restrictions.eq("description",type));
+        criteria.add(Restrictions.eq("description", type));
         Integer codType;
         List rsType = criteria.list();
         ProductType result = (ProductType) rsType.get(0);
@@ -121,32 +131,32 @@ public class AddItemController implements Initializable{
         String text = this.codField.getText();
         String text2 = this.nameField.getText();
         String text3 = this.typeField.getEditor().getText();
-        if((text.compareTo("") != 0) || (text2.compareTo("") != 0) || (text3.compareTo("") != 0)) {
+        if ((text.compareTo("") != 0) || (text2.compareTo("") != 0) || (text3.compareTo("") != 0)) {
             products = FXCollections.observableArrayList();
             productsView = FXCollections.observableArrayList();
-            products = getSearchList(text,text2,text3);
-            if(products == null){
+            products = getSearchList(text, text2, text3);
+            if (products == null) {
                 tableProd.setItems(null);
             } else {
-               for (int i = 0; i < products.size(); i++) {
+                for (int i = 0; i < products.size(); i++) {
                     ProductDisplay prod = new ProductDisplay(products.get(i).getId_product(), products.get(i).getName(),
                             products.get(i).getDescription(), products.get(i).getP_stock(), products.get(i).getC_stock(),
                             products.get(i).getWeight(), products.get(i).getTrademark(), products.get(i).getBase_price(),
-                            products.get(i).getId_unit_of_measure(), products.get(i).getId_product_type());
+                            products.get(i).getId_unit_of_measure(), products.get(i).getId_product_type(), products.get(i).getMax_qt());
                     productsView.add(prod);
                 }
-               tableProd.setItems(null);
-               tableProd.setItems(productsView);
+                tableProd.setItems(null);
+                tableProd.setItems(productsView);
             }
-        }else {
+        } else {
             loadData();
         }
     }
-    
+
     private ObservableList<Product> getProd() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -155,60 +165,84 @@ public class AddItemController implements Initializable{
         ObservableList<Product> returnable;
         returnable = FXCollections.observableArrayList();
         for (int i = 0; i < list.size(); i++) {
-            returnable.add((Product)list.get(i));
+            returnable.add((Product) list.get(i));
         }
         session.close();
         sessionFactory.close();
         return returnable;
     }
-    
+
     private void loadData() {
         products = FXCollections.observableArrayList();
         productsView = FXCollections.observableArrayList();
         products = getProd();
     }
-    
+
     public static List<ProductType> getTypes() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(ProductType.class)
                 .setProjection(Projections.projectionList()
-                .add(Projections.property("description"),"description"))
+                        .add(Projections.property("description"), "description"))
                 .setResultTransformer(Transformers.aliasToBean(ProductType.class));
         List<ProductType> types = criteria.list();
+        session.close();
+        sessionFactory.close();
         return types;
     }
-    
+
+    private Integer getQuantProduct(int id) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr = "SELECT c_stock FROM campis.productxwarehouse "
+                + "WHERE id_product ="+ id;
+        SQLQuery query = session.createSQLQuery(qryStr);
+        List<Integer> list = query.list();
+        int returnable = list.get(0);
+        session.close();
+        sessionFactory.close();
+        return returnable;
+    }
+
     @FXML
     private void addItemAction() throws IOException {
         ContextFX.getInstance().setId(selected_id);
-        ContextFX.getInstance().setQuantity(Integer.parseInt(quantityField.getText()));
-        this.goCreateRequestOrder();
+        int cQuant = getQuantProduct(selected_id);
+        int quant = Integer.parseInt(quantityField.getText());
+        if ( quant <= cQuant && quant > 0) {
+            ContextFX.getInstance().setQuantity(quant);
+            this.goCreateRequestOrder();
+        }else{
+            messageLabel.setText("La cantidad introducida es incorrecta");
+        }
     }
-    
+
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         tableProd.getSelectionModel().selectedItemProperty().addListener(
-        (observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                return;
-            }
-            this.selected_id = newValue.codProdProperty().getValue().intValue();
-            }
+                (observable, oldValue, newValue) -> {
+                    if (newValue == null) {
+                        return;
+                    }
+                    this.selected_id = newValue.codProdProperty().getValue().intValue();
+                }
         );
         codColumn.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
         nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
         typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty().asObject());
-        
-        List<ProductType> typeList = getTypes(); 
+
+        List<ProductType> typeList = getTypes();
         for (int i = 0; i < typeList.size(); i++) {
             typeField.getItems().addAll(typeList.get(i).getDescription());
         }
     }
-    
-    
+
 }

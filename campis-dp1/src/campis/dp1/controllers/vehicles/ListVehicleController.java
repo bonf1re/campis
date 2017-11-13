@@ -79,8 +79,10 @@ public class ListVehicleController implements Initializable {
     
     @FXML
     private void goEditVehicle() throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showEditVehicle();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showEditVehicle();
+        }
     } 
     
     /**
@@ -88,6 +90,7 @@ public class ListVehicleController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.selected_id = 0;
         tableVehicle.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -167,15 +170,17 @@ public class ListVehicleController implements Initializable {
  
     @FXML
     private void deleteVehicle(ActionEvent event) throws SQLException, ClassNotFoundException {
-        ContextFX.getInstance().setId(selected_id);
-        Integer id_vehicle = ContextFX.getInstance().getId();
-        deleteSelectedVehicle(selected_id);
-        for (int i = 0; i < vehiculos.size(); i++) {
-            if(vehiculos.get(i).getId_vehicle().compareTo(id_vehicle) == 0){
-                vehiculos.remove(i);
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            Integer id_vehicle = ContextFX.getInstance().getId();
+            deleteSelectedVehicle(selected_id);
+            for (int i = 0; i < vehiculos.size(); i++) {
+                if(vehiculos.get(i).getId_vehicle().compareTo(id_vehicle) == 0){
+                    vehiculos.remove(i);
+                }
             }
+            cargarData();
         }
-        cargarData();
     }
     
     private void deleteSelectedVehicle(int cod) {

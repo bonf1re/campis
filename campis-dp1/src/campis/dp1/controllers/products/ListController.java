@@ -76,6 +76,7 @@ public class ListController implements Initializable {
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.selected_id = 0;
         tablaProd.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -126,7 +127,7 @@ public class ListController implements Initializable {
             ProductDisplay prod = new ProductDisplay(productos.get(i).getId_product(), productos.get(i).getName(),
                     productos.get(i).getDescription(), productos.get(i).getP_stock(), productos.get(i).getC_stock(),
                     productos.get(i).getWeight(), productos.get(i).getTrademark(), productos.get(i).getBase_price(),
-                    productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type());
+                    productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type(),productos.get(i).getMax_qt());
             productosView.add(prod);
         }
         tablaProd.setItems(null);
@@ -170,7 +171,7 @@ public class ListController implements Initializable {
                     ProductDisplay prod = new ProductDisplay(productos.get(i).getId_product(), productos.get(i).getName(),
                             productos.get(i).getDescription(), productos.get(i).getP_stock(), productos.get(i).getC_stock(),
                             productos.get(i).getWeight(), productos.get(i).getTrademark(), productos.get(i).getBase_price(),
-                            productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type());
+                            productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type(), productos.get(i).getMax_qt());
                     productosView.add(prod);
                 }
             }
@@ -186,14 +187,18 @@ public class ListController implements Initializable {
 
     @FXML
     private void goEditProduct(ActionEvent event) throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showEditProduct();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showEditProduct();
+        }
     }
     
     @FXML
     private void goViewProduct(ActionEvent event) throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showViewProduct();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showViewProduct();
+        }
     }
 
     private void deleteProduct(int cod) {
@@ -214,16 +219,17 @@ public class ListController implements Initializable {
 
     @FXML
     private void deleteProduct(ActionEvent event) throws SQLException, ClassNotFoundException {
-        ContextFX.getInstance().setId(selected_id);
-        Integer id_product = ContextFX.getInstance().getId();
-        deleteProduct(selected_id);
-        for (int i = 0; i < productos.size(); i++) {
-            if(productos.get(i).getId_product().compareTo(id_product) == 0){
-                productos.remove(i);
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            Integer id_product = ContextFX.getInstance().getId();
+            deleteProduct(selected_id);
+            for (int i = 0; i < productos.size(); i++) {
+                if(productos.get(i).getId_product().compareTo(id_product) == 0){
+                    productos.remove(i);
+                }
             }
+            cargarData();
         }
-        cargarData();
     }
-    
 }
 

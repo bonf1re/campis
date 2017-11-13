@@ -108,6 +108,7 @@ public class ListSaleConditionController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.selected_id = 0;
         List<Campaign> cmpList = getCampaigns();
         cmbCampaign.getItems().addAll("");
         for (int i = 0; i < cmpList.size(); i++) {
@@ -356,14 +357,23 @@ public class ListSaleConditionController implements Initializable {
 
     @FXML
     private void goEditSaleCondition(ActionEvent event) throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showEditSaleCondition();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showEditSaleCondition();
+        }
+    }
+    
+    @FXML
+    private void goCampaigns(ActionEvent event) throws IOException {
+        main.showListCampaigns();
     }
     
     @FXML
     private void goViewSaleCondition(ActionEvent event) throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showViewSaleCondition();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showViewSaleCondition();
+        }
     }
     
     
@@ -389,10 +399,12 @@ public class ListSaleConditionController implements Initializable {
     
     @FXML
     private void deleteSaleCondition(ActionEvent event) throws SQLException, ClassNotFoundException {
-        ContextFX.getInstance().setId(selected_id);
-        Integer id_sale_condition = ContextFX.getInstance().getId();
-        deleteSaleCondition(selected_id);
-        
-        cargarData();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            Integer id_sale_condition = ContextFX.getInstance().getId();
+            deleteSaleCondition(selected_id);
+            
+            cargarData();
+        }
     }
 }

@@ -55,7 +55,7 @@ public class LoginController {
         if (VerifyUser()) {
             main.showTopMenu();
             Timeline timeline = new Timeline(new KeyFrame(
-                Duration.millis(300000),
+                Duration.millis(900000),
                 ae -> {
                 try {
                     GoLogin();
@@ -88,7 +88,8 @@ public class LoginController {
         List<User> users = criteria.list();
         session.close();
         sessionFactory.close();
-        ContextFX.getInstance().setUser((users.size() > 0 ? users.get(0) : null));
+        if (users.size() > 0)
+            ContextFX.getInstance().setUser(users.get(0));
 
         return (users.size() > 0);
     }

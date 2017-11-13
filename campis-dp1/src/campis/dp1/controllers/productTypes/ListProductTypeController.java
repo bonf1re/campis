@@ -46,14 +46,18 @@ public class ListProductTypeController implements Initializable {
 
     @FXML
     private void goCreateProductType() throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showCreateProductType();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showCreateProductType();
+        }
     }
     
     @FXML
     private void goEditProductType() throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showEditProductType();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showEditProductType();
+        }
     }
 
     /**
@@ -61,6 +65,7 @@ public class ListProductTypeController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.selected_id = 0;
         tableProductType.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -127,9 +132,11 @@ public class ListProductTypeController implements Initializable {
     
     @FXML
     private void deleteProductType(ActionEvent event) throws SQLException, ClassNotFoundException {
-        ContextFX.getInstance().setId(selected_id);
-        Integer id_product_type = ContextFX.getInstance().getId();
-        deleteProductType(selected_id);
-        loadData();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            Integer id_product_type = ContextFX.getInstance().getId();
+            deleteProductType(selected_id);
+            loadData();
+        }
     }
 }

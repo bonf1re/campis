@@ -76,6 +76,13 @@ public class Campaign {
         this.final_date = final_date;
     }
     
+    public Campaign(String name, String description, Timestamp initial_date, Timestamp final_date) {
+        this.name = name;
+        this.description = description;
+        this.initial_date = initial_date;
+        this.final_date = final_date;
+    }
+    
     public Campaign() {
         super();
     }

@@ -26,6 +26,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.query.Query;
 
 /**
  *
@@ -49,6 +50,8 @@ public class ListController implements Initializable{
     private TableColumn<UserDisplay,String> usernameColumn;
     @FXML
     private TableColumn<UserDisplay,String> emailColumn;
+    @FXML
+    private TableColumn<UserDisplay,String> statusColumn;
 
     @FXML
     private void goCreateUser() throws IOException {
@@ -57,18 +60,23 @@ public class ListController implements Initializable{
 
     @FXML
     private void goEditUser(ActionEvent event) throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showEditUser();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showEditUser();
+        }
     }
 
     @FXML
     private void goShowUser() throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showViewUser();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showViewUser();
+        }
     }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.selected_id = 0;
         tableUser.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -81,6 +89,7 @@ public class ListController implements Initializable{
             namesColumn.setCellValueFactory(cellData -> cellData.getValue().namesProperty());
             usernameColumn.setCellValueFactory(cellData -> cellData.getValue().usernameProperty());
             emailColumn.setCellValueFactory(cellData -> cellData.getValue().emailProperty());
+            statusColumn.setCellValueFactory(cellData -> cellData.getValue().getStatusname());
             /**/
             loadData();
         } catch (SQLException | ClassNotFoundException ex) {
@@ -112,7 +121,7 @@ public class ListController implements Initializable{
         usersView = FXCollections.observableArrayList();
         users = getUsers();
         for (int i = 0; i < users.size(); i++) {
-            UserDisplay user = new UserDisplay(users.get(i).getId_user(), users.get(i).getFirstname(), users.get(i).getLastname(), users.get(i).getEmail(), users.get(i).getUsername());
+            UserDisplay user = new UserDisplay(users.get(i).getId_user(), users.get(i).getFirstname(), users.get(i).getLastname(), users.get(i).getEmail(), users.get(i).getUsername(), users.get(i).isActive());
             usersView.add(user);
         }
         tableUser.setItems(null);
@@ -153,7 +162,7 @@ public class ListController implements Initializable{
                 tableUser.setItems(null);
             } else {
                 for (int i = 0; i < users.size(); i++) {
-                    UserDisplay user = new UserDisplay(users.get(i).getId_user(), users.get(i).getFirstname(), users.get(i).getLastname(), users.get(i).getEmail(), users.get(i).getUsername());
+                    UserDisplay user = new UserDisplay(users.get(i).getId_user(), users.get(i).getFirstname(), users.get(i).getLastname(), users.get(i).getEmail(), users.get(i).getUsername(), users.get(i).isActive());
                     usersView.add(user);
                 }
             }
@@ -180,14 +189,22 @@ public class ListController implements Initializable{
     
     @FXML
     private void deleteUser(ActionEvent event) throws SQLException, ClassNotFoundException {
-        ContextFX.getInstance().setId(selected_id);
-        Integer id_user = ContextFX.getInstance().getId();
-        deleteUser(selected_id);
-        for (int i = 0; i < users.size(); i++) {
-            if(users.get(i).getId_user() == selected_id) {
-                users.remove(i);
-            }
+        if (selected_id > 0) {
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+            Query query = session.createQuery("update User set active = :newFirstname where id_user = :oldIdProd");
+            query.setParameter("newFirstname", false);
+            query.setParameter("oldIdProd", selected_id);
+            int result = query.executeUpdate();
+            
+            session.getTransaction().commit();
+            sessionFactory.close();
+
+            loadData();
         }
-        loadData();
     }
 }

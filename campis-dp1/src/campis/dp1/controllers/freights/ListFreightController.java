@@ -48,8 +48,10 @@ public class ListFreightController implements Initializable {
 
     @FXML
     private void goEditFreight() throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showEditFreight();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showEditFreight();
+        }
     }
 
     /**
@@ -57,6 +59,7 @@ public class ListFreightController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.selected_id = 0;
         tableDistrict.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {

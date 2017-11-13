@@ -175,7 +175,8 @@ public class createEntryController implements Initializable {
             for (int i = 0; i < batchTable.getItems().size(); i++) {
                 int idBatch = batchTable.getItems().get(i).getId_batch().get();
                 Batch b = getBatch(idBatch);
-                updateBatch(idBatch);
+                int newType = 1;
+                updateBatch(idBatch,newType);
                 DispatchMove dispMove = new DispatchMove(typeOwner, 1, currentTimestamp, reason, id_batch, b.getArrival_date());
                 insertDispatchMove(dispMove);
             }
@@ -185,7 +186,8 @@ public class createEntryController implements Initializable {
             for (int i = 0; i < batchTable.getItems().size(); i++) {
                 int idBatch = batchTable.getItems().get(i).getId_batch().get();
                 Batch b = getBatch(idBatch);
-                updateBatch(idBatch);
+                int newType = 1;
+                updateBatch(idBatch,newType);
                 DispatchMove dispMove = new DispatchMove(typeOwner, 0, currentTimestamp, reason, id_batch, b.getArrival_date());
                 insertDispatchMove(dispMove);
             }
@@ -193,13 +195,12 @@ public class createEntryController implements Initializable {
         this.goListEntries();
     }
 
-    private void updateBatch(int idBatch) {
+    private void updateBatch(int idBatch,int newType) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        int newType = 1;
         Query query = session.createQuery("update Batch set type_batch = :newTypeBatch where id_batch = :oldIdBatch");
         query.setParameter("newTypeBatch", newType);
         query.setParameter("oldIdBatch", idBatch);

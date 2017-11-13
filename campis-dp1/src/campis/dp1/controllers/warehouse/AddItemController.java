@@ -129,7 +129,7 @@ public class AddItemController implements Initializable{
                     ProductDisplay prod = new ProductDisplay(products.get(i).getId_product(), products.get(i).getName(),
                             products.get(i).getDescription(), products.get(i).getP_stock(), products.get(i).getC_stock(),
                             products.get(i).getWeight(), products.get(i).getTrademark(), products.get(i).getBase_price(),
-                            products.get(i).getId_unit_of_measure(), products.get(i).getId_product_type());
+                            products.get(i).getId_unit_of_measure(), products.get(i).getId_product_type(), products.get(i).getMax_qt());
                     productsView.add(prod);
                 }
                tableProd.setItems(null);
@@ -182,13 +182,16 @@ public class AddItemController implements Initializable{
     
     @FXML
     private void addItemAction() throws IOException {
-        ContextFX.getInstance().setNum(selected_id);
-        ContextFX.getInstance().setQuantity(Integer.parseInt(quantityField.getText()));
-        this.goBackCreateEntryMoveSpecial();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setNum(selected_id);
+            ContextFX.getInstance().setQuantity(Integer.parseInt(quantityField.getText()));
+            this.goBackCreateEntryMoveSpecial();
+        }
     }
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.selected_id = 0;
         this.warehouse_id = ContextFX.getInstance().getId();
         tableProd.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
@@ -212,7 +215,5 @@ public class AddItemController implements Initializable{
     private void goBackCreateEntryMoveSpecial() throws IOException{
         ContextFX.getInstance().setId(warehouse_id);
         main.showWhEntryMoveSpecialCreate();
-    }
-    
-    
+    }   
 }

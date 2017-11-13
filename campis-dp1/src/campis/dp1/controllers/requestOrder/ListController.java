@@ -66,6 +66,7 @@ public class ListController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        this.selected_id = 0;
         requestTable.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
           if(newValue == null) {
@@ -138,28 +139,34 @@ public class ListController implements Initializable{
     }
     
     @FXML
-    private void goEditRequest(ActionEvent event) throws IOException{
-        ContextFX.getInstance().setId(selected_id);
-        main.showEditRequestOrder();
+    private void goEditRequest(ActionEvent event) throws IOException {
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showEditRequestOrder();
+        }
     }
     
     @FXML
     private void goViewRequest(ActionEvent event) throws IOException {
-        ContextFX.getInstance().setId(selected_id);
-        main.showViewRequest();
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showViewRequest();
+        }
     }
     
     @FXML
-    private void deleteRequest(ActionEvent event){
-        ContextFX.getInstance().setId(selected_id);
-        Integer id_request = ContextFX.getInstance().getId();
-        deleteRequest(id_request);
-        for (int i = 0; i < requestList.size(); i++) {
-            if(requestList.get(i).getId_request_order().compareTo(id_request) == 0){
-                requestList.remove(i);
+    private void deleteRequest(ActionEvent event) {
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            Integer id_request = ContextFX.getInstance().getId();
+            deleteRequest(id_request);
+            for (int i = 0; i < requestList.size(); i++) {
+                if(requestList.get(i).getId_request_order().compareTo(id_request) == 0){
+                    requestList.remove(i);
+                }
             }
+            loadData();
         }
-        loadData();
     }
 
     private void deleteRequest(int id_request) {
