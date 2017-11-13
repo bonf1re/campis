@@ -7,6 +7,8 @@ package campis.dp1.controllers.warehouse;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
+import campis.dp1.models.Batch;
+import campis.dp1.models.BatchDisplay;
 import campis.dp1.models.CGraph;
 import campis.dp1.models.CRack;
 import campis.dp1.models.ProductWH_Move;
@@ -15,6 +17,7 @@ import campis.dp1.models.Warehouse;
 import com.jfoenix.controls.JFXComboBox;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -40,6 +43,7 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 
 /**
  *
@@ -80,13 +84,10 @@ public class DepartureMoveCreateController implements Initializable{
     private TableColumn<ProductWH_Move, String> prodCol;
 
     @FXML
-    private TableColumn<ProductWH_Move, Integer> qtCol;
-
-    @FXML
-    private TableColumn<ProductWH_Move, Integer> numCol;
+    private TableColumn<ProductWH_Move, Integer> cantCol;
     
     @FXML
-    private TableColumn<ProductWH_Move, Integer> max_qtCol;
+    private TableColumn<ProductWH_Move, Integer> stockCol;
 
     @FXML
     private TableColumn<ProductWH_Move, String> delCol;
@@ -113,7 +114,51 @@ public class DepartureMoveCreateController implements Initializable{
     
     
     public void goDepartureMoveRoute(){
+        // Verify stock and capacity
+        double total_weight = weight_check();
+        if (total_weight<0){
+            System.out.println("No hay suficientes carritos para el peso a transportar, se ha sobrepasado la cantidad maxima de un producto por lote o no se ha seleccionado algo.");
+            return;
+        }
+        
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        
+        
+        if (enoughStock(session)==false){
+            System.out.println("No existe stock suficiente para abastecer requerimientos");
+        }
+
+        // get batches to remove
+        ArrayList<Batch> batches = getBatches(session);
+        
+        
+        
+        
+    }
     
+    private double weight_check() {
+        double total_weight=0;
+        if (vh2View.size()==0) return -1;
+        for (int i = 0; i < vh2View.size(); i++) {
+            total_weight+=vh2View.get(i).getMax_weight();
+        }
+        
+        int prods_counter=0;
+        for (ProductWH_Move prod : productsTable.getItems()) {
+                //if (prod.getQtLt().get()>prod.getMax_qt()) return -1;
+                //if (prod.getQtLt().get() <= 0 || prod.getNum().get() <= 0) return -1;
+                if (prod.getCant().get() <= 0) return -1;
+                //total_weight-=prod.getWeight()*prod.getNum().get()*prod.getQtLt().get();
+                total_weight-=prod.getWeight()*prod.getCant().get();
+                prods_counter++;
+        }
+        if (prods_counter==0) return -1;
+        return total_weight;
     }
     
     public void goWhDepartureMoveList() throws IOException{
@@ -168,7 +213,7 @@ public class DepartureMoveCreateController implements Initializable{
         cbMotive.getItems().addAll("Transferencia","Despacho","Perdida","Roto");
          try{
             prodCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-            qtCol.setCellFactory(
+            cantCol.setCellFactory(
                 TextFieldTableCell.<ProductWH_Move,Integer>forTableColumn(new StringConverter<Integer>(){
                     @Override
                     public String toString(Integer value){
@@ -179,22 +224,8 @@ public class DepartureMoveCreateController implements Initializable{
                         return Integer.parseInt(string);
                     }       
             }));
-            qtCol.setCellValueFactory(cellData -> cellData.getValue().getQtLt().asObject());
-            numCol.setCellFactory(
-                TextFieldTableCell.<ProductWH_Move,Integer>forTableColumn(new StringConverter<Integer>() {
-                @Override
-                public String toString(Integer object) {
-                    return object.toString();
-                }
-
-                @Override
-                public Integer fromString(String string) {
-                    return Integer.parseInt(string);
-                }
-            })
-            );
-            numCol.setCellValueFactory(cellData -> cellData.getValue().getNum().asObject());
-            max_qtCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getMax_qt()).asObject());
+            cantCol.setCellValueFactory(cellData -> cellData.getValue().getCant().asObject());
+            stockCol.setCellValueFactory(cellData -> cellData.getValue().getStock().asObject());
             delCol.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
             
             Callback<TableColumn<ProductWH_Move, String>, TableCell<ProductWH_Move, String>> cellFactory
@@ -318,5 +349,80 @@ public class DepartureMoveCreateController implements Initializable{
         }catch (Exception e){
             System.out.println("xd");
         }
+    }
+
+    private boolean enoughStock(Session session) {
+        class stockDict{
+            public int id_prod;
+            public int stock;
+            public stockDict(int id_prod, int stock){
+                super();
+                this.id_prod = id_prod;
+                this.stock = stock;
+            }
+        }
+        ArrayList<stockDict> stocks = new ArrayList<>();
+        
+        Query query = session.createSQLQuery("SELECT id_product,p_stock FROM campis.productxwarehouse WHERE id_warehouse = "+this.id_warehouse);
+        List<Object[]> rs = query.list();
+        for (Object[] r : rs) {
+            stocks.add(new stockDict( (int)r[0], (int)r[1]));
+        }
+        
+        for (ProductWH_Move prod : this.prodList) {
+            for (stockDict r : stocks) {
+                if (r.id_prod == prod.getId_product()){
+                    r.stock -= prod.getCant().get();
+                    if (r.stock<0) return false;
+                }
+            }
+        }
+        
+        return true;
+    }
+
+    private ArrayList<Batch> getBatches(Session session) {
+        String conditional_ids = " ";
+        int str_c = 0;
+        for (ProductWH_Move prod : this.prodList) {
+            if (str_c>0) conditional_ids = conditional_ids + " OR ";
+            conditional_ids = conditional_ids + "b.id_product = " + prod.getId_product();
+            str_c++;
+        }
+        System.out.println(conditional_ids);
+        Query query = session.createSQLQuery("SELECT b.* FROM campis.batch b\n" +
+                                                "INNER JOIN\n" +
+                                                "campis.movement m on m.id_batch = b.id_batch\n" +
+                                                "WHERE ("+conditional_ids+")AND m.mov_type < 2 AND b.type_batch = 3 AND m.id_warehouse="+this.id_warehouse+"\n"+
+                                                "ORDER BY b.expiration_date");
+        List<Object[]> rs = query.list();
+        ArrayList<Batch> batches = new ArrayList<>();
+        for (Object[] r : rs) {
+            batches.add(new Batch((int)r[1],(float)(double)r[2],(Timestamp)r[3],(Timestamp)r[4],(int)r[5],3,"--",true));
+        }
+        //  already sorted by query
+        
+        ArrayList<Batch> returnable = new ArrayList<>();
+        
+        for (ProductWH_Move productWH_Move : prodList) {
+            int qt = productWH_Move.getCant().get();
+            for (int i = batches.size()-1; i >= 0; i--) {
+                if (productWH_Move.getId_product() == batches.get(i).getId_product()){
+                    if (qt<batches.get(i).getQuantity()){
+                        // split batch in two
+                        Batch batch = new Batch(batches.get(i));
+                        batch.setId_batch(-1);
+                        batch.setHeritage("["+batches.get(i).getId_batch()+"]");
+                        
+                    }else{
+                        qt-=batches.get(i).getQuantity();
+                        returnable.add(batches.remove(i));
+                    }
+                }
+            }
+        }
+        
+        
+        return null;
     }
 }
