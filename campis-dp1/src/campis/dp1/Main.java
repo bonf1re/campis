@@ -659,5 +659,12 @@ public class Main extends Application {
         BorderPane campaign = loader.load();
         mainLayout.setCenter(campaign);
     }
+
+    public static void showWhDepartureAddItem() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/whdeparturemoveadditem.fxml"));
+        BorderPane addItem = loader.load();
+        mainLayout.setCenter(addItem);
+    }
     
 }
