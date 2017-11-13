@@ -38,6 +38,7 @@ import org.hibernate.criterion.Restrictions;
 public class ListVehicleController implements Initializable {
     private Main main;
     private int selected_id;
+    private int warehouse_id;
     private ObservableList<Vehicle> vehiculos;
     private ObservableList<VehicleDisplay> vehiculosView;
     
@@ -74,6 +75,7 @@ public class ListVehicleController implements Initializable {
     
     @FXML
     private void goCreateVehicle() throws IOException {
+        ContextFX.getInstance().setId(this.warehouse_id);
         main.showNewVehicle();
     } 
     
@@ -83,7 +85,12 @@ public class ListVehicleController implements Initializable {
             ContextFX.getInstance().setId(selected_id);
             main.showEditVehicle();
         }
-    } 
+    }
+    
+    @FXML
+    private void goWhList() throws IOException{
+        main.showWhList();
+    }
     
     /**
      * Initializes the controller class.
@@ -91,6 +98,7 @@ public class ListVehicleController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        this.warehouse_id = ContextFX.getInstance().getId();
         tableVehicle.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {
@@ -121,6 +129,7 @@ public class ListVehicleController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Vehicle.class);
+        criteria.add(Restrictions.eq("id_warehouse",this.warehouse_id));
         List lista = criteria.list();
         ObservableList<Vehicle> returnable;
         returnable = FXCollections.observableArrayList();

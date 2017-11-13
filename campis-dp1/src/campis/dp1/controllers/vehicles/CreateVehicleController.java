@@ -5,6 +5,7 @@
  */
 package campis.dp1.controllers.vehicles;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Vehicle;
 import campis.dp1.models.Warehouse;
@@ -33,15 +34,13 @@ import org.hibernate.transform.Transformers;
  */
 public class CreateVehicleController implements Initializable {
     private Main main;
+    private int warehouse_id;
     
     @FXML
     private JFXTextField lblWeight;
 
     @FXML
     private JFXTextField lblSpeed;
-
-    @FXML
-    private JFXComboBox<String> cmWarehouse;
 
     @FXML
     private JFXTextField lblPlate;
@@ -53,13 +52,11 @@ public class CreateVehicleController implements Initializable {
     private Label lblSpeedMessage;
 
     @FXML
-    private Label cmWarehouseMessage;
-
-    @FXML
     private Label lblPlateMessage;
    
     @FXML
     private void goListVehicles() throws IOException {
+        ContextFX.getInstance().setId(this.warehouse_id);
         main.showListVehicle();
     }
     
@@ -98,23 +95,19 @@ public class CreateVehicleController implements Initializable {
         boolean lblWeightValid = lblWeight.getText().length() == 0;
         boolean lblSpeedValid = lblSpeed.getText().length() == 0;
         boolean lblPlateValid = lblPlate.getText().length() == 0;
-        boolean cmWarehouseValid = cmWarehouse.getValue() == null;
         
         lblPlateMessage.setText("");
-        cmWarehouseMessage.setText("");
         lblSpeedMessage.setText("");
         lblWeightMessage.setText("");
 
         if (lblPlateValid)
             lblPlateMessage.setText("Campo obligatorio");
-        if (cmWarehouseValid)
-            cmWarehouseMessage.setText("Campo obligatorio");
         if (lblSpeedValid)
             lblSpeedMessage.setText("Campo obligatorio");
         if(lblWeightValid)
             lblWeightMessage.setText("Campo obligatorio");
 
-        return (!lblWeightValid && !lblSpeedValid && !lblPlateValid && !cmWarehouseValid);
+        return (!lblWeightValid && !lblSpeedValid && !lblPlateValid);
     }
 
     @FXML
@@ -126,20 +119,9 @@ public class CreateVehicleController implements Initializable {
             SessionFactory sessionFactory = configuration.buildSessionFactory();
             Session session = sessionFactory.openSession();
             session.beginTransaction();
-            int codWr = 0;
-            
-            try
-             {
-                codWr = searchWarehouse(cmWarehouse.getValue());
-             }
-            catch (ClassNotFoundException |SQLException e)
-             {
-                e.printStackTrace();
-                //agregar error
-             }
                
             Vehicle v = new Vehicle(Double.parseDouble(lblWeight.getText()), Integer.parseInt(lblSpeed.getText()),true,
-                                                codWr, lblPlate.getText());
+                                                this.warehouse_id, lblPlate.getText());
             session.save(v);
             session.getTransaction().commit();
             session.close();
@@ -154,9 +136,6 @@ public class CreateVehicleController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        List<Warehouse> list = getWarehouses();
-        for (int i = 0; i < list.size(); i++) {
-            cmWarehouse.getItems().addAll(list.get(i).getName());
-        }
+        this.warehouse_id = ContextFX.getInstance().getId();
     } 
 }
