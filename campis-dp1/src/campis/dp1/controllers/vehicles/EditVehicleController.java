@@ -68,7 +68,7 @@ public class EditVehicleController implements Initializable {
     }
 
     
-    public static Integer searchWarehouse(String wr) throws SQLException, ClassNotFoundException {
+    /*public static Integer searchWarehouse(String wr) throws SQLException, ClassNotFoundException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
@@ -82,7 +82,7 @@ public class EditVehicleController implements Initializable {
         Warehouse result = (Warehouse)rsWarehouse.get(0);
         codWr = result.getId();
         return codWr;
-    }
+    }*/
     
     public boolean validation() {
         boolean lblWeightValid = lblWeight.getText().length() == 0;
@@ -109,43 +109,43 @@ public class EditVehicleController implements Initializable {
 
     @FXML
     private void updateVehicle() throws IOException{
-        if (validation()) {
-            Configuration configuration = new Configuration();
-            configuration.configure("hibernate.cfg.xml");
-            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-            SessionFactory sessionFactory = configuration.buildSessionFactory();
-            Session session = sessionFactory.openSession();
-            session.beginTransaction();
-            
-            int codWr=0;
-            
-            try
-             {
-                codWr = searchWarehouse(cmWarehouse.getValue());
-             }
-            catch (ClassNotFoundException |SQLException e)
-             {
-                e.printStackTrace();
-                //agregar error
-             }
-            Query query = session.createQuery("update Vehicle set max_weight=:newMweight,"+
-                                                "speed=:newSpeed,"+
-                                              //  "active=:newActive,"+
-                                                "id_warehouse=:newidW,"+
-                                                "plate=:newPlate"+
-                                                " where id_vehicle=:oldId");
-            query.setParameter("newMweight", Double.parseDouble(lblWeight.getText()));
-            query.setParameter("newSpeed", Integer.parseInt(lblSpeed.getText()));
-            query.setParameter("newidW", codWr);
-            query.setParameter("newPlate", lblPlate.getText());
-            query.setParameter("oldId", this.vehicle_id);
-            int result = query.executeUpdate();
-            
-            session.getTransaction().commit();
-            session.close();
-            sessionFactory.close();
-            this.goListVehicles();
-        }
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        
+        int codWr=1;
+        
+        /*try
+         {
+            codWr = searchWarehouse(cmWarehouse.getValue());
+         }
+        catch (ClassNotFoundException |SQLException e)
+         {
+            e.printStackTrace();
+            //agregar error
+         }*/
+        
+        
+        Query query = session.createQuery("update Vehicle set max_weight=:newMweight,"+
+                                            "speed=:newSpeed,"+
+                                          //  "active=:newActive,"+
+                                            "id_warehouse=:newidW,"+
+                                            "plate=:newPlate"+
+                                            " where id_vehicle=:oldId");
+        query.setParameter("newMweight", Double.parseDouble(lblWeight.getText()));
+        query.setParameter("newSpeed", Integer.parseInt(lblSpeed.getText()));
+        query.setParameter("newidW", codWr);
+        query.setParameter("newPlate", lblPlate.getText());
+        query.setParameter("oldId", this.vehicle_id);
+        int result = query.executeUpdate();
+        
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
+        this.goListVehicles();
     }
     
     public static List<Warehouse> getWarehouses() {
@@ -170,10 +170,10 @@ public class EditVehicleController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         this.vehicle_id = ContextFX.getInstance().getId();
         
-        List<Warehouse> list = getWarehouses();
+        /*List<Warehouse> list = getWarehouses();
         for (int i = 0; i < list.size(); i++) {
             cmWarehouse.getItems().addAll(list.get(i).getName());
-        }
+        }*/
         
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");

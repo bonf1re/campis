@@ -57,8 +57,6 @@ public class ListRackController implements Initializable{
     @FXML
     private TableColumn<RackDisplay, Integer> idCol;
     @FXML
-    private TableColumn<RackDisplay,  Integer> warehouseCol;
-    @FXML
     private TableColumn<RackDisplay, Integer> numColumnsCol;
     @FXML
     private TableColumn<RackDisplay, Integer> numFloorsCol;
@@ -91,8 +89,7 @@ public class ListRackController implements Initializable{
         
         for (int i = 0; i < racks.size(); i++) {
             
-            RackDisplay r = new RackDisplay(racks.get(i).getId_rack(), 
-                                            racks.get(i).getId_warehouse(),                        
+            RackDisplay r = new RackDisplay(racks.get(i).getId_rack(),                        
                                             racks.get(i).getPos_x(),
                                             racks.get(i).getPos_y(),
                                             racks.get(i).getN_columns(),
@@ -152,7 +149,6 @@ public class ListRackController implements Initializable{
         
         try {
             idCol.setCellValueFactory(cellData -> cellData.getValue().id_rackProperty().asObject());
-            warehouseCol.setCellValueFactory(cellData -> cellData.getValue().id_warehouseProperty().asObject());
             numColumnsCol.setCellValueFactory(cellData -> cellData.getValue().n_columnsProperty().asObject());
             numFloorsCol.setCellValueFactory(cellData -> cellData.getValue().n_floorsProperty().asObject());
             orientationCol.setCellValueFactory(cellData -> cellData.getValue().orientationProperty().asObject());
