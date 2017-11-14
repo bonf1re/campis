@@ -42,7 +42,7 @@
             </TableView>
             <Label layoutX="156.0" layoutY="211.0" text="Productos:" />
             <Label layoutX="599.0" layoutY="461.0" prefHeight="17.0" prefWidth="62.0" text="Subtotal:" />
-            <Button layoutX="841.0" layoutY="326.0" mnemonicParsing="false" onAction="#goListRequestOrder" prefHeight="35.0" prefWidth="87.0" text="Regresar" />
+            <Button layoutX="841.0" layoutY="326.0" mnemonicParsing="false" onAction="#goListBills" prefHeight="35.0" prefWidth="87.0" text="Regresar" />
             <Label layoutX="515.0" layoutY="52.0" text="Código Cliente:" />
             <Label layoutX="156.0" layoutY="177.0" text="Estado:" />
             <Label layoutX="504.0" layoutY="177.0" text="Prioridad:" />
