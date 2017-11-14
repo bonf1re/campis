@@ -143,7 +143,7 @@ public class DepartureMoveListController implements Initializable {
         System.out.println(this.warehouse_id);
         
         criteria.add(Restrictions.eq("id_warehouse",this.warehouse_id));
-        criteria.add(Restrictions.gt("mov_type", 1));
+        criteria.add(Restrictions.gt("mov_type", 2));
         List whList = criteria.list();
         ObservableList<WarehouseMove> returnable=FXCollections.observableArrayList();
         for (int i = 0; i < whList.size(); i++) {

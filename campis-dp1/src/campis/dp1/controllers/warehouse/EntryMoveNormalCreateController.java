@@ -202,7 +202,7 @@ public class EntryMoveNormalCreateController implements Initializable{
         Query t_query = session.createSQLQuery("SELECT b.* FROM campis.batch b\n" +
                                                 "INNER JOIN\n" +
                                                 "campis.movement m on m.id_batch = b.id_batch\n" +
-                                                "WHERE m.mov_type=3 AND m.id_warehouse="+this.id_warehouse_back+" and b.type_batch=7");
+                                                "WHERE m.mov_type=2 AND m.id_warehouse="+this.id_warehouse_back+" and b.type_batch=7");
         List<Object[]> t_rs = t_query.list();
         for (Object[] t_r : t_rs) {
             //     public Batch(int quantity, float batch_cost, Timestamp arrival_date, Timestamp expiration_date, int id_product, int type_batch, String location, boolean state) {
