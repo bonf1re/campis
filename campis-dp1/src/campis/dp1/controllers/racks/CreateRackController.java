@@ -186,15 +186,19 @@ public class CreateRackController implements Initializable {
                         }
                         WarehouseZone zone = new WarehouseZone(r.getId_warehouse(), r.getId_rack(), x, y, z, true);
                         //session.beginTransaction();
+                        System.out.println("ok");
                         session.save(zone);
                     }
+                    
+                    
                 }
                 
-                session.getTransaction().commit();
-                session.close();
-                sessionFactory.close();
+               
             } 
-
+            
+            session.getTransaction().commit();
+            session.close();
+            sessionFactory.close();
             
             this.goListRacks();
         }
