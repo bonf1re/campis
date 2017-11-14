@@ -132,6 +132,8 @@ public class CreateController implements Initializable {
         SQLQuery query = session.createSQLQuery(qryStr);
         List list = query.list();
         Integer returnable = (Integer) list.get(0);
+        session.close();
+        sessionFactory.close();
         return returnable;
     }
 

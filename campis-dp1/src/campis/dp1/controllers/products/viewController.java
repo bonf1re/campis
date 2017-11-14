@@ -67,6 +67,9 @@ public class viewController implements Initializable{
         criteria.add(Restrictions.eq("id_product",id));
         List rsType = criteria.list();
         Product result = (Product)rsType.get(0);
+        session.close();
+        sessionFactory.close();
+        
         this.idField.setText(Integer.toString(id));
         this.stockPField.setText(Integer.toString(result.getP_stock()));
         this.stockLField.setText(Integer.toString(result.getC_stock()));

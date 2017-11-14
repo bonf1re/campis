@@ -159,6 +159,7 @@ public class RequestOrder {
         Criteria criteria = session.createCriteria(RequestOrderLine.class)
                 .add(Restrictions.eq("id_request_order", id));
         List<RequestOrderLine> request_ordes_lines = criteria.list();
+        session.close();
         sessionFactory.close();
 
         return request_ordes_lines;

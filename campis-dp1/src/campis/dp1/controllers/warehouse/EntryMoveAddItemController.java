@@ -177,6 +177,8 @@ public class EntryMoveAddItemController implements Initializable{
                 .add(Projections.property("description"),"description"))
                 .setResultTransformer(Transformers.aliasToBean(ProductType.class));
         List<ProductType> types = criteria.list();
+        session.close();
+        sessionFactory.close();
         return types;
     }
     

@@ -203,6 +203,8 @@ public class DepartureMoveAddItemController implements Initializable {
                 .add(Projections.property("description"),"description"))
                 .setResultTransformer(Transformers.aliasToBean(ProductType.class));
         List<ProductType> types = criteria.list();
+        session.close();
+        sessionFactory.close();
         return types;
     }
     
@@ -226,6 +228,8 @@ public class DepartureMoveAddItemController implements Initializable {
             aux_prod.add(ppp);
             aux_pol.set(0, aux_prod);
             ContextFX.getInstance().setPolymorphic_list(aux_pol);
+            session.close();
+            sessionFactory.close();
             this.goBackCreateDepartureMove();
         }
     }

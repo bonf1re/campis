@@ -146,6 +146,7 @@ public class EditController implements Initializable {
             
             session.getTransaction().commit();
 
+            session.close();
             sessionFactory.close();
             this.goListUser();
         }

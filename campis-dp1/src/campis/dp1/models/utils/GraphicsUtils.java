@@ -64,6 +64,8 @@ public class GraphicsUtils {
                 }
             }
         }
+        session.close();
+        sessionFactory.close();
         return crackList;
     }
     

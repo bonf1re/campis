@@ -210,6 +210,7 @@ public class ListController implements Initializable{
             int result = query.executeUpdate();
             
             session.getTransaction().commit();
+            session.close();
             sessionFactory.close();
 
             loadData();

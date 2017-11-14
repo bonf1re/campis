@@ -129,6 +129,8 @@ public class ListDepartureController implements Initializable {
         for (int i = 0; i < list.size(); i++) {
             returnable.add(list.get(i));
         }
+        session.close();
+        sessionFactory.close();
         return returnable;
     }
 

@@ -117,6 +117,8 @@ public class Permission {
         List rsMeasure = criteria.list();
         if (rsMeasure.size() > 0) {
             Permission result = (Permission)rsMeasure.get(0);
+            session.close();
+            sessionFactory.close();
 
             return result.getVisualize();
         }
@@ -140,6 +142,8 @@ public class Permission {
         List rsMeasure = criteria.list();
         if (rsMeasure.size() > 0) {
             Permission result = (Permission)rsMeasure.get(0);
+            session.close();
+            sessionFactory.close();
 
             return result.getModify();
         }

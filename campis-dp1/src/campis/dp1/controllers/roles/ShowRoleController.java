@@ -48,6 +48,8 @@ public class ShowRoleController implements Initializable {
         List rsType = criteria.list();
         Role result = (Role)rsType.get(0);
         this.descriptionField.setText(result.getDescription());
+        session.close();
+        sessionFactory.close();
     }
 
     @FXML
