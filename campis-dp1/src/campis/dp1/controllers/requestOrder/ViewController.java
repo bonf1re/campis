@@ -250,6 +250,7 @@ public class ViewController implements Initializable {
     }
 
     private void loadData(List<RequestOrderLine> list) {
+        
         products = FXCollections.observableArrayList();
         productsView = ContextFX.getInstance().getTempList();
         for (int i = 0; i < list.size(); i++) {
@@ -287,6 +288,9 @@ public class ViewController implements Initializable {
         productsView = ContextFX.getInstance().getTempList();
         tablaProd.setItems(null);
         tablaProd.setItems(productsView);
+        ContextFX.getInstance().setBaseTotAmount(0f);
+        ContextFX.getInstance().setTotAmount(0f);
+        
     }
 
     private ObservableList<Product> getProduct(Integer id_product) {
@@ -324,6 +328,8 @@ public class ViewController implements Initializable {
 
     @FXML
     private void goListRequestOrder() throws IOException {
+        productsView.clear();
+        ContextFX.getInstance().setTempList(productsView);
         main.showListRequestOrder();
     }
 
