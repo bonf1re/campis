@@ -17,13 +17,21 @@ import javafx.beans.property.StringProperty;
  * @author david
  */
 public class SaleConditionDisplay {
+
+    /**
+     * @return the promo
+     */
+    public StringProperty getPromo() {
+        return promo;
+    }
     
     private final IntegerProperty id_sale_condition;
     private final StringProperty initial_date;
     private final StringProperty final_date;
     private final FloatProperty amount;
+    private final StringProperty promo;
     private final StringProperty sale_condition_type;
-    private final IntegerProperty limits;
+    private final IntegerProperty limits;    
     private final StringProperty applied_to;
     private StringProperty campaign;
     
@@ -78,12 +86,13 @@ public class SaleConditionDisplay {
     }
 
     public SaleConditionDisplay(Integer id_sale_condition, String initial_date, 
-            String final_date, Float amount, String sale_condition_type, 
+            String final_date, Float amount, String promo, String sale_condition_type, 
             Integer limits, String applied_to, String campaign) {
         this.id_sale_condition = new SimpleIntegerProperty(id_sale_condition);
         this.initial_date = new SimpleStringProperty(initial_date);
         this.final_date = new SimpleStringProperty(final_date);
         this.amount = new SimpleFloatProperty(amount);
+        this.promo = new SimpleStringProperty(promo);
         this.sale_condition_type = new SimpleStringProperty(sale_condition_type);
         this.limits = new SimpleIntegerProperty(limits);
         this.applied_to = new SimpleStringProperty(applied_to);
