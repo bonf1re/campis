@@ -77,6 +77,7 @@ public class EntryMoveListController implements Initializable {
     @FXML
     private void goWhEntryMoveSpecialCreate() throws IOException{
         ContextFX.getInstance().setId(this.warehouse_id);
+        ContextFX.getInstance().setMode(0);
         main.showWhEntryMoveSpecialCreate();
     }
     
