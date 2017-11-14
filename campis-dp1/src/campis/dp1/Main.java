@@ -573,6 +573,13 @@ public class Main extends Application {
         BorderPane routeMove = loader.load();
         mainLayout.setCenter(routeMove);
     }
+    
+    public static  void showWhSpecialEntryMoveRoute() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/specialentrymoveroute.fxml"));
+        BorderPane routeMove = loader.load();
+        mainLayout.setCenter(routeMove);
+    }
 
     public static void showWhDepartureMoveCreate() throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -590,7 +597,7 @@ public class Main extends Application {
 
     public static void showWhEntryMoveAddProd() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/warehouse/whentrymoveadditem.fxml"));
+        loader.setLocation(Main.class.getResource("views/warehouse/entryMoveSpecialAddItem.fxml"));
         BorderPane addItem = loader.load();
         mainLayout.setCenter(addItem);
     }
