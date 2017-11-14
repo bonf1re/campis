@@ -64,6 +64,9 @@ public class CreateController implements Initializable {
     float baseTotalAmount = 0;
     float discountTotal = 0;
     float freightTotal = 0;
+    Integer n_discount = 1;
+    Integer n_tocount = 1;
+    
     String message = "";
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView = FXCollections.observableArrayList();
@@ -213,6 +216,9 @@ public class CreateController implements Initializable {
     }
 
     private Float verifyConditions(ObservableList<SaleCondition> discounts, Product prod, int quant) {
+        n_discount = 1;
+        n_tocount = 1;
+        Integer n_d_aux, n_c_aux;
         Float returnable = Float.valueOf(0);
         for (int i = 0; i < discounts.size(); i++) {
             int type = discounts.get(i).getId_sale_condition_type();
@@ -230,6 +236,13 @@ public class CreateController implements Initializable {
                     }
                 }
             }
+            n_d_aux = discounts.get(i).getN_discount();
+            n_c_aux = discounts.get(i).getN_tocount();
+            if (n_d_aux != 1 || n_c_aux != 1) {
+                n_discount = n_d_aux;
+                n_tocount = n_c_aux;
+            }
+            
         }
         return returnable;
     }
@@ -270,7 +283,9 @@ public class CreateController implements Initializable {
         baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
         baseTotalAmount = baseTotalAmount + base_amount;
         discountTotal = ContextFX.getInstance().getDiscount();
-        discountTotal = discountTotal + base_amount * disc;
+        
+        discountTotal = discountTotal + base_amount * disc + 
+                        (base_amount - ((quant/n_discount * n_tocount) * products.get(0).getBase_price()));
         freightTotal = ContextFX.getInstance().getFreight();
         totalAmount = baseTotalAmount - discountTotal;
         ContextFX.getInstance().setDiscount(discountTotal);

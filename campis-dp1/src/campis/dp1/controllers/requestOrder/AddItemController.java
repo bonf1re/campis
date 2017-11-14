@@ -203,7 +203,8 @@ public class AddItemController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         String qryStr = "SELECT c_stock FROM campis.productxwarehouse "
-                + "WHERE id_product ="+ id;
+                + "WHERE id_product ="+ id
+                + " AND id_warehouse = 1";
         SQLQuery query = session.createSQLQuery(qryStr);
         List<Integer> list = query.list();
         int returnable = list.get(0);

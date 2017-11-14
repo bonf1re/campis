@@ -36,6 +36,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javax.persistence.Query;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -110,6 +111,15 @@ public class EditSaleConditionController implements Initializable {
 
     @FXML
     private Label pckEndMessage;
+    
+    @FXML
+    private RadioButton brnPromo;
+
+    @FXML
+    private JFXTextField disLabel;
+
+    @FXML
+    private JFXTextField countLabel;
 
     public boolean validation() {
         boolean campaignCBValid = campaignCB.getValue() == null;
@@ -171,7 +181,7 @@ public class EditSaleConditionController implements Initializable {
         criteria.add(Restrictions.eq("id_sale_condition",id));
         List rsType = criteria.list();
         SaleCondition result = (SaleCondition)rsType.get(0);
-        this.amountField.setText(result.getAmount().toString());
+        
         this.limitField.setText(result.getLimits().toString());
         this.typeCB.setValue(getType(result.getId_sale_condition_type()));
         this.campaignCB.setValue(getCampaign(result.getId_campaign()));
@@ -182,6 +192,24 @@ public class EditSaleConditionController implements Initializable {
             this.objectiveCB.setValue(getProduct(result.getId_to_take()));
         }else{
             this.objectiveCB.setValue(getProductType(result.getId_to_take()));
+        }
+        
+        Float amountGet = result.getAmount();
+        
+        if (amountGet < 0.00001f) {
+            brnPromo.setSelected(true);
+            disLabel.disableProperty().set(false);
+            countLabel.disableProperty().set(false);
+            amountField.disableProperty().set(true);
+            this.amountField.setText(" - ");
+            this.disLabel.setText(result.getN_discount().toString());
+            this.countLabel.setText(result.getN_tocount().toString());
+            
+        }else{
+            disLabel.disableProperty().set(true);
+            countLabel.disableProperty().set(true);
+            amountField.disableProperty().set(false);
+            this.amountField.setText(result.getAmount().toString());
         }
         
         loadObjectives();
@@ -234,7 +262,7 @@ public class EditSaleConditionController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(ProductType.class);
-        criteria.add(Restrictions.eq("id_product",cod));
+        criteria.add(Restrictions.eq("id_product_type",cod));
         String descripType;
         List rsType = criteria.list();
         ProductType result = (ProductType) rsType.get(0);
@@ -351,6 +379,16 @@ public class EditSaleConditionController implements Initializable {
             setIds(campaignCB.getValue(),typeCB.getValue(),objectiveCB.getValue());
             Date date_init = getDate(pckBegin.getValue());
             Date date_end = getDate(pckEnd.getValue());
+            Float am = 0.0f;
+            Integer n_d = 1,  n_c = 1;
+            if (brnPromo.isSelected()){
+                n_d = Integer.parseInt(disLabel.getText());
+                n_c = Integer.parseInt(countLabel.getText());
+            } else {
+                
+                am = Float.parseFloat(amountField.getText());
+                
+            }
             
             Configuration configuration = new Configuration();
             configuration.configure("hibernate.cfg.xml");
@@ -360,16 +398,20 @@ public class EditSaleConditionController implements Initializable {
             session.beginTransaction();
             
             Query query = session.createQuery("update SaleCondition set initial_date = :newinDate, final_date = :newenDate,"
-                    + "amount=:newAmount,id_sale_condition_type=:newIDT, limits=:newLimits, "
-                    + "id_to_take=:newITT,id_campaign=:newCamp where id_sale_condition = :oldIdSC");
+                    + "amount=:newAmount, id_sale_condition_type=:newIDT, limits=:newLimits, "
+                    + "id_to_take=:newITT,id_campaign=:newCamp, "
+                    + "n_discount=:newND, n_tocount=:newTC "
+                    + "where id_sale_condition = :oldIdSC");
             
             query.setParameter("newinDate", date_init);
             query.setParameter("newenDate", date_end);
-            query.setParameter("newAmount", Float.parseFloat(amountField.getText()));
+            query.setParameter("newAmount", am);
             query.setParameter("newIDT", id_type);
             query.setParameter("newLimits", Integer.parseInt(limitField.getText()));
             query.setParameter("newITT", id_objective);
             query.setParameter("newCamp", id_campaign);
+            query.setParameter("newND", n_d);
+            query.setParameter("newTC", n_c);
             query.setParameter("oldIdSC", id);
             int result = query.executeUpdate();
             
@@ -405,5 +447,24 @@ public class EditSaleConditionController implements Initializable {
      @FXML
     private void goListSaleConditions() throws IOException{
         main.showListSaleConditions();
+    }
+    
+    @FXML
+    private void activatePromo() {
+        if (brnPromo.isSelected()){
+            amountField.setText(" - ");
+            amountField.disableProperty().set(true);
+            disLabel.disableProperty().set(false);
+            countLabel.disableProperty().set(false);
+        } else {
+            amountField.setText(null);
+            amountField.disableProperty().set(false);
+            disLabel.disableProperty().set(true);
+            countLabel.disableProperty().set(true);
+            disLabel.setText("");
+            countLabel.setText("");
+            
+        }
+                
     }
 }

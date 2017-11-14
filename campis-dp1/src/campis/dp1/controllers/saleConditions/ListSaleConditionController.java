@@ -15,10 +15,10 @@ import campis.dp1.models.SaleConditionDisplay;
 import campis.dp1.models.SaleConditionType;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -35,6 +35,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
@@ -115,6 +116,7 @@ public class ListSaleConditionController implements Initializable {
 
     @FXML
     private Button deleteButton;
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
