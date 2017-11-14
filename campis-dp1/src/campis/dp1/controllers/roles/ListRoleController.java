@@ -148,6 +148,7 @@ public class ListRoleController implements Initializable{
         role.setId_role(cod);
         session.delete(role);
         session.getTransaction().commit();
+        session.close();
         sessionFactory.close();
     }
 

@@ -63,6 +63,9 @@ public class ShowController implements Initializable {
         this.phoneField.setText(result.getPhone());
         this.emailField.setText(result.getEmail());
         this.addressField.setText(result.getAddress());
+
+        session.close();
+        sessionFactory.close();
     }
 
     @FXML

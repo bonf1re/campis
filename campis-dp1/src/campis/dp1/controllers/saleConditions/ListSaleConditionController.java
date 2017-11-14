@@ -162,6 +162,8 @@ public class ListSaleConditionController implements Initializable {
         List rsCampaign = criteria.list();
         Campaign result = (Campaign)rsCampaign.get(0);
         cod = result.getId_campaign();
+        session.close();
+        sessionFactory.close();
         return cod;
     }
     
@@ -284,6 +286,8 @@ public class ListSaleConditionController implements Initializable {
                 .add(Projections.property("name"),"name"))
                 .setResultTransformer(Transformers.aliasToBean(Campaign.class));
         List<Campaign> types = criteria.list();
+        session.close();
+        sessionFactory.close();
         return types;
     }
     
@@ -396,7 +400,7 @@ public class ListSaleConditionController implements Initializable {
         sc.setId_sale_condition(cod);
         session.delete(sc);
         session.getTransaction().commit();
-
+        session.close();
         sessionFactory.close();
     }
     

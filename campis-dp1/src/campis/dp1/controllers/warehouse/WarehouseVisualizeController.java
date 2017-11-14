@@ -96,6 +96,8 @@ public class WarehouseVisualizeController implements Initializable {
         this.real_map=gu.initMap(this.y,this.x);
         this.crackList=gu.putCRacks(warehouse_id, real_map);
         gu.drawVisualizationMap(gc,this.y,this.x,this.real_map);
+        session.close();
+        sessionFactory.close();
     }
     
     @FXML

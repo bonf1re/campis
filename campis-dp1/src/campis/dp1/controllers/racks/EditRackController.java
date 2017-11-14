@@ -113,6 +113,9 @@ public class EditRackController implements Initializable{
         List rsType = criteria.list();
         Rack result = (Rack)rsType.get(0);
         
+        session.close();
+        sessionFactory.close();
+        
         System.out.println(result.getId_rack());
         
         this.numColumnsField.setText(result.getN_columns().toString());

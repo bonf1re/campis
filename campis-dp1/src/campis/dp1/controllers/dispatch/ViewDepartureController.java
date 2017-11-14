@@ -140,6 +140,8 @@ public class ViewDepartureController implements Initializable {
         List<Client> list = criteria.list();
         Client cli = (Client) list.get(0);
         String nom = cli.getName();
+        session.close();
+        sessionFactory.close();
         return nom;
     }
 
@@ -155,6 +157,8 @@ public class ViewDepartureController implements Initializable {
         List<Warehouse> list = criteria.list();
         Warehouse zone = (Warehouse) list.get(0);
         String nom = zone.getName();
+        session.close();
+        sessionFactory.close();
         return nom;
     }
 
