@@ -120,6 +120,7 @@ public class Permission {
 
             return result.getVisualize();
         }
+        session.close();
         sessionFactory.close();
 
         return false;
@@ -142,6 +143,7 @@ public class Permission {
 
             return result.getModify();
         }
+        session.close();
         sessionFactory.close();
 
         return false;
