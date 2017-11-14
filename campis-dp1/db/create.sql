@@ -93,12 +93,17 @@ CREATE FUNCTION stock_update() RETURNS trigger
     productID   integer;
     BEGIN
         SELECT id_product into productID from campis.batch where id_batch = NEW.id_batch;
-        IF NEW.mov_type = 1 THEN
+        IF NEW.mov_type < 2 THEN
             UPDATE campis.productxwarehouse SET p_stock = p_stock + NEW.quantity, c_stock = c_stock + NEW.quantity 
             WHERE id_product = productID AND id_warehouse = NEW.id_warehouse;
-        ELSIF NEW.mov_type = 2 THEN
+        ELSIF NEW.mov_type = 3 THEN
             UPDATE campis.productxwarehouse SET p_stock = p_stock - NEW.quantity 
             WHERE id_product = productID AND id_warehouse = NEW.id_warehouse;
+        ELSIF NEW.mov_type = 4 THEN
+            UPDATE campis.productxwarehouse SET p_stock = p_stock - NEW.quantity, c_stock = c_stock - NEW.quantity 
+            WHERE id_product = productID AND id_warehouse = NEW.id_warehouse;
+        
+
         END IF;
         RETURN NEW;
     END;
@@ -345,7 +350,7 @@ CREATE TABLE dispatch_move (
     type_owner integer,
     id_owner integer,
     mov_date timestamp without time zone DEFAULT now() NOT NULL,
-    reason character varying,
+    reason integer,
     id_batch integer,
     arrival_date timestamp without time zone
 );
@@ -398,7 +403,8 @@ CREATE TABLE dispatch_order_line (
     id_dispatch_order_line integer NOT NULL,
     id_dispatch_order integer NOT NULL,
     id_product integer NOT NULL,
-    quantity integer
+    quantity integer,
+    delivered boolean DEFAULT false
 );
 
 
@@ -831,7 +837,9 @@ CREATE TABLE request_order (
     total_amount double precision,
     status character varying,
     id_client integer NOT NULL,
-    priority integer
+    priority integer,
+    id_district integer,
+    address character varying
 );
 
 
@@ -952,7 +960,9 @@ CREATE TABLE sale_condition (
     id_sale_condition_type character varying,
     limits integer,
     id_to_take integer,
-    id_campaign integer
+    id_campaign integer,
+    n_discount integer DEFAULT 1,
+    n_tocount integer DEFAULT 1
 );
 
 
@@ -1202,8 +1212,8 @@ CREATE TABLE zone (
     id_warehouse integer NOT NULL,
     id_rack integer NOT NULL,
     pos_x integer NOT NULL,
-    pos_y character varying NOT NULL,
-    pos_z character varying NOT NULL,
+    pos_y integer NOT NULL,
+    pos_z integer NOT NULL,
     free boolean DEFAULT true NOT NULL
 );
 
@@ -1747,6 +1757,14 @@ ALTER TABLE ONLY movementxdispatch
 
 
 --
+-- Name: request_order district_request_fkey; Type: FK CONSTRAINT; Schema: campis; Owner: postgres
+--
+
+ALTER TABLE ONLY request_order
+    ADD CONSTRAINT district_request_fkey FOREIGN KEY (id_district) REFERENCES district(id_district) ON UPDATE CASCADE ON DELETE CASCADE;
+
+
+--
 -- Name: movementxdocument document_movementxdocument_fk; Type: FK CONSTRAINT; Schema: campis; Owner: postgres
 --
 
@@ -1799,7 +1817,7 @@ ALTER TABLE ONLY request_order_line
 --
 
 ALTER TABLE ONLY product
-    ADD CONSTRAINT product_type_product_fk FOREIGN KEY (id_product_type) REFERENCES product_type(id_product_type);
+    ADD CONSTRAINT product_type_product_fk FOREIGN KEY (id_product_type) REFERENCES product_type(id_product_type) ON UPDATE CASCADE ON DELETE CASCADE;
 
 
 --

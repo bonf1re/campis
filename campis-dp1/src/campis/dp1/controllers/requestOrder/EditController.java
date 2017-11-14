@@ -142,6 +142,7 @@ public class EditController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        
         codGen = ContextFX.getInstance().getVar();
         List<Object[]> dists = getDistricts();
         for (Object[] dist : dists) {
@@ -313,6 +314,10 @@ public class EditController implements Initializable {
 
     @FXML
     private void goListRequestOrder() throws IOException {
+        ContextFX.getInstance().setBaseTotAmount(0f);
+        ContextFX.getInstance().setTotAmount(0f);
+        productsView.clear();
+        ContextFX.getInstance().setTempList(productsView);
         main.showListRequestOrder();
     }
 
@@ -357,6 +362,7 @@ public class EditController implements Initializable {
     }
 
     private void loadData(List<RequestOrderLine> list) {
+
         products = FXCollections.observableArrayList();
         productsView = ContextFX.getInstance().getTempList();
         
@@ -395,6 +401,7 @@ public class EditController implements Initializable {
         productsView = ContextFX.getInstance().getTempList();
         tablaProd.setItems(null);
         tablaProd.setItems(productsView);
+        
     }
 
     private ObservableList<SaleCondition> getDiscount(int cod) {
@@ -454,6 +461,8 @@ public class EditController implements Initializable {
     }
 
     private void loadData2(int cod, int quant) {
+        ContextFX.getInstance().setBaseTotAmount(0f);
+        ContextFX.getInstance().setTotAmount(0f);
         products = FXCollections.observableArrayList();
         productsView = ContextFX.getInstance().getTempList();
         products = getProduct(cod);
