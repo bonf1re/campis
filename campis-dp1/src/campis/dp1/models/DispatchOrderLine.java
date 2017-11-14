@@ -29,6 +29,12 @@ public class DispatchOrderLine {
         super();
     }
     
+    public DispatchOrderLine(int id_dispatch_order, int id_prod, int quantity) {
+        this.id_dispatch_order = id_dispatch_order;
+        this.id_product = id_prod;
+        this.quantity = quantity;
+    }
+    
     public DispatchOrderLine(int id_dispatch_order_line,int id_dispatch_order, int id_prod, int quantity) {
         this.id_dispatch_order_line = id_dispatch_order_line;
         this.id_dispatch_order = id_dispatch_order;

@@ -29,6 +29,12 @@ public class DispatchOrder {
         super();
     }
     
+    public DispatchOrder(int id_request_order, int priority, String status) {
+        this.id_request_order = id_request_order;
+        this.priority = priority;
+        this.status = status;
+    }
+    
     public DispatchOrder(int id_dispatch_order, int id_request_order, int priority, String status) {
         this.id_dispatch_order = id_dispatch_order;
         this.id_request_order = id_request_order;
