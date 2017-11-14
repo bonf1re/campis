@@ -212,17 +212,73 @@ public class GraphicsUtils {
         }
         
         // Draw route
-        for (int i = 0; i < route.size()-1; i++) {
+        for (int k = 0; k < route.size()-1; k++) {
             // paint line between coord i n coord i+1
             gc.setStroke(Color.RED);
-            int y_i = route.get(i).y;
-            int x_i = route.get(i).x;
-            int y_ii = route.get(i+1).y;
-            int x_ii = route.get(i+1).x;
-            gc.strokeLine(x_i*mult/scaling_factor_x+padding_x,
+            int y_i = route.get(k).y;
+            int x_i = route.get(k).x;
+            int y_ii = route.get(k+1).y;
+            int x_ii = route.get(k+1).x;
+            if (y_i==y_ii || x_i==x_ii){
+                
+                // Straight painting
+                gc.strokeLine(x_i*mult/scaling_factor_x+padding_x,
                             y_i*mult/scaling_factor_y+padding_y,
                             x_ii*mult/scaling_factor_x+padding_x,
                             y_ii*mult/scaling_factor_y+padding_y);
-        }
+            }else{ 
+
+                // for diagonal painting
+                Coord c1 = new Coord(y_i,x_i);
+                Coord c2 = new Coord(y_ii,x_ii);
+                int diff_y = c1.y-c2.y;
+                int diff_x = c1.x-c2.x;
+                int step_y = Math.abs((diff_y)/(diff_x))==0?1:Math.abs((diff_y)/(diff_x));
+                int step_x = Math.abs((diff_x)/(diff_y))==0?1:Math.abs((diff_x)/(diff_y));
+                int ini_y = c1.y;
+                int ini_x = c1.x;
+                
+                
+                do{
+                    for (int i = 0; i < Math.abs(step_y); i++) {                        
+                        if (overbound(ini_y,ini_x,c1,c2)){                    
+                        }else{
+                            break;
+                        }
+                        
+                        gc.strokeLine(ini_x*mult/scaling_factor_x+padding_x,
+                            ini_y*mult/scaling_factor_y+padding_y,
+                            ini_x*mult/scaling_factor_x+padding_x,
+                            (ini_y+(-1)*diff_y/Math.abs(diff_y))*mult/scaling_factor_y+padding_y);
+                        
+                        ini_y+=(-1)*diff_y/Math.abs(diff_y);
+                    }
+                    for (int i = 0; i < Math.abs(step_x); i++) {
+                        if (overbound(ini_y,ini_x,c1,c2)){
+                        }else{
+                            break;
+                        }
+                        
+                        gc.strokeLine(ini_x*mult/scaling_factor_x+padding_x,
+                            ini_y*mult/scaling_factor_y+padding_y,
+                            (ini_x+(-1)*diff_x/Math.abs(diff_x))*mult/scaling_factor_x+padding_x,
+                            ini_y*mult/scaling_factor_y+padding_y);
+                        
+                        ini_x+=(-1)*diff_x/Math.abs(diff_x);
+                    }
+                }while(overbound(ini_y,ini_x,c1,c2));
+                
+                gc.strokeLine(ini_x*mult/scaling_factor_x+padding_x,
+                            ini_y*mult/scaling_factor_y+padding_y,
+                            x_ii*mult/scaling_factor_x+padding_x,
+                            y_ii*mult/scaling_factor_y+padding_y);
+                
+            }   
+        }   
+    }
+    
+    private boolean overbound(int ini_y, int ini_x, Coord c1, Coord c2){
+        return ((ini_y>=c1.y && ini_y<=c2.y) || (ini_y>=c2.y && ini_y<=c1.y))
+                && ((ini_x>=c1.x && ini_x<=c2.x) || (ini_x>=c2.x && ini_x<=c1.x));
     }
 }

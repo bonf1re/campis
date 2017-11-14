@@ -277,6 +277,10 @@ public class EntryMoveNormalCreateController implements Initializable{
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         
+        
+       
+        
+        
         List aux = getMarked(session);
         List zone_sel = getZones((ArrayList<Batch>)aux,session);
         if (zone_sel.size() != aux.size()){
@@ -536,6 +540,18 @@ public class EntryMoveNormalCreateController implements Initializable{
         ObservableList<Vehicle> vh_list = FXCollections.observableArrayList(this.vh2View);
         sortPerCapacity(vh_list);
         
+         class weightDict{
+            public int id_prod;
+            public double weight;
+            public weightDict(int id_prod, double weight){
+                super();
+                this.id_prod = id_prod;
+                this.weight = weight;
+            }
+        }
+        ArrayList<weightDict> weights = new ArrayList<>();
+        
+        
         for (int i = 0; i < vh_list.size(); i++) {
             Vehicle vh = vh_list.get(i);
             double max_cp = vh.getMax_weight();
@@ -543,8 +559,19 @@ public class EntryMoveNormalCreateController implements Initializable{
             ArrayList<Batch> r_batches = new ArrayList<>();
             int counter = 0;
             for (int j=batch_list.size()-1;j>=0;j--) {
-                Query query = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+String.valueOf(batch_list.get(j).getId_product()));
-                double total_batch_weight = batch_list.get(j).getQuantity()*(double)(query.list().get(0));
+                double total_batch_weight = -1;
+                for (weightDict weight : weights) {
+                    if (weight.id_prod==batch_list.get(j).getId_product()){
+                        total_batch_weight=weight.weight;
+                        break;
+                    }
+                }
+                if (total_batch_weight<0){
+                    Query query = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+String.valueOf(batch_list.get(j).getId_product()));
+                    total_batch_weight = batch_list.get(j).getQuantity()*(double)(query.list().get(0));
+                    weightDict wd = new weightDict(batch_list.get(j).getId_product(), total_batch_weight);
+                    weights.add(wd);
+                }
                 max_cp=max_cp-total_batch_weight;
                 if (max_cp<=0){
                     // here it ends
@@ -632,14 +659,51 @@ public class EntryMoveNormalCreateController implements Initializable{
     }
 
     private void sortPerWeight(ArrayList<Batch> batch_list, ArrayList<WarehouseZone> zone_list,Session session) {
+        class weightDict{
+            public int id_prod;
+            public double weight;
+            public weightDict(int id_prod, double weight){
+                super();
+                this.id_prod = id_prod;
+                this.weight = weight;
+            }
+        }
+        ArrayList<weightDict> weights = new ArrayList<>();
+        
+        
        for (int i = 0; i < batch_list.size(); i++) {
            Batch batch_i = batch_list.get(i);
-           Query query_i = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+batch_i.getId_product());
-           double weight_i = batch_i.getQuantity()*(Double)query_i.list().get(0);
+           
+           double weight_i = -1;
+                for (weightDict weight : weights) {
+                    if (weight.id_prod==batch_i.getId_product()){
+                        weight_i=weight.weight;
+                        break;
+                    }
+                }
+           if (weight_i<0){
+                Query  query_i = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+batch_i.getId_product());
+                weight_i = batch_i.getQuantity()*(Double)query_i.list().get(0);
+                weightDict wd = new weightDict(batch_i.getId_product(),weight_i);
+                weights.add(wd);
+           }
+          
             for (int j = 0; j < batch_list.size(); j++) {
                 Batch batch_j = batch_list.get(j);
-                Query query_j = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+batch_j.getId_product());
-                double weight_j = batch_j.getQuantity()*(Double)query_j.list().get(0);
+                
+                double weight_j = -1;
+                for (weightDict weight : weights) {
+                    if (weight.id_prod==batch_j.getId_product()){
+                        weight_j=weight.weight;
+                        break;
+                    }
+                }
+                if (weight_i<0){
+                     Query  query_j = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+batch_j.getId_product());
+                     weight_j = batch_j.getQuantity()*(Double)query_j.list().get(0);
+                     weightDict wd = new weightDict(batch_j.getId_product(),weight_j);
+                     weights.add(wd);
+                }
                 if (weight_i > weight_j && j<i){
                     // For Zone
                     WarehouseZone swap_z = new WarehouseZone(zone_list.get(i),0);

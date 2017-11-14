@@ -23,7 +23,7 @@ public class RouteGen {
     private CGraph paths;
     private int[][] map;
     private double alpha = 0.3;
-    private Map<String,Route> dict = new HashMap<>();
+    private Map<String,Route> dict = new HashMap<>();    
     
     public void printDict(){
         ArrayList<String> keys = new ArrayList<String>(dict.keySet());
@@ -158,10 +158,13 @@ public class RouteGen {
         }
         return retornable;
     }
-
+    
+    public Route calculateRoute(Coord c_origin, Coord c_destiny_w){
+        return this.calculateRoute(c_origin, c_destiny_w, 0);
+    }
     
 
-    public Route calculateRoute(Coord c_origin, Coord c_destiny_w) {
+    public Route calculateRoute(Coord c_origin, Coord c_destiny_w, int opt2_counter) {
         Route real_returnable = new Route();
         Route returnable = new Route();
         Coord c_destiny = normalize_start(c_destiny_w);
@@ -201,7 +204,7 @@ public class RouteGen {
             }            
         }
         int grasp_counter=0;
-        while(grasp_counter<100){
+        while(grasp_counter<50){
             grasp_counter++;
             returnable=new Route();
             Random generator = new Random();
@@ -272,7 +275,7 @@ public class RouteGen {
                 continue;
         }
         // OPT 2
-        OPT2_coords(real_returnable);
+        OPT2_coords(real_returnable,opt2_counter);
         
         return real_returnable;
     }
@@ -382,10 +385,14 @@ public class RouteGen {
         return true;
     }
 
-    private void OPT2_coords(Route real_returnable) {
+    private void OPT2_coords(Route real_returnable, int opt2_counter) {
+        if (opt2_counter>1)
+            return;
         if (real_returnable.getPaths().size()<4) return;
         
+//        int r_step = real_returnable.getPaths().size()/16;
         // For for in for
+//        Random r_gen = new Random();
         ArrayList<Coord> route_cp = new ArrayList<>(real_returnable.getPaths());
         for (int i = 0; i <route_cp.size()-4; i+=4) {
             //  --d    b
@@ -393,18 +400,18 @@ public class RouteGen {
             //     /  \|
             //  --a    c
             // Bc of the dict, here only should be nodes interacting with themselves
-            Route a_c=calculateRoute(route_cp.get(i), route_cp.get(i+2));
-            Route c_b=calculateRoute(route_cp.get(i+2), route_cp.get(i+1));
-            Route b_d=calculateRoute(route_cp.get(i+1), route_cp.get(i+3));
+            Route a_c=calculateRoute(route_cp.get(i), route_cp.get(i+2),opt2_counter+1);
+            Route c_b=calculateRoute(route_cp.get(i+2), route_cp.get(i+1),opt2_counter+1);
+            Route b_d=calculateRoute(route_cp.get(i+1), route_cp.get(i+3),opt2_counter+1);
             if ((a_c.getCost()+ 
                  c_b.getCost()+
                  b_d.getCost())
                     
                     <
                     
-                    (calculateRoute(route_cp.get(i), route_cp.get(i+1)).getCost()+
-                    calculateRoute(route_cp.get(i+1), route_cp.get(i+2)).getCost()+
-                    calculateRoute(route_cp.get(i+2), route_cp.get(i+3)).getCost())){
+                    (calculateRoute(route_cp.get(i), route_cp.get(i+1),1+opt2_counter).getCost()+
+                    calculateRoute(route_cp.get(i+1), route_cp.get(i+2),1+opt2_counter).getCost()+
+                    calculateRoute(route_cp.get(i+2), route_cp.get(i+3),1+opt2_counter).getCost())){
                 ArrayList<Coord>  aux_coords = new ArrayList<>();
                 aux_coords.addAll(a_c.getPaths());
                 aux_coords.addAll(c_b.getPaths());
@@ -414,6 +421,7 @@ public class RouteGen {
                     route_cp.remove(i);
                 }
                 route_cp.addAll(i, aux_coords);
+//                i+=diff+r_step+r_gen.nextInt(r_step+1);
                 i+=diff;
             }
         }

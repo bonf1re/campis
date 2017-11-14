@@ -301,7 +301,7 @@ public class CreateSpecialDepartureController implements Initializable {
             Integer idReason = 0;
             Integer id_batch = 0;
             if(reason.compareTo("Producto Dañado")==0 || reason.compareTo("Producto Vencido")==0){
-                idReason = 1;
+                idReason = 5;
             }
             for (int i = 0; i < batchDepartureTable.getItems().size(); i++) {
                 id_batch = batchDepartureTable.getItems().get(i).getId_batch().getValue();                

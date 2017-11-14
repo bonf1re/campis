@@ -333,5 +333,8 @@ public class ViewController implements Initializable {
         main.showListRequestOrder();
     }
 
-
+    @FXML
+    private void goListBills() throws IOException {
+        main.showBillList();
+    }
 }

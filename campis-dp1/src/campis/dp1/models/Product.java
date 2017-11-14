@@ -176,4 +176,23 @@ public class Product {
         return result;
     }
     
+    public static int getNProduct(String nProd) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Product.class);
+        criteria.add(Restrictions.eq("name",nProd));
+        int res;
+        List rsMeasure = criteria.list();
+        Product result = (Product)rsMeasure.get(0);
+        res = result.getId_product();
+        session.close();
+        sessionFactory.close();
+
+        return res;
+    }
+    
 }

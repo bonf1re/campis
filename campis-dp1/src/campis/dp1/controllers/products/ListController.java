@@ -63,15 +63,11 @@ public class ListController implements Initializable {
     @FXML
     private TableColumn<ProductDisplay, String> nomCol;
     @FXML
-    private TableColumn<ProductDisplay, Integer> tipoCol;
+    private TableColumn<ProductDisplay, String> tipoCol;
     @FXML
     private TableColumn<ProductDisplay, Float> pesoCol;
     @FXML
-    private TableColumn<ProductDisplay, Integer> medidaCol;
-    @FXML
-    private TableColumn<ProductDisplay, Integer> pStockCol;
-    @FXML
-    private TableColumn<ProductDisplay, Integer> cStockCol;
+    private TableColumn<ProductDisplay, String> medidaCol;
     @FXML
     private Button searchButton;
     @FXML
@@ -100,11 +96,9 @@ public class ListController implements Initializable {
         try {
             itemCol.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
             nomCol.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-            tipoCol.setCellValueFactory(cellData -> cellData.getValue().typeProperty().asObject());
+            tipoCol.setCellValueFactory(cellData -> cellData.getValue().descripProperty());
             pesoCol.setCellValueFactory(cellData -> cellData.getValue().pesoProperty().asObject());
-            medidaCol.setCellValueFactory(cellData -> cellData.getValue().medidaProperty().asObject());
-            pStockCol.setCellValueFactory(cellData -> cellData.getValue().pStockProperty().asObject());
-            cStockCol.setCellValueFactory(cellData -> cellData.getValue().cStockProperty().asObject());
+            medidaCol.setCellValueFactory(cellData -> cellData.getValue().marcaProperty());
             /**/
             cargarData();
         } catch (SQLException | ClassNotFoundException ex) {
@@ -130,15 +124,54 @@ public class ListController implements Initializable {
         sessionFactory.close();
         return returnable;
     }
-
+    
+    public static String searchNameType(Integer type) throws SQLException, ClassNotFoundException {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(ProductType.class);
+        criteria.add(Restrictions.eq("id_product_type",type));
+        String codType;
+        List rsType = criteria.list();
+        ProductType result = (ProductType) rsType.get(0);
+        codType = result.getDescription();
+        session.close();
+        sessionFactory.close();
+        return codType;
+    }
+    
+    public static String searchCodMeasure(Integer measure) throws SQLException, ClassNotFoundException {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(UnitOfMeasure.class);
+        criteria.add(Restrictions.eq("id_unit_of_measure",measure));
+        String codMeasure;
+        List rsMeasure = criteria.list();
+        UnitOfMeasure result = (UnitOfMeasure)rsMeasure.get(0);
+        codMeasure = result.getDescription();
+        session.close();
+        sessionFactory.close();
+        return codMeasure;
+    }
+    
     private void cargarData() throws SQLException, ClassNotFoundException {
         productos = FXCollections.observableArrayList();
         productosView = FXCollections.observableArrayList();
         productos = getProducts();
+        
         for (int i = 0; i < productos.size(); i++) {
+            String nType = searchNameType(productos.get(i).getId_product_type());
+            String nMeasure = searchCodMeasure(productos.get(i).getId_unit_of_measure());
             ProductDisplay prod = new ProductDisplay(productos.get(i).getId_product(), productos.get(i).getName(),
-                    productos.get(i).getDescription(), productos.get(i).getP_stock(), productos.get(i).getC_stock(),
-                    productos.get(i).getWeight(), productos.get(i).getTrademark(), productos.get(i).getBase_price(),
+                    nType, productos.get(i).getP_stock(), productos.get(i).getC_stock(),
+                    productos.get(i).getWeight(), nMeasure, productos.get(i).getBase_price(),
                     productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type(),productos.get(i).getMax_qt());
             productosView.add(prod);
         }
