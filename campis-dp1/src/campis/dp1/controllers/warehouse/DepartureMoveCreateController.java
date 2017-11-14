@@ -611,7 +611,7 @@ public class DepartureMoveCreateController implements Initializable{
         sendable.add(3); // index + 2
         sendable.add(new ArrayList<>(this.original_batches)); // 1
         int[] motive_arr = new int[2];
-        motive_arr[0] = cbMotive.getSelectionModel().getSelectedIndex()+2;
+        motive_arr[0] = cbMotive.getSelectionModel().getSelectedIndex()+3;
         motive_arr[1] = -1;
         if (motive_arr[0]==3) motive_arr[1] = warehouses.get(cbWh.getSelectionModel().getSelectedIndex()).getId();
         sendable.add(motive_arr);

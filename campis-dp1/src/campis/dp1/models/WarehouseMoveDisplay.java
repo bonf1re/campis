@@ -29,7 +29,7 @@ public class WarehouseMoveDisplay {
         this.id_user = new SimpleIntegerProperty(whMove.getId_user());
         this.quantity = new SimpleIntegerProperty(whMove.getQuantity());
         this.id_zone = new SimpleIntegerProperty(whMove.getId_zone());
-        this.id_vehicle = new SimpleIntegerProperty(whMove.getId_movement());
+        this.id_vehicle = new SimpleIntegerProperty(whMove.getId_vehicle());
         this.mov_type = new SimpleIntegerProperty(whMove.getMov_type());
     }
     

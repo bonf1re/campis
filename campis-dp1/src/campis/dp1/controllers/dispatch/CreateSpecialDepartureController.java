@@ -286,7 +286,7 @@ public class CreateSpecialDepartureController implements Initializable {
             Integer id_type_owner = 1;
             Integer idReason = 0;
             Integer id_batch = 0;
-            if (reason.compareTo("Traslado de Almacén") == 0) {
+            if (reason.compareTo("Traslado hacia Almacén") == 0) {
                 idReason = 2;
             }
             for (int i = 0; i < batchDepartureTable.getItems().size(); i++) {

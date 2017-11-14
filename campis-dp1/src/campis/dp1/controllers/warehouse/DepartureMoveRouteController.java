@@ -153,22 +153,22 @@ public class DepartureMoveRouteController implements Initializable{
         
         // Previous verification
         int[] motive_arr = (int[]) this.routing_data.get(2);
-        int type_batch=2;
+        int type_batch=1;
         int warehouse_save_id = this.id_warehouse;
-        int mov_type=2; // till cbMotive
+        int mov_type=3; // till cbMotive
         
-        if (motive_arr[0]==2){ // To dispatch
+        if (motive_arr[0]==3){ // To dispatch
+            mov_type=3;
+            type_batch=1;
+        }else if (motive_arr[0]==4){ // Transfer to another warehouse
             mov_type=2;
-            type_batch=4;
-        }else if (motive_arr[0]==3){ // Transfer to another warehouse
-            mov_type=1;
-            type_batch=2;
+            type_batch=7;
             warehouse_save_id = motive_arr[1]; // New warehouse product
-        }else if (motive_arr[0]==4){ // Broken
-            mov_type=4;
-            type_batch=-1;
-        }else if (motive_arr[0]==5){
+        }else if (motive_arr[0]==5){ // Broken
             mov_type=5;
+            type_batch=-1;
+        }else if (motive_arr[0]==6){
+            mov_type=6;
             type_batch=-1;
         }
         
@@ -176,7 +176,12 @@ public class DepartureMoveRouteController implements Initializable{
         
         ArrayList<Batch> original_batches = (ArrayList<Batch>)this.routing_data.get(1);
         for (Batch original_b : original_batches) {
-            
+            if (original_b.isState() == false){ // fue partido, necesita actualizarse
+                Query b_query = session.createSQLQuery("UPDATE campis.batch \n"+
+                                                       "SET quantity = "+original_b.getQuantity()+"\n"+
+                                                       " WHERE id_batch = "+original_b.getId_batch());
+                b_query.executeUpdate();
+            }
         }
         
         
@@ -204,9 +209,9 @@ public class DepartureMoveRouteController implements Initializable{
                     // move/s save
                     WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), zone_list.get(j).getId_zone(), vh.getId_vehicle(), mov_type, warehouse_save_id,id_batch);
                     session.save(move);
-                    if (mov_type==1){ // transfer to another warehouse
-                        WarehouseMove move_extra = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), zone_list.get(j).getId_zone(), vh.getId_vehicle(), 3, this.id_warehouse,id_batch);
-                        session.save(move_extra);
+                    if (mov_type==2){
+                        WarehouseMove t_move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), zone_list.get(j).getId_zone(), vh.getId_vehicle(), 4, this.id_warehouse,id_batch);
+                        session.save(t_move);
                     }
                     continue;
                 }
@@ -226,14 +231,16 @@ public class DepartureMoveRouteController implements Initializable{
                 // move save
                 WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), zone_list.get(j).getId_zone(), vh.getId_vehicle(), mov_type, warehouse_save_id,batch.getId_batch());
                 session.save(move);
-                if (mov_type==1){ // transfer to another warehouse
-                        WarehouseMove move_extra = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), zone_list.get(j).getId_zone(), vh.getId_vehicle(), 3, this.id_warehouse,batch.getId_batch());
-                        session.save(move_extra);
+                if (mov_type==2){
+                    WarehouseMove t_move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), zone_list.get(j).getId_zone(), vh.getId_vehicle(), 4, this.id_warehouse,batch.getId_batch());
+                    session.save(t_move);
                 }
             }
             r_d_iterator.set(4, true);
             this.routing_data.set((int)this.routing_data.get(0), r_d_iterator);
         }
+        
+        
         
         session.getTransaction().commit();
         session.close();

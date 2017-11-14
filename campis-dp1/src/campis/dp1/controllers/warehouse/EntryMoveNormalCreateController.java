@@ -34,6 +34,7 @@ import java.io.IOError;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -184,14 +185,31 @@ public class EntryMoveNormalCreateController implements Initializable{
         
     }
 
-    private ObservableList<Batch> getBatches(Session session) {
-        Criteria criteria = session.createCriteria(Batch.class);
-        criteria.add(Restrictions.eq("type_batch",2));
-        List batchList = criteria.list();
+    ObservableList<Batch> getBatches(Session session) {
         ObservableList<Batch> returnable = FXCollections.observableArrayList();
-        for (int i = 0; i < batchList.size(); i++) {
-            returnable.add((Batch)batchList.get(i));
-        }       
+        Query d_query = session.createSQLQuery("SELECT b.* FROM campis.batch b\n" +
+                                                "INNER JOIN\n" +
+                                                "campis.dispatch_move d on d.id_batch = b.id_batch\n" +
+                                                "WHERE b.type_batch = 2 AND d.id_owner = "+this.id_warehouse_back);
+        List<Object[]> d_rs = d_query.list();
+        for (Object[] d_r : d_rs) {
+            //     public Batch(int quantity, float batch_cost, Timestamp arrival_date, Timestamp expiration_date, int id_product, int type_batch, String location, boolean state) {
+            Batch batch = new Batch((int)d_r[1],(float)(double)d_r[2],(Timestamp)d_r[3],(Timestamp)d_r[4],(int)d_r[5],(int)d_r[6],"--",(boolean)d_r[7]);
+            batch.setId_batch((int)d_r[0]);
+            returnable.add(batch);
+        }
+        
+        Query t_query = session.createSQLQuery("SELECT b.* FROM campis.batch b\n" +
+                                                "INNER JOIN\n" +
+                                                "campis.movement m on m.id_batch = b.id_batch\n" +
+                                                "WHERE m.mov_type=2 AND m.id_warehouse="+this.id_warehouse_back+" and b.type_batch=7");
+        List<Object[]> t_rs = t_query.list();
+        for (Object[] t_r : t_rs) {
+            //     public Batch(int quantity, float batch_cost, Timestamp arrival_date, Timestamp expiration_date, int id_product, int type_batch, String location, boolean state) {
+            Batch batch = new Batch((int)t_r[1],(float)(double)t_r[2],(Timestamp)t_r[3],(Timestamp)t_r[4],(int)t_r[5],(int)t_r[6],"--",(boolean)t_r[7]);
+            batch.setId_batch((int)t_r[0]);
+            returnable.add(batch);
+        }
         return returnable;
     }
     
