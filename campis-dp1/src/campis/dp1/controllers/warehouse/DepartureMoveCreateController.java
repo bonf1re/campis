@@ -466,6 +466,7 @@ public class DepartureMoveCreateController implements Initializable{
         for (ProductWH_Move productWH_Move : prodList) {
             int qt = productWH_Move.getCant().get();
             for (int i = original_batches.size()-1; i >= 0; i--) {
+                if (qt==0) break;
                 if (productWH_Move.getId_product() == original_batches.get(i).getId_product()){
                     if (original_batches.get(i).getQuantity()>0 && qt<original_batches.get(i).getQuantity()){
                         // split batch in two and set to true its state
@@ -613,7 +614,7 @@ public class DepartureMoveCreateController implements Initializable{
         int[] motive_arr = new int[2];
         motive_arr[0] = cbMotive.getSelectionModel().getSelectedIndex()+3;
         motive_arr[1] = -1;
-        if (motive_arr[0]==3) motive_arr[1] = warehouses.get(cbWh.getSelectionModel().getSelectedIndex()).getId();
+        if (motive_arr[0]==4) motive_arr[1] = warehouses.get(cbWh.getSelectionModel().getSelectedIndex()).getId();
         sendable.add(motive_arr);
         // the idea is to send list of zones, list of batches, vehicle and route per row
         ObservableList<Vehicle> vh_list = FXCollections.observableArrayList(this.vh2View);
