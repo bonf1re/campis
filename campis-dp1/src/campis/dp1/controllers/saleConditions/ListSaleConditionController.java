@@ -15,10 +15,10 @@ import campis.dp1.models.SaleConditionDisplay;
 import campis.dp1.models.SaleConditionType;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
+import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
-import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -35,6 +35,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
@@ -81,6 +82,9 @@ public class ListSaleConditionController implements Initializable {
     private TableColumn<SaleConditionDisplay, Float> amountColumn;
 
     @FXML
+    private TableColumn<SaleConditionDisplay, String> promoColumn;
+    
+    @FXML
     private TableColumn<SaleConditionDisplay, String> typeColumn;
 
     @FXML
@@ -113,6 +117,7 @@ public class ListSaleConditionController implements Initializable {
     @FXML
     private Button deleteButton;
     
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
@@ -137,6 +142,7 @@ public class ListSaleConditionController implements Initializable {
             initialColumn.setCellValueFactory(cellData -> cellData.getValue().getInitial_date());
             endColumn.setCellValueFactory(cellData -> cellData.getValue().getFinal_date());
             amountColumn.setCellValueFactory(cellData -> cellData.getValue().getAmount().asObject());
+            promoColumn.setCellValueFactory(cellData -> cellData.getValue().getPromo());
             typeColumn.setCellValueFactory(cellData -> cellData.getValue().getSale_condition_type());
             totakeColumn.setCellValueFactory(cellData -> cellData.getValue().getApplied_to());
             limitColumn.setCellValueFactory(cellData -> cellData.getValue().getLimits().asObject());
@@ -201,7 +207,9 @@ public class ListSaleConditionController implements Initializable {
         for (int i = 0; i < condiciones.size(); i++) {
 
             SaleConditionDisplay sc = new SaleConditionDisplay(condiciones.get(i).getId_sale_condition(), condiciones.get(i).getInitial_date().toString(),
-                    condiciones.get(i).getFinal_date().toString(), condiciones.get(i).getAmount(), getType(condiciones.get(i).getId_sale_condition_type()), 
+                    condiciones.get(i).getFinal_date().toString(), condiciones.get(i).getAmount(), 
+                    condiciones.get(i).getN_discount().toString() + "x" + condiciones.get(i).getN_tocount().toString(),
+                    getType(condiciones.get(i).getId_sale_condition_type()), 
                     condiciones.get(i).getLimits(),getObjective(condiciones.get(i).getId_to_take(),condiciones.get(i).getId_sale_condition_type()),
                     getCampaign(condiciones.get(i).getId_campaign()));
             condicionesView.add(sc);
@@ -245,7 +253,9 @@ public class ListSaleConditionController implements Initializable {
         for (int i = 0; i < condiciones.size(); i++) {
 
             SaleConditionDisplay sc = new SaleConditionDisplay(condiciones.get(i).getId_sale_condition(), condiciones.get(i).getInitial_date().toString(),
-                    condiciones.get(i).getFinal_date().toString(), condiciones.get(i).getAmount(), getType(condiciones.get(i).getId_sale_condition_type()), 
+                    condiciones.get(i).getFinal_date().toString(), condiciones.get(i).getAmount(), 
+                    condiciones.get(i).getN_discount().toString() + "x" + condiciones.get(i).getN_tocount().toString(),
+                    getType(condiciones.get(i).getId_sale_condition_type()), 
                     condiciones.get(i).getLimits(),getObjective(condiciones.get(i).getId_to_take(),condiciones.get(i).getId_sale_condition_type()),
                     getCampaign(condiciones.get(i).getId_campaign()));
             condicionesView.add(sc);

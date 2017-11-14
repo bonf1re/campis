@@ -58,6 +58,9 @@ public class EditController implements Initializable {
     float baseTotalAmount = 0;
     float discountTotal = 0;
     float freightTotal = 0;
+    Integer n_discount = 1;
+    Integer n_tocount = 1;
+    
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView;
 
@@ -366,7 +369,9 @@ public class EditController implements Initializable {
             baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
             baseTotalAmount = baseTotalAmount + base_amount;
             discountTotal = ContextFX.getInstance().getDiscount();
-            discountTotal = discountTotal + base_amount * disc;
+            
+            discountTotal = discountTotal + base_amount * disc + 
+                        (base_amount - ((list.get(i).getQuantity()/n_discount * n_tocount) * products.get(0).getBase_price()));
             totalAmount = baseTotalAmount - discountTotal;
             float f = getFreight(distr);
             freightTotal = freightTotal + baseTotalAmount * f;
@@ -393,6 +398,9 @@ public class EditController implements Initializable {
     }
 
     private ObservableList<SaleCondition> getDiscount(int cod) {
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
@@ -401,6 +409,8 @@ public class EditController implements Initializable {
         session.beginTransaction();
         Criteria criteria = session.createCriteria(SaleCondition.class);
         criteria.add(Restrictions.eq("id_to_take", cod));
+        criteria.add(Restrictions.ge("initial_date", today.getTime()));
+        criteria.add(Restrictions.le("final_date", today.getTime()));
         List<SaleCondition> list = criteria.list();
         ObservableList<SaleCondition> returnable;
         returnable = FXCollections.observableArrayList();
@@ -413,6 +423,9 @@ public class EditController implements Initializable {
     }
 
     private Float verifyConditions(ObservableList<SaleCondition> discounts, Product prod, int quant) {
+        n_discount = 1;
+        n_tocount = 1;
+        Integer n_d_aux, n_c_aux;
         Float returnable = Float.valueOf(0);
         for (int i = 0; i < discounts.size(); i++) {
             int type = discounts.get(i).getId_sale_condition_type();
@@ -430,6 +443,12 @@ public class EditController implements Initializable {
                     }
                 }
             }
+            n_d_aux = discounts.get(i).getN_discount();
+            n_c_aux = discounts.get(i).getN_tocount();
+            if (n_d_aux != 1 || n_c_aux != 1) {
+                n_discount = n_d_aux;
+                n_tocount = n_c_aux;
+            }
         }
         return returnable;
     }
@@ -445,7 +464,9 @@ public class EditController implements Initializable {
         baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
         baseTotalAmount = baseTotalAmount + base_amount;
         discountTotal = ContextFX.getInstance().getDiscount();
-        discountTotal = discountTotal + base_amount * disc;
+        
+        discountTotal = discountTotal + base_amount * disc + 
+                        (base_amount - ((quant/n_discount * n_tocount) * products.get(0).getBase_price()));
         totalAmount = baseTotalAmount - discountTotal;
         ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
         ContextFX.getInstance().setTotAmount(totalAmount);

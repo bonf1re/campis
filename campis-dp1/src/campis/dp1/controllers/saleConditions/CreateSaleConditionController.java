@@ -30,6 +30,7 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
+import javafx.scene.control.RadioButton;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -103,6 +104,16 @@ public class CreateSaleConditionController implements Initializable {
 
     @FXML
     private Label pckEndMessage;
+    
+    @FXML
+    private RadioButton btnPromo;
+
+    @FXML
+    private JFXTextField disLabel;
+
+    @FXML
+    private JFXTextField countLabel;
+    
 
     public boolean validation() {
         boolean campaignCBValid = campaignCB.getValue() == null;
@@ -141,6 +152,11 @@ public class CreateSaleConditionController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        disLabel.disableProperty().set(true);
+        countLabel.disableProperty().set(true);
+        
+        
+        
         listCampaigns = getCampaigns();
         listSaleConditionTypes = getConditionTypes();
         listProducts = getProducts();
@@ -156,6 +172,25 @@ public class CreateSaleConditionController implements Initializable {
     @FXML
     private void goListSaleConditions() throws IOException{
         main.showListSaleConditions();
+    }
+    
+    @FXML
+    private void activatePromo() {
+        if (btnPromo.isSelected()){
+            amountField.setText(" - ");
+            amountField.disableProperty().set(true);
+            disLabel.disableProperty().set(false);
+            countLabel.disableProperty().set(false);
+        } else {
+            amountField.setText(null);
+            amountField.disableProperty().set(false);
+            disLabel.disableProperty().set(true);
+            countLabel.disableProperty().set(true);
+            disLabel.setText("");
+            countLabel.setText("");
+            
+        }
+                
     }
     
     
@@ -340,7 +375,8 @@ public class CreateSaleConditionController implements Initializable {
             SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             Date date_init = getDate(pckBegin.getValue());
             Date date_end = getDate(pckEnd.getValue());
-            
+            Integer n_d =1, n_c =1;
+            Float amount = 0f;
             Configuration configuration = new Configuration();
             configuration.configure("hibernate.cfg.xml");
             configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
@@ -349,14 +385,22 @@ public class CreateSaleConditionController implements Initializable {
             session.beginTransaction();
             setIds(campaignCB.getValue(),typeCB.getValue(),objectiveCB.getValue());
             
+            if (amountField.disableProperty().get()){
+                n_d = Integer.parseInt(disLabel.getText());
+                n_c = Integer.parseInt(countLabel.getText());
+            }else{
+                amount = Float.parseFloat(amountField.getText());
+            }
             
             SaleCondition sc = new SaleCondition(Timestamp.valueOf(formatIn.format(date_init)),
                                                  Timestamp.valueOf(formatIn.format(date_end)),
-                                                 Float.parseFloat(amountField.getText()),
+                                                 amount,
                                                  id_type,
                                                  Integer.parseInt(limitField.getText()),
                                                  id_objective,
-                                                 id_campaign);
+                                                 id_campaign,
+                                                 n_d,
+                                                 n_c);
             
             
             session.save(sc);

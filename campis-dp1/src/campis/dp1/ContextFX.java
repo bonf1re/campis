@@ -23,6 +23,34 @@ import javafx.scene.control.Button;
  */
 public class ContextFX {
 
+    /**
+     * @return the n_discount
+     */
+    public Integer getN_discount() {
+        return n_discount;
+    }
+
+    /**
+     * @param n_discount the n_discount to set
+     */
+    public void setN_discount(Integer n_discount) {
+        this.n_discount = n_discount;
+    }
+
+    /**
+     * @return the n_tocount
+     */
+    public Integer getN_tocount() {
+        return n_tocount;
+    }
+
+    /**
+     * @param n_tocount the n_tocount to set
+     */
+    public void setN_tocount(Integer n_tocount) {
+        this.n_tocount = n_tocount;
+    }
+
  
 
     private final static ContextFX instance = new ContextFX();
@@ -42,6 +70,8 @@ public class ContextFX {
     Float totAmount = 0.0f;
     Float discount = 0.0f;
     Float freight = 0.0f;
+    private Integer n_discount = 1;
+    private Integer n_tocount = 1;
     Integer num = 0; // Useful to save any integer variable.
     Integer var = 0;
     String word = null;

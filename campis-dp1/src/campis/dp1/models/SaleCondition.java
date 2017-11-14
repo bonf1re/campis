@@ -19,6 +19,34 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "sale_condition")
 public class SaleCondition {
+
+    /**
+     * @return the n_discount
+     */
+    public Integer getN_discount() {
+        return n_discount;
+    }
+
+    /**
+     * @param n_discount the n_discount to set
+     */
+    public void setN_discount(Integer n_discount) {
+        this.n_discount = n_discount;
+    }
+
+    /**
+     * @return the n_tocount
+     */
+    public Integer getN_tocount() {
+        return n_tocount;
+    }
+
+    /**
+     * @param n_tocount the n_tocount to set
+     */
+    public void setN_tocount(Integer n_tocount) {
+        this.n_tocount = n_tocount;
+    }
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id_sale_condition;
@@ -29,8 +57,14 @@ public class SaleCondition {
     private Integer limits;
     private Integer id_to_take;
     private Integer id_campaign;
+    private Integer n_discount;
+    private Integer n_tocount;
+    
 
-    public SaleCondition(Timestamp initial_date, Timestamp final_date, Float amount, Integer id_sale_condition_type, Integer limits, Integer id_to_take, Integer id_campaign) {
+    public SaleCondition(Timestamp initial_date, Timestamp final_date, Float amount, 
+            Integer id_sale_condition_type, Integer limits, 
+            Integer id_to_take, Integer id_campaign,
+            Integer n_discount, Integer n_tocount) {
         this.initial_date = initial_date;
         this.final_date = final_date;
         this.amount = amount;
@@ -38,6 +72,26 @@ public class SaleCondition {
         this.limits = limits;
         this.id_to_take = id_to_take;
         this.id_campaign = id_campaign;
+        this.n_discount = n_discount;
+        this.n_tocount = n_tocount;
+        
+    }
+    
+    public SaleCondition(Integer id_sale_condition, Timestamp initial_date, Timestamp final_date, Float amount, 
+            Integer id_sale_condition_type, Integer limits, 
+            Integer id_to_take, Integer id_campaign,
+            Integer n_discount, Integer n_tocount) {
+        this.id_sale_condition = id_sale_condition;
+        this.initial_date = initial_date;
+        this.final_date = final_date;
+        this.amount = amount;
+        this.id_sale_condition_type = id_sale_condition_type;
+        this.limits = limits;
+        this.id_to_take = id_to_take;
+        this.id_campaign = id_campaign;
+        this.n_discount = n_discount;
+        this.n_tocount = n_tocount;
+        
     }
     
 

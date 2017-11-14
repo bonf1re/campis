@@ -25,6 +25,7 @@
                 <TableColumn fx:id="initialColumn" prefWidth="75.0" text="Día inicial" />
                   <TableColumn fx:id="endColumn" prefWidth="75.0" text="Día final" />
                   <TableColumn fx:id="amountColumn" prefWidth="75.0" text="\%" />
+                  <TableColumn fx:id="promoColumn" prefWidth="75.0" text="Promo" />
                   <TableColumn fx:id="typeColumn" prefWidth="75.0" text="Tipo" />
                   <TableColumn fx:id="totakeColumn" prefWidth="75.0" text="Aplicado a" />
                   <TableColumn fx:id="limitColumn" prefWidth="75.0" text="Límite" />
