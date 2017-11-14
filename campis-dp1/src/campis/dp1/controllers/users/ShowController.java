@@ -71,6 +71,8 @@ public class ShowController implements Initializable {
         this.emailField.setText(result.getEmail());
         String role = campis.dp1.controllers.users.EditController.getRole(result.getId_role());
         this.roleField.setValue(role);
+        session.close();
+        sessionFactory.close();
     } 
 
 }

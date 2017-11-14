@@ -170,6 +170,7 @@ public class Product {
         String descrip;
         List rsMeasure = criteria.list();
         Product result = (Product)rsMeasure.get(0);
+        session.close();
         sessionFactory.close();
 
         return result;

@@ -132,6 +132,8 @@ public class EditController implements Initializable {
         SQLQuery query = session.createSQLQuery(qryStr);
         List list = query.list();
         String returnable = (String) list.get(0);
+        session.close();
+        sessionFactory.close();
         return returnable;
     }
 
@@ -230,6 +232,8 @@ public class EditController implements Initializable {
         SQLQuery query = session.createSQLQuery(qryStr);
         List list = query.list();
         Integer returnable = (Integer) list.get(0);
+        session.close();
+        sessionFactory.close();
         return returnable;
     }
 
@@ -319,6 +323,8 @@ public class EditController implements Initializable {
         Criteria criteria = session.createCriteria(RequestOrderLine.class);
         criteria.add(Restrictions.eq("id_request_order", id));
         List<RequestOrderLine> rsRequestOrderLine = criteria.list();
+        session.close();
+        sessionFactory.close();
         return rsRequestOrderLine;
     }
 
@@ -360,7 +366,7 @@ public class EditController implements Initializable {
             baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
             baseTotalAmount = baseTotalAmount + base_amount;
             discountTotal = ContextFX.getInstance().getDiscount();
-            discountTotal = discountTotal + baseTotalAmount * disc;
+            discountTotal = discountTotal + base_amount * disc;
             totalAmount = baseTotalAmount - discountTotal;
             float f = getFreight(distr);
             freightTotal = freightTotal + baseTotalAmount * f;
@@ -439,7 +445,7 @@ public class EditController implements Initializable {
         baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
         baseTotalAmount = baseTotalAmount + base_amount;
         discountTotal = ContextFX.getInstance().getDiscount();
-        discountTotal = discountTotal + baseTotalAmount * disc;
+        discountTotal = discountTotal + base_amount * disc;
         totalAmount = baseTotalAmount - discountTotal;
         ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
         ContextFX.getInstance().setTotAmount(totalAmount);
@@ -473,6 +479,8 @@ public class EditController implements Initializable {
         ObservableList<Product> returnable;
         returnable = FXCollections.observableArrayList();
         returnable.add(list.get(0));
+        session.close();
+        sessionFactory.close();
         return returnable;
     }
 
@@ -488,6 +496,8 @@ public class EditController implements Initializable {
         List<RequestOrder> list = criteria.list();
         RequestOrder returnable;
         returnable = (RequestOrder) list.get(0);
+        session.close();
+        sessionFactory.close();
         return returnable;
     }
 
@@ -502,6 +512,8 @@ public class EditController implements Initializable {
         criteria.add(Restrictions.eq("id_client", id_client));
         List<Client> list = criteria.list();
         String name = list.get(0).getName();
+        session.close();
+        sessionFactory.close();
         return name;
     }
 
@@ -514,7 +526,8 @@ public class EditController implements Initializable {
         session.beginTransaction();
         Criteria criteria = session.createCriteria(RequestOrderLine.class);
         List<RequestOrderLine> request = criteria.list();
-
+        session.close();
+        sessionFactory.close();
         return request;
     }
 

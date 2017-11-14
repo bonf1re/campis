@@ -31,6 +31,8 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import campis.dp1.models.Permission;
 import campis.dp1.models.View;
+import campis.dp1.models.WarehouseZone;
+import javafx.scene.control.Alert;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -44,6 +46,7 @@ public class ListRackController implements Initializable{
     private int selected_id;
     private int id_role;
     private int warehouse_id;
+    private ObservableList<WarehouseZone> zones;
 
     @FXML
     private void goNewRack() throws IOException {
@@ -138,19 +141,65 @@ public class ListRackController implements Initializable{
         session.close();
         sessionFactory.close();
     }
-          
+    
+    private boolean verifyZones() {
+        //Debes buscar en la tabla zones, si es que las zonas para ese racks... todas etsan vacias 
+        zones = FXCollections.observableArrayList();
+        zones = getZones();
+        
+        for (int i = 0; i < zones.size(); i++) {
+            System.out.println(zones.get(i).isFree());
+            if (!zones.get(i).isFree()) return false;
+        }
+        
+        return true;    
+    }
+    
+     private ObservableList<WarehouseZone> getZones() {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(WarehouseZone.class);
+        criteria.add(Restrictions.eq("id_rack",this.selected_id));
+        List lista = criteria.list();
+        //ArrayList<WarehouseZone> zonesList = new ArrayList<>();
+        ObservableList<WarehouseZone> zonesList;
+        zonesList = FXCollections.observableArrayList();
+        for (int i = 0; i < lista.size(); i++) {
+            zonesList.add((WarehouseZone)lista.get(i));
+        }
+        session.close();
+        sessionFactory.close();
+        return zonesList;   
+     }
+     
     @FXML
     private void deleteRack(ActionEvent event) throws SQLException, ClassNotFoundException {
         if (selected_id > 0) {
             ContextFX.getInstance().setId(selected_id);
             Integer id_rack = ContextFX.getInstance().getId();
-            deleteRack(selected_id);
-            for (int i = 0; i < racks.size(); i++) {
-                if(racks.get(i).getId_rack().compareTo(id_rack) == 0){
-                    racks.remove(i);
+            
+            //verificamos que todas las zonas esten vacias 
+            boolean flagZones = verifyZones();
+            
+            if (flagZones){
+                deleteRack(selected_id);
+                for (int i = 0; i < racks.size(); i++) {
+                    if(racks.get(i).getId_rack().compareTo(id_rack) == 0){
+                        racks.remove(i);
+                    }
                 }
-            }
-            loadData();
+                loadData();
+            } else {
+                 Alert alert = new Alert(Alert.AlertType.ERROR);
+                alert.setTitle("Error");
+                alert.setHeaderText(null);
+                alert.setContentText("No se pudo eliminar el rack porque no todas las zonas estan vacías");
+                alert.showAndWait();
+            }            
         }
     }
     

@@ -341,6 +341,8 @@ public class CreateNormalDepartureController implements Initializable {
         List list = criteria.list();
         RequestOrder rq = (RequestOrder) list.get(0);
         Integer returnable = rq.getId_client();
+        session.close();
+        sessionFactory.close();
         return returnable;
     }
 
@@ -406,6 +408,7 @@ public class CreateNormalDepartureController implements Initializable {
         session.save(dispatch);
         session.getTransaction().commit();
         session.close();
+        sessionFactory.close();
         //createDispatchOrderLine(dispatch.getId_dispatch_move());
     }
 

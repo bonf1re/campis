@@ -76,7 +76,8 @@ public class View {
         session.beginTransaction();
         Criteria criteria = session.createCriteria(View.class);
         List<View> types = criteria.list();
-
+        session.close();
+        sessionFactory.close();
         return types;
     }
 
@@ -92,6 +93,7 @@ public class View {
         String descrip;
         List rsMeasure = criteria.list();
         View result = (View)rsMeasure.get(0);
+        session.close();
         sessionFactory.close();
 
         return result;

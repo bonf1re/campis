@@ -109,6 +109,7 @@ public class CreateBatchEntryController implements Initializable {
         session.save(b);
         session.getTransaction().commit();
 
+        session.close();
         sessionFactory.close();
         ContextFX.getInstance().setId(b.getId_batch());
         this.goNewEntry();

@@ -142,6 +142,9 @@ public class CreateSpecialDepartureController implements Initializable {
         for (int i = 0; i < list.size(); i++) {
             returnable.add((Batch) list.get(i));
         }
+        session.close();
+        sessionFactory.close();
+
         return returnable;
     }
 
@@ -174,6 +177,8 @@ public class CreateSpecialDepartureController implements Initializable {
         List list = criteria.list();
         Product prod = (Product) list.get(0);
         String returnable = prod.getName();
+        session.close();
+        sessionFactory.close();
         return returnable;
     }
 
@@ -266,6 +271,8 @@ public class CreateSpecialDepartureController implements Initializable {
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Warehouse.class);
         List<Warehouse> list = criteria.list();
+        session.close();
+        sessionFactory.close();
         return list;
     }
 
@@ -315,6 +322,8 @@ public class CreateSpecialDepartureController implements Initializable {
         criteria.add(Restrictions.eq("name", zone));
         List<Warehouse> list = criteria.list();
         Integer idzone = list.get(0).getId();
+        session.close();
+        sessionFactory.close();
         return idzone;
     }
 
@@ -330,6 +339,7 @@ public class CreateSpecialDepartureController implements Initializable {
         session.save(dispatch);
         session.getTransaction().commit();
         session.close();
+        sessionFactory.close();
     }
 
     private Integer getIntMeasure(int id_product) {
@@ -343,6 +353,8 @@ public class CreateSpecialDepartureController implements Initializable {
         criteria.add(Restrictions.eq("id_product", id_product));
         List<Product> list = criteria.list();
         Integer meas = list.get(0).getId_unit_of_measure();
+        session.close();
+        sessionFactory.close();
         return meas;
     }
     

@@ -8,6 +8,8 @@ package campis.dp1.controllers.requestOrder;
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Client;
+import campis.dp1.models.DispatchOrder;
+import campis.dp1.models.DispatchOrderLine;
 import campis.dp1.models.District;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
@@ -56,12 +58,13 @@ import org.hibernate.criterion.Restrictions;
 public class CreateController implements Initializable {
 
     Main main;
-    Integer id, quantity,selected_id;
+    Integer id, quantity, selected_id;
     Integer num = 0;
     float totalAmount = 0;
     float baseTotalAmount = 0;
     float discountTotal = 0;
     float freightTotal = 0;
+    String message = "";
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView = FXCollections.observableArrayList();
 
@@ -132,6 +135,8 @@ public class CreateController implements Initializable {
         SQLQuery query = session.createSQLQuery(qryStr);
         List list = query.list();
         Integer returnable = (Integer) list.get(0);
+        session.close();
+        sessionFactory.close();
         return returnable;
     }
 
@@ -161,11 +166,11 @@ public class CreateController implements Initializable {
             session.close();
             sessionFactory.close();
             createRequestOrderLine(requestOrder.getId_request_order());
+            createDispatchOrder(requestOrder.getId_request_order());
             ContextFX.getInstance().setTempList(null);
             this.goListRequestOrder();
         } else {
-            messageField1.setText("Fecha debe ser mayor a la actual");
-            messageField2.setText("Fecha debe ser mayor a la fecha de creación");
+            messageField1.setText(message);
         }
     }
 
@@ -239,7 +244,7 @@ public class CreateController implements Initializable {
         String qryStr = "SELECT freight FROM campis.district WHERE name = '" + cad + "';";
         SQLQuery query = session.createSQLQuery(qryStr);
         List list = query.list();
-        Float returnable = ((Double)list.get(0)).floatValue();
+        Float returnable = ((Double) list.get(0)).floatValue();
         session.close();
         sessionFactory.close();
         return returnable;
@@ -265,7 +270,7 @@ public class CreateController implements Initializable {
         baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
         baseTotalAmount = baseTotalAmount + base_amount;
         discountTotal = ContextFX.getInstance().getDiscount();
-        discountTotal = discountTotal + baseTotalAmount * disc;
+        discountTotal = discountTotal + base_amount * disc;
         freightTotal = ContextFX.getInstance().getFreight();
         totalAmount = baseTotalAmount - discountTotal;
         ContextFX.getInstance().setDiscount(discountTotal);
@@ -369,7 +374,7 @@ public class CreateController implements Initializable {
     private Date getDate(LocalDate value) {
 
         Calendar calendar = new GregorianCalendar(value.getYear(),
-                value.getMonthValue()-1,
+                value.getMonthValue() - 1,
                 value.getDayOfMonth());
         return calendar.getTime();
     }
@@ -392,6 +397,40 @@ public class CreateController implements Initializable {
         session.getTransaction().commit();
         session.close();
         sessionFactory.close();
+    }
+    
+    private void createDispatchOrderLine(int codDispOrd) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        for (int i = 0; i < tablaProd.getItems().size(); i++) {
+            ProductDisplay prod = tablaProd.getItems().get(i);
+            Integer idprod = prod.codProdProperty().getValue();
+            Integer quant = prod.cStockProperty().getValue();
+            DispatchOrderLine dispOrdLine = new DispatchOrderLine(codDispOrd, idprod, quant);
+            session.save(dispOrdLine);
+        }
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
+    }
+
+    private void createDispatchOrder(int codReqOrd) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        DispatchOrder dispatch = new DispatchOrder(codReqOrd, Integer.valueOf(this.priorityField.getValue()), this.statesField.getText());
+        session.save(dispatch);
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
+        createDispatchOrderLine(dispatch.getId_dispatch_order());
     }
 
     @FXML
@@ -421,15 +460,17 @@ public class CreateController implements Initializable {
         Boolean flag = TRUE;
         if (creation.compareTo(currentTimestamp) <= 0) {
             flag = FALSE;
+            message = "Fecha debe ser mayor a la actual";
         }
         if (delivery.compareTo(creation) < 0) {
             flag = FALSE;
+            message = "Fecha debe ser mayor a la fecha de creación";
         }
         return flag;
     }
-    
+
     private void deleteItems(int codProd, int quantity, float price) {
-        float base_price = quantity*price;
+        float base_price = quantity * price;
         ObservableList<SaleCondition> discounts = getDiscount(codProd);
         Float disc = verifyConditions(discounts, products.get(0), quantity);
         discountTotal = discountTotal - base_price * disc;
@@ -450,7 +491,7 @@ public class CreateController implements Initializable {
             for (int i = 0; i < productsView.size(); i++) {
                 if (productsView.get(i).codProdProperty().getValue().compareTo(id_prod) == 0) {
                     deleteItems(productsView.get(i).codProdProperty().getValue(),
-                    productsView.get(i).cStockProperty().getValue(),productsView.get(i).precioBProperty().getValue());
+                            productsView.get(i).cStockProperty().getValue(), productsView.get(i).precioBProperty().getValue());
                     productsView.remove(i);
                 }
             }
@@ -458,5 +499,5 @@ public class CreateController implements Initializable {
             tablaProd.setItems(productsView);
         }
     }
-    
+
 }
