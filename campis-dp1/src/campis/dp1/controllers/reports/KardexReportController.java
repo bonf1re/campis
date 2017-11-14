@@ -183,9 +183,11 @@ public class KardexReportController implements Initializable {
                 "    '[' || ml.pos_x || ',' || ml.pos_y || ',' || ml.pos_z || ']' as position,\n" +
                 "    ml.plate,\n" +
                 "    CASE\n" +
-                "        WHEN (mup.mov_type = 1) \n" +
+                "        WHEN (mup.mov_type < 2) \n" +
                 "                THEN 'Entrada'\n" +
-                "                ELSE 'Salida'\n" +
+                "        WHEN (mup.mov_type = 3) \n" +
+                "                THEN 'Salida a despacho'\n" +
+                "                ELSE 'Salida a almacén'\n" +
                 "        END AS mov_type\n" +
                 "    from movs_users_products mup, movs_location ml\n" +
                 "    where mup.id_movement = ml.id_movement\n";
@@ -211,7 +213,7 @@ public class KardexReportController implements Initializable {
         for(Object[] row : rows){
             ReportKardexDisplay r = new ReportKardexDisplay(row[0].toString(), row[1].toString(),row[2].toString(),
                                                             Integer.parseInt(row[3].toString()),row[4].toString(),row[5].toString(),
-                                                            row[6].toString(),"placa xd",row[8].toString());
+                                                            row[6].toString(),row[7].toString(),row[8].toString());
             kardexView.add(r);
         }
         

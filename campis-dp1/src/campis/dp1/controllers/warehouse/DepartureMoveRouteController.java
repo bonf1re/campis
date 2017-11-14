@@ -113,7 +113,7 @@ public class DepartureMoveRouteController implements Initializable{
     public void initialize(URL url, ResourceBundle rb) {
         this.id_warehouse=ContextFX.getInstance().getId();
         this.routing_data=ContextFX.getInstance().getPolymorphic_list();
-        Vehicle vh =(Vehicle) ((ArrayList<Object>) this.routing_data.get((int)this.routing_data.get(0))).get(2);
+        Vehicle vh =(Vehicle) ((ArrayList<Object>) this.routing_data.get((int)this.routing_data.get(0))).get(2); //wtf
         this.vhText.setText("Vehicle: "+ vh.getPlate() + " \nde capacidad : "+vh.getMax_weight());
         this.pCounterField.setText("<"+String.valueOf((int)this.routing_data.get(0)-2)+"/"+String.valueOf(this.routing_data.size()-3)+">");
         try{

@@ -23,9 +23,6 @@
             <TableColumn fx:id="tipoCol" prefWidth="75.0" text="Tipo" />
             <TableColumn fx:id="pesoCol" prefWidth="75.0" text="Peso" />
             <TableColumn fx:id="medidaCol" prefWidth="75.0" text="Unidad de Medida" />
-            <TableColumn fx:id="pStockCol" prefWidth="75.0" text="Stock Físico" />
-            <TableColumn fx:id="cStockCol" prefWidth="75.0" text="Stock Lógico" />
-            <TableColumn prefWidth="75.0" text="Acciones" />
         </columns>
          <columnResizePolicy>
             <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />

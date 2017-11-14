@@ -25,6 +25,8 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Disjunction;
+import org.hibernate.criterion.Restrictions;
 
 /**
  * FXML Controller class
@@ -124,6 +126,11 @@ public class ListDepartureController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(DispatchMove.class);
+        Integer rs1 = 1;
+        Integer rs2 = 2;
+        Integer rs3 = 5;
+        criteria.add(Restrictions.disjunction().add(Restrictions.eq("reason",rs1))
+                .add(Restrictions.eq("reason",rs2)).add(Restrictions.eq("reason",rs3)));
         List<DispatchMove> list = criteria.list();
         ObservableList<DispatchMove> returnable = FXCollections.observableArrayList();
         for (int i = 0; i < list.size(); i++) {

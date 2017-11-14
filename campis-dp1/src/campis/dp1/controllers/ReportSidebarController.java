@@ -47,6 +47,11 @@ public class ReportSidebarController implements Initializable {
     private void goStocksReport() throws IOException {
         main.showStocksReportConf();
     }
+
+    @FXML
+    private void goBills() throws IOException {
+        main.showBillList();
+    }
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {

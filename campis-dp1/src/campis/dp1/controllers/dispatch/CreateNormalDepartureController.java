@@ -18,6 +18,7 @@ import campis.dp1.models.DispatchMove;
 import campis.dp1.models.DispatchOrder;
 import campis.dp1.models.DispatchOrderLine;
 import campis.dp1.models.Product;
+import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.RequestOrder;
 import campis.dp1.models.UnitOfMeasure;
 import campis.dp1.models.Warehouse;
@@ -25,8 +26,10 @@ import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
+import static java.lang.Boolean.FALSE;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -150,16 +153,18 @@ public class CreateNormalDepartureController implements Initializable {
     private void generateList(ActionEvent event) {
         int cod = Integer.parseInt(dispatchField.getValue());
         dispatchOrLine = getListDisp(cod);
+        ObservableList<Batch> batchAux = getListBatch();
         for (int i = 0; i < dispatchOrLine.size(); i++) {
-            List<Batch> batchAux = getBatch(dispatchOrLine.get(i).getId_prod());
             for (int j = 0; j < batchAux.size(); j++) {
-                batch.add(batchAux.get(j));
+                if (batchAux.get(j).getId_product() == dispatchOrLine.get(i).getId_prod()) {
+                    batch.add(batchAux.get(j));
+                }
             }
         }
         loadData(batch);
     }
 
-    private List<Batch> getBatch(int codProd) {
+    private Batch getBatch(int codProd) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
@@ -169,13 +174,9 @@ public class CreateNormalDepartureController implements Initializable {
         Criteria criteria = session.createCriteria(Batch.class);
         Conjunction objCriteria = Restrictions.conjunction();
         objCriteria.add(Restrictions.eq("id_product", codProd));
-        objCriteria.add(Restrictions.eq("type_batch", 1));
         criteria.add(objCriteria);
         List<Batch> list = criteria.list();
-        List<Batch> returnable = FXCollections.observableArrayList();
-        for (int i = 0; i < list.size(); i++) {
-            returnable.add(list.get(i));
-        }
+        Batch returnable = list.get(0);
         session.close();
         sessionFactory.close();
         return returnable;
@@ -208,7 +209,7 @@ public class CreateNormalDepartureController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Batch.class);
-        criteria.add(Restrictions.eq("type_batch", 1));
+        criteria.add(Restrictions.disjunction().add(Restrictions.eq("type_batch", 1))).add(Restrictions.gt("quantity", 0));
         ObservableList<Batch> returnable = FXCollections.observableArrayList();
         List list = criteria.list();
         for (int i = 0; i < list.size(); i++) {
@@ -221,7 +222,6 @@ public class CreateNormalDepartureController implements Initializable {
 
     private void loadData(ObservableList<Batch> batch) {
         batchView = FXCollections.observableArrayList();
-        //batchListAux = getListBatch();
         for (int j = 0; j < dispatchOrLine.size(); j++) {
             for (int i = 0; i < batch.size(); i++) {
                 String nameProd = getNameProd(batch.get(i).getId_product());
@@ -234,14 +234,33 @@ public class CreateNormalDepartureController implements Initializable {
                             batch.get(i).getType_batch(), nameProd,
                             Boolean.toString(batch.get(i).isState()), measure);
                     batchView.add(batchDisp);
-                }/* else {
-                    BatchDisplay batchDisp = new BatchDisplay(batch.get(i).getId_product(), batch.get(i).getQuantity(),
-                            batch.get(i).getBatch_cost(), batch.get(i).getArrival_date().toString(),
-                            batch.get(i).getExpiration_date().toString(), 0,
-                            batch.get(i).getType_batch(), nameProd,
-                            Boolean.toString(batch.get(i).isState()), measure);
+                }
+                /*else {
+                    int cd = dispatchOrLine.get(j).getId_prod();
+                    Batch batchAus = getBatch(dispatchOrLine.get(j).getId_prod());
+                    nameProd = getNameProd(batchAus.getId_product());
+                    meas = getIntMeasure(batchAus.getId_product());
+                    measure = getMeasure(meas);
+                    BatchDisplay batchDisp = new BatchDisplay(batchAus.getId_product(), dispatchOrLine.get(j).getQuantity(),
+                            batchAus.getBatch_cost(), batchAus.getArrival_date().toString(),
+                            batchAus.getExpiration_date().toString(), 0,
+                            batchAus.getType_batch(), nameProd,
+                            Boolean.toString(batchAus.isState()), measure);
                     batchView.add(batchDisp);
                 }*/
+            }
+            if (batch.isEmpty()) {
+                int cd = dispatchOrLine.get(j).getId_prod();
+                Batch batchAus = getBatch(dispatchOrLine.get(j).getId_prod());
+                String nameProd = getNameProd(batchAus.getId_product());
+                int meas = getIntMeasure(batchAus.getId_product());
+                String measure = getMeasure(meas);
+                BatchDisplay batchDisp = new BatchDisplay(batchAus.getId_product(), dispatchOrLine.get(j).getQuantity(),
+                        batchAus.getBatch_cost(), batchAus.getArrival_date().toString(),
+                        batchAus.getExpiration_date().toString(), 0,
+                        batchAus.getType_batch(), nameProd,
+                        Boolean.toString(batchAus.isState()), measure);
+                batchView.add(batchDisp);
             }
         }
         departureZoneTable.setItems(null);
@@ -270,7 +289,7 @@ public class CreateNormalDepartureController implements Initializable {
         ContextFX.getInstance().setId(id_selected);
         addBatch();
     }
-    
+
     private Batch getOneBatch(int idBatch) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -286,7 +305,7 @@ public class CreateNormalDepartureController implements Initializable {
         sessionFactory.close();
         return returnable;
     }
-    
+
     private void addBatch() {
         Integer idBatch = ContextFX.getInstance().getId();
         Batch auxi = getOneBatch(idBatch);
@@ -297,7 +316,7 @@ public class CreateNormalDepartureController implements Initializable {
                 String nameProd = getNameProd(batch.get(i).getId_product());
                 int meas = getIntMeasure(batch.get(i).getId_product());
                 String measure = getMeasure(meas);
-                BatchDisplay batchDisp = new BatchDisplay(batch.get(i).getId_batch(), batch.get(i).getQuantity(),
+                BatchDisplay batchDisp = new BatchDisplay(batch.get(i).getId_batch(), auxi.getQuantity(),
                         batch.get(i).getBatch_cost(), batch.get(i).getArrival_date().toString(),
                         batch.get(i).getExpiration_date().toString(), batch.get(i).getId_product(),
                         batch.get(i).getType_batch(), nameProd,
@@ -311,7 +330,7 @@ public class CreateNormalDepartureController implements Initializable {
                 }
             }
         }
-        
+
         batchDepartureTable.setItems(null);
         batchDepartureTable.setItems(batchView2);
         departureZoneTable.setItems(null);
@@ -378,6 +397,119 @@ public class CreateNormalDepartureController implements Initializable {
         sessionFactory.close();
     }
 
+    private DispatchOrder getDispatchOrder(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(DispatchOrder.class);
+        criteria.add(Restrictions.eq("id_dispatch_order", cod));
+        List<DispatchOrder> list = criteria.list();
+        DispatchOrder dpOrd = list.get(0);
+        session.close();
+        sessionFactory.close();
+        return dpOrd;
+    }
+
+    private void createDispatchOrder(DispatchOrder dpOrd) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        DispatchOrder dispatch = new DispatchOrder(dpOrd.getId_request_order(), dpOrd.getPriority(), "EN PROGRESO");
+        session.save(dispatch);
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
+
+        for (int j = 0; j < batchDepartureTable.getItems().size(); j++) {
+            for (int i = 0; i < dispatchOrLine.size(); i++) {
+                if (dispatchOrLine.get(i).getId_prod().compareTo(batchDepartureTable.getItems().get(i).getId_product().getValue()) != 0) {
+                    createDispatchOrderLine(dispatch.getId_dispatch_order(), dispatchOrLine.get(i).getId_prod(),
+                            dispatchOrLine.get(i).getQuantity());
+                }
+            }
+        }
+    }
+
+    private void createDispatchOrderLine(int codDispOrd, int prod, int quant) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        DispatchOrderLine dispOrdLine = new DispatchOrderLine(codDispOrd, prod, quant);
+        session.save(dispOrdLine);
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
+    }
+
+    private void updateDispatchOrder(int codDpOrd, String mess) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("update DispatchOrder set status = :newStatus where id_dispatch_order = :oldDpOrd");
+        query.setParameter("newStatus", mess);
+        query.setParameter("oldDpOrd", codDpOrd);
+        int result = query.executeUpdate();
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
+    }
+
+    private void updateDispatchOrder2(int codDpOrd, String mess) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("update DispatchOrder set status = :newStatus where id_request_order = :oldDpOrd");
+        query.setParameter("newStatus", mess);
+        query.setParameter("oldDpOrd", codDpOrd);
+        int result = query.executeUpdate();
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
+        updateReqOrder(codDpOrd, mess);
+    }
+
+    private void updateReqOrder(int codDpOrd, String mess) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query2 = session.createQuery("update RequestOrder set status = :newStatus where id_request_order = :oldDpOrd");
+        query2.setParameter("newStatus", mess);
+        query2.setParameter("oldDpOrd", codDpOrd);
+        int result2 = query2.executeUpdate();
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
+    }
+
+    private void updateBatchQ(int codBatch, int q) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("update Batch set quantity = :newQuantity where id_batch = :oldIdBatch");
+        query.setParameter("newQuantity", q);
+        query.setParameter("oldIdBatch", codBatch);
+        int result = query.executeUpdate();
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
+    }
+
     @FXML
     private void goCreateDeparture(ActionEvent event) throws IOException {
         String dispatchOrder = this.dispatchField.getValue();
@@ -387,13 +519,59 @@ public class CreateNormalDepartureController implements Initializable {
             Integer id_type_owner = 2;
             Integer id_batch = 0;
             Integer idReason = 1;
-            for (int i = 0; i < batchDepartureTable.getItems().size(); i++) {
-                id_batch = batchDepartureTable.getItems().get(i).getId_batch().getValue();
-                createDeparture(id_type_owner, id_owner, idReason, id_batch);
-                updateBatch(id_batch);
+            if (dispatchOrLine.size() != batchDepartureTable.getItems().size()) {
+                DispatchOrder dpOrd = getDispatchOrder(Integer.parseInt(this.dispatchField.getValue()));
+                String status = "INCOMPLETO";
+                updateDispatchOrder(dpOrd.getId_dispatch_order(), status);
+                createDispatchOrder(dpOrd);
+            } else {
+                int m = 0;
+                for (int i = 0; i < batchDepartureTable.getItems().size(); i++) {
+                    id_batch = batchDepartureTable.getItems().get(i).getId_batch().getValue();
+                    String nProd = batchDepartureTable.getItems().get(i).getLocation().getValue();
+                    int coProd = Product.getNProduct(nProd);
+                    Batch aux = getOneBatch(id_batch);
+                    int q = 0;
+                    if (dispatchOrLine.get(i).getId_prod() == aux.getId_product()) {
+                        q = dispatchOrLine.get(i).getQuantity();
+                    }
+                    createDeparture(id_type_owner, id_owner, idReason, id_batch);
+                    if (aux.getQuantity() == q) {
+                        m = m + 1;
+                        updateBatch(id_batch);
+                    } else if (aux.getQuantity() > q) {
+                        q = aux.getQuantity() - q;
+                        updateBatchQ(id_batch, q);
+                    } else if (aux.getQuantity() < q) {
+                        q = q - aux.getQuantity();
+                        updateDispatchOrderLine(Integer.parseInt(this.dispatchField.getValue()), q, coProd);
+                    }
+                    if (m == batchDepartureTable.getItems().size()) {
+                        DispatchOrder dpOrd = getDispatchOrder(Integer.parseInt(this.dispatchField.getValue()));
+                        String status = "ENTREGADO";
+                        updateDispatchOrder2(dpOrd.getId_request_order(), status);
+                    }
+                }
             }
             this.goListDepartures();
         }
+    }
+
+    private void updateDispatchOrderLine(int codDisp, int q, int coProd) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Query query = session.createQuery("update DispatchOrderLine set quantity = :newQuantity "
+                + "where id_dispatch_order = :oldDpOrder AND id_product = :oldIdProd");
+        query.setParameter("newQuantity", q);
+        query.setParameter("oldDpOrder", codDisp);
+        query.setParameter("oldIdProd", coProd);
+        int result = query.executeUpdate();
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
     }
 
     private void createDeparture(Integer id_type_owner, Integer id_owner, Integer idReason, Integer idBatch) {
@@ -449,6 +627,7 @@ public class CreateNormalDepartureController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(DispatchOrder.class);
+        criteria.add(Restrictions.eq("status", "EN PROGRESO"));
         ObservableList<DispatchOrder> returnable = FXCollections.observableArrayList();
         List list = criteria.list();
         for (int i = 0; i < list.size(); i++) {
