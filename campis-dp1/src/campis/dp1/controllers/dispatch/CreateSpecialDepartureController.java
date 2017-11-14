@@ -93,7 +93,7 @@ public class CreateSpecialDepartureController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        reasonField.getItems().addAll("Producto Dañado", "Producto Vencido", "Traslado de Almacén");
+        reasonField.getItems().addAll("Producto Dañado", "Producto Vencido", "Traslado hacia Almacén");
         batch = FXCollections.observableArrayList();
         batch = getListBatch();
         /* First Table */
