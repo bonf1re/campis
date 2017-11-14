@@ -88,6 +88,7 @@ public class EditRequestStatusController implements Initializable{
         List rsType = criteria.list();
         RequestStatus result = (RequestStatus)rsType.get(0);
         this.descriptionField.setText(result.getDescription());
+        session.close();
         sessionFactory.close();
     }
 }

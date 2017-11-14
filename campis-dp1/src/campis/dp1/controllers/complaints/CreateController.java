@@ -56,7 +56,11 @@ public class CreateController implements Initializable {
                 .add(Projections.property("id_request_order"),"id_request_order"))
                 .setResultTransformer(Transformers.aliasToBean(RequestOrder.class));
         List<RequestOrder> types = criteria.list();
+        
+        session.close();    
+        sessionFactory.close();
         return types;
+
     }
  
     @FXML

@@ -94,5 +94,8 @@ public class AttendComplaintController implements Initializable {
         id_request_oder = result.getId_request_order();
         this.requestField.setValue(result.getId_request_order());
         this.descriptionField.setText(result.getDescription());
+        session.close();
+        sessionFactory.close();
+        
     }
 }

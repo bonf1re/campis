@@ -151,6 +151,8 @@ public class EditVehicleController implements Initializable {
                 .add(Projections.property("name"),"name"))
                 .setResultTransformer(Transformers.aliasToBean(Warehouse.class));
         List<Warehouse> measures = criteria.list();
+        session.close();
+        sessionFactory.close();
         return measures;
     }
     
@@ -193,5 +195,8 @@ public class EditVehicleController implements Initializable {
                 }
             }
         });
+
+        session.close();
+        sessionFactory.close();
     } 
 }

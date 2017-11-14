@@ -130,6 +130,8 @@ public class CreateController implements Initializable {
         List rsMeasure = criteria.list();
         UnitOfMeasure result = (UnitOfMeasure)rsMeasure.get(0);
         codMeasure = result.getId_unit_of_measure();
+        session.close();
+        sessionFactory.close();
         return codMeasure;
     }
     
@@ -186,6 +188,8 @@ public class CreateController implements Initializable {
                 .add(Projections.property("description"),"description"))
                 .setResultTransformer(Transformers.aliasToBean(UnitOfMeasure.class));
         List<UnitOfMeasure> measures = criteria.list();
+        session.close();
+        sessionFactory.close();
         return measures;
     }
     
@@ -201,6 +205,8 @@ public class CreateController implements Initializable {
                 .add(Projections.property("description"),"description"))
                 .setResultTransformer(Transformers.aliasToBean(ProductType.class));
         List<ProductType> types = criteria.list();
+        session.close();
+        sessionFactory.close();
         return types;
     }
 

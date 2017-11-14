@@ -87,6 +87,7 @@ public class RequestOrderLine {
     public static RequestOrderLine getRequestOrderLine(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -95,6 +96,7 @@ public class RequestOrderLine {
         String descrip;
         List rsMeasure = criteria.list();
         RequestOrderLine result = (RequestOrderLine)rsMeasure.get(0);
+        session.close();
         sessionFactory.close();
 
         return result;

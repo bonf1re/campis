@@ -214,6 +214,9 @@ public class CreateRackController implements Initializable {
         for (int i = 0; i < racks.size(); i++) {
             crackList.add(new CRack((Rack) racks.get(i)));
         }
+        session.close();
+        sessionFactory.close();
+        
         return crackList;
     }
 

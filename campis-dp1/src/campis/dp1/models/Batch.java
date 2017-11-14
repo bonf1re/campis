@@ -181,4 +181,11 @@ public class Batch {
         this.heritage = heritage;
     }
     
+    public void printBatch(){
+        System.out.println("Batch with id: "+this.id_batch);
+        System.out.println("-Id Product: "+this.id_product);
+        System.out.println("-State: "+this.state);
+        System.out.println("-Heritage: "+this.heritage);
+    }
+    
 }

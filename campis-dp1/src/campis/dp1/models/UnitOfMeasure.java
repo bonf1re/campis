@@ -72,6 +72,7 @@ public class UnitOfMeasure {
         String descrip;
         List rsMeasure = criteria.list();
         UnitOfMeasure result = (UnitOfMeasure)rsMeasure.get(0);
+        session.close();
         sessionFactory.close();
 
         return result;

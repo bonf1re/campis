@@ -208,45 +208,9 @@ public class EntryMoveRouteController implements Initializable{
             this.routing_data.set((int)this.routing_data.get(0), r_d_iterator);
         }
         
-        
-//        for (int i=0; i<batchesList.size();i++) {
-            //Batch batch = new Batch(batchesList.get(i));
-            //Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-            // zone update
-//            Query zone_q = session.createQuery(
-//                    "update WarehouseZone set free = :s_status "+" where id_zone = :zoneId");
-//            zone_q.setParameter("s_status",false);
-//            zone_q.setParameter("zoneId", batchesList.get(i).getZone().getId_zone());
-//            zone_q.executeUpdate();
-            
-//            if (batch.getId_batch()==-1){ // batch insertion
-//                // batch save
-//                batch.setType_batch(3);
-//                int id_batch = (int) session.save(new Batch(batch));
-//                int id_parent_batch = singleHer(batch);
-//                Query query = session.createSQLQuery("UPDATE campis.batch SET type_batch = -1 WHERE id_batch = "+id_parent_batch);
-//                query.executeUpdate();
-//                // move save
-//                WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), batchesList.get(i).getZone().getId_zone(), this.vehicle_id, 1, id_warehouse,id_batch);
-//                session.save(move);
-//                continue;
-//            }            
-//            // batch update
-//            Query query = session.createQuery(
-//                "update Batch set type_batch = :t_batch " + " where id_batch = :batchId ");
-//            query.setParameter("t_batch", 3);
-//            query.setParameter("batchId", batch.getId_batch());
-//            query.executeUpdate();
-//            // move save
-//            WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), batchesList.get(i).getZone().getId_zone(), this.vehicle_id, 1, id_warehouse,batch.getId_batch());
-//            session.save(move);
-//        }
         session.getTransaction().commit();
         session.close();
-        sessionFactory.close();
-        //goEntryMoveList();
-//        aux.set(4, true);
-//        this.routing_data.set((int)this.routing_data.get(0), aux);
+        sessionFactory.close();        
     }
     
     @FXML

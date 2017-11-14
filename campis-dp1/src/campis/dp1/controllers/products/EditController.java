@@ -124,6 +124,8 @@ public class EditController implements Initializable{
         List rsMeasure = criteria.list();
         UnitOfMeasure result = (UnitOfMeasure)rsMeasure.get(0);
         codMeasure = result.getId_unit_of_measure();
+        session.close();
+        sessionFactory.close();
         return codMeasure;
     }
     
@@ -190,6 +192,8 @@ public class EditController implements Initializable{
         List rsMeasure = criteria.list();
         UnitOfMeasure result = (UnitOfMeasure)rsMeasure.get(0);
         descrip = result.getDescription();
+        session.close();
+        sessionFactory.close();
         return descrip;
     }
     
@@ -260,6 +264,9 @@ public class EditController implements Initializable{
         criteria.add(Restrictions.eq("id_product",id));
         List rsType = criteria.list();
         Product result = (Product)rsType.get(0);
+        session.close();
+        sessionFactory.close();
+        
         this.nameField.setText(result.getName());
         this.descripField.setText(result.getDescription());
         String measure = getMeasure(result.getId_unit_of_measure());
