@@ -71,7 +71,7 @@ public class CreateRackController implements Initializable {
         main.showListRacks();
     }
 
-    private List<Rack> getRacks() {
+    private List<Rack> getRacks(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
@@ -79,6 +79,7 @@ public class CreateRackController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Rack.class);
+        criteria.add(Restrictions.eq("id_warehouse", cod));
         List<Rack> list = criteria.list();
         List<Rack> returnable = list;
         session.close();
@@ -94,7 +95,7 @@ public class CreateRackController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Warehouse.class);
-
+        criteria.add(Restrictions.eq("id_warehouse", warehouse_id));
         List<Warehouse> list = criteria.list();
         Warehouse returnable = list.get(0);
         session.close();
@@ -105,7 +106,7 @@ public class CreateRackController implements Initializable {
     private boolean verifyRacks() {
         boolean returnable = TRUE;
         List<Rack> racks;
-        racks = getRacks();
+        racks = getRacks(warehouse_id);
         Warehouse dimensions = getWarehouseDimensions();
         if (this.orientationField.getValue() == 0) {
             Integer x_pos = Integer.parseInt(x_Field.getText());
@@ -239,7 +240,7 @@ public class CreateRackController implements Initializable {
             GraphicsUtils gu = new GraphicsUtils();
             ArrayList<CRack> crackListAux = new ArrayList<>();
             crackListAux = getCRacks();
-            Rack rackAux = new Rack(1, Integer.parseInt(x_Field.getText()), Integer.parseInt(y_Field.getText()),
+            Rack rackAux = new Rack(this.warehouse_id, Integer.parseInt(x_Field.getText()), Integer.parseInt(y_Field.getText()),
                     Integer.parseInt(columnsField.getText()), Integer.parseInt(floorsField.getText()),
                     orientationField.getValue());
             CRack cRackAux = new CRack(rackAux);

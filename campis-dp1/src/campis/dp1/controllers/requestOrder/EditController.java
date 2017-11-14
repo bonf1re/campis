@@ -366,7 +366,7 @@ public class EditController implements Initializable {
             baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
             baseTotalAmount = baseTotalAmount + base_amount;
             discountTotal = ContextFX.getInstance().getDiscount();
-            discountTotal = discountTotal + baseTotalAmount * disc;
+            discountTotal = discountTotal + base_amount * disc;
             totalAmount = baseTotalAmount - discountTotal;
             float f = getFreight(distr);
             freightTotal = freightTotal + baseTotalAmount * f;
@@ -445,7 +445,7 @@ public class EditController implements Initializable {
         baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
         baseTotalAmount = baseTotalAmount + base_amount;
         discountTotal = ContextFX.getInstance().getDiscount();
-        discountTotal = discountTotal + baseTotalAmount * disc;
+        discountTotal = discountTotal + base_amount * disc;
         totalAmount = baseTotalAmount - discountTotal;
         ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
         ContextFX.getInstance().setTotAmount(totalAmount);
