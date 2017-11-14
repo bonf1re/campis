@@ -64,6 +64,8 @@
             <Button layoutX="360.0" layoutY="48.0" mnemonicParsing="false" onAction="#goDepartureMoveRoute" text="Siguiente" />
             <Button layoutX="484.0" layoutY="48.0" mnemonicParsing="false" onAction="#goWhDepartureMoveList" text="Cancelar" />
             <Button layoutX="225.0" layoutY="-18.0" mnemonicParsing="false" onAction="#searchProds" text="Agregar Producto/s" />
+            <JFXComboBox fx:id="cbWh" layoutX="689.0" layoutY="1.0" prefHeight="26.0" prefWidth="145.0" />
+            <Text layoutX="615.0" layoutY="19.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Almacen:" wrappingWidth="67.52587890625" />
          </children>
       </Pane>
    </bottom>
