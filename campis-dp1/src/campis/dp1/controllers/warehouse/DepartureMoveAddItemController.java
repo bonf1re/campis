@@ -36,6 +36,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Projections;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 import org.hibernate.transform.Transformers;
 
 /**
@@ -220,7 +221,9 @@ public class DepartureMoveAddItemController implements Initializable {
             Criteria criteria = session.createCriteria(Product.class);
             criteria.add(Restrictions.eq("id_product", selected_id));
             Product prod =  (Product) criteria.list().get(0);
-            ProductWH_Move ppp = new ProductWH_Move(prod, Integer.parseInt(quantityField.getText()));
+            Query query = session.createSQLQuery("SELECT p_stock FROM campis.productxwarehouse WHERE id_product ="+prod.getId_product());
+            int stock = (int) query.list().get(0);
+            ProductWH_Move ppp = new ProductWH_Move(prod, Integer.parseInt(quantityField.getText()),stock);
             ContextFX.getInstance().setId(warehouse_id);
             ContextFX.getInstance().setMode(1);
             ArrayList<Object> aux_pol = ContextFX.getInstance().getPolymorphic_list();

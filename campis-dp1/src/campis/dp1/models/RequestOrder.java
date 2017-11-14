@@ -38,6 +38,7 @@ public class RequestOrder {
     Integer priority;
     Integer id_district;
     String address;
+    
 
     public RequestOrder() {
         super();

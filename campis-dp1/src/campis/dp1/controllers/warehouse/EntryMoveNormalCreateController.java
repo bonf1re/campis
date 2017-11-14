@@ -545,7 +545,6 @@ public class EntryMoveNormalCreateController implements Initializable{
             aux.add(r_zones);
             aux.add(vh);
             System.out.println(r_zones.toString());
-            System.out.println("Puta madre");
             ArrayList<Coord> route =generateRoute(r_zones,session);
             aux.add(new ArrayList<Coord>(route));
             aux.add(false); // to know whether this move has been saved or not
