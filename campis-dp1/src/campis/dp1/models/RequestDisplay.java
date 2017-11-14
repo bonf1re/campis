@@ -22,14 +22,16 @@ public class RequestDisplay {
     private final FloatProperty total_amount;
     private final StringProperty nom_client;
     private final IntegerProperty priority;
+    private final StringProperty nom_district;
     
     public RequestDisplay(Integer codReq, String nomCli, float totAmount,
-                            String status, Integer priority) {
+                            String status, Integer priority, String nomDistrict) {
         this.id_request = new SimpleIntegerProperty(codReq);
         this.status = new SimpleStringProperty(status);
         this.total_amount = new SimpleFloatProperty(totAmount);
         this.nom_client = new SimpleStringProperty(nomCli);
         this.priority = new SimpleIntegerProperty(priority);
+        this.nom_district = new SimpleStringProperty(nomDistrict);
     }
     
     public IntegerProperty idRequestProperty() {
@@ -50,5 +52,9 @@ public class RequestDisplay {
     
     public IntegerProperty priority() {
         return priority;
+    }
+    
+    public StringProperty nomDistrict() {
+        return nom_district;
     }
 }
