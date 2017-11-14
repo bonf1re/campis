@@ -271,6 +271,9 @@ public class RouteGen {
             if ((grasp_counter==1) || (real_returnable.getCost()>returnable.getCost())) real_returnable = new Route(returnable);
                 continue;
         }
+        // OPT 2
+        OPT2_coords(real_returnable);
+        
         return real_returnable;
     }
     
@@ -379,4 +382,47 @@ public class RouteGen {
         return true;
     }
 
+    private void OPT2_coords(Route real_returnable) {
+        if (real_returnable.getPaths().size()<4) return;
+        
+        // For for in for
+        ArrayList<Coord> route_cp = new ArrayList<>(real_returnable.getPaths());
+        for (int i = 0; i <route_cp.size()-4; i+=4) {
+            //  --d    b
+            //      \/ |
+            //     /  \|
+            //  --a    c
+            // Bc of the dict, here only should be nodes interacting with themselves
+            Route a_c=calculateRoute(route_cp.get(i), route_cp.get(i+2));
+            Route c_b=calculateRoute(route_cp.get(i+2), route_cp.get(i+1));
+            Route b_d=calculateRoute(route_cp.get(i+1), route_cp.get(i+3));
+            if ((a_c.getCost()+ 
+                 c_b.getCost()+
+                 b_d.getCost())
+                    
+                    <
+                    
+                    (calculateRoute(route_cp.get(i), route_cp.get(i+1)).getCost()+
+                    calculateRoute(route_cp.get(i+1), route_cp.get(i+2)).getCost()+
+                    calculateRoute(route_cp.get(i+2), route_cp.get(i+3)).getCost())){
+                ArrayList<Coord>  aux_coords = new ArrayList<>();
+                aux_coords.addAll(a_c.getPaths());
+                aux_coords.addAll(c_b.getPaths());
+                aux_coords.addAll(b_d.getPaths());
+                int diff =aux_coords.size()-6;
+                for (int j = 0; j < 4; j++) {
+                    route_cp.remove(i);
+                }
+                route_cp.addAll(i, aux_coords);
+                i+=diff;
+            }
+        }
+        
+        int r_size = route_cp.size();
+        real_returnable = new Route();
+        for (int i = 0; i < r_size-1; i++) {
+            real_returnable.addPath(route_cp.get(i));
+        }
+        
+    }
 }
