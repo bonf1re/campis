@@ -96,7 +96,7 @@ public class WarehouseEditController implements Initializable {
         this.x=Integer.parseInt(this.lengthField.getText());
         this.real_map=gu.initMap(this.y,this.x);
         this.crackList=gu.putCRacks(warehouse_id, real_map);
-        //gu.drawVisualizationMap(gc,this.y,this.x,this.real_map);
+        gu.drawVisualizationMap(gc,this.y,this.x,this.real_map);
     }
 
 
