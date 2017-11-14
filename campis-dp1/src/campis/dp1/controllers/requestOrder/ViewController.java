@@ -13,16 +13,15 @@ import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.RequestOrder;
 import campis.dp1.models.RequestOrderLine;
 import campis.dp1.models.SaleCondition;
-import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
+import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -175,6 +174,9 @@ public class ViewController implements Initializable {
     }
 
     private ObservableList<SaleCondition> getDiscount(int cod) {
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
@@ -183,6 +185,9 @@ public class ViewController implements Initializable {
         session.beginTransaction();
         Criteria criteria = session.createCriteria(SaleCondition.class);
         criteria.add(Restrictions.eq("id_to_take", cod));
+        criteria.add(Restrictions.ge("initial_date", today.getTime()));
+        criteria.add(Restrictions.le("final_date", today.getTime()));
+        
         List<SaleCondition> list = criteria.list();
         ObservableList<SaleCondition> returnable;
         returnable = FXCollections.observableArrayList();
@@ -198,8 +203,11 @@ public class ViewController implements Initializable {
         n_discount = 1;
         n_tocount = 1;
         Integer n_d_aux, n_c_aux;
+
+        
         Float returnable = Float.valueOf(0);
         for (int i = 0; i < discounts.size(); i++) {
+            
             int type = discounts.get(i).getId_sale_condition_type();
             if (type == 1) {
                 int maxQ = discounts.get(i).getLimits();

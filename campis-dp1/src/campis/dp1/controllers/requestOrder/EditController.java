@@ -398,6 +398,9 @@ public class EditController implements Initializable {
     }
 
     private ObservableList<SaleCondition> getDiscount(int cod) {
+        Calendar today = Calendar.getInstance();
+        today.set(Calendar.HOUR_OF_DAY, 0);
+        
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
@@ -406,6 +409,8 @@ public class EditController implements Initializable {
         session.beginTransaction();
         Criteria criteria = session.createCriteria(SaleCondition.class);
         criteria.add(Restrictions.eq("id_to_take", cod));
+        criteria.add(Restrictions.ge("initial_date", today.getTime()));
+        criteria.add(Restrictions.le("final_date", today.getTime()));
         List<SaleCondition> list = criteria.list();
         ObservableList<SaleCondition> returnable;
         returnable = FXCollections.observableArrayList();
