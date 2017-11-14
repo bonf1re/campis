@@ -1,0 +1,2 @@
+INSERT INTO campis.users VALUES (666, 'Carga', 'Masiva', 'bulki', 'bul@lol.com', '2017-10-27 23:53:16.454', true, 1593, '2017-10-27 23:53:16.454', 'bulki');
+INSERT INTO campis.role VALUES (666, 'Bulki');

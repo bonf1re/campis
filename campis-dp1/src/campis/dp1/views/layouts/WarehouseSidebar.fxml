@@ -5,8 +5,8 @@
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="95.0" styleClass="container" stylesheets="@../../assets/css/sidebar.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.WarehouseSidebarController">
    <children>
-      <JFXButton onAction="#goWhList" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Almacén" />
-      <JFXButton onAction="#goListProduct" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Producto" />
-      <JFXButton onAction="#goListProductTypes" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Tipo de Producto" textAlignment="CENTER" wrapText="true" />
+      <JFXButton fx:id="whButton" onAction="#goWhList" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Almacén" />
+      <JFXButton fx:id="productButton" onAction="#goListProduct" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Producto" />
+      <JFXButton fx:id="tipoProductButton" onAction="#goListProductTypes" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Tipo de Producto" textAlignment="CENTER" wrapText="true" />
    </children>
 </VBox>

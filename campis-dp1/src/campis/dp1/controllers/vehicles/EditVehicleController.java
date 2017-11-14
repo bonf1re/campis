@@ -18,6 +18,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
@@ -172,5 +174,24 @@ public class EditVehicleController implements Initializable {
         this.lblSpeed.setText(Integer.toString(v.getSpeed()));
         this.lblPlate.setText(v.getPlate());
         
+        lblWeight.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    lblWeight.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+        
+        lblSpeed.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue,
+                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    lblSpeed.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
     } 
 }

@@ -18,6 +18,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import javafx.scene.control.Button;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -43,7 +44,8 @@ public class ListController implements Initializable{
     private ObservableList<RequestDisplay> requestView;
     String name;
     private int selected_id;
-    
+    private int id_role;
+
     @FXML
     private JFXTextField searchField;
     @FXML
@@ -58,6 +60,14 @@ public class ListController implements Initializable{
     private TableColumn<RequestDisplay, String> stateColumn;
     @FXML
     private TableColumn<RequestDisplay, Integer> priorityColumn;
+    @FXML
+    private Button createButton;
+
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private Button deleteButton;
     
     @FXML
     private void goCreateRequestOrder() throws IOException {
@@ -67,6 +77,7 @@ public class ListController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.selected_id = 0;
+        ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "request_orders");
         requestTable.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
           if(newValue == null) {

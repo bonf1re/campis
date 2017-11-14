@@ -17,6 +17,7 @@ import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
+import javafx.scene.control.Button;
 import java.util.logging.Logger;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -38,11 +39,18 @@ public class ListRoleController implements Initializable{
     private ObservableList<Role> roles;
     private ObservableList<RoleDisplay> rolesView;
     private int selected_id;
+    private int id_role;
 
     @FXML
     private TableView<RoleDisplay> tableRole;
     @FXML
     private TableColumn<RoleDisplay,String> descriptionColumn;
+    @FXML
+    private Button createButton;
+    @FXML
+    private Button editButton;
+    @FXML
+    private Button deleteButton;
 
     @FXML
     private void goCreateRole() throws IOException {
@@ -71,6 +79,7 @@ public class ListRoleController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "roles");
         tableRole.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
             if (newValue == null) {

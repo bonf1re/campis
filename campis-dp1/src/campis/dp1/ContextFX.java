@@ -13,6 +13,9 @@ import javafx.collections.ObservableList;
 import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
+import campis.dp1.models.Permission;
+import campis.dp1.models.View;
+import javafx.scene.control.Button;
 
 /**
  *
@@ -38,6 +41,7 @@ public class ContextFX {
     Float baseTotAmount = 0.0f;
     Float totAmount = 0.0f;
     Float discount = 0.0f;
+    Float freight = 0.0f;
     Integer num = 0; // Useful to save any integer variable.
     Integer var = 0;
     String word = null;
@@ -65,7 +69,17 @@ public class ContextFX {
     public void setPolymorphic_list(ArrayList<Object> polymorphic_list) {
         this.polymorphic_list = new ArrayList<>(polymorphic_list);
     }
-     
+
+    public void modifyValidation(Button createButton, Button editButton, Button deleteButton, int id_role, String view) {
+        id_role = (ContextFX.getInstance().getUser().getId_role());
+        View whView = View.getView(view);
+
+        if (!Permission.canModify(id_role, whView.getId_view())) {
+            createButton.setVisible(false);
+            editButton.setVisible(false);
+            deleteButton.setVisible(false);
+        }
+    } 
 
     int id_user;
     // Es un desmadre este contexto
@@ -195,7 +209,16 @@ public class ContextFX {
     public void setDiscount(Float discount) {
         this.discount = discount;
     }
-
+    
+    public Float getFreight() {
+        Float returnable = new Float(this.freight);
+        return returnable;
+    }
+    
+    public void setFreight(Float freight) {
+        this.freight = freight;
+    }
+    
     public ObservableList<ProductDisplay> getTempList() {
         ObservableList<ProductDisplay> returnable = this.tempList;
         return returnable;

@@ -32,10 +32,10 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button layoutX="832.0" layoutY="272.0" mnemonicParsing="false" onAction="#goNewDeparture" prefHeight="40.0" prefWidth="105.0" text="Salida Especial" />
+            <Button fx:id="spButton" layoutX="832.0" layoutY="272.0" mnemonicParsing="false" onAction="#goNewDeparture" prefHeight="40.0" prefWidth="105.0" text="Salida Especial" />
             <Button layoutX="832.0" layoutY="209.0" mnemonicParsing="false" onAction="#goVisualizeDeparture" prefHeight="41.0" prefWidth="105.0" text="Ver detalle" />
-            <Button layoutX="832.0" layoutY="395.0" mnemonicParsing="false" onAction="#deleteDispatch" prefHeight="42.0" prefWidth="106.0" text="Eliminar" />
-            <Button layoutX="832.0" layoutY="332.0" mnemonicParsing="false" onAction="#goNormalDispatch" prefHeight="42.0" prefWidth="106.0" text="Salida Despacho" />
+            <Button fx:id="deleteButton" layoutX="832.0" layoutY="395.0" mnemonicParsing="false" onAction="#deleteDispatch" prefHeight="42.0" prefWidth="106.0" text="Eliminar" />
+            <Button fx:id="depButton" layoutX="832.0" layoutY="332.0" mnemonicParsing="false" onAction="#goNormalDispatch" prefHeight="42.0" prefWidth="106.0" text="Salida Despacho" />
          </children>
       </AnchorPane>
    </right>

@@ -32,7 +32,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Button layoutX="840.0" layoutY="258.0" mnemonicParsing="false" onAction="#goEditRequestStatus" prefHeight="35.0" prefWidth="85.0" text="Editar" />
+            <Button fx:id="editButton" layoutX="840.0" layoutY="258.0" mnemonicParsing="false" onAction="#goEditRequestStatus" prefHeight="35.0" prefWidth="85.0" text="Editar" />
          </children>
       </AnchorPane>
    </center>

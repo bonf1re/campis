@@ -24,6 +24,7 @@ import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
 
 public class AddPermissionController implements Initializable {
@@ -49,13 +50,12 @@ public class AddPermissionController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Permission.class);
+        criteria.add(Restrictions.eq("id_role",id));
         List<Permission> list = criteria.list();
         ObservableList<Permission> returnable;
         returnable = FXCollections.observableArrayList();
         for (int i = 0; i < list.size(); i++) {
-            if (list.get(i).getId_role().equals(id)) {
-                returnable.add(list.get(i));
-        	}
+                returnable.add((Permission)list.get(i));
         }
         session.close();
         sessionFactory.close();

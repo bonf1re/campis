@@ -22,12 +22,15 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import campis.dp1.models.Permission;
+import campis.dp1.models.View;
 import org.hibernate.criterion.Restrictions;
 
 /**
@@ -39,14 +42,15 @@ public class ListRackController implements Initializable{
     private ObservableList<Rack> racks;
     private ObservableList<RackDisplay> racksView;
     private int selected_id;
+    private int id_role;
     private int warehouse_id;
-    
+
     @FXML
     private void goNewRack() throws IOException {
         ContextFX.getInstance().setId(warehouse_id);
         main.showNewRack();
     }
-    
+
     @FXML
     private void goEditRack(ActionEvent event) throws IOException {
         if (selected_id > 0) {
@@ -70,6 +74,14 @@ public class ListRackController implements Initializable{
     private TableColumn<RackDisplay, Integer> numFloorsCol;
     @FXML
     private TableColumn<RackDisplay, Integer> orientationCol;
+    @FXML
+    private Button createButton;
+
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private Button deleteButton;
     
     private ObservableList<Rack> getRacks() {
         Configuration configuration = new Configuration();
@@ -149,6 +161,7 @@ public class ListRackController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "racks");
         this.warehouse_id = ContextFX.getInstance().getId();
         tablaRacks.getSelectionModel().selectedItemProperty().addListener(
             (observable, oldValue, newValue) -> {

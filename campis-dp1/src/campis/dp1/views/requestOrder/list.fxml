@@ -44,9 +44,9 @@
       <AnchorPane prefHeight="600.0" prefWidth="179.0" BorderPane.alignment="CENTER">
          <children>
             <Button layoutX="46.0" layoutY="253.0" mnemonicParsing="false" onAction="#goViewRequest" prefHeight="35.0" prefWidth="88.0" text="Visualizar" />
-            <Button layoutX="46.0" layoutY="191.0" mnemonicParsing="false" onAction="#goCreateRequestOrder" prefHeight="35.0" prefWidth="88.0" text="Nuevo" />
-            <Button layoutX="46.0" layoutY="317.0" mnemonicParsing="false" onAction="#goEditRequest" prefHeight="35.0" prefWidth="88.0" text="Modificar" />
-            <Button layoutX="46.0" layoutY="377.0" mnemonicParsing="false" onAction="#deleteRequest" prefHeight="35.0" prefWidth="88.0" text="Eliminar" />
+            <Button fx:id="createButton" layoutX="46.0" layoutY="191.0" mnemonicParsing="false" onAction="#goCreateRequestOrder" prefHeight="35.0" prefWidth="88.0" text="Nuevo" />
+            <Button fx:id="editButton" layoutX="46.0" layoutY="317.0" mnemonicParsing="false" onAction="#goEditRequest" prefHeight="35.0" prefWidth="88.0" text="Modificar" />
+            <Button fx:id="deleteButton" layoutX="46.0" layoutY="377.0" mnemonicParsing="false" onAction="#deleteRequest" prefHeight="35.0" prefWidth="88.0" text="Eliminar" />
          </children>
       </AnchorPane>
    </right>

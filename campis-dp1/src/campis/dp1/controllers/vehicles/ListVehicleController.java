@@ -38,6 +38,7 @@ import org.hibernate.criterion.Restrictions;
 public class ListVehicleController implements Initializable {
     private Main main;
     private int selected_id;
+    private int id_role;
     private int warehouse_id;
     private ObservableList<Vehicle> vehiculos;
     private ObservableList<VehicleDisplay> vehiculosView;
@@ -54,7 +55,14 @@ public class ListVehicleController implements Initializable {
     private TableColumn<VehicleDisplay, String> activeColumn;
     @FXML
     private TableColumn<VehicleDisplay, String> plateColumn;
-  
+    @FXML
+    private Button newButton;
+
+    @FXML
+    private Button editButton;
+
+    @FXML
+    private Button deleteButton;
     @FXML
     private void goCreateVehicle() throws IOException {
         ContextFX.getInstance().setId(this.warehouse_id);
@@ -80,6 +88,7 @@ public class ListVehicleController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        ContextFX.getInstance().modifyValidation(newButton, editButton, deleteButton, id_role, "vehicles");
         this.warehouse_id = ContextFX.getInstance().getId();
         tableVehicle.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
