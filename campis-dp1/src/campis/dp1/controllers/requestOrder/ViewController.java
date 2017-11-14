@@ -241,7 +241,7 @@ public class ViewController implements Initializable {
             baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
             baseTotalAmount = baseTotalAmount + base_amount;
             discountTotal = ContextFX.getInstance().getTotAmount();
-            discountTotal = discountTotal + baseTotalAmount * disc;
+            discountTotal = discountTotal + base_amount * disc;
             totalAmount = baseTotalAmount - discountTotal;
             float f = getFreight(distr);
             freightTotal = freightTotal + baseTotalAmount * f;
