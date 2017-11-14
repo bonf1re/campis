@@ -189,11 +189,13 @@ public class CreateRackController implements Initializable {
                         session.save(zone);
                     }
                 }
-            }
+                
+                session.getTransaction().commit();
+                session.close();
+                sessionFactory.close();
+            } 
 
-            session.getTransaction().commit();
-            session.close();
-            sessionFactory.close();
+            
             this.goListRacks();
         }
     }

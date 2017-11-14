@@ -33,7 +33,8 @@ public class Rack {
         super();
     }
     
-    public Rack(Integer id_warehouse, Integer pos_x, Integer pos_y, Integer n_columns, Integer n_floors, Integer orientation) {
+    public Rack(Integer id_warehouse, Integer pos_x, Integer pos_y, 
+                Integer n_columns, Integer n_floors, Integer orientation) {
         this.id_warehouse = id_warehouse;
         this.pos_x =  pos_x;
         this.pos_y = pos_y;
