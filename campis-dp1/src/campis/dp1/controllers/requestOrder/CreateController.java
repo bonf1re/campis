@@ -124,6 +124,10 @@ public class CreateController implements Initializable {
 
     @FXML
     private void goListRequestOrder() throws IOException {
+        productsView.clear();
+        ContextFX.getInstance().setTempList(productsView);
+        ContextFX.getInstance().setBaseTotAmount(0f);
+        ContextFX.getInstance().setTotAmount(0f);
         main.showListRequestOrder();
     }
 
@@ -311,6 +315,7 @@ public class CreateController implements Initializable {
         productsView = ContextFX.getInstance().getTempList();
         tablaProd.setItems(null);
         tablaProd.setItems(productsView);
+        
     }
 
     private List<Client> getClients() {
@@ -349,6 +354,7 @@ public class CreateController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        
         this.selected_id = 0;
         tablaProd.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
