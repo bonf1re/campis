@@ -156,6 +156,6 @@ public class MainViewController implements Initializable {
     @FXML
     private void goShowUser() throws IOException {
         ContextFX.getInstance().setId(ContextFX.getInstance().getUser().getId_user());
-        main.showViewUser();
+        main.showLoggedUser();
     }
 }
