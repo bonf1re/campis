@@ -10,8 +10,12 @@ import campis.dp1.models.Coord;
 import campis.dp1.models.Rack;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.GraphicsContext;
+import javafx.scene.control.Alert;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.paint.Color;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -280,5 +284,43 @@ public class GraphicsUtils {
     private boolean overbound(int ini_y, int ini_x, Coord c1, Coord c2){
         return ((ini_y>=c1.y && ini_y<=c2.y) || (ini_y>=c2.y && ini_y<=c1.y))
                 && ((ini_x>=c1.x && ini_x<=c2.x) || (ini_x>=c2.x && ini_x<=c1.x));
+    }
+    
+    // Buttons section
+    
+    public boolean popup2Options(String btext_header, String btext_content, String btext_confir, String btext_cancel){
+        ButtonType b_ok = new ButtonType(btext_confir, ButtonBar.ButtonData.OK_DONE);
+        ButtonType b_cancel = new ButtonType(btext_cancel, ButtonBar.ButtonData.CANCEL_CLOSE);
+        Alert alert = new Alert(Alert.AlertType.WARNING,
+                                btext_content,
+                                b_ok,
+                                b_cancel);
+        alert.setTitle("C A M P I S");
+        alert.setHeaderText(btext_header);
+        Optional<ButtonType> result = alert.showAndWait();
+        if (result.isPresent() && result.get() == b_ok) {
+            return true;
+        }
+        return false;
+    }
+    
+    public void popupNotif(String btext_header, String btext_content, String btext_confir){
+        ButtonType b_ok = new ButtonType(btext_confir, ButtonBar.ButtonData.OK_DONE);
+        Alert alert = new Alert(Alert.AlertType.INFORMATION,
+                                   btext_content,
+                                   b_ok);
+        alert.setTitle("C A M P I S");
+        alert.setHeaderText(btext_header);
+        alert.showAndWait();
+    }
+    
+    public void popupError(String btext_header, String btext_content, String btext_confir){
+        ButtonType b_ok = new ButtonType(btext_confir, ButtonBar.ButtonData.OK_DONE);
+        Alert alert = new Alert(Alert.AlertType.ERROR,
+                                   btext_content,
+                                   b_ok);
+        alert.setTitle("C A M P I S");
+        alert.setHeaderText(btext_header);
+        alert.showAndWait();
     }
 }
