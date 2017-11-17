@@ -42,11 +42,11 @@ public class editController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.dolarField.setText(Float.toString(ContextFX.getInstance().getDollar()));
+        this.dolarField.setText(Float.toString((ContextFX.getInstance().getDollar()*100)/100));
         this.dolarField.disableProperty().set(true);
-        this.euroField.setText(Float.toString(ContextFX.getInstance().getEuro()));
+        this.euroField.setText(Float.toString((ContextFX.getInstance().getEuro()*100)/100));
         this.euroField.disableProperty().set(true);
-        this.igvField.setText(Float.toString(ContextFX.getInstance().getIGV()));
+        this.igvField.setText(Float.toString((ContextFX.getInstance().getIGV()*100)/100));
         this.igvField.disableProperty().set(true);
     }
 
