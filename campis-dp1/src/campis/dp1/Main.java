@@ -700,6 +700,13 @@ public class Main extends Application {
         mainLayout.setCenter(routing);
     }
     
+    public static void showCurrencyIGV() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/currencyIGV/edit.fxml"));
+        BorderPane currency = loader.load();
+        mainLayout.setCenter(currency);
+    }
+    
     public static void showBulkLoad() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/bulkLoad/execute.fxml"));

@@ -5,9 +5,14 @@ import javafx.fxml.FXML;
 import campis.dp1.Main;
 import java.io.IOException;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 
 /**
@@ -22,13 +27,34 @@ public class MainViewController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
+            getCurrencyIGV();
             user_name.setText(ContextFX.getInstance().getUser().getFirstname());
         } catch(NullPointerException e) {
         }
 
     }
     
-
+    private void getCurrencyIGV() {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr = "SELECT * FROM campis.parameters;";
+        SQLQuery qry = session.createSQLQuery(qryStr);
+        List<Object[]> rows = qry.list();
+        session.close();
+        sessionFactory.close();
+        for (Object[] row : rows) {
+            float igv = Float.parseFloat(row[0].toString());
+            float dol = Float.parseFloat(row[1].toString());
+            float eur = Float.parseFloat(row[3].toString());
+            ContextFX.getInstance().setIGV(igv);
+            ContextFX.getInstance().setDollar(dol);
+            ContextFX.getInstance().setEuro(eur);
+        }
+    }
     
 
     @FXML

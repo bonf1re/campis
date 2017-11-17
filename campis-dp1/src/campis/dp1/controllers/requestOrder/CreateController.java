@@ -66,6 +66,7 @@ public class CreateController implements Initializable {
     float freightTotal = 0;
     Integer n_discount = 1;
     Integer n_tocount = 1;
+    float IGV = 0.0f;
     
     String message = "";
     private ObservableList<Product> products;
@@ -203,7 +204,6 @@ public class CreateController implements Initializable {
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY, 0);
         
-        
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
@@ -304,6 +304,7 @@ public class CreateController implements Initializable {
         ContextFX.getInstance().setTotAmount(totalAmount);
         this.subtotalField.setText(Float.toString(baseTotalAmount));
         this.discountField.setText(Float.toString(discountTotal));
+        totalAmount = totalAmount*IGV;
         this.amountField.setText(Float.toString(totalAmount));
         ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
                 products.get(0).getDescription(), products.get(0).getP_stock(), quantity,
@@ -315,7 +316,6 @@ public class CreateController implements Initializable {
         productsView = ContextFX.getInstance().getTempList();
         tablaProd.setItems(null);
         tablaProd.setItems(productsView);
-        
     }
 
     private List<Client> getClients() {
@@ -364,6 +364,7 @@ public class CreateController implements Initializable {
                     this.selected_id = newValue.codProdProperty().getValue().intValue();
                 });
         try {
+            IGV = ContextFX.getInstance().getIGV() + 1;
             statesField.setText("EN PROGRESO");
             priorityField.getItems().addAll("1", "2", "3");
             List<Object[]> dists = getDistricts();

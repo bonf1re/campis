@@ -43,6 +43,9 @@ public class CommerceSidebarController implements Initializable {
 
     @FXML
     private JFXButton refButton;
+    
+    @FXML
+    private JFXButton curButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -107,6 +110,11 @@ public class CommerceSidebarController implements Initializable {
     @FXML
     private void goListRefund() throws IOException {
         main.showListRefund();
+    }
+    
+    @FXML
+    private void goCurrencyIGV() throws IOException {
+        main.showCurrencyIGV();
     }
 
 }
