@@ -48,6 +48,12 @@ public class ShowController implements Initializable {
         main.showEditUser();
     }
 
+    @FXML
+    private void goChangePassword(ActionEvent event) throws IOException {
+        ContextFX.getInstance().setId(id);
+        main.showChangePassUser();
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         id = ContextFX.getInstance().getId();

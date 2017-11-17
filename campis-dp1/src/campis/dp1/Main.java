@@ -178,6 +178,20 @@ public class Main extends Application {
         BorderPane listProd = loader.load();
         mainLayout.setCenter(listProd);
     }
+
+    public static void showChangePassUser() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/users/changePassword.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
+
+    public static void showLoggedUser() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/users/loggedUser.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
     
     public static void showAreaCreate() throws IOException {
         FXMLLoader loader = new FXMLLoader();
