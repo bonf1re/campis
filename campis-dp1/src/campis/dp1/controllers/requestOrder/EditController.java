@@ -60,6 +60,7 @@ public class EditController implements Initializable {
     float freightTotal = 0;
     Integer n_discount = 1;
     Integer n_tocount = 1;
+    float IGV = 0.0f;
     
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView;
@@ -158,6 +159,7 @@ public class EditController implements Initializable {
                 });
         try {
             if (codGen == 0) {
+                IGV = ContextFX.getInstance().getIGV() + 1;
                 id = ContextFX.getInstance().getId();
                 ContextFX.getInstance().setVar(id);
                 statesField.getItems().addAll("ENTREGADO", "CANCELADO", "EN PROGRESO");
@@ -389,6 +391,7 @@ public class EditController implements Initializable {
             ContextFX.getInstance().setDiscount(discountTotal);
             this.subtotalField.setText(Float.toString(baseTotalAmount));
             this.discountField.setText(Float.toString(discountTotal));
+            totalAmount = totalAmount*IGV;
             this.amountField.setText(Float.toString(totalAmount));
             ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
                     products.get(0).getDescription(), products.get(0).getP_stock(), list.get(i).getQuantity(),
@@ -482,6 +485,7 @@ public class EditController implements Initializable {
         ContextFX.getInstance().setDiscount(discountTotal);
         this.subtotalField.setText(Float.toString(baseTotalAmount));
         this.discountField.setText(Float.toString(discountTotal));
+        totalAmount = totalAmount*IGV;
         this.amountField.setText(Float.toString(totalAmount));
 
         ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),

@@ -49,6 +49,7 @@ public class ViewController implements Initializable {
     float freightTotal = 0;
     Integer n_discount = 1;
     Integer n_tocount = 1;
+    float IGV = 0.0f;
     
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView;
@@ -100,6 +101,7 @@ public class ViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        IGV = ContextFX.getInstance().getIGV() + 1;
         id = ContextFX.getInstance().getId();
         ContextFX.getInstance().setId(id);
         List<RequestOrderLine> list = getReqOrdLine(id);
@@ -275,6 +277,7 @@ public class ViewController implements Initializable {
             //this.amountField.setText(Float.toString(totalAmount));
             this.subtotalField.setText(Float.toString(baseTotalAmount));
             this.discountField.setText(Float.toString(discountTotal));
+            totalAmount = totalAmount * IGV;
             this.amountField.setText(Float.toString(totalAmount));
 
             ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
