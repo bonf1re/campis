@@ -17,6 +17,7 @@ import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -98,6 +99,8 @@ public class ViewController implements Initializable {
     private JFXTextField freightField;
     @FXML
     private JFXTextField stateField;
+    @FXML
+    private JFXTextField igvField;
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -108,6 +111,7 @@ public class ViewController implements Initializable {
         RequestOrder request = getRequestOrder(id);
         String nameCli = getNameCli(request.getId_client());
         distr = getNameDistric(request.getId_district());
+        this.igvField.setText(Float.toString((ContextFX.getInstance().getIGV()*100)/100));
         this.nameClientField.setText(nameCli);
         this.clientField.setText(Integer.toString(request.getId_client()));
         this.creationDate.setValue(request.getCreation_date().toLocalDateTime().toLocalDate());
@@ -252,7 +256,6 @@ public class ViewController implements Initializable {
     }
 
     private void loadData(List<RequestOrderLine> list) {
-        
         products = FXCollections.observableArrayList();
         productsView = ContextFX.getInstance().getTempList();
         for (int i = 0; i < list.size(); i++) {
@@ -270,15 +273,15 @@ public class ViewController implements Initializable {
             float f = getFreight(distr);
             freightTotal = freightTotal + baseTotalAmount * f;
             totalAmount = totalAmount + freightTotal;
-            this.freightField.setText(Float.toString(freightTotal));
-            this.amountField.setText(Float.toString(totalAmount));
+            this.freightField.setText(Float.toString((freightTotal*100)/100));
+            this.amountField.setText(Float.toString((totalAmount*100)/100));
             ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
             ContextFX.getInstance().setTotAmount(totalAmount);
             //this.amountField.setText(Float.toString(totalAmount));
-            this.subtotalField.setText(Float.toString(baseTotalAmount));
-            this.discountField.setText(Float.toString(discountTotal));
-            totalAmount = totalAmount * IGV;
-            this.amountField.setText(Float.toString(totalAmount));
+            this.subtotalField.setText(Float.toString((baseTotalAmount*100)/100));
+            this.discountField.setText(Float.toString((discountTotal*100)/100));
+            totalAmount = (totalAmount * IGV*100)/100;
+            this.amountField.setText(Float.toString((totalAmount*100)/100));
 
             ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
                     products.get(0).getDescription(), products.get(0).getP_stock(), list.get(i).getQuantity(),
@@ -336,7 +339,6 @@ public class ViewController implements Initializable {
         main.showListRequestOrder();
     }
 
-    @FXML
     private void goListBills() throws IOException {
         main.showBillList();
     }

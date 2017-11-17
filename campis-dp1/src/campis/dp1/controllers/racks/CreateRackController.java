@@ -59,7 +59,7 @@ public class CreateRackController implements Initializable {
     @FXML
     private JFXTextField y_Field;
     @FXML
-    private JFXComboBox<Integer> orientationField;
+    private JFXComboBox<String> orientationField;
     @FXML
     private Canvas mapCanvas;
     @FXML
@@ -103,15 +103,17 @@ public class CreateRackController implements Initializable {
         return returnable;
     }
 
-    private boolean verifyRacks() {
+    private boolean verifyRacks(int orient) {
         boolean returnable = TRUE;
         List<Rack> racks;
         racks = getRacks(warehouse_id);
         Warehouse dimensions = getWarehouseDimensions();
-        if (this.orientationField.getValue() == 0) {
+        if (orient == 0) {
             Integer x_pos = Integer.parseInt(x_Field.getText());
             Integer y_pos = Integer.parseInt(y_Field.getText());
-            if (x_pos > dimensions.getLength() || y_pos > dimensions.getWidth()) {
+            if (x_pos > dimensions.getLength() || y_pos > dimensions.getWidth()
+                    || (x_pos + Integer.parseInt(this.columnsField.getText()) == dimensions.getLength())
+                    || (y_pos + 2 == dimensions.getWidth())) {
                 returnable = FALSE;
             } else {
                 for (int i = 0; i < racks.size(); i++) {
@@ -119,18 +121,24 @@ public class CreateRackController implements Initializable {
                     Integer posXfin = racks.get(i).getPos_x() + racks.get(i).getN_columns();
                     Integer posYini = racks.get(i).getPos_y();
                     Integer posYfin = racks.get(i).getPos_y() + 2;
-                    if (((x_pos > posXfin + 1) || (x_pos < posXini - 1)) && ((y_pos > posYfin + 1) || (y_pos < posYini - 1))) {
+                    if ((x_pos > posXfin + 1) || (x_pos < posXini - 1)) {
                         returnable = TRUE;
                     } else {
-                        returnable = FALSE;
-                        break;
+                        if ((y_pos > posYfin + 1) || (y_pos < posYini - 1)) {
+                            returnable = TRUE;
+                        } else {
+                            returnable = FALSE;
+                            break;
+                        }
                     }
                 }
             }
-        } else if (this.orientationField.getValue() == 1) {
+        } else if (orient == 1) {
             Integer x_pos = Integer.parseInt(x_Field.getText());
             Integer y_pos = Integer.parseInt(y_Field.getText());
-            if (x_pos > dimensions.getLength() || y_pos > dimensions.getWidth()) {
+            if (x_pos > dimensions.getLength() || y_pos > dimensions.getWidth()
+                    || (y_pos + Integer.parseInt(this.columnsField.getText()) == dimensions.getWidth())
+                    || (x_pos + 2 == dimensions.getLength())) {
                 returnable = FALSE;
             } else {
                 for (int i = 0; i < racks.size(); i++) {
@@ -138,11 +146,15 @@ public class CreateRackController implements Initializable {
                     Integer posXfin = racks.get(i).getPos_x() + 2;
                     Integer posYini = racks.get(i).getPos_y();
                     Integer posYfin = racks.get(i).getPos_y() + racks.get(i).getN_columns();
-                    if (((x_pos > posXfin + 1) || (x_pos < posXini - 1)) && ((y_pos > posYfin + 1) || (y_pos < posYini - 1))) {
+                    if ((x_pos > posXfin + 1) || (x_pos < posXini - 1)) {
                         returnable = TRUE;
                     } else {
-                        returnable = FALSE;
-                        break;
+                        if ((y_pos > posYfin + 1) || (y_pos < posYini - 1)) {
+                            returnable = TRUE;
+                        } else {
+                            returnable = FALSE;
+                            break;
+                        }
                     }
                 }
             }
@@ -152,13 +164,17 @@ public class CreateRackController implements Initializable {
 
     @FXML
     private void insertRack() throws IOException {
-
-        //int orientation = orientationCb.getSelectionModel().getSelectedIndex();
-        boolean flag = verifyRacks();
+        int orient;
+        if (orientationField.getValue().compareTo("Horizontal") == 0) {
+            orient = 0;
+        } else {
+            orient = 1;
+        }
+        boolean flag = verifyRacks(orient);
         if (flag == TRUE) {
             Rack r = new Rack(this.warehouse_id, Integer.parseInt(x_Field.getText()), Integer.parseInt(y_Field.getText()),
                     Integer.parseInt(columnsField.getText()), Integer.parseInt(floorsField.getText()),
-                    0);
+                    orient);
 
             Configuration configuration = new Configuration();
             configuration.configure("hibernate.cfg.xml");
@@ -190,17 +206,15 @@ public class CreateRackController implements Initializable {
                         System.out.println("ok");
                         session.save(zone);
                     }
-                    
-                    
+
                 }
-                
-               
-            } 
-            
+
+            }
+
             session.getTransaction().commit();
             session.close();
             sessionFactory.close();
-            
+
             this.goListRacks();
         }
     }
@@ -212,7 +226,8 @@ public class CreateRackController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Criteria criteria = session.createCriteria(Rack.class);
+        Criteria criteria = session.createCriteria(Rack.class
+        );
         criteria.add(Restrictions.eq("id_warehouse", warehouse_id));
         List racks = criteria.list();
         ArrayList<CRack> crackList = new ArrayList<>();
@@ -221,7 +236,7 @@ public class CreateRackController implements Initializable {
         }
         session.close();
         sessionFactory.close();
-        
+
         return crackList;
     }
 
@@ -231,6 +246,7 @@ public class CreateRackController implements Initializable {
         this.real_map = gu.initMap(this.y, this.x);
         this.crackList = gu.putCRacks(wareh.getId(), real_map);
         gu.drawVisualizationMap(gc, this.y, this.x, this.real_map);
+        messageField.setText("");
     }
 
     @FXML
@@ -240,29 +256,60 @@ public class CreateRackController implements Initializable {
             GraphicsUtils gu = new GraphicsUtils();
             ArrayList<CRack> crackListAux = new ArrayList<>();
             crackListAux = getCRacks();
+            int orient = 0;
+            if (orientationField.getValue().compareTo("Horizontal") == 0) {
+                orient = 0;
+            } else {
+                orient = 1;
+            }
             Rack rackAux = new Rack(this.warehouse_id, Integer.parseInt(x_Field.getText()), Integer.parseInt(y_Field.getText()),
                     Integer.parseInt(columnsField.getText()), Integer.parseInt(floorsField.getText()),
-                    orientationField.getValue());
+                    orient);
             CRack cRackAux = new CRack(rackAux);
-            crackListAux.add(cRackAux);
+            //crackListAux.add(cRackAux);
             for (CRack rack : crackListAux) {
                 int rack_y = rack.getPos_y();
                 int rack_x = rack.getPos_x();
                 int rack_length = rack.getN_columns();
+                if (rack.getOrientation() == 0) {
+                    for (int i = 0; i < 2; i++) {
+                        for (int j = 0; j < rack_length; j++) {
+                            real_map[i + rack_y][j + rack_x] = 1;
+                        }
+                    }
+                } else if (rack.getOrientation() == 1) {
+                    for (int i = 0; i < rack_length; i++) {
+                        for (int j = 0; j < 2; j++) {
+                            real_map[i + rack_y][j + rack_x] = 1;
+                        }
+                    }
+                }
+            }
+            int rack_y = cRackAux.getPos_y();
+            int rack_x = cRackAux.getPos_x();
+            int rack_length = cRackAux.getN_columns();
+            if (cRackAux.getOrientation() == 0) {
                 for (int i = 0; i < 2; i++) {
                     for (int j = 0; j < rack_length; j++) {
                         real_map[i + rack_y][j + rack_x] = 2;
                     }
                 }
+            } else if (cRackAux.getOrientation() == 1) {
+                for (int i = 0; i < rack_length; i++) {
+                    for (int j = 0; j < 2; j++) {
+                        real_map[i + rack_y][j + rack_x] = 2;
+                    }
+                }
             }
+
             gu.drawVisualizationMap(gc, this.y, this.x, this.real_map);
-            boolean flag = verifyRacks();
+            boolean flag = verifyRacks(orient);
             if (flag == TRUE) {
                 messageField.setText("Se puede crear el Rack");
             } else {
                 messageField.setText("No se puede crear el Rack, seleccione otras posiciones");
             }
-        }else{
+        } else {
             messageField.setText("Los valores introducidos deben ser mayores a 0");
         }
     }
@@ -309,7 +356,7 @@ public class CreateRackController implements Initializable {
                 }
             }
         });
-        orientationField.getItems().addAll(0, 1);
+        orientationField.getItems().addAll("Horizontal", "Vertical");
         GraphicsUtils gu = new GraphicsUtils();
         gc = mapCanvas.getGraphicsContext2D();
         wareh = getWarehouseDimensions();

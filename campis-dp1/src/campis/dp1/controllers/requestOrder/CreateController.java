@@ -24,6 +24,7 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import java.net.URL;
 import java.sql.Timestamp;
+import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
@@ -94,8 +95,6 @@ public class CreateController implements Initializable {
     @FXML
     private JFXTextField nameClientField;
     @FXML
-    private JFXDatePicker creationDate;
-    @FXML
     private JFXDatePicker deliveryDate;
     @FXML
     private JFXTextField statesField;
@@ -117,6 +116,8 @@ public class CreateController implements Initializable {
     private JFXComboBox<String> districtField;
     @FXML
     private JFXTextField freightField;
+    @FXML
+    private JFXTextField igvField;
 
     @FXML
     private void goAddItem() throws IOException {
@@ -150,11 +151,11 @@ public class CreateController implements Initializable {
 
     @FXML
     private void createRequestOrder() throws IOException, ParseException {
+        Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
         SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date_creation = getDate(creationDate.getValue());
         Date date_delivery = getDate(deliveryDate.getValue());
         int idDist = getDistrict(this.districtField.getValue());
-        Boolean verify = verifyDates(date_creation, date_delivery);
+        Boolean verify = verifyDates(currentTimestamp, date_delivery);
         if (verify == TRUE) {
             int prior = Integer.parseInt(priorityField.getValue());
             Configuration configuration = new Configuration();
@@ -163,7 +164,7 @@ public class CreateController implements Initializable {
             SessionFactory sessionFactory = configuration.buildSessionFactory();
             Session session = sessionFactory.openSession();
             session.beginTransaction();
-            RequestOrder requestOrder = new RequestOrder(Timestamp.valueOf(formatIn.format(date_creation)),
+            RequestOrder requestOrder = new RequestOrder(Timestamp.valueOf(formatIn.format(currentTimestamp)),
                     Timestamp.valueOf((String) formatIn.format(date_delivery)),
                     Float.parseFloat(subtotalField.getText()),
                     Float.parseFloat(amountField.getText()),
@@ -277,9 +278,9 @@ public class CreateController implements Initializable {
     private void setDistrictAction() {
         Float freight = getFreight(this.districtField.getValue());
         freightTotal = freightTotal + baseTotalAmount * freight;
-        totalAmount = totalAmount + freightTotal;
-        this.freightField.setText(Float.toString(freightTotal));
-        this.amountField.setText(Float.toString(totalAmount));
+        totalAmount = ((totalAmount + freightTotal)*100)/100;
+        this.freightField.setText(Float.toString((freightTotal*100)/100));
+        this.amountField.setText(Float.toString((totalAmount*100)/100));
     }
 
     private void loadData(int cod, int quant) {
@@ -302,10 +303,10 @@ public class CreateController implements Initializable {
         ContextFX.getInstance().setFreight(freightTotal);
         ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
         ContextFX.getInstance().setTotAmount(totalAmount);
-        this.subtotalField.setText(Float.toString(baseTotalAmount));
-        this.discountField.setText(Float.toString(discountTotal));
-        totalAmount = totalAmount*IGV;
-        this.amountField.setText(Float.toString(totalAmount));
+        this.subtotalField.setText(Float.toString((baseTotalAmount*100)/100));
+        this.discountField.setText(Float.toString((discountTotal*100)/100));
+        totalAmount = (totalAmount*IGV*100)/100;
+        this.amountField.setText(Float.toString((totalAmount*100)/100));
         ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
                 products.get(0).getDescription(), products.get(0).getP_stock(), quantity,
                 base_amount, state, products.get(0).getBase_price(),
@@ -378,6 +379,7 @@ public class CreateController implements Initializable {
             id = ContextFX.getInstance().getId();
             quantity = ContextFX.getInstance().getQuantity();
             num = ContextFX.getInstance().getNum();
+            this.igvField.setText(Float.toString((ContextFX.getInstance().getIGV()*100)/100));
             num = num + 1;
             ContextFX.getInstance().setNum(num);
             idColumn.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
