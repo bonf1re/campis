@@ -3,6 +3,7 @@ package campis.dp1.controllers;
 import campis.dp1.ContextFX;
 import javafx.fxml.FXML;
 import campis.dp1.Main;
+import campis.dp1.models.utils.GraphicsUtils;
 import java.io.IOException;
 import java.net.URL;
 import java.util.List;
@@ -150,7 +151,9 @@ public class MainViewController implements Initializable {
 
     @FXML
     private void goLogin() throws IOException {
-        main.showLogin();
+        GraphicsUtils gu = new GraphicsUtils();
+        if (gu.popup2Options(" ", "¿Esta seguro de cerrar sesión?", "Aceptar", "Cancelar"))
+            main.showLogin();
     }
 
     @FXML
