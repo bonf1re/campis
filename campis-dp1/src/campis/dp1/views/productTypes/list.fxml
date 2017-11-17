@@ -35,6 +35,7 @@
             <Button fx:id="createButton" layoutX="840.0" layoutY="141.0" mnemonicParsing="false" onAction="#goCreateProductType" prefHeight="35.0" prefWidth="85.0" text="Crear" />
             <Button fx:id="editButton" layoutX="840.0" layoutY="191.0" mnemonicParsing="false" onAction="#goEditProductType" prefHeight="35.0" prefWidth="85.0" text="Editar" />
             <Button fx:id="deleteButton" layoutX="840.0" layoutY="240.0" mnemonicParsing="false" onAction="#deleteProductType" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
+            <Label fx:id="lblprodType" layoutX="40.0" layoutY="455.0" text="Label" textFill="#fc0303" />
          </children>
       </AnchorPane>
    </center>
