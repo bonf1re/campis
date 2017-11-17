@@ -47,6 +47,7 @@ public class createEntryController implements Initializable {
     private Main main;
     Integer id_batch;
     String provider;
+    String reason;
     ObservableList<Batch> batch = FXCollections.observableArrayList();
     ObservableList<BatchDisplay> batchView = FXCollections.observableArrayList();
 
@@ -84,7 +85,7 @@ public class createEntryController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         providerField.getItems().addAll("Ladrillos REX", "Cementos SOL", "Ceramicos CELIMA", "Constructores PEPITO");
-        reasonField.getItems().addAll("Hallazgos", "Devoluciones");
+        reasonField.getItems().addAll("Hallazgo", "Devolucion");
         try {
             id_batch = ContextFX.getInstance().getId();
             batchView = ContextFX.getInstance().getTempBatchList();
@@ -167,28 +168,67 @@ public class createEntryController implements Initializable {
 
     @FXML
     private void saveBatchEntries(ActionEvent event) throws IOException {
+        /*
+            idTypeOwner = 3 [Provedor genérico]
+            idTypeOwner = 4 [Viene de un almacen]
+            idTypeOwner = 5 [Ladrillos REX]
+            idTypeOwner = 6 [Cementos SOL]
+            idTypeOwner = 7 [Ceramicos CELIMA]
+            idTypeOwner = 8 [Constructores PEPITO]
+        */
+        
+        /* 
+            idReason = 3 [Proveedores/compra]
+            idReason = 4 [Hallazgo]
+            idReason = 5 [Devolucion]
+        */
+        
         Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
         provider = providerField.getValue();
+        reason = reasonField.getValue();
+        
         if (provider == null) {
-            int typeOwner = 4;
-            int reason = 4; // Razón de que ha entrado por parte de hallazgo o devolucion
+            int idTypeOwner = 4;
+            int idReason = 4; // Razón de que ha entrado por parte de hallazgo o devolucion
+            
+            if (reason.compareTo("Hallazgo") == 0){
+                idReason = 4;
+            } else if (reason.compareTo("Devolucion") == 0) {
+                idReason = 5;
+            }
+                
+            //reasonField.getItems().addAll("Hallazgo", "Devolucion");
+                        
             for (int i = 0; i < batchTable.getItems().size(); i++) {
                 int idBatch = batchTable.getItems().get(i).getId_batch().get();
                 Batch b = getBatch(idBatch);
                 int newType = 1;
                 updateBatch(idBatch,newType);
-                DispatchMove dispMove = new DispatchMove(typeOwner, 1, currentTimestamp, reason, id_batch, b.getArrival_date());
+                DispatchMove dispMove = new DispatchMove(idTypeOwner, 1, currentTimestamp, idReason, id_batch, b.getArrival_date());
                 insertDispatchMove(dispMove);
             }
+            
         } else {
-            int typeOwner = 3;
-            int reason = 3; // Razón de que ha entrado por parte de un proveedor
+            int idTypeOwner = 3; //proveedor genérico
+            
+            if (provider.compareTo("Ladrillos REX") == 0) {
+                idTypeOwner = 5; //provedor Ladrillos REX
+            } else if (provider.compareTo("Cementos SOL") == 0) {
+                idTypeOwner = 6; //Provedor Cementos SQL
+            } else if (provider.compareTo("Ceramicos CELIMA") == 0) {
+                idTypeOwner = 7;  //Provedor ceraicos Celima
+            } else if (provider.compareTo("Constructores PEPITO") == 0) {            
+                idTypeOwner = 8; //Provedor constructores PEPITO
+            } 
+            
+            int idReason = 3; // Razón de que ha entrado por parte de un proveedor - COMPRA
+            
             for (int i = 0; i < batchTable.getItems().size(); i++) {
                 int idBatch = batchTable.getItems().get(i).getId_batch().get();
                 Batch b = getBatch(idBatch);
                 int newType = 1;
                 updateBatch(idBatch,newType);
-                DispatchMove dispMove = new DispatchMove(typeOwner, 0, currentTimestamp, reason, id_batch, b.getArrival_date());
+                DispatchMove dispMove = new DispatchMove(idTypeOwner, 0, currentTimestamp, idReason, id_batch, b.getArrival_date());
                 insertDispatchMove(dispMove);
             }
         }

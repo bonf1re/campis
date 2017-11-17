@@ -67,11 +67,11 @@ public class ListEntryController implements Initializable {
     @FXML
     private TableColumn<DispatchMoveDisplay, Integer> idIngresCol;
     @FXML
-    private TableColumn<DispatchMoveDisplay,  Integer> prov_AlmCol;
+    private TableColumn<DispatchMoveDisplay,  String> prov_AlmCol;
     @FXML
     private TableColumn<DispatchMoveDisplay, String> dateCol;
     @FXML
-    private TableColumn<DispatchMoveDisplay, Integer> reasonsCol;
+    private TableColumn<DispatchMoveDisplay, String> reasonsCol;
     
     private ObservableList<DispatchMove> getEntries() {
         Configuration configuration = new Configuration();
@@ -81,10 +81,18 @@ public class ListEntryController implements Initializable {
         session.beginTransaction();
         int typeOwner1 = 3;
         int typeOwner2 = 4;
+        int typeOwner3 = 5;
+        int typeOwner4 = 6;
+        int typeOwner5 = 7;
+        int typeOwner6 = 8;
         Criteria criteria = session.createCriteria(DispatchMove.class);
         criteria.add(Restrictions.disjunction()
                 .add(Restrictions.eq("type_owner", typeOwner1))
-                .add(Restrictions.eq("type_owner", typeOwner2)));
+                .add(Restrictions.eq("type_owner", typeOwner2))
+                .add(Restrictions.eq("type_owner", typeOwner3))
+                .add(Restrictions.eq("type_owner", typeOwner4))
+                .add(Restrictions.eq("type_owner", typeOwner5))
+                .add(Restrictions.eq("type_owner", typeOwner6)));
         
         List lista = criteria.list();
         
@@ -104,17 +112,68 @@ public class ListEntryController implements Initializable {
         entries = getEntries();
         
         for (int i = 0; i < entries.size(); i++) {
+            String reason = getReason(entries.get(i).getReason());
+            String type_owner = getTypeOwner(entries.get(i).getType_owner());
             
             DispatchMoveDisplay e = new DispatchMoveDisplay(entries.get(i).getId_dispatch_move(), 
-                                              entries.get(i).getType_owner(),
+                                              entries.get(i).getType_owner(), type_owner,
                                               entries.get(i).getId_owner(),
                                               entries.get(i).getMov_date().toString(),
-                                              entries.get(i).getReason());
+                                              entries.get(i).getReason(), reason);
             entriesView.add(e);
         }
         
         tablaEntries.setItems(null);  
         tablaEntries.setItems(entriesView);  
+    }
+    
+     private String getReason(Integer r) {
+        String reason = " ";
+        
+        if (null != r) switch (r) {
+            case 3:
+                reason = "Compra";
+                break;
+            case 4:
+                reason = "Hallazgo";
+                break;
+            case 5:
+                reason = "Devolucion";
+                break;
+            default:
+                break;
+        }
+        
+        return reason;
+    }
+    
+    private String getTypeOwner(Integer t_owner) {
+        String reason = " ";
+        
+        if (null != t_owner) switch (t_owner) {
+            case 3:
+                reason = "Provedor";
+                break;
+            case 4:
+                reason = "Almacén";
+                break;
+            case 5:
+                reason = "Ladrillos REX";
+                break;
+            case 6:
+                reason = "Cementos SOL";
+                break;
+            case 7:
+                reason = "Ceramicos CELIMA";
+                break;
+            case 8:
+                reason = "Constructores PEPITO";
+                break;
+            default:
+                break;
+        }
+        
+        return reason;
     }
     
     /**
@@ -138,9 +197,9 @@ public class ListEntryController implements Initializable {
         
         try {
             idIngresCol.setCellValueFactory(cellData -> cellData.getValue().id_dispatch_moveProperty().asObject());
-            prov_AlmCol.setCellValueFactory(cellData -> cellData.getValue().id_ownerProperty().asObject());
+            prov_AlmCol.setCellValueFactory(cellData -> cellData.getValue().type_owner_textProperty());
             dateCol.setCellValueFactory(cellData -> cellData.getValue().arrival_dateProperty());
-            reasonsCol.setCellValueFactory(cellData -> cellData.getValue().reasonProperty().asObject());
+            reasonsCol.setCellValueFactory(cellData -> cellData.getValue().reason_textProperty());
              
             loadData();
         } catch (SQLException | ClassNotFoundException ex) {
