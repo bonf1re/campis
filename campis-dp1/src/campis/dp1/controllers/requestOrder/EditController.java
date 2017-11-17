@@ -18,7 +18,9 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
+import java.math.RoundingMode;
 import java.net.URL;
+import java.text.DecimalFormat;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
 import java.util.Calendar;
@@ -60,6 +62,7 @@ public class EditController implements Initializable {
     float freightTotal = 0;
     Integer n_discount = 1;
     Integer n_tocount = 1;
+    float IGV = 0.0f;
     
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView;
@@ -108,6 +111,8 @@ public class EditController implements Initializable {
     private JFXTextField freightField;
     @FXML
     private JFXTextField clientField;
+    @FXML
+    private JFXTextField igvField;
 
     private List<Object[]> getDistricts() {
         Configuration configuration = new Configuration();
@@ -142,6 +147,7 @@ public class EditController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        
         codGen = ContextFX.getInstance().getVar();
         List<Object[]> dists = getDistricts();
         for (Object[] dist : dists) {
@@ -157,6 +163,7 @@ public class EditController implements Initializable {
                 });
         try {
             if (codGen == 0) {
+                IGV = ContextFX.getInstance().getIGV() + 1;
                 id = ContextFX.getInstance().getId();
                 ContextFX.getInstance().setVar(id);
                 statesField.getItems().addAll("ENTREGADO", "CANCELADO", "EN PROGRESO");
@@ -165,6 +172,7 @@ public class EditController implements Initializable {
                 RequestOrder request = getRequestOrder(id);
                 String nameCli = getNameCli(request.getId_client());
                 distr = getNameDistric(request.getId_district());
+                this.igvField.setText(Float.toString((ContextFX.getInstance().getIGV()*100)/100));
                 this.nameClientField.setText(nameCli);
                 this.clientField.setText(Integer.toString(request.getId_client()));
                 this.creationDate.setValue(request.getCreation_date().toLocalDateTime().toLocalDate());
@@ -191,6 +199,7 @@ public class EditController implements Initializable {
                 RequestOrder request = getRequestOrder(codGen);
                 String nameCli = getNameCli(request.getId_client());
                 String distr = getNameDistric(request.getId_district());
+                this.igvField.setText(Float.toString((ContextFX.getInstance().getIGV()*100)/100));
                 this.nameClientField.setText(nameCli);
                 this.clientField.setText(Integer.toString(request.getId_client()));
                 this.creationDate.setValue(request.getCreation_date().toLocalDateTime().toLocalDate());
@@ -313,6 +322,10 @@ public class EditController implements Initializable {
 
     @FXML
     private void goListRequestOrder() throws IOException {
+        ContextFX.getInstance().setBaseTotAmount(0f);
+        ContextFX.getInstance().setTotAmount(0f);
+        productsView.clear();
+        ContextFX.getInstance().setTempList(productsView);
         main.showListRequestOrder();
     }
 
@@ -351,9 +364,9 @@ public class EditController implements Initializable {
     private void setDistrictAction() {
         Float freight = getFreight(this.districtField.getValue());
         freightTotal = freightTotal + baseTotalAmount * freight;
-        totalAmount = totalAmount + freightTotal;
-        this.freightField.setText(Float.toString(freightTotal));
-        this.amountField.setText(Float.toString(totalAmount));
+        totalAmount = ((totalAmount + freightTotal)*100)/100;
+        this.freightField.setText(Float.toString((freightTotal*100)/100));
+        this.amountField.setText(Float.toString((totalAmount*100)/100));
     }
 
     private void loadData(List<RequestOrderLine> list) {
@@ -376,14 +389,15 @@ public class EditController implements Initializable {
             float f = getFreight(distr);
             freightTotal = freightTotal + baseTotalAmount * f;
             totalAmount = totalAmount + freightTotal;
-            this.freightField.setText(Float.toString(freightTotal));
-            this.amountField.setText(Float.toString(totalAmount));
+            this.freightField.setText(Float.toString((freightTotal*100)/100));
+            this.amountField.setText(Float.toString((totalAmount*100)/100));
             ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
             ContextFX.getInstance().setTotAmount(totalAmount);
             ContextFX.getInstance().setDiscount(discountTotal);
-            this.subtotalField.setText(Float.toString(baseTotalAmount));
-            this.discountField.setText(Float.toString(discountTotal));
-            this.amountField.setText(Float.toString(totalAmount));
+            this.subtotalField.setText(Float.toString((baseTotalAmount*100)/100));
+            this.discountField.setText(Float.toString((discountTotal*100)/100));
+            totalAmount = totalAmount*IGV;
+            this.amountField.setText(Float.toString((totalAmount*100)/100));
             ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
                     products.get(0).getDescription(), products.get(0).getP_stock(), list.get(i).getQuantity(),
                     base_amount, state, products.get(0).getBase_price(),
@@ -395,6 +409,7 @@ public class EditController implements Initializable {
         productsView = ContextFX.getInstance().getTempList();
         tablaProd.setItems(null);
         tablaProd.setItems(productsView);
+        
     }
 
     private ObservableList<SaleCondition> getDiscount(int cod) {
@@ -454,6 +469,8 @@ public class EditController implements Initializable {
     }
 
     private void loadData2(int cod, int quant) {
+        ContextFX.getInstance().setBaseTotAmount(0f);
+        ContextFX.getInstance().setTotAmount(0f);
         products = FXCollections.observableArrayList();
         productsView = ContextFX.getInstance().getTempList();
         products = getProduct(cod);
@@ -471,9 +488,10 @@ public class EditController implements Initializable {
         ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
         ContextFX.getInstance().setTotAmount(totalAmount);
         ContextFX.getInstance().setDiscount(discountTotal);
-        this.subtotalField.setText(Float.toString(baseTotalAmount));
-        this.discountField.setText(Float.toString(discountTotal));
-        this.amountField.setText(Float.toString(totalAmount));
+        this.subtotalField.setText(Float.toString((baseTotalAmount*100)/100));
+        this.discountField.setText(Float.toString((discountTotal*100)/100));
+        totalAmount = (totalAmount*IGV*100)/100;
+        this.amountField.setText(Float.toString((totalAmount*100)/100));
 
         ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
                 products.get(0).getDescription(), products.get(0).getP_stock(), quantity,
@@ -561,9 +579,9 @@ public class EditController implements Initializable {
         totalAmount = baseTotalAmount + discountTotal + freightTotal;
         ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
         ContextFX.getInstance().setTotAmount(totalAmount);
-        this.subtotalField.setText(Float.toString(baseTotalAmount));
-        this.discountField.setText(Float.toString(discountTotal));
-        this.amountField.setText(Float.toString(totalAmount));
+        this.subtotalField.setText(Float.toString((baseTotalAmount*100)/100));
+        this.discountField.setText(Float.toString((discountTotal*100)/100));
+        this.amountField.setText(Float.toString((totalAmount*100)/100));
     }
 
     @FXML

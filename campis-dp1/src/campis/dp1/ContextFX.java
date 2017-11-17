@@ -70,6 +70,9 @@ public class ContextFX {
     Float totAmount = 0.0f;
     Float discount = 0.0f;
     Float freight = 0.0f;
+    Float dollar = 0.0f;
+    Float euro = 0.0f;
+    Float igv = 0.0f;
     private Integer n_discount = 1;
     private Integer n_tocount = 1;
     Integer num = 0; // Useful to save any integer variable.
@@ -125,6 +128,33 @@ public class ContextFX {
     private String labeltoPrint2;
     private String labeltoPrint3;
     
+    
+    public Float getDollar() {
+        Float returnable = new Float(this.dollar);
+        return returnable;
+    }
+
+    public void setDollar(Float dollar) {
+        this.dollar = dollar;
+    }
+    
+    public Float getEuro() {
+        Float returnable = new Float(this.euro);
+        return returnable;
+    }
+
+    public void setEuro(Float euro) {
+        this.euro = euro;
+    }
+    
+    public Float getIGV() {
+        Float returnable = new Float(this.igv);
+        return returnable;
+    }
+
+    public void setIGV(Float igv) {
+        this.igv = igv;
+    }
     
     public Integer getWhMoveType(){
         Integer returnable = new Integer(this.whMoveType);

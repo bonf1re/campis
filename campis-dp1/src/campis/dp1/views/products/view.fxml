@@ -30,18 +30,15 @@
             <Label layoutX="266.0" layoutY="180.0" text="Stock Lógico:" />
             <Label layoutX="266.0" layoutY="228.0" text="Stock Físico:" />
             <Label layoutX="581.0" layoutY="102.0" text="Tipo de Producto:" />
-            <Label layoutX="266.0" layoutY="367.0" text="Ubicación:" />
-            <Label layoutX="412.0" layoutY="404.0" text="X:" />
             <JFXTextField fx:id="nameField" editable="false" layoutX="416.0" layoutY="51.0" prefHeight="25.0" prefWidth="427.0" unFocusColor="WHITE" />
             <JFXTextArea fx:id="descripField" editable="false" layoutX="416.0" layoutY="279.0" prefHeight="53.0" prefWidth="301.0" unFocusColor="WHITE" />
             <JFXTextField fx:id="stockPField" editable="false" layoutX="417.0" layoutY="180.0" prefHeight="25.0" prefWidth="140.0" unFocusColor="WHITE" />
             <JFXTextField fx:id="stockLField" editable="false" layoutX="417.0" layoutY="228.0" prefHeight="25.0" prefWidth="140.0" unFocusColor="WHITE" />
             <JFXTextField fx:id="typeField" editable="false" layoutX="694.0" layoutY="98.0" prefHeight="25.0" prefWidth="145.0" unFocusColor="WHITE" />
-            <Label layoutX="576.0" layoutY="404.0" text="Y:" />
             <JFXTextField fx:id="posXField" editable="false" layoutX="436.0" layoutY="400.0" prefHeight="25.0" prefWidth="59.0" unFocusColor="WHITE" />
             <JFXTextField fx:id="posYField" editable="false" layoutX="603.0" layoutY="400.0" prefHeight="25.0" prefWidth="59.0" unFocusColor="WHITE" />
-            <Button layoutX="397.0" layoutY="447.0" mnemonicParsing="false" onAction="#goEditProduct" prefHeight="30.0" prefWidth="83.0" text="Editar" />
-            <Button layoutX="546.0" layoutY="447.0" mnemonicParsing="false" onAction="#goListproduct" prefHeight="31.0" prefWidth="83.0" text="Aceptar" />
+            <Button layoutX="397.0" layoutY="425.0" mnemonicParsing="false" onAction="#goEditProduct" prefHeight="30.0" prefWidth="83.0" text="Editar" />
+            <Button layoutX="546.0" layoutY="425.0" mnemonicParsing="false" onAction="#goListproduct" prefHeight="31.0" prefWidth="83.0" text="Aceptar" />
             <Label layoutX="581.0" layoutY="146.0" text="Precio:" />
             <JFXTextField fx:id="priceField" editable="false" layoutX="696.0" layoutY="142.0" prefHeight="25.0" prefWidth="146.0" unFocusColor="WHITE" />
             <Label layoutX="266.0" layoutY="102.0" text="Marca:" />

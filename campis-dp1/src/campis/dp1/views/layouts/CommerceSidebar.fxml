@@ -2,6 +2,7 @@
 
 <?import com.jfoenix.controls.JFXButton?>
 <?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
 
 <VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="95.0" styleClass="container" stylesheets="@../../assets/css/sidebar.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.CommerceSidebarController">
     <children>
@@ -9,6 +10,11 @@
       <JFXButton fx:id="scButton" onAction="#goListSaleConditions" prefHeight="61.0" prefWidth="95.0" styleClass="option" text="Condiciones de Venta" textAlignment="CENTER" wrapText="true" />
       <JFXButton fx:id="rsButton" onAction="#goListRequestStatuses" prefHeight="61.0" prefWidth="95.0" styleClass="option" text="Estados de Orden" textAlignment="CENTER" wrapText="true" />
       <JFXButton fx:id="cliButton" onAction="#goListClient" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Cliente" />
+      <JFXButton fx:id="curButton" onAction="#goCurrencyIGV" text="Tipos de Cambio e IGV" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+         <font>
+            <Font name="System Bold" size="12.0" />
+         </font>
+      </JFXButton>
       <JFXButton fx:id="freButton" onAction="#goListFreights" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Flete" />
       <JFXButton fx:id="comButton" onAction="#goListComplaint" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Reclamos" />
       <JFXButton fx:id="refButton" onAction="#goListRefund" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Devoluciones" />
