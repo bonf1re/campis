@@ -134,10 +134,10 @@ public class ListEntryController implements Initializable {
             case 3:
                 reason = "Compra";
                 break;
-            case 4:
+            case 7:
                 reason = "Hallazgo";
                 break;
-            case 5:
+            case 8:
                 reason = "Devolucion";
                 break;
             default:

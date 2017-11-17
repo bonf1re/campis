@@ -179,8 +179,8 @@ public class createEntryController implements Initializable {
         
         /* 
             idReason = 3 [Proveedores/compra]
-            idReason = 4 [Hallazgo]
-            idReason = 5 [Devolucion]
+            idReason = 7 [Hallazgo]
+            idReason = 8 [Devolucion]
         */
         
         Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
@@ -192,9 +192,9 @@ public class createEntryController implements Initializable {
             int idReason = 4; // Razón de que ha entrado por parte de hallazgo o devolucion
             
             if (reason.compareTo("Hallazgo") == 0){
-                idReason = 4;
+                idReason = 7;
             } else if (reason.compareTo("Devolucion") == 0) {
-                idReason = 5;
+                idReason = 8;
             }
                 
             //reasonField.getItems().addAll("Hallazgo", "Devolucion");
