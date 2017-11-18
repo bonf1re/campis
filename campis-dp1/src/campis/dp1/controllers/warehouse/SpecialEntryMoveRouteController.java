@@ -172,18 +172,15 @@ public class SpecialEntryMoveRouteController implements Initializable{
                 zone_q.setParameter("s_status",false);
                 zone_q.setParameter("zoneId", zone_list.get(j).getId_zone());
                 zone_q.executeUpdate();
+                
                 Batch batch = batch_list.get(j);
-                    // batch save
-                    batch.setType_batch(3);
-                    int id_batch = (int) session.save(new Batch(batch));
-                    
-                    //int id_parent_batch = singleHer(batch);
-                    //Query query = session.createSQLQuery("UPDATE campis.batch SET type_batch = -1 WHERE id_batch = "+id_parent_batch);
-                    //query.executeUpdate();
-                    
-                    // move save
-                    WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), zone_list.get(j).getId_zone(), vh.getId_vehicle(), 0, id_warehouse,id_batch);
-                    session.save(move);
+                // batch save
+                batch.setType_batch(3);
+                int id_batch = (int) session.save(new Batch(batch));
+
+                // move save
+                WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), zone_list.get(j).getId_zone(), vh.getId_vehicle(), 0, id_warehouse,id_batch);
+                session.save(move);
                    
             }
             r_d_iterator.set(4, true);

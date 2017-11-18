@@ -622,6 +622,34 @@ public class EntryMoveSpecialCreateController implements Initializable {
                     returnable.add(new_batch);
                 }                 
             } else {
+                for (int j = 0; j < item.getQtLt().get(); j++) {
+                    // divide batches in max_qt and one with not so much
+                    int number_batches = (int) Math.ceil((double)item.getNum().get()/(double)max_qt);
+                    System.out.println(number_batches);
+                    for (int k = 1; k < number_batches; k++) {
+                        Batch new_batch = new Batch();
+                        
+                        new_batch.setId_product(item.getId_product());
+                        new_batch.setId_batch(-1);
+                        //new_batch.setQuantity(b_num);
+                        new_batch.setQuantity(max_qt);
+                        new_batch.setArrival_date(currentTimestamp);
+                        new_batch.setExpiration_date(item.getExp_date());
+                    
+                        returnable.add(new_batch);
+                    }
+                    
+                    Batch new_batch = new Batch();
+                    
+                    new_batch.setId_product(item.getId_product());
+                    new_batch.setId_batch(-1);
+                    //new_batch.setQuantity(b_num);
+                    new_batch.setQuantity(item.getNum().get() - max_qt*(number_batches-1));
+                    new_batch.setArrival_date(currentTimestamp);
+                    new_batch.setExpiration_date(item.getExp_date());
+                    
+                    returnable.add(new_batch);
+                }    
                 System.out.println("Lote no agregado");
             }             
         }
