@@ -282,11 +282,14 @@ public class CreateNormalDepartureController implements Initializable {
                 String nameProd = getNameProd(batchAus.getId_product());
                 int meas = getIntMeasure(batchAus.getId_product());
                 String measure = getMeasure(meas);
-                BatchDisplay batchDisp = new BatchDisplay(batchAus.getId_product(), dispatchOrLine.get(j).getQuantity(),
+                BatchDisplay batchDisp = new BatchDisplay(batchAus.getId_product(), 0,
                         batchAus.getBatch_cost(), batchAus.getArrival_date().toString(),
-                        batchAus.getExpiration_date().toString(), 0,
+                        batchAus.getExpiration_date().toString(), batchAus.getId_product(),
                         batchAus.getType_batch(), nameProd,
-                        Boolean.toString(batchAus.isState()), measure);
+                        Boolean.toString(batchAus.isState()), measure,
+                        dispatchOrLine.get(j).getId_dispatch_order_line(),
+                        dispatchOrLine.get(j).getQuantity(), nameProd);
+                
                 batchView.add(batchDisp);
             }
         }
@@ -733,7 +736,7 @@ public class CreateNormalDepartureController implements Initializable {
         session.beginTransaction();
         Query query = session.createQuery("update DispatchOrderLine set delivered = :delv "
                 + "where id_dispatch_order = :oldDpOrder AND id_product = :oldIdProd");
-        query.setParameter("devl", state);
+        query.setParameter("delv", state);
         query.setParameter("oldDpOrder", codDisp);
         query.setParameter("oldIdProd", coProd);
         int result = query.executeUpdate();
