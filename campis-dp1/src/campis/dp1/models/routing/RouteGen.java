@@ -208,8 +208,22 @@ public class RouteGen {
             grasp_counter++;
             returnable=new Route();
             Random generator = new Random();
-            CNode destiny_corner = destiny_nodes.get(generator.nextInt(destiny_nodes.size()));
-            CNode origin_corner = origin_nodes.get(generator.nextInt(origin_nodes.size()));
+            CNode destiny_corner;
+            try{
+                destiny_corner = destiny_nodes.get(generator.nextInt(destiny_nodes.size()));
+            }catch (Exception e){
+                System.out.println("Can't find destiny corners for coord: "+c_destiny.y+", "+c_destiny.x);
+                continue;
+            }
+            
+            CNode origin_corner;
+            try{
+                origin_corner = origin_nodes.get(generator.nextInt(origin_nodes.size()));
+            }catch (Exception e){
+                System.out.println("Can't find origin corners for coord: "+c_origin.y+", "+c_origin.x);
+                continue;
+            }
+            
             // will use pitagoric distance, only moving between nodes
             returnable.addPath(c_destiny);
             returnable.addPath(destiny_corner.getPos());
@@ -386,7 +400,7 @@ public class RouteGen {
     }
 
     private void OPT2_coords(Route real_returnable, int opt2_counter) {
-        if (opt2_counter>1)
+        if (opt2_counter>3)
             return;
         if (real_returnable.getPaths().size()<4) return;
         
