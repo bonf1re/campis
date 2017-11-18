@@ -46,11 +46,11 @@ public class ListDepartureController implements Initializable {
     @FXML
     private TableColumn<DispatchMoveDisplay, Integer> idDepartureColumn;
     @FXML
-    private TableColumn<DispatchMoveDisplay, Integer> typeColumn;
+    private TableColumn<DispatchMoveDisplay, String> typeColumn;
     @FXML
     private TableColumn<DispatchMoveDisplay, String> departureDateColumn;
     @FXML
-    private TableColumn<DispatchMoveDisplay, Integer> reasonColumn;
+    private TableColumn<DispatchMoveDisplay, String> reasonColumn;
     @FXML
     private Button spButton;
     @FXML
@@ -93,15 +93,15 @@ public class ListDepartureController implements Initializable {
                     }
             );
             idDepartureColumn.setCellValueFactory(cellData -> cellData.getValue().id_dispatch_moveProperty().asObject());
-            typeColumn.setCellValueFactory(cellData -> cellData.getValue().type_ownerProperty().asObject());
+            typeColumn.setCellValueFactory(cellData -> cellData.getValue().type_owner_textProperty());
             departureDateColumn.setCellValueFactory(cellData -> cellData.getValue().arrival_dateProperty());
-            reasonColumn.setCellValueFactory(cellData -> cellData.getValue().reasonProperty().asObject());
+            reasonColumn.setCellValueFactory(cellData -> cellData.getValue().reason_textProperty());
             loadData();
         } catch (NullPointerException e) {
             idDepartureColumn.setCellValueFactory(cellData -> cellData.getValue().id_dispatch_moveProperty().asObject());
-            typeColumn.setCellValueFactory(cellData -> cellData.getValue().type_ownerProperty().asObject());
+            typeColumn.setCellValueFactory(cellData -> cellData.getValue().type_owner_textProperty());
             departureDateColumn.setCellValueFactory(cellData -> cellData.getValue().arrival_dateProperty());
-            reasonColumn.setCellValueFactory(cellData -> cellData.getValue().reasonProperty().asObject());
+            reasonColumn.setCellValueFactory(cellData -> cellData.getValue().reason_textProperty());
         }
     }
 
@@ -109,13 +109,60 @@ public class ListDepartureController implements Initializable {
         dispatch = FXCollections.observableArrayList();
         ObservableList<DispatchMove> dispatch = getDispatch();
         for (int i = 0; i < dispatch.size(); i++) {
+            String reason = getReason(dispatch.get(i).getReason());
+            String type_owner = getTypeOwner(dispatch.get(i).getType_owner());
+            
             DispatchMoveDisplay request = new DispatchMoveDisplay(dispatch.get(i).getId_dispatch_move(),
-                    dispatch.get(i).getType_owner(), dispatch.get(i).getId_owner(),
-                    dispatch.get(i).getMov_date().toString(), dispatch.get(i).getReason());
+                    dispatch.get(i).getType_owner(), type_owner, dispatch.get(i).getId_owner(),
+                    dispatch.get(i).getMov_date().toString(), dispatch.get(i).getReason(), reason);
+            
             dispatchView.add(request);
         }
         departureTable.setItems(null);
         departureTable.setItems(dispatchView);
+    }
+    
+    private String getReason(Integer r) {
+        String reason = " ";
+        
+        if (null != r) switch (r) {
+            case 1:
+                reason = "Para la venta";
+                break;
+            case 2:
+                reason = "Traslado hacia almacen";
+                break;
+            case 5:
+                reason = "Producto dañado";
+                break;
+            case 6:
+                reason = "Producto vencido";
+                break;
+            default:
+                break;
+        }
+        
+        return reason;
+    }
+    
+    private String getTypeOwner(Integer t_owner) {
+        String reason = " ";
+        
+        if (null != t_owner) switch (t_owner) {
+            case 0:
+                reason = "Desechado";
+                break;
+            case 1:
+                reason = "Almacen";
+                break;
+            case 2:
+                reason = "Cliente";
+                break;
+            default:
+                break;
+        }
+        
+        return reason;
     }
 
     private ObservableList<DispatchMove> getDispatch() {
@@ -129,8 +176,9 @@ public class ListDepartureController implements Initializable {
         Integer rs1 = 1;
         Integer rs2 = 2;
         Integer rs3 = 5;
+        Integer rs4 = 6;
         criteria.add(Restrictions.disjunction().add(Restrictions.eq("reason",rs1))
-                .add(Restrictions.eq("reason",rs2)).add(Restrictions.eq("reason",rs3)));
+                .add(Restrictions.eq("reason",rs2)).add(Restrictions.eq("reason",rs3)).add(Restrictions.eq("reason",rs4)));
         List<DispatchMove> list = criteria.list();
         ObservableList<DispatchMove> returnable = FXCollections.observableArrayList();
         for (int i = 0; i < list.size(); i++) {

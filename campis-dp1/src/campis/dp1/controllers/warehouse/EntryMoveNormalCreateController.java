@@ -187,10 +187,15 @@ public class EntryMoveNormalCreateController implements Initializable{
 
     ObservableList<Batch> getBatches(Session session) {
         ObservableList<Batch> returnable = FXCollections.observableArrayList();
-        Query d_query = session.createSQLQuery("SELECT b.* FROM campis.batch b\n" +
+        Query d_query = session.createSQLQuery("SELECT DISTINCT b.* FROM campis.batch b\n" +
                                                 "INNER JOIN\n" +
                                                 "campis.dispatch_move d on d.id_batch = b.id_batch\n" +
-                                                "WHERE b.type_batch = 2 AND d.id_owner = "+this.id_warehouse_back);
+                                                "WHERE b.type_batch = 2 AND d.id_owner = "+this.id_warehouse_back+"\n"+
+                                                "UNION\n"+
+                                                "SELECT DISTINCT b.* FROM campis.batch b\n" +
+                                                "INNER JOIN\n" +
+                                                "campis.movement m on m.id_batch = b.id_batch\n" +
+                                                "WHERE m.mov_type=2 AND m.id_warehouse="+this.id_warehouse_back+" and b.type_batch=7");
         List<Object[]> d_rs = d_query.list();
         for (Object[] d_r : d_rs) {
             //     public Batch(int quantity, float batch_cost, Timestamp arrival_date, Timestamp expiration_date, int id_product, int type_batch, String location, boolean state) {
@@ -198,18 +203,18 @@ public class EntryMoveNormalCreateController implements Initializable{
             batch.setId_batch((int)d_r[0]);
             returnable.add(batch);
         }
-        
-        Query t_query = session.createSQLQuery("SELECT b.* FROM campis.batch b\n" +
-                                                "INNER JOIN\n" +
-                                                "campis.movement m on m.id_batch = b.id_batch\n" +
-                                                "WHERE m.mov_type=2 AND m.id_warehouse="+this.id_warehouse_back+" and b.type_batch=7");
-        List<Object[]> t_rs = t_query.list();
-        for (Object[] t_r : t_rs) {
-            //     public Batch(int quantity, float batch_cost, Timestamp arrival_date, Timestamp expiration_date, int id_product, int type_batch, String location, boolean state) {
-            Batch batch = new Batch((int)t_r[1],(float)(double)t_r[2],(Timestamp)t_r[3],(Timestamp)t_r[4],(int)t_r[5],(int)t_r[6],"--",(boolean)t_r[7]);
-            batch.setId_batch((int)t_r[0]);
-            returnable.add(batch);
-        }
+//        
+//        Query t_query = session.createSQLQuery("SELECT DISTINCT b.* FROM campis.batch b\n" +
+//                                                "INNER JOIN\n" +
+//                                                "campis.movement m on m.id_batch = b.id_batch\n" +
+//                                                "WHERE m.mov_type=2 AND m.id_warehouse="+this.id_warehouse_back+" and b.type_batch=7");
+//        List<Object[]> t_rs = t_query.list();
+//        for (Object[] t_r : t_rs) {
+//            //     public Batch(int quantity, float batch_cost, Timestamp arrival_date, Timestamp expiration_date, int id_product, int type_batch, String location, boolean state) {
+//            Batch batch = new Batch((int)t_r[1],(float)(double)t_r[2],(Timestamp)t_r[3],(Timestamp)t_r[4],(int)t_r[5],(int)t_r[6],"--",(boolean)t_r[7]);
+//            batch.setId_batch((int)t_r[0]);
+//            returnable.add(batch);
+//        }
         return returnable;
     }
     
@@ -264,10 +269,12 @@ public class EntryMoveNormalCreateController implements Initializable{
     
     @FXML
     private void goWhEntryMoveRoute() throws IOException{
+        GraphicsUtils gu = new GraphicsUtils();
         // Weight check
         double total_weight = weight_check();
         if (total_weight<0){
-            System.out.println("No hay suficientes carritos para el piso a transportar o no se ha seleccionado algo.");
+            gu.popupError("Error", "No hay suficientes vehículos para la carga a transportar o no se ha seleccionado algún lote.", "Volver");
+            //System.out.println("No hay suficientes carritos para el piso a transportar o no se ha seleccionado algo.");
             return;
         }
         Configuration configuration = new Configuration();
@@ -284,7 +291,8 @@ public class EntryMoveNormalCreateController implements Initializable{
         List aux = getMarked(session);
         List zone_sel = getZones((ArrayList<Batch>)aux,session);
         if (zone_sel.size() != aux.size()){
-            System.out.println("No se pudo colocar todos los lotes, abortando.");
+            gu.popupError("Error", "No hay suficiente espacio en el almacén para colocar los lotes en su totalidad.", "Volver");
+            //System.out.println("No se pudo colocar todos los lotes, abortando.");
             return;
         }
         
@@ -313,9 +321,11 @@ public class EntryMoveNormalCreateController implements Initializable{
         
         Criteria criteria = session.createCriteria(WarehouseZone.class);
         criteria.add(Restrictions.eq("free",true));
+        criteria.add(Restrictions.eq("id_warehouse",this.id_warehouse_back));
         List zones = criteria.list();
         
         criteria = session.createCriteria(Area.class);
+        criteria.add(Restrictions.eq("id_warehouse",this.id_warehouse_back));
         ArrayList<Area> areas = new ArrayList<>((List)criteria.list());
         
         for (int i = 0; i < zones.size(); i++) {

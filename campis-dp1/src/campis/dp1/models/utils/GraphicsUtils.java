@@ -17,6 +17,8 @@ import javafx.scene.control.Alert;
 import javafx.scene.control.ButtonBar;
 import javafx.scene.control.ButtonType;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
+import javafx.scene.text.TextAlignment;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -296,6 +298,10 @@ public class GraphicsUtils {
                                 btext_content,
                                 b_ok,
                                 b_cancel);
+        Text text = new Text(btext_content);
+        text.setWrappingWidth(400);
+        text.setTextAlignment(TextAlignment.CENTER);
+        alert.getDialogPane().setContent(text);
         alert.setTitle("C A M P I S");
         alert.setHeaderText(btext_header);
         Optional<ButtonType> result = alert.showAndWait();
@@ -310,6 +316,10 @@ public class GraphicsUtils {
         Alert alert = new Alert(Alert.AlertType.INFORMATION,
                                    btext_content,
                                    b_ok);
+        Text text = new Text(btext_content);
+        text.setWrappingWidth(400);
+        text.setTextAlignment(TextAlignment.CENTER);
+        alert.getDialogPane().setContent(text);
         alert.setTitle("C A M P I S");
         alert.setHeaderText(btext_header);
         alert.showAndWait();
@@ -320,6 +330,10 @@ public class GraphicsUtils {
         Alert alert = new Alert(Alert.AlertType.ERROR,
                                    btext_content,
                                    b_ok);
+        Text text = new Text(btext_content);
+        text.setWrappingWidth(400);
+        text.setTextAlignment(TextAlignment.CENTER);
+        alert.getDialogPane().setContent(text);
         alert.setTitle("C A M P I S");
         alert.setHeaderText(btext_header);
         alert.showAndWait();

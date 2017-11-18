@@ -37,13 +37,14 @@ public class Product {
     Integer id_unit_of_measure;
     Integer id_product_type;
     Integer max_qt;
-    
+    Integer min_stock;
+
     public Product() {
         super();
     }
     
     public Product(String nombre, String descripcion, int phy_stock, int comm_stock,
-                    float peso, String marca, float precio_base, int medida, int type, int max_qt) {
+                    float peso, String marca, float precio_base, int medida, int type, int max_qt, int min_stock) {
         this.name = nombre;
         this.description = descripcion;
         this.p_stock = phy_stock;
@@ -54,6 +55,7 @@ public class Product {
         this.id_unit_of_measure = medida;
         this.id_product_type = type;
         this.max_qt = max_qt;
+        this.min_stock = min_stock;
     }
     
     public Product(Integer codProd , String nombre, String descripcion, int phy_stock, int comm_stock,
@@ -157,6 +159,15 @@ public class Product {
     public void setMax_qt(Integer max_qt) {
         this.max_qt = max_qt;
     }
+    
+    public Integer getMin_stock() {
+        return min_stock;
+    }
+
+    public void setMin_stock(Integer min_stock) {
+        this.min_stock = min_stock;
+    }
+    
 
     public static Product getProduct(int cod) {
         Configuration configuration = new Configuration();
