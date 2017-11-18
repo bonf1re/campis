@@ -132,10 +132,12 @@ public class DepartureMoveCreateController implements Initializable{
     
     
     public void goDepartureMoveRoute() throws IOException{
+        GraphicsUtils gu = new GraphicsUtils();
         // Verify stock and capacity
         double total_weight = weight_check();
         if (total_weight<0){
-            System.out.println("No hay suficientes carritos para el peso a transportar, se ha sobrepasado la cantidad maxima de un producto por lote o no se ha seleccionado algo.");
+            gu.popupError("Error", "No hay suficientes carritos para el peso a transportar, se ha sobrepasado la cantidad maxima de un producto por lote o no se ha seleccionado algo.", "Volver");
+            //System.out.println("No hay suficientes carritos para el peso a transportar, se ha sobrepasado la cantidad maxima de un producto por lote o no se ha seleccionado algo.");
             return;
         }
         
@@ -148,7 +150,8 @@ public class DepartureMoveCreateController implements Initializable{
         
         
         if (enoughStock(session)==false){
-            System.out.println("No existe stock suficiente para abastecer requerimientos");
+            gu.popupError("Error", "No existe stock suficiente para abastecer requerimientos.", "Volver");
+            //System.out.println("No existe stock suficiente para abastecer requerimientos");
         }
 
         // get batches to remove
@@ -167,8 +170,9 @@ public class DepartureMoveCreateController implements Initializable{
         
         ArrayList<WarehouseZone> zone_sel = getZones(this.created_batches,session);
         if (zone_sel.size()<created_batches.size()){
-            System.out.println("Mala generacion de zonas.");
-            System.out.println("Se cancelara el movimiento.");
+            gu.popupError("Error", "No existe coherencia entre stock físico del almacen y lotes dentro del mismo.", "Volver");
+//            System.out.println("Mala generacion de zonas.");
+//            System.out.println("Se cancelara el movimiento.");
             return;
         }
         
@@ -481,6 +485,7 @@ public class DepartureMoveCreateController implements Initializable{
                         org_batch.setQuantity(org_batch.getQuantity()-qt);
                         org_batch.setState(false);
                         original_batches.set(i, org_batch);
+                        qt=0;
                     }else{
                         qt-=original_batches.get(i).getQuantity();
                         Batch org_batch = original_batches.get(i);
