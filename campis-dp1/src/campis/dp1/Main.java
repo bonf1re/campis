@@ -434,6 +434,14 @@ public class Main extends Application {
         mainLayout.setCenter(newNormalDeparture);
      }
     
+    /*Batches x dispatch*/
+    public static void showListDispatchBatch() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/dispatch/listDispatchBatch.fxml"));
+        BorderPane listDepartures = loader.load();
+        mainLayout.setCenter(listDepartures);
+     }
+    
     /* RequestOrder */
     
     public static void showListRequestOrder() throws IOException {
