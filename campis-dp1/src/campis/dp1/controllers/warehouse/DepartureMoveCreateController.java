@@ -443,7 +443,7 @@ public class DepartureMoveCreateController implements Initializable{
             str_c++;
         }
         System.out.println(conditional_ids);
-        Query query = session.createSQLQuery("SELECT b.* FROM campis.batch b\n" +
+        Query query = session.createSQLQuery("SELECT DISTINCT b.* FROM campis.batch b\n" +
                                                 "INNER JOIN\n" +
                                                 "campis.movement m on m.id_batch = b.id_batch\n" +
                                                 "WHERE  b.state=true AND ("+conditional_ids+")AND m.mov_type < 2 AND b.type_batch = 3 AND m.id_warehouse="+this.id_warehouse+"\n"+
@@ -477,12 +477,16 @@ public class DepartureMoveCreateController implements Initializable{
                         batch.setState(true);
                         created_batches.add(batch);
                         // set batch to false and diminish its quantity
-                        original_batches.get(i).setQuantity(original_batches.get(i).getQuantity()-qt);
-                        original_batches.get(i).setState(false);
+                        Batch org_batch = original_batches.get(i);
+                        org_batch.setQuantity(org_batch.getQuantity()-qt);
+                        org_batch.setState(false);
+                        original_batches.set(i, org_batch);
                     }else{
                         qt-=original_batches.get(i).getQuantity();
-                        original_batches.get(i).setState(true);
-                        created_batches.add(original_batches.remove(i));
+                        Batch org_batch = original_batches.get(i);
+                        org_batch.setState(true);
+                        created_batches.add(org_batch);
+                        original_batches.remove(i);
                     }
                 }
             }
