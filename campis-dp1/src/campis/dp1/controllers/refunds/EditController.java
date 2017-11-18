@@ -37,11 +37,9 @@ import javafx.util.StringConverter;
 public class EditController implements Initializable {
     Integer id;
     Main main;
-    int selected_id;
+    int selected_quantity;
     private ObservableList<RefundLineDisplay> refundLinesView;
     private ObservableList<RefundLine> refundLines;
-    @FXML
-    private JFXComboBox<String> statusField;
     @FXML
     private TableView<RefundLineDisplay> tableRefundLine;
     @FXML
@@ -70,11 +68,17 @@ public class EditController implements Initializable {
             query.setParameter("newQuantity", refundLinesView.get(i).getQuantity().intValue());
             query.setParameter("IdRefundLine", refundLinesView.get(i).getId_refund_line().intValue());
             int result = query.executeUpdate();
+
+            Query query2 = session.createQuery("update ProductWH set p_stock = p_stock + :newQuantity"
+                + " where id_product = :IdPro and id_warehouse = 1");
+            query2.setParameter("newQuantity", refundLinesView.get(i).getQuantity().intValue());
+            query2.setParameter("IdPro", refundLinesView.get(i).getId_product().intValue());
+            int result2 = query2.executeUpdate();            
         }
 
         Query query = session.createQuery("update Refund set status= :newStatus"
                 + " where id_refund = :IdRefund");
-            query.setParameter("newStatus", statusField.getValue());
+            query.setParameter("newStatus", "Atendido");
             query.setParameter("IdRefund", id);
             int result = query.executeUpdate();
         
@@ -121,27 +125,39 @@ public class EditController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.id = ContextFX.getInstance().getId();
-        statusField.getItems().addAll("En proceso");
-        statusField.getItems().addAll("Entregado");
+        this.selected_quantity = -1;
 
         try {
+            tableRefundLine.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue) -> {
+                if (newValue == null) {
+                    return;
+                }
+                this.selected_quantity = newValue.getOrder_request_quantity().getValue().intValue();
+                }
+            );
+
             productColumn.setCellValueFactory(cellData -> cellData.getValue().getProduct_name());
             orderRequestQuantityColumn.setCellValueFactory(cellData -> cellData.getValue().getOrder_request_quantity().asObject());
             
             quantityColumn.setCellFactory(
                 TextFieldTableCell.<RefundLineDisplay,Integer>forTableColumn(new StringConverter<Integer>(){
                     @Override
-                    public String toString(Integer value){
+                    public String toString(Integer value) {
+                        if ((selected_quantity > -1 && selected_quantity < value) || (value < 0))
+                            return "0";
                         return value.toString();
                     }
                     @Override
-                    public Integer fromString(String string){
+                    public Integer fromString(String string) {
                         return Integer.parseInt(string);
                     }
                 }));
-            quantityColumn.setCellValueFactory(
+
+                quantityColumn.setCellValueFactory(
                     cellData->cellData.getValue().getQuantity().asObject()
-            );
+                );
+
 
             tableRefundLine.setEditable(true);
             
