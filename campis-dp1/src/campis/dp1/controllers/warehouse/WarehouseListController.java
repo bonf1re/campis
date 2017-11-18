@@ -142,6 +142,9 @@ public class WarehouseListController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // no se pueden borrar los almacenes
+        deleteButton.setVisible(false);
+        //
         this.selected_id = 0;
         id_role = (ContextFX.getInstance().getUser().getId_role());
         View rackView = View.getView("racks");

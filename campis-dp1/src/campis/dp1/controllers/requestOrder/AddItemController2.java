@@ -214,7 +214,7 @@ public class AddItemController2 implements Initializable{
             ContextFX.getInstance().setQuantity(quant);
             this.goEditRequestOrder();
         }else{
-            messageLabel.setText("La cantidad introducida es incorrecta");
+            messageLabel.setText("No hay stock disponible para el producto indicado");
         }
     }
     

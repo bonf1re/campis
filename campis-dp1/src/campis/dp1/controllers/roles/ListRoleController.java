@@ -11,6 +11,7 @@ import campis.dp1.controllers.products.ListController;
 import campis.dp1.models.RoleDisplay;
 import campis.dp1.models.Role;
 import campis.dp1.ContextFX;
+import campis.dp1.models.User;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -23,12 +24,14 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -51,6 +54,8 @@ public class ListRoleController implements Initializable{
     private Button editButton;
     @FXML
     private Button deleteButton;
+    @FXML
+    private Label lbldelete;
 
     @FXML
     private void goCreateRole() throws IOException {
@@ -79,6 +84,7 @@ public class ListRoleController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        this.lbldelete.setText("");
         ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "roles");
         tableRole.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
@@ -156,14 +162,38 @@ public class ListRoleController implements Initializable{
     private void deleteRole(ActionEvent event) throws SQLException, ClassNotFoundException {
         if (selected_id > 0) {
             ContextFX.getInstance().setId(selected_id);
-            Integer id_role = ContextFX.getInstance().getId();
-            deleteRole(selected_id);
-            for (int i = 0; i < roles.size(); i++) {
-                if(roles.get(i).getId_role() == selected_id) {
-                    roles.remove(i);
+            if (anyUsers(selected_id)){
+                deleteRole(selected_id);
+                for (int i = 0; i < roles.size(); i++) {
+                    if(roles.get(i).getId_role() == selected_id) {
+                        roles.remove(i);
+                    }
                 }
+                loadData();
+                this.lbldelete.setText("");
+            }  else {
+            this.lbldelete.setText("No es posible eliminar. Se han creado usuarios asignados "
+                                    + "a este rol.");
             }
-            loadData();
         }
+        
     }
+    
+    private boolean anyUsers(int type_id){
+        
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(User.class);
+        criteria.add(Restrictions.eq("id_role",type_id));
+        List lista = criteria.list();
+
+        session.close();
+        sessionFactory.close();
+        return (lista.isEmpty());
+    }
+    
 }
