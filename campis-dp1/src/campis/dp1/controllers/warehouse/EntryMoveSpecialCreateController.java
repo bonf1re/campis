@@ -9,15 +9,12 @@ import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Area;
 import campis.dp1.models.Batch;
-import campis.dp1.models.BatchDisplay;
 import campis.dp1.models.BatchWH_Move;
 import campis.dp1.models.CGraph;
 import campis.dp1.models.CNode;
 import campis.dp1.models.CRack;
 import campis.dp1.models.Coord;
 import campis.dp1.models.Coordinates;
-import campis.dp1.models.Product;
-import campis.dp1.models.ProductType;
 import campis.dp1.models.ProductWH_Move;
 import campis.dp1.models.TabuProblem;
 import campis.dp1.models.TabuSolution;
@@ -31,10 +28,9 @@ import campis.dp1.models.utils.GraphicsUtils;
 import campis.dp1.models.utils.ListUtils;
 import campis.dp1.models.utils.RoutingUtils;
 import campis.dp1.services.TabuSearchService;
-import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
-import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -116,7 +112,7 @@ public class EntryMoveSpecialCreateController implements Initializable {
     private TableColumn<ProductWH_Move, String> delCol;
 
     @FXML
-    private JFXComboBox<String> cbMotive;
+    private JFXTextField cbMotive;
     
     @FXML
     private TableView<Vehicle> vh1Table;
@@ -136,7 +132,8 @@ public class EntryMoveSpecialCreateController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.id_warehouse = ContextFX.getInstance().getId();
-        cbMotive.getItems().addAll("Hallazgo","Proveedores");
+        //.getItems().addAll("Hallazgo","Proveedores");
+        cbMotive.setText("Hallazgo");
         
         this.mode = ContextFX.getInstance().getMode();
         if(this.mode!=0){
@@ -534,6 +531,18 @@ public class EntryMoveSpecialCreateController implements Initializable {
         ObservableList<Vehicle> vh_list = FXCollections.observableArrayList(this.vh2View);
         sortPerCapacity(vh_list);
         
+         class weightDict{
+            public int id_prod;
+            public double weight;
+            public weightDict(int id_prod, double weight){
+                super();
+                this.id_prod = id_prod;
+                this.weight = weight;
+            }
+        }
+         
+        ArrayList<weightDict> weights = new ArrayList<>();
+        
         for (int i = 0; i < vh_list.size(); i++) {
             Vehicle vh = vh_list.get(i);
             double max_cp = vh.getMax_weight();
@@ -541,8 +550,19 @@ public class EntryMoveSpecialCreateController implements Initializable {
             ArrayList<Batch> r_batches = new ArrayList<>();
             int counter = 0;
             for (int j=batch_list.size()-1;j>=0;j--) {
-                Query query = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+String.valueOf(batch_list.get(j).getId_product()));
-                double total_batch_weight = batch_list.get(j).getQuantity()*(double)(query.list().get(0));
+                double total_batch_weight = -1;
+                for (weightDict weight : weights) {
+                    if (weight.id_prod==batch_list.get(j).getId_product()){
+                        total_batch_weight=weight.weight;
+                        break;
+                    }
+                }
+                if (total_batch_weight<0){
+                    Query query = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+String.valueOf(batch_list.get(j).getId_product()));
+                    total_batch_weight = batch_list.get(j).getQuantity()*(double)(query.list().get(0));
+                    weightDict wd = new weightDict(batch_list.get(j).getId_product(), total_batch_weight);
+                    weights.add(wd);
+                }
                 max_cp=max_cp-total_batch_weight;
                 if (max_cp<=0){
                     // here it ends
@@ -573,8 +593,7 @@ public class EntryMoveSpecialCreateController implements Initializable {
      private ArrayList<Batch> getMarked(Session session){
          
         Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-        Timestamp expTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-          
+
         // Here will divide batches if larger than max_qt of each product
         ArrayList<Batch> returnable = new ArrayList<>();
         // TODOProductWH_Move
@@ -598,12 +617,39 @@ public class EntryMoveSpecialCreateController implements Initializable {
                     new_batch.setId_batch(-1);
                     new_batch.setQuantity(b_num);
                     new_batch.setArrival_date(currentTimestamp);
-                    new_batch.setExpiration_date(expTimestamp);
+                    new_batch.setExpiration_date(item.getExp_date());
                     
-
                     returnable.add(new_batch);
                 }                 
             } else {
+                for (int j = 0; j < item.getQtLt().get(); j++) {
+                    // divide batches in max_qt and one with not so much
+                    int number_batches = (int) Math.ceil((double)item.getNum().get()/(double)max_qt);
+                    System.out.println(number_batches);
+                    for (int k = 1; k < number_batches; k++) {
+                        Batch new_batch = new Batch();
+                        
+                        new_batch.setId_product(item.getId_product());
+                        new_batch.setId_batch(-1);
+                        //new_batch.setQuantity(b_num);
+                        new_batch.setQuantity(max_qt);
+                        new_batch.setArrival_date(currentTimestamp);
+                        new_batch.setExpiration_date(item.getExp_date());
+                    
+                        returnable.add(new_batch);
+                    }
+                    
+                    Batch new_batch = new Batch();
+                    
+                    new_batch.setId_product(item.getId_product());
+                    new_batch.setId_batch(-1);
+                    //new_batch.setQuantity(b_num);
+                    new_batch.setQuantity(item.getNum().get() - max_qt*(number_batches-1));
+                    new_batch.setArrival_date(currentTimestamp);
+                    new_batch.setExpiration_date(item.getExp_date());
+                    
+                    returnable.add(new_batch);
+                }    
                 System.out.println("Lote no agregado");
             }             
         }

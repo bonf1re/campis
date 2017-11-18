@@ -7,20 +7,24 @@ package campis.dp1.controllers.warehouse;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
-import static campis.dp1.controllers.warehouse.EntryMoveAddItemController.getCodType;
-import static campis.dp1.controllers.warehouse.EntryMoveAddItemController.getTypes;
-import campis.dp1.models.BatchWH_Move;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.ProductType;
 import campis.dp1.models.ProductWH_Move;
 import com.jfoenix.controls.JFXComboBox;
+import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import static java.lang.Boolean.TRUE;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -50,7 +54,8 @@ public class EntryMoveSpecialAddItemController implements Initializable {
     private int selected_id;
     private int warehouse_id;
     
-    
+     @FXML
+    private JFXDatePicker expDateField;
     
     @FXML
     private JFXTextField codField;
@@ -221,26 +226,46 @@ public class EntryMoveSpecialAddItemController implements Initializable {
             Criteria criteria = session.createCriteria(Product.class);
             criteria.add(Restrictions.eq("id_product", selected_id));
             Product prod =  (Product) criteria.list().get(0);
+            
             Query query = session.createSQLQuery("SELECT p_stock FROM campis.productxwarehouse WHERE id_product ="+prod.getId_product()+"AND id_warehouse = "+this.warehouse_id);
             int stock = (int) query.list().get(0);
-            ProductWH_Move ppp = new ProductWH_Move(prod, Integer.parseInt(quantityField.getText()),stock, 0, 0);
+            
+            //obtenemos la maxima cantidad 
+            
+            SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date_exp = getDate(expDateField.getValue());
+            Timestamp expTimestamp = Timestamp.valueOf((String)formatIn.format(date_exp));
+            
+            ProductWH_Move ppp = new ProductWH_Move(prod, Integer.parseInt(quantityField.getText()),stock, 0, Integer.parseInt(quantityField.getText()), expTimestamp);
             ContextFX.getInstance().setId(warehouse_id);
             ContextFX.getInstance().setMode(1);
+            
             ArrayList<Object> aux_pol = ContextFX.getInstance().getPolymorphic_list();
             ObservableList aux_prod = FXCollections.observableArrayList((ObservableList)aux_pol.get(0));
             aux_prod.add(ppp);
             aux_pol.set(0, aux_prod);
+            
             ContextFX.getInstance().setPolymorphic_list(aux_pol);
+            
             session.close();
             sessionFactory.close();
+            
             this.goBackCreateEspecialEntry();
         }
+    }
+    
+     private Date getDate(LocalDate value) {
+        
+        Calendar calendar = new GregorianCalendar(value.getYear(),
+                                                    value.getMonthValue()-1,
+                                                    value.getDayOfMonth());
+        return calendar.getTime();
     }
     
     @FXML
     private void goBackCreateEspecialEntry() throws IOException {
         ContextFX.getInstance().setId(warehouse_id);
-        ContextFX.getInstance().setMode(1);
+        //ContextFX.getInstance().setMode(1);
         main.showWhEntryMoveSpecialCreate();
     }
 }
