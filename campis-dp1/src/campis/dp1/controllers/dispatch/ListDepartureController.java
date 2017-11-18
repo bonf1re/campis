@@ -153,10 +153,10 @@ public class ListDepartureController implements Initializable {
                 reason = "Desechado";
                 break;
             case 1:
-                reason = "Cliente";
+                reason = "Almacen";
                 break;
             case 2:
-                reason = "Almacen";
+                reason = "Cliente";
                 break;
             default:
                 break;

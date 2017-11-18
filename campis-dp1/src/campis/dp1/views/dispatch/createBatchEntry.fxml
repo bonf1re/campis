@@ -23,34 +23,35 @@
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="277.0" layoutY="207.0" prefHeight="21.0" prefWidth="101.0" text="Cantidad:">
+            <Label layoutX="277.0" layoutY="221.0" prefHeight="21.0" prefWidth="101.0" text="Cantidad:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Label layoutX="277.0" layoutY="394.0" text="Fecha de expiracion:">
+            <Label layoutX="272.0" layoutY="414.0" text="Fecha de expiracion:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <Button layoutX="386.0" layoutY="502.0" mnemonicParsing="false" onAction="#insertBatchEntry" prefHeight="35.0" prefWidth="85.0" text="Guardar" />
-            <Button layoutX="532.0" layoutY="502.0" mnemonicParsing="false" onAction="#goNewEntry" prefHeight="35.0" prefWidth="85.0" text="Cancelar" />
-            <JFXComboBox fx:id="prodField" layoutX="524.0" layoutY="148.0" prefHeight="31.0" prefWidth="169.0" />
-            <JFXTextField fx:id="quantityField" layoutX="525.0" layoutY="205.0" prefHeight="31.0" prefWidth="168.0" />
-            <Label layoutX="277.0" layoutY="323.0" prefHeight="27.0" prefWidth="144.0" text="Fecha de ingreso:">
+            <Button layoutX="341.0" layoutY="530.0" mnemonicParsing="false" onAction="#insertBatchEntry" prefHeight="35.0" prefWidth="85.0" text="Guardar" />
+            <Button layoutX="458.0" layoutY="530.0" mnemonicParsing="false" onAction="#goNewEntry" prefHeight="35.0" prefWidth="85.0" text="Cancelar" />
+            <JFXComboBox fx:id="prodField" layoutX="457.0" layoutY="148.0" prefHeight="31.0" prefWidth="199.0" />
+            <JFXTextField fx:id="quantityField" layoutX="458.0" layoutY="205.0" prefHeight="31.0" prefWidth="198.0" />
+            <Label layoutX="273.0" layoutY="348.0" prefHeight="27.0" prefWidth="144.0" text="Fecha de ingreso:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <JFXDatePicker fx:id="arrivalDateField" layoutX="529.0" layoutY="324.0" prefHeight="25.0" prefWidth="193.0" />
-            <JFXDatePicker fx:id="expDateField" layoutX="527.0" layoutY="390.0" prefHeight="30.0" prefWidth="197.0" />
-            <Label layoutX="277.0" layoutY="273.0" prefHeight="27.0" prefWidth="135.0" text="Precio del Lote:">
+            <JFXDatePicker fx:id="arrivalDateField" layoutX="456.0" layoutY="340.0" prefHeight="31.0" prefWidth="207.0" />
+            <JFXDatePicker fx:id="expDateField" layoutX="454.0" layoutY="404.0" prefHeight="31.0" prefWidth="206.0" />
+            <Label layoutX="277.0" layoutY="282.0" prefHeight="27.0" prefWidth="135.0" text="Precio del Lote:">
                <font>
                   <Font size="18.0" />
                </font>
             </Label>
-            <JFXTextField fx:id="batchPriceField" layoutX="609.0" layoutY="271.0" prefHeight="31.0" prefWidth="84.0" />
-            <JFXComboBox fx:id="currencyField" layoutX="525.0" layoutY="271.0" prefHeight="31.0" prefWidth="56.0" />
+            <JFXTextField fx:id="batchPriceField" layoutX="542.0" layoutY="273.0" prefHeight="31.0" prefWidth="116.0" />
+            <JFXComboBox fx:id="currencyField" layoutX="456.0" layoutY="273.0" prefHeight="31.0" prefWidth="78.0" />
+            <Label fx:id="messageField1" layoutX="277.0" layoutY="473.0" prefHeight="21.0" prefWidth="32.0" textFill="RED" />
          </children>
       </AnchorPane>
    </center>

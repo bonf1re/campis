@@ -29,6 +29,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
 import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
@@ -306,15 +307,28 @@ public class CreateSpecialDepartureController implements Initializable {
             }
             this.goListDepartures();
         } else {
+            
+            if (reason == null){
+                Alert alert = new Alert(Alert.AlertType.INFORMATION);
+                //alert.setTitle("Alerta");
+                alert.setHeaderText(null);
+                alert.setContentText("Se debe indicar un motivo");
+                alert.showAndWait();
+                return;
+            }
+                
             Integer id_owner = 0;
             Integer id_type_owner = 0;
             Integer idReason = 0;
             Integer id_batch = 0;
+            
+            
             if(reason.compareTo("Producto Dañado")==0){
                 idReason = 5;
             } else if (reason.compareTo("Producto Vencido")==0){
                 idReason = 6;
             }
+            
             for (int i = 0; i < batchDepartureTable.getItems().size(); i++) {
                 id_batch = batchDepartureTable.getItems().get(i).getId_batch().getValue();   
                 createDeparture(id_type_owner, id_owner, idReason, id_batch);

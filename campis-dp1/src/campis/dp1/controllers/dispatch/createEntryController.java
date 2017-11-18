@@ -16,9 +16,12 @@ import campis.dp1.models.DispatchMove;
 import campis.dp1.models.Product;
 import com.jfoenix.controls.JFXComboBox;
 import java.io.IOException;
+import static java.lang.Boolean.FALSE;
+import static java.lang.Boolean.TRUE;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
@@ -165,7 +168,8 @@ public class createEntryController implements Initializable {
         String returnable = getMeasure(id);
         return returnable;
     }
-
+    
+    
     @FXML
     private void saveBatchEntries(ActionEvent event) throws IOException {
         /*

@@ -13,6 +13,7 @@ import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
+import static java.lang.Boolean.TRUE;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.text.SimpleDateFormat;
@@ -27,6 +28,7 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -56,7 +58,15 @@ public class CreateBatchEntryController implements Initializable {
     private JFXTextField batchPriceField;
     @FXML
     private JFXComboBox<String> currencyField;
-
+    
+    @FXML
+    private Label messageField1;
+//    @FXML
+//    private Label messageField2;
+//    
+    String message = "";
+    
+    
     @FXML
     private void goNewEntry() throws IOException {
         main.showNewEntry();
@@ -86,33 +96,62 @@ public class CreateBatchEntryController implements Initializable {
         return id;
     }
 
+    private Boolean verifyDates(Date creation, Date exp) {
+        Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+       
+        Boolean flag = true;
+        
+        //verificamos que la fecha de ingreso sea menor, igual a la fecha de hoy dia
+        if (creation.compareTo(currentTimestamp) > 0) {
+            flag = false;
+            message = "Fecha de creación debe ser menor o igual a la actual";
+        }
+        if (exp.compareTo(creation) <= 0) {
+            flag = false;
+            message = "Fecha de expiración, debe ser mayor a la fecha de creación";
+        }
+        return flag;
+    }
+        
+        
     @FXML
     private void insertBatchEntry() throws IOException {
         SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+        
         String prod = prodField.getValue();
         Integer quantity = Integer.parseInt(quantityField.getText());
+        
         Date date_creation = getDate(arrivalDateField.getValue());
         Date date_exp = getDate(expDateField.getValue());
+        
         float batchPrice = Float.parseFloat(batchPriceField.getText());
         Integer idprod = getIdProd(prod);
         
-        Batch b = new Batch(quantity, batchPrice, Timestamp.valueOf((String)formatIn.format(date_creation)), 
+        /*Verificacion de las fechas*/
+        Boolean verify = verifyDates(date_creation, date_exp);
+
+        if (verify == TRUE) {
+            Batch b = new Batch(quantity, batchPrice, Timestamp.valueOf((String)formatIn.format(date_creation)), 
                             Timestamp.valueOf((String)formatIn.format(date_exp)), idprod, 4, "-1", true);
 
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
 
-        session.beginTransaction();
-        session.save(b);
-        session.getTransaction().commit();
+            session.beginTransaction();
+            session.save(b);
+            session.getTransaction().commit();
 
-        session.close();
-        sessionFactory.close();
-        ContextFX.getInstance().setId(b.getId_batch());
-        this.goNewEntry();
+            session.close();
+            sessionFactory.close();
+            ContextFX.getInstance().setId(b.getId_batch());
+            this.goNewEntry();
+        } else {
+            messageField1.setText(message);
+        }
+ 
     }
 
     /**

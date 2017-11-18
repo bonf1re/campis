@@ -35,6 +35,10 @@ public class BatchDisplay {
     private final SimpleIntegerProperty numMove;
     private final DoubleProperty weight;
     
+    private final IntegerProperty id_line_do;
+    private final IntegerProperty prod_quantity;
+    private final StringProperty prod_name;
+    
 
     public BatchDisplay(Batch whMove,double weight) {
         this.id_batch = new SimpleIntegerProperty(whMove.getId_batch());
@@ -50,6 +54,10 @@ public class BatchDisplay {
         this.selected = new SimpleBooleanProperty(false);
         this.numMove = new SimpleIntegerProperty(0);
         this.weight =  new  SimpleDoubleProperty(weight);
+        
+        this.id_line_do = new SimpleIntegerProperty(0);
+        this.prod_quantity = new SimpleIntegerProperty(0);
+        this.prod_name =  new SimpleStringProperty(" ");
     }
     
     public BatchDisplay(int id_batch, int quantity, float cost, String arrivalDate, String expirationDate,
@@ -68,6 +76,37 @@ public class BatchDisplay {
         this.selected = new SimpleBooleanProperty(false);
         this.numMove = new SimpleIntegerProperty(0);
         this.weight =  new SimpleDoubleProperty(0);
+        
+        this.id_line_do = new SimpleIntegerProperty(0);
+        this.prod_quantity = new SimpleIntegerProperty(0);
+        this.prod_name =  new SimpleStringProperty(" ");
+    }
+    
+    public BatchDisplay(int id_batch, int quantity, float cost, String arrivalDate, 
+                        String expirationDate, int id_product, int type, 
+                        String location, String state, String heritage, 
+                        int id_line, int prod_q, String p_name) {
+        
+        this.id_batch = new SimpleIntegerProperty(id_batch);
+        this.quantity = new SimpleIntegerProperty(quantity);
+        this.batch_cost = new SimpleFloatProperty(cost);
+        this.arrival_date = new SimpleStringProperty(arrivalDate);
+        this.expiration_date = new SimpleStringProperty(expirationDate);
+        this.id_product = new SimpleIntegerProperty(id_product);
+        this.type_batch = new SimpleIntegerProperty(type);
+        this.location = new SimpleStringProperty(location);
+        this.state = new SimpleStringProperty(state);
+        this.heritage = new SimpleStringProperty(heritage);
+        this.selected = new SimpleBooleanProperty(false);
+        this.numMove = new SimpleIntegerProperty(0);
+        this.weight =  new SimpleDoubleProperty(0);
+        
+        //Muestra a que linea del dispatch order esta relacionado este lote
+        this.id_line_do = new SimpleIntegerProperty(id_line);
+        //guarda la cantidad de producto requerida por la linea dle dispatch order
+        this.prod_quantity = new SimpleIntegerProperty(prod_q);
+        //guarda el nombre del producto
+        this.prod_name =  new SimpleStringProperty(p_name);
     }
 
     public BooleanProperty getSelected() {
@@ -121,7 +160,18 @@ public class BatchDisplay {
 
     public DoubleProperty getWeight() {
         return weight;
+    }  
+        
+    public IntegerProperty getId_line_do() {
+        return id_line_do;
     }
     
+    public IntegerProperty getProd_quantity() {
+        return prod_quantity;
+    }
+    
+    public StringProperty getProd_name() {
+        return prod_name;
+    }
     
 }

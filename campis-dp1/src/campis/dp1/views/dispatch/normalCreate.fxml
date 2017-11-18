@@ -12,8 +12,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" 
-            fx:controller="campis.dp1.controllers.dispatch.CreateNormalDepartureController">
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.dispatch.CreateNormalDepartureController">
     <stylesheets>
         <URL value="@/campis/dp1/assets/css/listentries.css" />
     </stylesheets>
@@ -50,7 +49,7 @@
                </font>
             </Label>
             <Button layoutX="880.0" layoutY="267.0" mnemonicParsing="false" onAction="#goCreateDeparture" prefHeight="27.0" prefWidth="73.0" text="Guardar" />
-            <Button fx:id="addButton" layoutX="443.0" layoutY="292.0" mnemonicParsing="false" onAction="#addAction" prefHeight="25.0" prefWidth="28.0" text="&gt;" />
+            <Button fx:id="addButton" layoutX="438.0" layoutY="249.0" mnemonicParsing="false" onAction="#addAction" prefHeight="38.0" prefWidth="36.0" text="&gt;" />
             <TableView fx:id="batchDepartureTable" layoutX="484.0" layoutY="155.0" prefHeight="280.0" prefWidth="384.0">
                <columns>
                   <TableColumn fx:id="idBatchColumn2" prefWidth="128.0" text="ID Lote" />
@@ -77,6 +76,7 @@
             </Label>
             <JFXTextField fx:id="reasonField" layoutX="124.0" layoutY="453.0" unFocusColor="#4d4d4d0b" />
             <Button layoutX="451.0" layoutY="82.0" mnemonicParsing="false" onAction="#generateList" prefHeight="30.0" prefWidth="80.0" text="Generar" />
+            <Button fx:id="delButton" layoutX="438.0" layoutY="299.0" mnemonicParsing="false" onAction="#delAction" prefHeight="38.0" prefWidth="36.0" text="&lt;" />
          </children>
       </AnchorPane>
    </right>
