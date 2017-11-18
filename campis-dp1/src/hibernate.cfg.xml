@@ -65,6 +65,8 @@
         <mapping class="campis.dp1.models.WarehouseZone"/>
         <mapping class="campis.dp1.models.Area"/>
         <mapping class="campis.dp1.models.District"/>
+        <mapping class="campis.dp1.models.Parameters"/>
+        <mapping class="campis.dp1.models.ProductWH"/>
         
     </session-factory>
 

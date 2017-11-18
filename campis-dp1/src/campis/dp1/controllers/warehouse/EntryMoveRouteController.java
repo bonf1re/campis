@@ -149,17 +149,32 @@ public class EntryMoveRouteController implements Initializable{
         }
     }
     
+    
     @FXML
     private void saveEntryMove() throws IOException{
-        // Will save all
+        // Will save all        
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        
+        GraphicsUtils gu = new GraphicsUtils();
         // Previous verification
+        for (int i = 1; i < this.routing_data.size(); i++) {
+            ArrayList<Object> r_d_iterator = (ArrayList<Object>) this.routing_data.get(i);
+            boolean saved = (boolean) r_d_iterator.get(4);
+            if (saved == true ){
+                gu.popupNotif("Notificación", "Estos movimientos ya fueron grabados", "Continuar");
+                if (gu.popup2Options(" ", "¿Desea volver a la lista de movimientos?", "Sí", "No, gracias") == true){
+                    goEntryMoveList();
+                }
+                return;
+            }
+        }
+        
+        
+        
         Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
         for (int i = 1; i < this.routing_data.size(); i++) {
             ArrayList<Object> r_d_iterator = (ArrayList<Object>) this.routing_data.get(i);
@@ -210,7 +225,11 @@ public class EntryMoveRouteController implements Initializable{
         
         session.getTransaction().commit();
         session.close();
-        sessionFactory.close();        
+        sessionFactory.close();
+        gu.popupNotif("Notificación", "Estos movimientos ya fueron grabados", "Continuar");
+        if (gu.popup2Options(" ", "¿Desea volver a la lista de movimientos?", "Sí", "No, gracias") == true) {
+            goEntryMoveList();
+        }
     }
     
     @FXML

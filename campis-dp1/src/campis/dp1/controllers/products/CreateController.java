@@ -5,6 +5,7 @@
  */
 package campis.dp1.controllers.products;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Product;
 
@@ -56,7 +57,7 @@ public class CreateController implements Initializable {
     @FXML
     private JFXTextArea descripField;
     @FXML
-    private JFXComboBox currencyType;
+    private JFXComboBox<String> currencyType;
     @FXML
     private JFXTextField maxQtField;
     @FXML
@@ -164,9 +165,18 @@ public class CreateController implements Initializable {
             session.beginTransaction();
             int measure = searchCodMeasure(measureField.getEditor().getText());
             int type = searchCodType(typeField.getEditor().getText());
+            String curTyp = this.currencyType.getValue();
+            float price;
+            if(curTyp.compareTo("S/.")==0){
+                price = Float.parseFloat(priceField.getText());
+            }else if(curTyp.compareTo("$")==0){
+                price = Float.parseFloat(priceField.getText()) * ContextFX.getInstance().getDollar();
+            }else {
+                price = Float.parseFloat(priceField.getText()) * ContextFX.getInstance().getEuro();
+            }
             
             Product product = new Product(nameField.getText(), descripField.getText(), 1, 1, Float.parseFloat(weightField.getText()),
-                                         trademarkField.getText(), Float.parseFloat(priceField.getText()), measure, type, Integer.parseInt(maxQtField.getText()));
+                                         trademarkField.getText(), price, measure, type, Integer.parseInt(maxQtField.getText()));
             
             session.save(product);
             session.getTransaction().commit();

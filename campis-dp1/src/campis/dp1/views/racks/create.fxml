@@ -29,11 +29,11 @@
             <Button layoutX="356.0" layoutY="504.0" mnemonicParsing="false" onAction="#insertRack" prefHeight="35.0" prefWidth="85.0" text="Guardar" />
             <Button layoutX="532.0" layoutY="504.0" mnemonicParsing="false" onAction="#goListRacks" prefHeight="35.0" prefWidth="85.0" text="Cancelar" />
             <Label layoutX="62.0" layoutY="253.0" text="Orientacion:" />
-            <JFXComboBox fx:id="orientationField" layoutX="153.0" layoutY="246.0" prefHeight="31.0" prefWidth="35.0" />
+            <JFXComboBox fx:id="orientationField" layoutX="137.0" layoutY="246.0" prefHeight="31.0" prefWidth="114.0" />
             <Canvas fx:id="mapCanvas" height="376.0" layoutX="403.0" layoutY="64.0" width="544.0" />
-            <Button layoutX="232.0" layoutY="249.0" mnemonicParsing="false" onAction="#testAction" prefHeight="25.0" prefWidth="62.0" text="Probar" />
+            <Button layoutX="259.0" layoutY="249.0" mnemonicParsing="false" onAction="#testAction" prefHeight="25.0" prefWidth="62.0" text="Probar" />
             <Label fx:id="messageField" layoutX="62.0" layoutY="300.0" prefHeight="54.0" prefWidth="340.0" textFill="RED" wrapText="true" />
-            <Button layoutX="313.0" layoutY="238.0" mnemonicParsing="false" onAction="#clearAction" prefHeight="47.0" prefWidth="70.0" text="Limpiar Mapa" textAlignment="CENTER" wrapText="true" />
+            <Button layoutX="330.0" layoutY="238.0" mnemonicParsing="false" onAction="#clearAction" prefHeight="47.0" prefWidth="70.0" text="Limpiar Mapa" textAlignment="CENTER" wrapText="true" />
          </children>
       </AnchorPane>
    </center>
