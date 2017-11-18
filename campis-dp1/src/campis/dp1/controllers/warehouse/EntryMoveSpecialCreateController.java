@@ -294,6 +294,7 @@ public class EntryMoveSpecialCreateController implements Initializable {
             vh1View = FXCollections.observableArrayList();
             Criteria criteria = session.createCriteria(Vehicle.class);
             criteria.add(Restrictions.eq("id_warehouse", this.id_warehouse));
+            criteria.add(Restrictions.eq("active", true));
             List rs = criteria.list();
             for (int i = 0; i < rs.size(); i++) {
                 vh1View.add((Vehicle) rs.get(i));
