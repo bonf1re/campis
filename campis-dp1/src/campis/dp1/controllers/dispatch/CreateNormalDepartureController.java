@@ -8,9 +8,6 @@ package campis.dp1.controllers.dispatch;
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import static campis.dp1.controllers.products.EditController.getMeasure;
-import static campis.dp1.controllers.products.EditController.searchCodMeasure;
-import static campis.dp1.controllers.products.EditController.searchCodType;
-import static campis.dp1.controllers.vehicles.CreateVehicleController.getWarehouses;
 import campis.dp1.models.Batch;
 import campis.dp1.models.BatchDisplay;
 import campis.dp1.models.Client;
@@ -18,18 +15,13 @@ import campis.dp1.models.DispatchMove;
 import campis.dp1.models.DispatchOrder;
 import campis.dp1.models.DispatchOrderLine;
 import campis.dp1.models.Product;
-import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.RequestOrder;
-import campis.dp1.models.UnitOfMeasure;
-import campis.dp1.models.Warehouse;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
-import static java.lang.Boolean.FALSE;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -154,8 +146,8 @@ public class CreateNormalDepartureController implements Initializable {
         );
         
         idBatchColumn2.setCellValueFactory(cellData -> cellData.getValue().getId_batch().asObject());
-        productColumn2.setCellValueFactory(cellData -> cellData.getValue().getLocation());
-        quantityColumn2.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
+        productColumn2.setCellValueFactory(cellData -> cellData.getValue().getProd_name());
+        quantityColumn2.setCellValueFactory(cellData -> cellData.getValue().getProd_quantity().asObject());
         measureColumn2.setCellValueFactory(cellData -> cellData.getValue().getHeritage());
         expColumn2.setCellValueFactory(cellData -> cellData.getValue().getExpiration_date());
 
@@ -380,30 +372,11 @@ public class CreateNormalDepartureController implements Initializable {
        boolean flag = verifyBatch(id_line_do_selected);
        
        if (flag){ //si no se encontro el id de esa fila en la tabla de despachos
-            for (int i = 0; i < batch.size(); i++) {
-                if (auxi.getId_batch() == batch.get(i).getId_batch()) {
-
-                    String nameProd = getNameProd(batch.get(i).getId_product());
-                    int meas = getIntMeasure(batch.get(i).getId_product());
-                    String measure = getMeasure(meas);
-
-                    BatchDisplay batchDisp = new BatchDisplay(batch.get(i).getId_batch(), auxi.getQuantity(),
-                            batch.get(i).getBatch_cost(), batch.get(i).getArrival_date().toString(),
-                            batch.get(i).getExpiration_date().toString(), batch.get(i).getId_product(),
-                            batch.get(i).getType_batch(), nameProd,
-                            Boolean.toString(batch.get(i).isState()), measure, 
-                            id_line_do_selected, 0, " ");
-                    
-                    batchView2.add(batchDisp);
-
-                    num = num + 1;
-
-                    for (int j = 0; j < batchView.size(); j++) {
-                        if (auxi.getId_batch() == batchView.get(j).getId_batch().getValue()) {
-                            batchView.remove(j);
-                        }
-                    }
-
+            for (int i = 0; i < batchView.size(); i++) {
+                if (auxi.getId_batch() == batchView.get(i).getId_batch().getValue()) {                
+                    batchView2.add(batchView.get(i));
+                    batchView.remove(i);
+                     num = num + 1;
                 }
             } 
        } else {
