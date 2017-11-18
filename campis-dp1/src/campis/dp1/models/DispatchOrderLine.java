@@ -24,6 +24,7 @@ public class DispatchOrderLine {
     Integer id_dispatch_order;
     Integer id_product;
     Integer quantity;
+    private boolean delivered;
     
     public DispatchOrderLine() {
         super();
@@ -72,6 +73,20 @@ public class DispatchOrderLine {
 
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
+    }
+    
+    /**
+     * @return the delivered
+     */
+    public boolean isDelivered() {
+        return delivered;
+    }
+
+    /**
+     * @param delivered the delivered to set
+     */
+    public void setDelivered(boolean delivered) {
+        this.delivered = delivered;
     }
     
 }
