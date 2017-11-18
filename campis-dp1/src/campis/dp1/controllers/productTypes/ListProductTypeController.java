@@ -12,8 +12,7 @@ import campis.dp1.models.ProductTypeDisplay;
 import campis.dp1.models.ProductType;
 import campis.dp1.ContextFX;
 import java.io.IOException;
-import campis.dp1.models.Permission;
-import campis.dp1.models.View;
+import campis.dp1.models.Product;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
 import java.sql.SQLException;
@@ -30,8 +29,10 @@ import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -58,6 +59,9 @@ public class ListProductTypeController implements Initializable {
 
     @FXML
     private Button deleteButton;
+    
+    @FXML
+    private Label lblprodType;
 
     @FXML
     private void goCreateProductType() throws IOException {
@@ -78,6 +82,7 @@ public class ListProductTypeController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        this.lblprodType.setText("");
         ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "product_types");
         tableProductType.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
@@ -147,9 +152,31 @@ public class ListProductTypeController implements Initializable {
     private void deleteProductType(ActionEvent event) throws SQLException, ClassNotFoundException {
         if (selected_id > 0) {
             ContextFX.getInstance().setId(selected_id);
-            Integer id_product_type = ContextFX.getInstance().getId();
-            deleteProductType(selected_id);
-            loadData();
+            if (anyProducts(selected_id)){
+                deleteProductType(selected_id);
+                loadData();
+                this.lblprodType.setText("");
+            } else {
+                this.lblprodType.setText("No es posible eliminar. Existen productos de este tipo.");
+            }
+            
         }
+    }
+    
+    private boolean anyProducts(int type_id){
+        
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Product.class);
+        criteria.add(Restrictions.eq("id_product_type",type_id));
+        List lista = criteria.list();
+
+        session.close();
+        sessionFactory.close();
+        return (lista.isEmpty());
     }
 }

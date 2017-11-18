@@ -87,6 +87,9 @@ public class ListVehicleController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // no se pueden borrar los vehiculos
+        deleteButton.setVisible(false);
+        //
         this.selected_id = 0;
         ContextFX.getInstance().modifyValidation(newButton, editButton, deleteButton, id_role, "vehicles");
         this.warehouse_id = ContextFX.getInstance().getId();

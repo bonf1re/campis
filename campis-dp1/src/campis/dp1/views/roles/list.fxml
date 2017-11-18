@@ -37,6 +37,7 @@
             <Button fx:id="deleteButton" layoutX="840.0" layoutY="319.0" mnemonicParsing="false" onAction="#deleteRole" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
             <Button layoutX="840.0" layoutY="383.0" mnemonicParsing="false" onAction="#goPermission" prefHeight="36.0" prefWidth="85.0" text="Permisos" />
             <Button fx:id="createButton" layoutX="840.0" layoutY="130.0" mnemonicParsing="false" onAction="#goCreateRole" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
+            <Label fx:id="lbldelete" layoutX="40.0" layoutY="455.0" text="Label" textFill="RED" />
          </children>
       </AnchorPane>
    </center>

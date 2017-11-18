@@ -18,6 +18,7 @@ import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -48,15 +49,19 @@ public class viewController implements Initializable{
     @FXML
     private JFXTextField typeField;
     @FXML
-    private JFXTextField posXField;
-    @FXML
-    private JFXTextField posYField;
-    @FXML
     private JFXTextField priceField;
     @FXML
     private JFXTextField trademarkField;
     @FXML
     private JFXTextField weightField;
+    @FXML
+    private JFXTextField minQTField;
+    @FXML
+    private JFXTextField currencyField;
+    @FXML
+    private JFXTextField unitOfMeasureField;
+    @FXML
+    private Label stockMinMessage;
     
     @Override
     public void initialize(URL location, ResourceBundle resources) {
@@ -74,6 +79,7 @@ public class viewController implements Initializable{
         session.close();
         sessionFactory.close();
         getStock(id);
+        String measure = EditController.getMeasure(result.getId_unit_of_measure());
         this.idField.setText(Integer.toString(id));
         this.stockPField.setText(Integer.toString(pStock));
         this.stockLField.setText(Integer.toString(cStock));
@@ -84,6 +90,15 @@ public class viewController implements Initializable{
         String type = getType(result.getId_product_type());
         this.typeField.setText(type);
         this.weightField.setText(Float.toString(result.getWeight()));
+        this.minQTField.setText(Float.toString(result.getMin_stock()));
+        this.currencyField.setText("S/.");
+        this.unitOfMeasureField.setText(measure);
+        if((pStock - result.getMin_stock() < 5) && (pStock - result.getMin_stock() > 0)){
+            stockMinMessage.setText("Se necesita más productos el stock esta cerca a terminarse.");
+        }
+        if(pStock - result.getMin_stock() == 0){
+            stockMinMessage.setText("El stock del producto esta en su mínimo permitido.");
+        }
     }
     
     private void getStock(int id_product) {
