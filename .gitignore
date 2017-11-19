@@ -49,7 +49,6 @@ nb-configuration.xml
 
 # Package Files #
 
-*.jar
 *.war
 *.ear
 *.zip
@@ -75,7 +74,7 @@ nb-configuration.xml
 !.vscode/settings.json
 !.vscode/tasks.json
 !.vscode/launch.json
-!.vscode/extensions.json
+!.vscodejar/extensions.json
 
 ### WebStorm/IntelliJ ###
 /.idea
