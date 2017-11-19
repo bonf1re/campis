@@ -4,20 +4,12 @@
  * and open the template in the editor.
  */
 package campis.dp1.controllers.dispatch;
-import campis.dp1.ContextFX;
-import campis.dp1.Main;
-import static campis.dp1.controllers.products.EditController.getMeasure;
 import campis.dp1.models.Batch;
 import campis.dp1.models.BatchDisplay;
-import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import javafx.fxml.FXML;
-import campis.dp1.models.Permission;
 import campis.dp1.models.Product;
-import campis.dp1.models.View;
-import javafx.fxml.Initializable;
-import com.jfoenix.controls.JFXButton;
 import java.util.List;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
