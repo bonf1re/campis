@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXButton?>
+<?import com.jfoenix.controls.JFXComboBox?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
@@ -9,16 +9,16 @@
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.DepartureMoveListController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.DepartureMoveListController">
    <center>
       <Pane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
-            <Text layoutX="79.0" layoutY="47.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Movimientos de Salida en Almacén" wrappingWidth="687.8330078125">
+            <Text layoutX="79.0" layoutY="93.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Movimientos de Salida en:" wrappingWidth="376.8330078125">
                <font>
                   <Font size="28.0" />
                </font>
             </Text>
-            <TableView fx:id="whDepartureMoveTable" layoutX="79.0" layoutY="142.0" prefHeight="337.0" prefWidth="711.0">
+            <TableView fx:id="whDepartureMoveTable" layoutX="79.0" layoutY="142.0" prefHeight="384.0" prefWidth="711.0">
                <columns>
                   <TableColumn fx:id="idCol" prefWidth="75.0" text="ID" />
                   <TableColumn fx:id="dateCol" prefWidth="75.0" text="Fecha" />
@@ -32,26 +32,19 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <JFXButton layoutX="61.0" layoutY="61.0" onAction="#goWhEntryMoveList" prefHeight="55.0" prefWidth="477.0" text="Movimientos de Entrada en Almacén" underline="true">
-               <font>
-                  <Font size="24.0" />
-               </font>
-            </JFXButton>
+            <JFXComboBox fx:id="cbWarehouses" layoutX="474.0" layoutY="70.0" prefHeight="26.0" prefWidth="162.0" />
          </children>
       </Pane>
    </center>
    <right>
       <Pane prefHeight="600.0" prefWidth="174.0" BorderPane.alignment="CENTER">
          <children>
-            <Button layoutX="30.0" layoutY="205.0" mnemonicParsing="false" onAction="#goWhDepartureMoveCreate" prefHeight="41.0" prefWidth="114.0" text="Agregar Salida" />
+            <Button layoutX="30.0" layoutY="338.0" mnemonicParsing="false" onAction="#goWhDepartureMoveCreate" prefHeight="41.0" prefWidth="114.0" text="Agregar Salida Especial" textAlignment="CENTER" wrapText="true" />
+            <Button layoutX="30.0" layoutY="270.0" mnemonicParsing="false" onAction="#goWhDepartureMoveCreate" prefHeight="41.0" prefWidth="114.0" text="Agregar Salida Regular" textAlignment="CENTER" wrapText="true" />
          </children>
       </Pane>
    </right>
    <bottom>
-      <Pane prefHeight="116.0" prefWidth="967.0" BorderPane.alignment="CENTER">
-         <children>
-            <Button layoutX="423.0" layoutY="45.0" mnemonicParsing="false" onAction="#goWhList" prefHeight="35.0" prefWidth="100.0" text="Regresar" />
-         </children>
-      </Pane>
+      <Pane prefHeight="116.0" prefWidth="967.0" BorderPane.alignment="CENTER" />
    </bottom>
 </BorderPane>

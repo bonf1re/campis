@@ -61,7 +61,7 @@ public class EntryMoveListController implements Initializable {
     
     @FXML
     JFXComboBox<String> cbWarehouses;
-    ArrayList<Warehouse> listWarehouses=new ArrayList<>();;
+    ArrayList<Warehouse> listWarehouses=new ArrayList<>();
     
 
     
