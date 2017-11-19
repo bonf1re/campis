@@ -14,24 +14,14 @@ import campis.dp1.models.CNode;
 import campis.dp1.models.CRack;
 import campis.dp1.models.Coord;
 import campis.dp1.models.Coordinates;
-import campis.dp1.models.Product;
-import campis.dp1.models.Rack;
-import campis.dp1.models.TabuProblem;
-import campis.dp1.models.TabuSolution;
 import campis.dp1.models.Vehicle;
 import campis.dp1.models.utils.GraphicsUtils;
 import campis.dp1.models.Warehouse;
 import campis.dp1.models.WarehouseMove;
 import campis.dp1.models.WarehouseZone;
-import campis.dp1.models.routing.Grasp;
-import campis.dp1.models.routing.GraspResults;
-import campis.dp1.models.routing.RouteGen;
 import campis.dp1.models.utils.RoutingUtils;
-import campis.dp1.services.TabuSearchService;
 import java.io.IOException;
-import java.lang.reflect.Array;
 import java.net.URL;
-import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -50,12 +40,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.util.StringConverter;
-import oracle.jrockit.jfr.tools.ConCatRepository;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -112,19 +97,26 @@ public class SpecialEntryMoveRouteController implements Initializable{
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.id_warehouse=ContextFX.getInstance().getId();
-        this.routing_data=ContextFX.getInstance().getPolymorphic_list();
+        
+        this.routing_data = ContextFX.getInstance().getPolymorphic_list();
+        
         Vehicle vh =(Vehicle) ((ArrayList<Object>) this.routing_data.get((int)this.routing_data.get(0))).get(2);
+        /*
+        0 - indice
+        1 -
+*/
+        
         this.vhText.setText("Vehicle: "+ vh.getPlate() + " \nde capacidad : "+vh.getMax_weight());
         this.pCounterField.setText("<"+String.valueOf(this.routing_data.get(0))+"/"+String.valueOf(this.routing_data.size()-1)+">");
+        
         try{
             int m_test = ContextFX.getInstance().getWhMoveType() + 1;
             this.mode=1;
         }catch(Exception e){
             this.mode=0;
         }
+        
         try{
-            
-            
             qtCol.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getQuantity()).asObject());            
             prodCol.setCellValueFactory(cellData -> new SimpleStringProperty(this.product_names.get(this.batchesList.indexOf(cellData.getValue()))));
             zoneCol.setCellValueFactory(cellData -> cellData.getValue().getZoneStr());
@@ -135,8 +127,7 @@ public class SpecialEntryMoveRouteController implements Initializable{
             SessionFactory sessionFactory = configuration.buildSessionFactory();
             Session session = sessionFactory.openSession();
             session.beginTransaction();
-            
-            
+           
             
             loadData(session);
             drawMap(session);
@@ -181,18 +172,15 @@ public class SpecialEntryMoveRouteController implements Initializable{
                 zone_q.setParameter("s_status",false);
                 zone_q.setParameter("zoneId", zone_list.get(j).getId_zone());
                 zone_q.executeUpdate();
+                
                 Batch batch = batch_list.get(j);
-                    // batch save
-                    batch.setType_batch(3);
-                    int id_batch = (int) session.save(new Batch(batch));
-                    
-                    //int id_parent_batch = singleHer(batch);
-                    //Query query = session.createSQLQuery("UPDATE campis.batch SET type_batch = -1 WHERE id_batch = "+id_parent_batch);
-                    //query.executeUpdate();
-                    
-                    // move save
-                    WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), zone_list.get(j).getId_zone(), vh.getId_vehicle(), 0, id_warehouse,id_batch);
-                    session.save(move);
+                // batch save
+                batch.setType_batch(3);
+                int id_batch = (int) session.save(new Batch(batch));
+
+                // move save
+                WarehouseMove move = new WarehouseMove(currentTimestamp, ContextFX.getInstance().getId_User(), batch.getQuantity(), zone_list.get(j).getId_zone(), vh.getId_vehicle(), 0, id_warehouse,id_batch);
+                session.save(move);
                    
             }
             r_d_iterator.set(4, true);
@@ -201,7 +189,17 @@ public class SpecialEntryMoveRouteController implements Initializable{
         
         session.getTransaction().commit();
         session.close();
-        sessionFactory.close();        
+        sessionFactory.close();    
+        
+        this.goEntryMoveList();
+    }
+    
+    public void goWhEntryMoveList() throws IOException{
+        ContextFX.getInstance().setId(id_warehouse);
+        ContextFX.getInstance().setPolymorphic_list(null);
+        ContextFX.getInstance().setMode(0);
+        
+        main.showWhEntryMoveList();
     }
     
     @FXML
@@ -215,13 +213,17 @@ public class SpecialEntryMoveRouteController implements Initializable{
     public void nextRoute() throws IOException{
         int size = this.routing_data.size();
         int index = (int) this.routing_data.get(0);
+        
         if (index+1>size-1){
             System.out.println("No hay mas rutas");
             return;
         }
+        
         this.routing_data.set(0, index+1);
+        
         ContextFX.getInstance().setPolymorphic_list(routing_data);
         ContextFX.getInstance().setId(this.id_warehouse);
+        
         main.showWhEntryMoveRoute();
     }
     

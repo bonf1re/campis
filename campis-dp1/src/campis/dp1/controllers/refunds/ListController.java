@@ -113,7 +113,7 @@ public class ListController implements Initializable {
 
     @FXML
     private void goEditRefund(ActionEvent event) throws IOException {
-        if (selected_id > 0) {
+        if (selected_id > 0 && selected_status.equals("En proceso")) {
             ContextFX.getInstance().setId(selected_id);
             main.showEditRefund();
         }

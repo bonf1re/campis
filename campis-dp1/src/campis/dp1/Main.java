@@ -178,6 +178,20 @@ public class Main extends Application {
         BorderPane listProd = loader.load();
         mainLayout.setCenter(listProd);
     }
+
+    public static void showChangePassUser() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/users/changePassword.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
+
+    public static void showLoggedUser() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/users/loggedUser.fxml"));
+        BorderPane listProd = loader.load();
+        mainLayout.setCenter(listProd);
+    }
     
     public static void showAreaCreate() throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -418,6 +432,14 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("views/dispatch/normalCreate.fxml"));
         BorderPane newNormalDeparture = loader.load();
         mainLayout.setCenter(newNormalDeparture);
+     }
+    
+    /*Batches x dispatch*/
+    public static void showListDispatchBatch() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/dispatch/listDispatchBatch.fxml"));
+        BorderPane listDepartures = loader.load();
+        mainLayout.setCenter(listDepartures);
      }
     
     /* RequestOrder */
@@ -728,6 +750,13 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("views/warehouse/departuremoveroute.fxml"));
         BorderPane routing = loader.load();
         mainLayout.setCenter(routing);
+    }
+    
+    public static void showCurrencyIGV() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/currencyIGV/edit.fxml"));
+        BorderPane currency = loader.load();
+        mainLayout.setCenter(currency);
     }
     
     public static void showBulkLoad() throws IOException {

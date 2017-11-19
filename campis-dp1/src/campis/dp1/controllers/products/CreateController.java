@@ -5,6 +5,7 @@
  */
 package campis.dp1.controllers.products;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Product;
 
@@ -56,7 +57,7 @@ public class CreateController implements Initializable {
     @FXML
     private JFXTextArea descripField;
     @FXML
-    private JFXComboBox currencyType;
+    private JFXComboBox<String> currencyType;
     @FXML
     private JFXTextField maxQtField;
     @FXML
@@ -71,6 +72,10 @@ public class CreateController implements Initializable {
     private Label weightMessage;
     @FXML
     private Label maxQTMessage;
+    @FXML
+    private JFXTextField minQtField;
+    @FXML
+    private Label minQTMessage;
 
     public boolean validation() {
         boolean nameValid = nameField.getText().length() == 0;
@@ -79,6 +84,7 @@ public class CreateController implements Initializable {
         boolean typeValid = typeField.getEditor().getText().length() == 0;
         boolean weightValid = weightField.getText().length() == 0;
         boolean maxQTValid = maxQtField.getText().length() == 0;
+        boolean minQTValid = minQtField.getText().length() == 0;
         
         nameMessage.setText("");
         priceMessage.setText("");
@@ -86,6 +92,7 @@ public class CreateController implements Initializable {
         typeMessage.setText("");
         weightMessage.setText("");
         maxQTMessage.setText("");
+        minQTMessage.setText("");
 
         if (nameValid)
             nameMessage.setText("Campo obligatorio");
@@ -105,7 +112,10 @@ public class CreateController implements Initializable {
         if(maxQTValid)
             maxQTMessage.setText("Campo obligatorio");
 
-        return (!nameValid && !priceValid && !trademarkValid && !typeValid && !weightValid && !maxQTValid);
+        if(minQTValid)
+            minQTMessage.setText("Campo obligatorio");
+        
+        return (!nameValid && !priceValid && !trademarkValid && !typeValid && !weightValid && !maxQTValid && !minQTValid);
     }
     
     @FXML
@@ -164,9 +174,19 @@ public class CreateController implements Initializable {
             session.beginTransaction();
             int measure = searchCodMeasure(measureField.getEditor().getText());
             int type = searchCodType(typeField.getEditor().getText());
+            String curTyp = this.currencyType.getValue();
+            float price;
+            if(curTyp.compareTo("S/.")==0){
+                price = Float.parseFloat(priceField.getText());
+            }else if(curTyp.compareTo("$")==0){
+                price = Float.parseFloat(priceField.getText()) * ContextFX.getInstance().getDollar();
+            }else {
+                price = Float.parseFloat(priceField.getText()) * ContextFX.getInstance().getEuro();
+            }
             
             Product product = new Product(nameField.getText(), descripField.getText(), 1, 1, Float.parseFloat(weightField.getText()),
-                                         trademarkField.getText(), Float.parseFloat(priceField.getText()), measure, type, Integer.parseInt(maxQtField.getText()));
+                                         trademarkField.getText(), price, measure, type, Integer.parseInt(maxQtField.getText()),
+                                         Integer.parseInt(minQtField.getText()));
             
             session.save(product);
             session.getTransaction().commit();
@@ -236,6 +256,15 @@ public class CreateController implements Initializable {
                 String newValue) {
                 if (!newValue.matches("\\d*")) {
                     maxQtField.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
+        minQtField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, 
+                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    minQtField.setText(newValue.replaceAll("[^\\d]", ""));
                 }
             }
         });

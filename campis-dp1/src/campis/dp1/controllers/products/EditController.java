@@ -54,7 +54,7 @@ public class EditController implements Initializable{
     @FXML
     private JFXTextField weightField;
     @FXML
-    private JFXComboBox currencyType;
+    private JFXComboBox<String> currencyType;
     @FXML
     private JFXTextField maxQTField;
     @FXML
@@ -69,6 +69,10 @@ public class EditController implements Initializable{
     private Label weightMessage;
     @FXML
     private Label maxQTMessage;
+    @FXML
+    private JFXTextField minQTField;
+    @FXML
+    private Label minQTMessage;
     
     @FXML
     private void goListProduct() throws IOException {
@@ -82,6 +86,7 @@ public class EditController implements Initializable{
         boolean typeValid = typeField.getEditor().getText().length() == 0;
         boolean weightValid = weightField.getText().length() == 0;
         boolean maxQTValid = maxQTField.getText().length() == 0;
+        boolean minQTValid = minQTField.getText().length() == 0;
         
         nameMessage.setText("");
         priceMessage.setText("");
@@ -89,6 +94,7 @@ public class EditController implements Initializable{
         typeMessage.setText("");
         weightMessage.setText("");
         maxQTMessage.setText("");
+        minQTMessage.setText("");
 
         if (nameValid)
             nameMessage.setText("Campo obligatorio");
@@ -107,8 +113,11 @@ public class EditController implements Initializable{
 
         if(maxQTValid)
             maxQTMessage.setText("Campo obligatorio");
+        
+        if(minQTValid)
+            minQTMessage.setText("Campo obligatorio");
 
-        return (!nameValid && !priceValid && !trademarkValid && !typeValid && !weightValid && !maxQTValid);
+        return (!nameValid && !priceValid && !trademarkValid && !typeValid && !weightValid && !maxQTValid && !minQTValid);
     }
 
     public static Integer searchCodMeasure(String measure) throws SQLException, ClassNotFoundException {
@@ -150,6 +159,15 @@ public class EditController implements Initializable{
     @FXML
     private void insertProduct (ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
         if (validation()) {
+            String curTyp = this.currencyType.getValue();
+            float price;
+            if(curTyp.compareTo("S/.")==0){
+                price = Float.parseFloat(priceField.getText());
+            }else if(curTyp.compareTo("$")==0){
+                price = Float.parseFloat(priceField.getText()) * ContextFX.getInstance().getDollar();
+            }else {
+                price = Float.parseFloat(priceField.getText()) * ContextFX.getInstance().getEuro();
+            }
             Configuration configuration = new Configuration();
             configuration.configure("hibernate.cfg.xml");
             configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
@@ -160,16 +178,18 @@ public class EditController implements Initializable{
             int type = searchCodType(typeField.getEditor().getText());
             Query query = session.createQuery("update Product set name = :newName,description = :newDescrip,"
                     + "weight=:newWeight,trademark=:newTrademark,base_price=:newPrice,id_unit_of_measure=:newMeasure,"
-                    + "id_product_type=:newType,max_qt=:newMaxQT where id_product = :oldIdProd");
+                    + "id_product_type=:newType,max_qt=:newMaxQT,min_stock=:newMinQT "
+                    + "where id_product = :oldIdProd");
             query.setParameter("newName", nameField.getText());
             query.setParameter("newName", nameField.getText());
             query.setParameter("newDescrip",descripField.getText());
             query.setParameter("newWeight", Float.parseFloat(weightField.getText()));
             query.setParameter("newTrademark", trademarkField.getText());
-            query.setParameter("newPrice", Float.parseFloat(priceField.getText()));
+            query.setParameter("newPrice", price);
             query.setParameter("newMeasure", measure);
             query.setParameter("newType", type);
             query.setParameter("newMaxQT", Integer.parseInt(maxQTField.getText()));
+            query.setParameter("newMinQT", Integer.parseInt(minQTField.getText()));
             query.setParameter("oldIdProd", id);
             int result = query.executeUpdate();
             session.getTransaction().commit();
@@ -244,6 +264,15 @@ public class EditController implements Initializable{
                 }
             }
         });
+        minQTField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, 
+                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    minQTField.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
         id = ContextFX.getInstance().getId();
         currencyType.getItems().addAll("S/.","$","€");
         List<UnitOfMeasure> list = CreateController.getUnitsOfMeasure();
@@ -276,6 +305,9 @@ public class EditController implements Initializable{
         String type = getType(result.getId_product_type());
         this.typeField.setValue(type);
         this.weightField.setText(Float.toString(result.getWeight()));
+        this.currencyType.setValue("S/.");
+        this.maxQTField.setText(Float.toString(result.getMax_qt()));
+        this.minQTField.setText(Float.toString(result.getMin_stock()));
     }
     
 }

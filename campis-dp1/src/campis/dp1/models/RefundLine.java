@@ -91,4 +91,8 @@ public class RefundLine {
     public void setQuantity(Integer quantity) {
         this.quantity = quantity;
     }
+
+    public Integer get_idProduct() {
+        return RequestOrderLine.getRequestOrderLine(id_request_order_line).getId_product();
+    }
 }

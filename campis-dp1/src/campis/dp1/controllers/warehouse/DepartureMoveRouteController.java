@@ -218,7 +218,11 @@ public class DepartureMoveRouteController implements Initializable{
                 // zone update
                 Query zone_q = session.createQuery(
                         "update WarehouseZone set free = :s_status "+" where id_zone = :zoneId");
-                zone_q.setParameter("s_status",false);
+                if (batch.getId_batch()==-1){
+                    zone_q.setParameter("s_status",false);
+                }else{
+                    zone_q.setParameter("s_status",true);
+                }
                 zone_q.setParameter("zoneId", zone_list.get(j).getId_zone());
                 zone_q.executeUpdate();
                 // batch update

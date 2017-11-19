@@ -10,7 +10,11 @@
       <JFXButton fx:id="scButton" onAction="#goListSaleConditions" prefHeight="61.0" prefWidth="95.0" styleClass="option" text="Condiciones de Venta" textAlignment="CENTER" wrapText="true" />
       <JFXButton fx:id="rsButton" onAction="#goListRequestStatuses" prefHeight="61.0" prefWidth="95.0" styleClass="option" text="Estados de Orden" textAlignment="CENTER" wrapText="true" />
       <JFXButton fx:id="cliButton" onAction="#goListClient" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Cliente" />
+<<<<<<< HEAD
       <JFXButton fx:id="supButton" onAction="#goListSupplier" prefHeight="42.0" prefWidth="95.0" text="Proveedor" textAlignment="CENTER" textFill="WHITE">
+=======
+      <JFXButton fx:id="curButton" onAction="#goCurrencyIGV" text="Tipos de Cambio e IGV" textAlignment="CENTER" textFill="WHITE" wrapText="true">
+>>>>>>> dev2
          <font>
             <Font name="System Bold" size="12.0" />
          </font>

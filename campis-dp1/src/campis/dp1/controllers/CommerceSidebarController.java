@@ -115,6 +115,11 @@ public class CommerceSidebarController implements Initializable {
     private void goListRefund() throws IOException {
         main.showListRefund();
     }
+    
+    @FXML
+    private void goCurrencyIGV() throws IOException {
+        main.showCurrencyIGV();
+    }
 
     @FXML
     private void goListSupplier(ActionEvent event) throws IOException {

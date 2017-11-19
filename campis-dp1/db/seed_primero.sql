@@ -74,3 +74,4 @@ INSERT INTO campis.permission VALUES (21, 1593, true, true, 1614);
 INSERT INTO campis.permission VALUES (22, 1593, true, true, 1615);
 INSERT INTO campis.permission VALUES (23, 1593, true, true, 1616);
 INSERT INTO campis.permission VALUES (24, 1593, true, true, 1617);
+INSERT INTO parameters VALUES (0.189999997615814209, 3.25099992752075195, 4.28099999999999969, 3.83299994468688965);

@@ -11,11 +11,13 @@ import campis.dp1.models.Permission;
 import campis.dp1.models.View;
 import campis.dp1.models.Warehouse;
 import campis.dp1.models.WarehouseDisplay;
+import campis.dp1.models.utils.GraphicsUtils;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
 import java.util.HashSet;
 import java.util.List;
+import java.util.Optional;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -25,7 +27,11 @@ import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Alert;
+import javafx.scene.control.Alert.AlertType;
 import javafx.scene.control.Button;
+import javafx.scene.control.ButtonBar;
+import javafx.scene.control.ButtonType;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
@@ -90,8 +96,13 @@ public class WarehouseListController implements Initializable {
     private void goWhEntryMoveList() throws IOException {
         if (selected_id > 0) {
             ContextFX.getInstance().setId(selected_id);
-            main.showWhEntryMoveList();
+            try {
+                main.showWhEntryMoveList();
+            } catch (IOException ex) {
+                Logger.getLogger(WarehouseListController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }
+            
     }
     
     @FXML 
@@ -131,6 +142,9 @@ public class WarehouseListController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        // no se pueden borrar los almacenes
+        deleteButton.setVisible(false);
+        //
         this.selected_id = 0;
         id_role = (ContextFX.getInstance().getUser().getId_role());
         View rackView = View.getView("racks");

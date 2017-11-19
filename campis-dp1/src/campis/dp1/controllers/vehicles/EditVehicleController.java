@@ -57,6 +57,9 @@ public class EditVehicleController implements Initializable {
 
     @FXML
     private Label lblPlateMessage;
+    
+    @FXML
+    private JFXComboBox<String> statusCb;
    
     @FXML
     private void goListVehicles() throws IOException {
@@ -123,12 +126,17 @@ public class EditVehicleController implements Initializable {
             session.beginTransaction();
             Query query = session.createQuery("update Vehicle set max_weight=:newMweight,"+
                                                 "speed=:newSpeed,"+
-                                              //  "active=:newActive,"+
+                                                "active=:newActive,"+
                                                 "plate=:newPlate"+
                                                 " where id_vehicle=:oldId");
             query.setParameter("newMweight", Double.parseDouble(lblWeight.getText()));
             query.setParameter("newSpeed", Integer.parseInt(lblSpeed.getText()));
             query.setParameter("newPlate", lblPlate.getText());
+            if (statusCb.getSelectionModel().getSelectedIndex()==0){
+                query.setParameter("newActive", true);
+            }else{
+                query.setParameter("newActive", false);
+            }
             query.setParameter("oldId", this.vehicle_id);
             int result = query.executeUpdate();
             
@@ -162,7 +170,7 @@ public class EditVehicleController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.vehicle_id = ContextFX.getInstance().getId();       
-        
+        statusCb.getItems().addAll("Habilitado","Deshabilitado");
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
@@ -175,6 +183,12 @@ public class EditVehicleController implements Initializable {
         this.lblWeight.setText(Double.toString(v.getMax_weight()));
         this.lblSpeed.setText(Integer.toString(v.getSpeed()));
         this.lblPlate.setText(v.getPlate());
+        
+        if (v.isActive()){
+            this.statusCb.getSelectionModel().select(0);
+        }else{
+            this.statusCb.getSelectionModel().select(1);
+        }
         
         lblWeight.textProperty().addListener(new ChangeListener<String>() {
             @Override

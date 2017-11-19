@@ -51,7 +51,8 @@ import org.hibernate.criterion.Restrictions;
  *
  * @author Gina Bustamante
  */
-public class EditRackController implements Initializable{
+public class EditRackController implements Initializable {
+
     Integer id;
     private Main main;
     private GraphicsContext gc;
@@ -62,7 +63,7 @@ public class EditRackController implements Initializable{
     private int warehouse_id;
     private ObservableList<WarehouseZone> zones;
     private Warehouse wareh = new Warehouse();
-    
+
     @FXML
     private JFXTextField numColumnsField;
     @FXML
@@ -72,55 +73,60 @@ public class EditRackController implements Initializable{
     @FXML
     private JFXTextField pos_yField;
     @FXML
-    private JFXComboBox<Integer> orientationField;
+    private JFXComboBox<String> orientationField;
     @FXML
     private Canvas mapCanvas;
     @FXML
     private Label messageField;
     @FXML
     private Button saveButton;
-    
+
     @FXML
     private void goListRacks() throws IOException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Rack.class);
-        criteria.add(Restrictions.eq("id_rack",this.id));
+        criteria.add(Restrictions.eq("id_rack", this.id));
         List rsWarehouse = criteria.list();
-        Rack result = (Rack)rsWarehouse.get(0);
+        Rack result = (Rack) rsWarehouse.get(0);
         session.close();
         sessionFactory.close();
         ContextFX.getInstance().setId(result.getId_warehouse());
         main.showListRacks();
     }
-    
-     @FXML
-    private void editRack (ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
-        
+
+    @FXML
+    private void editRack(ActionEvent actionEvent) throws SQLException, ClassNotFoundException, IOException {
+        int orient;
+        if (orientationField.getValue().compareTo("Horizontal") == 0) {
+            orient = 0;
+        } else {
+            orient = 1;
+        }
         boolean flagZones = verifyZones();
-        boolean flag = verifyRacks();
-        
-        if (flagZones==TRUE && flag == TRUE){
+        boolean flag = verifyRacks(orient);
+
+        if (flagZones == TRUE && flag == TRUE) {
             Configuration configuration = new Configuration();
             configuration.configure("hibernate.cfg.xml");
-            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
             SessionFactory sessionFactory = configuration.buildSessionFactory();
             Session session = sessionFactory.openSession();
             session.beginTransaction();
-            
+
             int orientation = searchOrientation(orientationField.getEditor().getText());
-            
-            Query query = session.createQuery("update Rack set" + 
-                                              " pos_x = :newPos_x, pos_y = :newPos_y, n_columns = :newN_columns," +
-                                              " n_floors = :newN_floors, orientation=:neworientation" +  
-                                              " where id_rack = :id_rack");
+
+            Query query = session.createQuery("update Rack set"
+                    + " pos_x = :newPos_x, pos_y = :newPos_y, n_columns = :newN_columns,"
+                    + " n_floors = :newN_floors, orientation=:neworientation"
+                    + " where id_rack = :id_rack");
 
             query.setParameter("newPos_x", Integer.parseInt(pos_xField.getText()));
-            query.setParameter("newPos_y",Integer.parseInt(pos_yField.getText()));
+            query.setParameter("newPos_y", Integer.parseInt(pos_yField.getText()));
             query.setParameter("newN_floors", Integer.parseInt(numFloorsField.getText()));
             query.setParameter("newN_columns", Integer.parseInt(numColumnsField.getText()));
             query.setParameter("neworientation", orientation);
@@ -130,13 +136,13 @@ public class EditRackController implements Initializable{
             session.getTransaction().commit();
             session.close();
             sessionFactory.close();
-        } else if (!flagZones){
+        } else if (!flagZones) {
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Error");
             alert.setHeaderText(null);
             alert.setContentText("No se pudo eliminar el rack porque no todas las zonas estan vacías");
             alert.showAndWait();
-            
+
             this.goListRacks();
         } else if (!flag) {
             Alert alert = new Alert(AlertType.ERROR);
@@ -144,19 +150,19 @@ public class EditRackController implements Initializable{
             alert.setHeaderText(null);
             alert.setContentText("No se pudo editar le rack, seleccione otras posiciones");
             alert.showAndWait();
-            
+
             this.goListRacks();
         }
-        
-        this.goListRacks();    
-    } 
-    
+
+        this.goListRacks();
+    }
+
     public static Integer searchOrientation(String orientation) {
         System.out.println("campis.dp1.controllers.racks.EditRackController.searchOrientation()");
         System.out.println(orientation);
         return 0;
     }
-    
+
     private ArrayList<CRack> getCRacks() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -173,43 +179,43 @@ public class EditRackController implements Initializable{
         }
         return crackList;
     }
-    
-     /**
+
+    /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        
+
         id = ContextFX.getInstance().getId();
 
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Rack.class);
-        criteria.add(Restrictions.eq("id_rack",id));
+        criteria.add(Restrictions.eq("id_rack", id));
         List rsType = criteria.list();
-        Rack result = (Rack)rsType.get(0);
-        
+        Rack result = (Rack) rsType.get(0);
+
         session.close();
         sessionFactory.close();
-        
+
         System.out.println(result.getId_rack());
-        
+
         this.numColumnsField.setText(result.getN_columns().toString());
         this.numFloorsField.setText(result.getN_floors().toString());
         this.pos_xField.setText(result.getPos_x().toString());
         this.pos_yField.setText(result.getPos_y().toString());
         this.orientationField.getSelectionModel().select(result.getOrientation());
         //this.orientacionField.setText(result.getOrientation().toString());
-        
+
         this.warehouse_id = result.getId_warehouse();
         //============================Nuevo=================================
-        orientationField.getItems().addAll(0, 1);
-        
-        
+        //orientationField.getItems().addAll(0, 1);
+        orientationField.getItems().addAll("Horizontal", "Vertical");
+
         GraphicsUtils gu = new GraphicsUtils();
         gc = mapCanvas.getGraphicsContext2D();
         wareh = getWarehouseDimensions();
@@ -218,17 +224,17 @@ public class EditRackController implements Initializable{
         this.real_map = gu.initMap(this.y, this.x);
         this.crackList = gu.putCRacks(wareh.getId(), real_map);
         gu.drawVisualizationMap(gc, this.y, this.x, this.real_map);
-        
+
         //Evaluamos si todas las zonas estan libres
-         boolean flag = verifyZones();
+        boolean flag = verifyZones();
         if (flag == TRUE) {
             //messageField.setText("Se puede editar el Rack");
         } else {
             messageField.setText("No se puede editar el Rack, no todas las zonas estan libres");
             this.saveButton.setDisable(true);
         }
-    }  
-    
+    }
+
     private List<Rack> getRacks() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -243,140 +249,185 @@ public class EditRackController implements Initializable{
         sessionFactory.close();
         return returnable;
     }
-    
-       
+
     private boolean verifyZones() {
         //Debes buscar en la tabla zones, si es que las zonas para ese racks... todas etsan vacias 
         zones = FXCollections.observableArrayList();
         zones = getZones();
-        
+
         for (int i = 0; i < zones.size(); i++) {
             System.out.println(zones.get(i).isFree());
-            if (!zones.get(i).isFree()) return false;
+            if (!zones.get(i).isFree()) {
+                return false;
+            }
         }
-        
-        return true;    
+
+        return true;
     }
-    
-     private ObservableList<WarehouseZone> getZones() {
+
+    private ObservableList<WarehouseZone> getZones() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(WarehouseZone.class);
-        criteria.add(Restrictions.eq("id_rack",this.id));
+        criteria.add(Restrictions.eq("id_rack", this.id));
         List lista = criteria.list();
         //ArrayList<WarehouseZone> zonesList = new ArrayList<>();
         ObservableList<WarehouseZone> zonesList;
         zonesList = FXCollections.observableArrayList();
         for (int i = 0; i < lista.size(); i++) {
-            zonesList.add((WarehouseZone)lista.get(i));
+            zonesList.add((WarehouseZone) lista.get(i));
         }
         session.close();
         sessionFactory.close();
-        return zonesList;   
-     }
-    
-    private boolean verifyRacks() {
+        return zonesList;
+    }
+
+    private boolean verifyRacks(int orient) {
         boolean returnable = TRUE;
         List<Rack> racks;
         racks = getRacks();
         Warehouse dimensions = getWarehouseDimensions();
-        if (this.orientationField.getValue() == 0) {
+        if (orient == 0) {
             Integer x_pos = Integer.parseInt(pos_xField.getText());
             Integer y_pos = Integer.parseInt(pos_yField.getText());
-            if (x_pos > dimensions.getLength() || y_pos > dimensions.getWidth()) {
+            if (x_pos > dimensions.getLength() || y_pos > dimensions.getWidth()
+                    || (x_pos + Integer.parseInt(this.numColumnsField.getText()) == dimensions.getLength())
+                    || (y_pos + 2 == dimensions.getWidth())) {
                 returnable = FALSE;
             } else {
                 for (int i = 0; i < racks.size(); i++) {
                     //si es el mismo racks no lo valida
-                    if(Objects.equals(racks.get(i).getId_rack(), this.id)) {
+                    if (Objects.equals(racks.get(i).getId_rack(), this.id)) {
                         System.out.println("Es el mismo rack");
                         continue;
                     }
-                    
+
                     System.out.println("campis.dp1.controllers.racks.EditRackController.verifyRacks()");
                     System.out.println(racks.get(i).getId_rack());
                     System.out.println(this.id);
-                    
+
                     Integer posXini = racks.get(i).getPos_x();
                     Integer posXfin = racks.get(i).getPos_x() + racks.get(i).getN_columns();
                     Integer posYini = racks.get(i).getPos_y();
                     Integer posYfin = racks.get(i).getPos_y() + 2;
-                    if (((x_pos > posXfin + 1) || (x_pos < posXini - 1)) || ((y_pos > posYfin + 1) || (y_pos < posYini - 1))) {
+                    if ((x_pos > posXfin + 1) || (x_pos < posXini - 1)) {
                         returnable = TRUE;
                     } else {
-                        returnable = FALSE;
-                        break;
+                        if ((y_pos > posYfin + 1) || (y_pos < posYini - 1)) {
+                            returnable = TRUE;
+                        } else {
+                            returnable = FALSE;
+                            break;
+                        }
                     }
                 }
             }
-        } else if (this.orientationField.getValue() == 1) {
+        } else if (orient == 1) {
             Integer x_pos = Integer.parseInt(pos_xField.getText());
             Integer y_pos = Integer.parseInt(pos_yField.getText());
-            if (x_pos > dimensions.getLength() || y_pos > dimensions.getWidth()) {
+            if (x_pos > dimensions.getLength() || y_pos > dimensions.getWidth()
+                    || (y_pos + Integer.parseInt(this.numColumnsField.getText()) == dimensions.getWidth())
+                    || (x_pos + 2 == dimensions.getLength())) {
                 returnable = FALSE;
             } else {
                 for (int i = 0; i < racks.size(); i++) {
-                    if(Objects.equals(this.id, racks.get(i).getId_rack())) continue;
-                    
+                    if (Objects.equals(this.id, racks.get(i).getId_rack())) {
+                        continue;
+                    }
+
                     Integer posXini = racks.get(i).getPos_x();
                     Integer posXfin = racks.get(i).getPos_x() + 2;
                     Integer posYini = racks.get(i).getPos_y();
                     Integer posYfin = racks.get(i).getPos_y() + racks.get(i).getN_columns();
-                    if (((x_pos > posXfin + 1) || (x_pos < posXini - 1)) || ((y_pos > posYfin + 1) || (y_pos < posYini - 1))) {
+                    if ((x_pos > posXfin + 1) || (x_pos < posXini - 1)) {
                         returnable = TRUE;
                     } else {
-                        returnable = FALSE;
-                        break;
+                        if ((y_pos > posYfin + 1) || (y_pos < posYini - 1)) {
+                            returnable = TRUE;
+                        } else {
+                            returnable = FALSE;
+                            break;
+                        }
                     }
                 }
             }
         }
         return returnable;
     }
-    
+
     @FXML
     private void testAction() {
         if (Integer.parseInt(pos_xField.getText()) > 0 && Integer.parseInt(pos_yField.getText()) > 0
-                && Integer.parseInt(numColumnsField.getText()) > 0 
+                && Integer.parseInt(numColumnsField.getText()) > 0
                 && Integer.parseInt(numFloorsField.getText()) > 0) {
             GraphicsUtils gu = new GraphicsUtils();
             ArrayList<CRack> crackListAux = new ArrayList<>();
             crackListAux = getCRacks();
-            
+
             System.out.println("campis.dp1.controllers.racks.EditRackController.testAction()");
             System.out.println(crackListAux.size());
-            
-            Rack rackAux =new Rack(1, Integer.parseInt(pos_xField.getText()), 
-                                       Integer.parseInt(pos_yField.getText()),
-                                       Integer.parseInt(numColumnsField.getText()), 
-                                       Integer.parseInt(numFloorsField.getText()),
-                                       orientationField.getValue());
-            
+            int orient;
+            if (orientationField.getValue().compareTo("Horizontal") == 0) {
+                orient = 0;
+            } else {
+                orient = 1;
+            }
+
+            Rack rackAux = new Rack(1, Integer.parseInt(pos_xField.getText()),
+                    Integer.parseInt(pos_yField.getText()),
+                    Integer.parseInt(numColumnsField.getText()),
+                    Integer.parseInt(numFloorsField.getText()),
+                    orient);
+
             CRack cRackAux = new CRack(rackAux);
-            
-            crackListAux.add(cRackAux);
-            
+
+            //crackListAux.add(cRackAux);
+
             for (CRack rack : crackListAux) {
                 int rack_y = rack.getPos_y();
                 int rack_x = rack.getPos_x();
                 int rack_length = rack.getN_columns();
+                if (rack.getOrientation() == 0) {
+                    for (int i = 0; i < 2; i++) {
+                        for (int j = 0; j < rack_length; j++) {
+                            real_map[i + rack_y][j + rack_x] = 1;
+                        }
+                    }
+                } else if (rack.getOrientation() == 1) {
+                    for (int i = 0; i < rack_length; i++) {
+                        for (int j = 0; j < 2; j++) {
+                            real_map[i + rack_y][j + rack_x] = 1;
+                        }
+                    }
+                }
+            }
+            int rack_y = cRackAux.getPos_y();
+            int rack_x = cRackAux.getPos_x();
+            int rack_length = cRackAux.getN_columns();
+            if (cRackAux.getOrientation() == 0) {
                 for (int i = 0; i < 2; i++) {
                     for (int j = 0; j < rack_length; j++) {
                         real_map[i + rack_y][j + rack_x] = 2;
                     }
                 }
+            } else if (cRackAux.getOrientation() == 1) {
+                for (int i = 0; i < rack_length; i++) {
+                    for (int j = 0; j < 2; j++) {
+                        real_map[i + rack_y][j + rack_x] = 2;
+                    }
+                }
             }
-            
+
             gu.drawVisualizationMap(gc, this.y, this.x, this.real_map);
-            
-            boolean flag = verifyRacks();
+
+            boolean flag = verifyRacks(orient);
             boolean flagZones = verifyZones();
-            
-            if (flagZones == TRUE) { 
+
+            if (flagZones == TRUE) {
                 if (flag == TRUE) {
                     messageField.setText("Se puede editar el Rack");
                 } else {
@@ -385,12 +436,12 @@ public class EditRackController implements Initializable{
             } else {
                 messageField.setText("No se puede editar el Rack, no todas las zonas estan libres");
             }
-            
-        }else{
+
+        } else {
             messageField.setText("Los valores introducidos deben ser mayores a 0");
         }
     }
-    
+
     @FXML
     private void clearAction() {
 //        GraphicsUtils gu = new GraphicsUtils();
@@ -398,8 +449,8 @@ public class EditRackController implements Initializable{
 //        this.crackList = gu.putCRacks(wareh.getId(), real_map);
 //        gu.drawVisualizationMap(gc, this.y, this.x, this.real_map);
     }
-    
-     private Warehouse getWarehouseDimensions() {
+
+    private Warehouse getWarehouseDimensions() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
@@ -409,11 +460,11 @@ public class EditRackController implements Initializable{
         Criteria criteria = session.createCriteria(Warehouse.class);
         System.out.println("campis.dp1.controllers.racks.EditRackController.getWarehouseDimensions()");
         System.out.println(warehouse_id);
-        criteria.add(Restrictions.eq("id_warehouse",warehouse_id));
+        criteria.add(Restrictions.eq("id_warehouse", warehouse_id));
 
         List<Warehouse> list = criteria.list();
         Warehouse returnable = list.get(0);
-         System.out.println(returnable.getId());
+        System.out.println(returnable.getId());
         session.close();
         sessionFactory.close();
         return returnable;

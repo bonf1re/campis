@@ -14,20 +14,12 @@ import campis.dp1.models.CNode;
 import campis.dp1.models.CRack;
 import campis.dp1.models.Coord;
 import campis.dp1.models.Coordinates;
-import campis.dp1.models.Product;
-import campis.dp1.models.Rack;
-import campis.dp1.models.TabuProblem;
-import campis.dp1.models.TabuSolution;
 import campis.dp1.models.Vehicle;
 import campis.dp1.models.utils.GraphicsUtils;
 import campis.dp1.models.Warehouse;
 import campis.dp1.models.WarehouseMove;
 import campis.dp1.models.WarehouseZone;
-import campis.dp1.models.routing.Grasp;
-import campis.dp1.models.routing.GraspResults;
-import campis.dp1.models.routing.RouteGen;
 import campis.dp1.models.utils.RoutingUtils;
-import campis.dp1.services.TabuSearchService;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.URL;
@@ -50,12 +42,7 @@ import javafx.scene.canvas.Canvas;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
-import javafx.scene.control.TextField;
-import javafx.scene.control.cell.TextFieldTableCell;
-import javafx.scene.paint.Color;
 import javafx.scene.text.Text;
-import javafx.util.StringConverter;
-import oracle.jrockit.jfr.tools.ConCatRepository;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -149,17 +136,32 @@ public class EntryMoveRouteController implements Initializable{
         }
     }
     
+    
     @FXML
     private void saveEntryMove() throws IOException{
-        // Will save all
+        // Will save all        
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        
+        GraphicsUtils gu = new GraphicsUtils();
         // Previous verification
+        for (int i = 1; i < this.routing_data.size(); i++) {
+            ArrayList<Object> r_d_iterator = (ArrayList<Object>) this.routing_data.get(i);
+            boolean saved = (boolean) r_d_iterator.get(4);
+            if (saved == true ){
+                gu.popupNotif("Notificación", "Estos movimientos ya fueron grabados", "Continuar");
+                if (gu.popup2Options(" ", "¿Desea volver a la lista de movimientos?", "Sí", "No, gracias") == true){
+                    goEntryMoveList();
+                }
+                return;
+            }
+        }
+        
+        
+        
         Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
         for (int i = 1; i < this.routing_data.size(); i++) {
             ArrayList<Object> r_d_iterator = (ArrayList<Object>) this.routing_data.get(i);
@@ -210,7 +212,11 @@ public class EntryMoveRouteController implements Initializable{
         
         session.getTransaction().commit();
         session.close();
-        sessionFactory.close();        
+        sessionFactory.close();
+        gu.popupNotif("Notificación", "Estos movimientos ya fueron grabados", "Continuar");
+        if (gu.popup2Options(" ", "¿Desea volver a la lista de movimientos?", "Sí", "No, gracias") == true) {
+            goEntryMoveList();
+        }
     }
     
     @FXML
