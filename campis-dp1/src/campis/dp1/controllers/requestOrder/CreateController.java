@@ -11,6 +11,7 @@ import campis.dp1.models.Client;
 import campis.dp1.models.DispatchOrder;
 import campis.dp1.models.DispatchOrderLine;
 import campis.dp1.models.District;
+import campis.dp1.models.Parameters;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.RequestOrder;
@@ -68,7 +69,7 @@ public class CreateController implements Initializable {
     Integer n_discount = 1;
     Integer n_tocount = 1;
     float IGV = 0.0f;
-    
+    Parameters param = new Parameters();
     String message = "";
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView = FXCollections.observableArrayList();
@@ -278,9 +279,11 @@ public class CreateController implements Initializable {
     private void setDistrictAction() {
         Float freight = getFreight(this.districtField.getValue());
         freightTotal = freightTotal + baseTotalAmount * freight;
-        totalAmount = ((totalAmount + freightTotal)*100)/100;
-        this.freightField.setText(Float.toString((freightTotal*100)/100));
-        this.amountField.setText(Float.toString((totalAmount*100)/100));
+        totalAmount = totalAmount + freightTotal;
+        freightTotal = param.roundingMethod(freightTotal, 2);
+        totalAmount = param.roundingMethod(totalAmount, 2);
+        this.freightField.setText(Float.toString(freightTotal));
+        this.amountField.setText(Float.toString(totalAmount));
     }
 
     private void loadData(int cod, int quant) {
@@ -303,10 +306,13 @@ public class CreateController implements Initializable {
         ContextFX.getInstance().setFreight(freightTotal);
         ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
         ContextFX.getInstance().setTotAmount(totalAmount);
-        this.subtotalField.setText(Float.toString((baseTotalAmount*100)/100));
-        this.discountField.setText(Float.toString((discountTotal*100)/100));
-        totalAmount = (totalAmount*IGV*100)/100;
-        this.amountField.setText(Float.toString((totalAmount*100)/100));
+        baseTotalAmount = param.roundingMethod(baseTotalAmount, 2);
+        discountTotal = param.roundingMethod(discountTotal, 2);
+        this.subtotalField.setText(Float.toString(baseTotalAmount));
+        this.discountField.setText(Float.toString(discountTotal));
+        totalAmount = totalAmount*IGV;
+        totalAmount = param.roundingMethod(totalAmount, 2);
+        this.amountField.setText(Float.toString(totalAmount));
         ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
                 products.get(0).getDescription(), products.get(0).getP_stock(), quantity,
                 base_amount, state, products.get(0).getBase_price(),
@@ -510,6 +516,9 @@ public class CreateController implements Initializable {
         totalAmount = baseTotalAmount + discountTotal + freightTotal;
         ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
         ContextFX.getInstance().setTotAmount(totalAmount);
+        baseTotalAmount = param.roundingMethod(baseTotalAmount, 2);
+        discountTotal = param.roundingMethod(discountTotal, 2);
+        totalAmount = param.roundingMethod(totalAmount, 2);
         this.subtotalField.setText(Float.toString(baseTotalAmount));
         this.discountField.setText(Float.toString(discountTotal));
         this.amountField.setText(Float.toString(totalAmount));
