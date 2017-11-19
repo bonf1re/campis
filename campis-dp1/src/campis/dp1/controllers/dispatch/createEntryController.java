@@ -33,6 +33,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javax.persistence.Query;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -82,12 +83,31 @@ public class createEntryController implements Initializable {
         main.showNewBatch();
     }
 
-    /**
-     * Initializes the controller class.
-     */
+    private List<String> getSupNames() {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr = "SELECT name FROM campis.supplier;";
+        SQLQuery qry = session.createSQLQuery(qryStr);
+        List<Object> rows = qry.list();
+        List<String> returnable = FXCollections.observableArrayList();
+        for (Object row : rows) {
+            returnable.add(row.toString());
+        }
+        session.close();
+        sessionFactory.close();
+        return returnable;
+    }
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        providerField.getItems().addAll("Ladrillos REX", "Cementos SOL", "Ceramicos CELIMA", "Constructores PEPITO");
+        List<String> names = getSupNames();
+        for (int i = 0; i < names.size(); i++) {
+            providerField.getItems().add(names.get(i));
+        }
         reasonField.getItems().addAll("Hallazgo", "Devolucion");
         try {
             id_batch = ContextFX.getInstance().getId();
@@ -168,8 +188,7 @@ public class createEntryController implements Initializable {
         String returnable = getMeasure(id);
         return returnable;
     }
-    
-    
+
     @FXML
     private void saveBatchEntries(ActionEvent event) throws IOException {
         /*
@@ -179,59 +198,57 @@ public class createEntryController implements Initializable {
             idTypeOwner = 6 [Cementos SOL]
             idTypeOwner = 7 [Ceramicos CELIMA]
             idTypeOwner = 8 [Constructores PEPITO]
-        */
-        
-        /* 
+         */
+
+ /* 
             idReason = 3 [Proveedores/compra]
             idReason = 7 [Hallazgo]
             idReason = 8 [Devolucion]
-        */
-        
+         */
         Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
         provider = providerField.getValue();
         reason = reasonField.getValue();
-        
+
         if (provider == null) {
             int idTypeOwner = 4;
             int idReason = 4; // Razón de que ha entrado por parte de hallazgo o devolucion
-            
-            if (reason.compareTo("Hallazgo") == 0){
+
+            if (reason.compareTo("Hallazgo") == 0) {
                 idReason = 7;
             } else if (reason.compareTo("Devolucion") == 0) {
                 idReason = 8;
             }
-                
+
             //reasonField.getItems().addAll("Hallazgo", "Devolucion");
-                        
             for (int i = 0; i < batchTable.getItems().size(); i++) {
                 int idBatch = batchTable.getItems().get(i).getId_batch().get();
                 Batch b = getBatch(idBatch);
                 int newType = 1;
-                updateBatch(idBatch,newType);
+                updateBatch(idBatch, newType);
                 DispatchMove dispMove = new DispatchMove(idTypeOwner, 1, currentTimestamp, idReason, id_batch, b.getArrival_date());
                 insertDispatchMove(dispMove);
             }
-            
+
         } else {
             int idTypeOwner = 3; //proveedor genérico
-            
+
             if (provider.compareTo("Ladrillos REX") == 0) {
                 idTypeOwner = 5; //provedor Ladrillos REX
             } else if (provider.compareTo("Cementos SOL") == 0) {
                 idTypeOwner = 6; //Provedor Cementos SQL
             } else if (provider.compareTo("Ceramicos CELIMA") == 0) {
                 idTypeOwner = 7;  //Provedor ceraicos Celima
-            } else if (provider.compareTo("Constructores PEPITO") == 0) {            
+            } else if (provider.compareTo("Constructores PEPITO") == 0) {
                 idTypeOwner = 8; //Provedor constructores PEPITO
-            } 
-            
+            }
+
             int idReason = 3; // Razón de que ha entrado por parte de un proveedor - COMPRA
-            
+
             for (int i = 0; i < batchTable.getItems().size(); i++) {
                 int idBatch = batchTable.getItems().get(i).getId_batch().get();
                 Batch b = getBatch(idBatch);
                 int newType = 1;
-                updateBatch(idBatch,newType);
+                updateBatch(idBatch, newType);
                 DispatchMove dispMove = new DispatchMove(idTypeOwner, 0, currentTimestamp, idReason, id_batch, b.getArrival_date());
                 insertDispatchMove(dispMove);
             }
@@ -239,7 +256,7 @@ public class createEntryController implements Initializable {
         this.goListEntries();
     }
 
-    private void updateBatch(int idBatch,int newType) {
+    private void updateBatch(int idBatch, int newType) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
