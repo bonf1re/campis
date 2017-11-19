@@ -15,10 +15,12 @@ public class RefundLineDisplay {
     final IntegerProperty quantity;
     final IntegerProperty id_request_order_line;
     final StringProperty product_name;
+    Integer id_product;
 
     public RefundLineDisplay(int id, int id_request_order_line, int quantity) {
         RequestOrderLine rq = RequestOrderLine.getRequestOrderLine(id_request_order_line);
-        Product product = Product.getProduct(rq.getId_product());
+        this.id_product = rq.getId_product();
+        Product product = Product.getProduct(id_product);
         this.product_name = new SimpleStringProperty(product.getName());
         this.order_request_quantity = new SimpleIntegerProperty(rq.getQuantity());
         this.id_refund_line = new SimpleIntegerProperty(id);
@@ -59,5 +61,19 @@ public class RefundLineDisplay {
      */
     public StringProperty getProduct_name() {
         return product_name;
+    }
+
+    /**
+     * @return the id_product
+     */
+    public Integer getId_product() {
+        return id_product;
+    }
+
+    /**
+     * @param id_product the id_product to set
+     */
+    public void setId_product(Integer id_product) {
+        this.id_product = id_product;
     }
 }

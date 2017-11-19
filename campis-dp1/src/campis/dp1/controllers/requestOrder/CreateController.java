@@ -155,7 +155,7 @@ public class CreateController implements Initializable {
         SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         Date date_delivery = getDate(deliveryDate.getValue());
         int idDist = getDistrict(this.districtField.getValue());
-        Boolean verify = verifyDates(currentTimestamp, date_delivery);
+        Boolean verify = verifyDates(currentTimestamp,date_delivery);
         if (verify == TRUE) {
             int prior = Integer.parseInt(priorityField.getValue());
             Configuration configuration = new Configuration();
@@ -486,12 +486,14 @@ public class CreateController implements Initializable {
     }
 
     private Boolean verifyDates(Date creation, Date delivery) {
-        Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+        //Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
         Boolean flag = TRUE;
+        /*
         if (creation.compareTo(currentTimestamp) <= 0) {
             flag = FALSE;
             message = "Fecha debe ser mayor a la actual";
         }
+        */
         if (delivery.compareTo(creation) < 0) {
             flag = FALSE;
             message = "Fecha debe ser mayor a la fecha de creación";
