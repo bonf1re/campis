@@ -7,7 +7,7 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.clients.CreateController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.suppliers.CreateController">
    <center>
       <AnchorPane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
@@ -31,6 +31,8 @@
             <Label fx:id="nameMessage" layoutX="396.0" layoutY="149.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />
             <Label fx:id="emailMessage" layoutX="400.0" layoutY="377.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />
             <Label fx:id="rucMessage" layoutX="400.0" layoutY="206.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />
+            <Label fx:id="addressMessage" layoutX="400.0" layoutY="319.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />
+            <Label fx:id="phoneMessage" layoutX="398.0" layoutY="264.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />
          </children>
       </AnchorPane>
    </center>
