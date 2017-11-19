@@ -300,9 +300,9 @@ public class CreateController implements Initializable {
         baseTotalAmount = baseTotalAmount + base_amount;
         discountTotal = ContextFX.getInstance().getDiscount();
         
-        // cantidad neta de descuento por porcentaje
+        // cantidad neta de descuento por promocion
         Float promo = (base_amount - ((quant/n_discount * n_tocount) * products.get(0).getBase_price()));
-        
+        //
         discountTotal = discountTotal + base_amount * disc + promo;
         freightTotal = ContextFX.getInstance().getFreight();
         totalAmount = baseTotalAmount - discountTotal;
