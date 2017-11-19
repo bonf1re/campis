@@ -560,6 +560,36 @@ public class Main extends Application {
 
     /* End RequestOrder*/
     
+    /* Suppliers */
+    public static void showListSupplier() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/supplier/list.fxml"));
+        BorderPane listSupplier = loader.load();
+        mainLayout.setCenter(listSupplier);  
+    }
+    
+    public static void showSupplierCreate() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/supplier/create.fxml"));
+        BorderPane newSupplier = loader.load();
+        mainLayout.setCenter(newSupplier);    
+    }
+    
+     public static void showSupplierEdit() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/supplier/edit.fxml"));
+        BorderPane editSupplier = loader.load();
+        mainLayout.setCenter(editSupplier);      
+    }
+     
+     public static void showSupplierVisualize() throws IOException{
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/supplier/view.fxml"));
+        BorderPane viewSupplier = loader.load();
+        mainLayout.setCenter(viewSupplier);       
+     }
+     /* End Suppliers */
+    
     /**  
      * @param args the command line arguments
      */
