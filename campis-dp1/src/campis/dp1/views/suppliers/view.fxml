@@ -7,27 +7,27 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.suppliers.EditController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.suppliers.ViewController">
    <center>
       <AnchorPane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
             <Label layoutX="216.0" layoutY="124.0" text="Razón Social" />
             <Label layoutX="220.0" layoutY="178.0" text="RUC" />
-            <Button layoutX="351.0" layoutY="517.0" mnemonicParsing="false" onAction="#editSupplier" prefHeight="42.0" prefWidth="94.0" text="Editar" />
-            <Button layoutX="549.0" layoutY="517.0" mnemonicParsing="false" onAction="#goListSupplier" prefHeight="42.0" prefWidth="99.0" text="Cancelar" />
-            <Label layoutX="51.0" layoutY="37.0" text="Editar Proveedor">
+            <Button layoutX="351.0" layoutY="517.0" mnemonicParsing="false" onAction="#goEditSupplier" prefHeight="42.0" prefWidth="94.0" text="Editar" />
+            <Button layoutX="549.0" layoutY="517.0" mnemonicParsing="false" onAction="#goListSupplier" prefHeight="42.0" prefWidth="99.0" text="Aceptar" />
+            <Label layoutX="51.0" layoutY="37.0" text="Proveedor">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <JFXTextField fx:id="nameField" layoutX="396.0" layoutY="116.0" prefHeight="21.0" prefWidth="399.0" />
+            <JFXTextField fx:id="nameField" disable="true" editable="false" layoutX="396.0" layoutY="116.0" prefHeight="21.0" prefWidth="399.0" />
             <Label layoutX="220.0" layoutY="234.0" text="Telefono" />
             <Label layoutX="221.0" layoutY="292.0" text="Dirección" />
             <Label layoutX="221.0" layoutY="348.0" text="Correo" />
             <JFXTextField fx:id="rucField" disable="true" editable="false" layoutX="398.0" layoutY="166.0" prefHeight="25.0" prefWidth="133.0" />
-            <JFXTextField fx:id="phoneField" layoutX="398.0" layoutY="230.0" prefHeight="25.0" prefWidth="119.0" />
-            <JFXTextField fx:id="addressField" layoutX="400.0" layoutY="288.0" prefHeight="21.0" prefWidth="399.0" />
-            <JFXTextField fx:id="emailField" layoutX="398.0" layoutY="344.0" prefHeight="25.0" prefWidth="215.0" />
+            <JFXTextField fx:id="phoneField" disable="true" editable="false" layoutX="398.0" layoutY="230.0" prefHeight="25.0" prefWidth="119.0" />
+            <JFXTextField fx:id="addressField" disable="true" editable="false" layoutX="400.0" layoutY="288.0" prefHeight="21.0" prefWidth="399.0" />
+            <JFXTextField fx:id="emailField" disable="true" editable="false" layoutX="398.0" layoutY="344.0" prefHeight="25.0" prefWidth="215.0" />
             <Label fx:id="nameMessage" layoutX="396.0" layoutY="149.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />
             <Label fx:id="emailMessage" layoutX="400.0" layoutY="377.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />
             <Label fx:id="rucMessage" layoutX="400.0" layoutY="206.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />

@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.suppliers.ListController">
+<BorderPane prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.clients.ListController">
    <opaqueInsets>
       <Insets />
    </opaqueInsets>
@@ -20,7 +20,6 @@
         <columns>
           <TableColumn fx:id="nameCol" prefWidth="75.0" text="Razón Social" />
             <TableColumn fx:id="rucCol" prefWidth="75.0" text="RUC" />
-            <TableColumn fx:id="addressCol" prefWidth="75.0" text="Dirección" />
             <TableColumn fx:id="phoneCol" prefWidth="75.0" text="Telefono" />
             <TableColumn fx:id="emailCol" prefWidth="75.0" text="Correo" />
         </columns>
@@ -42,7 +41,7 @@
    <top>
       <HBox prefHeight="100.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Label text="Lista de Proveedores">
+            <Label text="Lista de Clientes">
                <font>
                   <Font size="18.0" />
                </font>
@@ -63,7 +62,7 @@
                   <Insets left="30.0" top="60.0" />
                </HBox.margin>
             </JFXTextField>
-            <Button mnemonicParsing="false" onAction="#searchSupplier" text="Buscar">
+            <Button mnemonicParsing="false" text="Buscar">
                <HBox.margin>
                   <Insets left="50.0" top="60.0" />
                </HBox.margin>
@@ -77,10 +76,10 @@
    <right>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Button fx:id="createButton" layoutX="58.0" layoutY="101.0" mnemonicParsing="false" onAction="#goCreateSupplier" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
-            <Button fx:id="editButton" layoutX="58.0" layoutY="161.0" mnemonicParsing="false" onAction="#goEditSupplier" prefHeight="35.0" prefWidth="85.0" text="Editar" />
-            <Button fx:id="deleteButton" layoutX="58.0" layoutY="224.0" mnemonicParsing="false" onAction="#deleteSupplier" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
-            <Button layoutX="58.0" layoutY="38.0" mnemonicParsing="false" onAction="#goShowSupplier" prefHeight="35.0" prefWidth="85.0" text="Visualizar" />
+            <Button fx:id="createButton" layoutX="58.0" layoutY="101.0" mnemonicParsing="false" onAction="#goCreateClient" prefHeight="35.0" prefWidth="85.0" text="Nuevo" />
+            <Button fx:id="editButton" layoutX="58.0" layoutY="161.0" mnemonicParsing="false" onAction="#goEditClient" prefHeight="35.0" prefWidth="85.0" text="Editar" />
+            <Button fx:id="deleteButton" layoutX="58.0" layoutY="224.0" mnemonicParsing="false" onAction="#deleteClient" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
+            <Button layoutX="58.0" layoutY="38.0" mnemonicParsing="false" onAction="#goShowClient" prefHeight="35.0" prefWidth="85.0" text="Visualizar" />
          </children>
       </AnchorPane>
    </right>

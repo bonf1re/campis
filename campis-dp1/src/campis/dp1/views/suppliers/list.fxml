@@ -16,7 +16,7 @@
       <Insets />
    </opaqueInsets>
    <center>
-      <TableView fx:id="tableClient" prefHeight="335.0" prefWidth="737.0" BorderPane.alignment="CENTER">
+      <TableView fx:id="tableSupplier" prefHeight="335.0" prefWidth="737.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="nameCol" prefWidth="75.0" text="Razón Social" />
             <TableColumn fx:id="rucCol" prefWidth="75.0" text="RUC" />

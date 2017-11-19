@@ -7,7 +7,7 @@ package campis.dp1.controllers.suppliers;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
-import campis.dp1.models.Client;
+import campis.dp1.models.Supplier;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
@@ -64,10 +64,14 @@ public class EditController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Criteria criteria = session.createCriteria(Client.class);
-        criteria.add(Restrictions.eq("id_client", id));
-        List rsType = criteria.list();
-        Client result = (Client) rsType.get(0);
+        String qryStr = "SELECT * FROM campis.supplier WHERE id_supplier = " + id;
+        SQLQuery qry = session.createSQLQuery(qryStr);
+        List<Object[]> rows = qry.list();
+        Supplier result = new Supplier();
+        for (Object[] row : rows) {
+             result = new Supplier(Integer.parseInt(row[0].toString()),row[1].toString(),
+                                row[2].toString(),row[3].toString(),row[4].toString(),row[5].toString());
+        }
         this.nameField.setText(result.getName());
         this.rucField.setText(result.getRuc());
         this.phoneField.setText(result.getPhone());

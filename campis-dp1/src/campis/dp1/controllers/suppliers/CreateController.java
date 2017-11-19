@@ -16,6 +16,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -99,9 +100,14 @@ public class CreateController implements Initializable{
             configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
             SessionFactory sessionFactory = configuration.buildSessionFactory();
             Session session = sessionFactory.openSession();
-
             session.beginTransaction();
-            session.save(supplier);
+            String qryStr = "INSERT INTO campis.supplier VALUES(DEFAULT,'" + supplier.getName() + "',"
+                    + "'"+supplier.getRuc()+"',"
+                    + "'"+supplier.getAddress() +"',"
+                    + "'"+supplier.getEmail()+"',"
+                    + "'"+supplier.getPhone()+"')";
+            SQLQuery qry = session.createSQLQuery(qryStr);
+            qry.executeUpdate();
             session.getTransaction().commit();
             session.close();
             sessionFactory.close();
