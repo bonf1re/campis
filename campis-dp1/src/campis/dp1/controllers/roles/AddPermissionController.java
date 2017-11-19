@@ -26,6 +26,7 @@ import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
 import org.hibernate.query.Query;
+import javafx.scene.control.cell.CheckBoxTableCell;
 
 public class AddPermissionController implements Initializable {
     private Main main;
@@ -36,11 +37,11 @@ public class AddPermissionController implements Initializable {
     @FXML
     private TableView<PermissionDisplay> tablePerm;
     @FXML
-    private TableColumn<PermissionDisplay,String> viewColumn;
+    private TableColumn<PermissionDisplay, String> viewColumn;
     @FXML
-    private TableColumn<PermissionDisplay,String> editColumn;
+    private TableColumn<PermissionDisplay, Boolean> editColumn;
     @FXML
-    private TableColumn<PermissionDisplay,String> visualizeColumn;
+    private TableColumn<PermissionDisplay, Boolean> visualizeColumn;
 
 	private ObservableList<Permission> getPermissions() {
         Configuration configuration = new Configuration();
@@ -95,60 +96,18 @@ public class AddPermissionController implements Initializable {
             }
             this.selected_id = newValue.idPermissionProperty().getValue().intValue();
         });
-    	visualizeColumn.setCellFactory(tc -> {
-            TableCell<PermissionDisplay, String> cell = new TableCell<PermissionDisplay, String>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty) ;
-                    setText(empty ? null : item);
-                }
-            };
-            cell.setOnMouseClicked(e -> {
-                if (! cell.isEmpty()) {
-                    String userId = cell.getItem();
-                    for (int i = 0; i < permissions.size(); i++) {
-                        if (permissions.get(i).getId_permission().compareTo(selected_id) == 0) {
-                            permissions.get(i).setVisualize(! permissions.get(i).getVisualize());
-                        }
-                    }
-                    try {
-                        loadLocalData();
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(AddPermissionController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(AddPermissionController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            });
-            return cell ;
-        });
-    	editColumn.setCellFactory(tc -> {
-            TableCell<PermissionDisplay, String> cell = new TableCell<PermissionDisplay, String>() {
-                @Override
-                protected void updateItem(String item, boolean empty) {
-                    super.updateItem(item, empty) ;
-                    setText(empty ? null : item);
-                }
-            };
-            cell.setOnMouseClicked(e -> {
-                if (! cell.isEmpty()) {
-                    String userId = cell.getItem();
-                    for (int i = 0; i < permissions.size(); i++) {
-                        if (permissions.get(i).getId_permission().compareTo(selected_id) == 0) {
-                            permissions.get(i).setModify(! permissions.get(i).getModify());
-                        }
-                    }
-                    try {
-                        loadLocalData();
-                    } catch (ClassNotFoundException ex) {
-                        Logger.getLogger(AddPermissionController.class.getName()).log(Level.SEVERE, null, ex);
-                    } catch (SQLException ex) {
-                        Logger.getLogger(AddPermissionController.class.getName()).log(Level.SEVERE, null, ex);
-                    }
-                }
-            });
-            return cell ;
-        });
+        visualizeColumn.setCellFactory(
+                CheckBoxTableCell.forTableColumn(visualizeColumn)
+            );
+        visualizeColumn.setCellValueFactory(
+                cellData->cellData.getValue().getVisualize()
+        );
+        editColumn.setCellFactory(
+                CheckBoxTableCell.forTableColumn(editColumn)
+            );
+        editColumn.setCellValueFactory(
+                cellData->cellData.getValue().getModify()
+        );
         try {
             viewColumn.setCellValueFactory(cellData -> cellData.getValue().getView());
             editColumn.setCellValueFactory(cellData -> cellData.getValue().getModify());
@@ -157,6 +116,7 @@ public class AddPermissionController implements Initializable {
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ListController.class.getName()).log(Level.SEVERE, null, ex);
         }
+        tablePerm.setEditable(true);
     }
 
     @FXML
@@ -167,12 +127,12 @@ public class AddPermissionController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-    	for (int i = 0; i < permissions.size(); i++) {
+    	for (int i = 0; i < permissionsView.size(); i++) {
 	        Query query = session.createQuery("update Permission set visualize = :newVisualize, modify = :newModify "
 	                + "where id_permission = :oldIdPerm");
-	        query.setParameter("newVisualize", permissions.get(i).getVisualize());
-	        query.setParameter("newModify", permissions.get(i).getModify());
-	        query.setParameter("oldIdPerm", permissions.get(i).getId_permission());
+	        query.setParameter("newVisualize", permissionsView.get(i).getVisualize().get());
+	        query.setParameter("newModify", permissionsView.get(i).getModify().get());
+	        query.setParameter("oldIdPerm", permissionsView.get(i).idPermissionProperty().getValue().intValue());
 	        int result = query.executeUpdate();
     	}
         session.getTransaction().commit();
