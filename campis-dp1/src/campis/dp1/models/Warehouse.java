@@ -82,5 +82,9 @@ public class Warehouse {
         this.status = status;
     }
     
+    public String toString(){
+        return new String(this.name);
+    }
+    
     
 }

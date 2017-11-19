@@ -31,6 +31,9 @@ public class WarehouseSidebarController implements Initializable {
 
     @FXML
     private JFXButton tipoProductButton;
+    
+    @FXML
+    private JFXButton entriesButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -62,5 +65,10 @@ public class WarehouseSidebarController implements Initializable {
     @FXML
     private void goListProductTypes() throws IOException {
         main.showListProductType();
+    }
+    
+    @FXML
+    private void goEntryMoveList() throws IOException {
+        main.showEntryMoveList();
     }
 }

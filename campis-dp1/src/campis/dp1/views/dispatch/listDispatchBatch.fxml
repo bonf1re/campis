@@ -11,7 +11,7 @@
    <center>
       <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="38.0" layoutY="35.0" text="Lotes en zona de despacho">
+            <Label fx:id="titleText" layoutX="38.0" layoutY="35.0" text="&lt;Lotes actualmente en: &gt;">
                <font>
                   <Font size="25.0" />
                </font>

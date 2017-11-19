@@ -735,5 +735,12 @@ public class Main extends Application {
         BorderPane ex = loader.load();
         mainLayout.setCenter(ex);
     }
+
+    public static void showEntryMoveList() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/entrymovelist.fxml"));
+        BorderPane entries = loader.load();
+        mainLayout.setCenter(entries);
+    }
     
 }
