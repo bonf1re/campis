@@ -34,6 +34,9 @@ public class DispatchSidebarController implements Initializable {
     private JFXButton batchxdispButton;
     
     @FXML
+    private JFXButton vhButton;
+    
+    @FXML
     private void goListEntries() throws IOException {
         main.showListEntries();
     }
@@ -47,6 +50,11 @@ public class DispatchSidebarController implements Initializable {
     @FXML
     private void goListDispatchBatch() throws IOException {
         main.showListDispatchBatch();
+    }
+    
+    @FXML
+    private void goListDeliveryVehicles() throws IOException {
+        main.showListDeliveryVehicles();
     }
     
     /**

@@ -123,7 +123,7 @@ public class CreateVehicleController implements Initializable {
             session.beginTransaction();
                
             Vehicle v = new Vehicle(Double.parseDouble(lblWeight.getText()), Integer.parseInt(lblSpeed.getText()),true,
-                                                this.warehouse_id, lblPlate.getText());
+                                                this.warehouse_id, lblPlate.getText(), 0);
             session.save(v);
             session.getTransaction().commit();
             session.close();

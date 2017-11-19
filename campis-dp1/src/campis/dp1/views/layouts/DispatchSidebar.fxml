@@ -12,6 +12,7 @@
     <children>
       <JFXButton fx:id="entriesButton" onAction="#goListEntries" prefHeight="51.0" prefWidth="95.0" styleClass="option" text="Entradas" />
       <JFXButton fx:id="depButton" onAction="#goListDepartures" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Salidas" />
-      <JFXButton fx:id="batchxdispButton" onAction="#goListDispatchBatch" layoutX="10.0" layoutY="61.0" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Lotes en despacho" />
+      <JFXButton fx:id="batchxdispButton" layoutX="10.0" layoutY="61.0" onAction="#goListDispatchBatch" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Lotes en despacho" />
+      <JFXButton fx:id="vhButton" layoutX="10.0" layoutY="107.0" onAction="#goListDeliveryVehicles" prefHeight="46.0" prefWidth="95.0" styleClass="option" text="Vehiculos de entregas" />
    </children>
 </VBox>

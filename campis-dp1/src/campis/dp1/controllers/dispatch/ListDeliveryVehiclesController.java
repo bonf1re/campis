@@ -3,27 +3,27 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1.controllers.vehicles;
+package campis.dp1.controllers.dispatch;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
-import campis.dp1.models.Role;
-import java.net.URL;
-import java.util.ResourceBundle;
-import javafx.fxml.Initializable;
-import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import java.io.IOException;
-import javafx.collections.FXCollections;
-import javafx.collections.ObservableList;
+import campis.dp1.controllers.vehicles.ListVehicleController;
 import campis.dp1.models.Vehicle;
 import campis.dp1.models.VehicleDisplay;
-import campis.dp1.models.Warehouse;
+import java.io.IOException;
+import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javafx.event.ActionEvent;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
+import javafx.fxml.FXML;
+import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -33,9 +33,10 @@ import org.hibernate.criterion.Restrictions;
 /**
  * FXML Controller class
  *
- * @author david
+ * @author Gina Bustamante
  */
-public class ListVehicleController implements Initializable {
+public class ListDeliveryVehiclesController implements Initializable {
+    
     private Main main;
     private int selected_id;
     private int id_role;
@@ -63,39 +64,13 @@ public class ListVehicleController implements Initializable {
 
     @FXML
     private Button deleteButton;
-    
-    
-    @FXML
-    private void goCreateVehicle() throws IOException {
-        ContextFX.getInstance().setId(this.warehouse_id);
-        main.showNewVehicle();
-    } 
-    
-    @FXML
-    private void goEditVehicle() throws IOException {
-        if (selected_id > 0) {
-            ContextFX.getInstance().setId(selected_id);
-            main.showEditVehicle();
-        }
-    }
-    
-    @FXML
-    private void goWhList() throws IOException{
-        main.showWhList();
-    }
-    
+
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // no se pueden borrar los vehiculos
-        deleteButton.setVisible(false);
-        
-        //
-        this.selected_id = 0;
-        ContextFX.getInstance().modifyValidation(newButton, editButton, deleteButton, id_role, "vehicles");
-        this.warehouse_id = ContextFX.getInstance().getId();
+        this.warehouse_id  = 1;
         
         tableVehicle.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
@@ -105,49 +80,22 @@ public class ListVehicleController implements Initializable {
             this.selected_id = newValue.idProperty().getValue().intValue();
             }
         );
+          
         try {
             idVehicleColumn.setCellValueFactory(cellData -> cellData.getValue().idProperty().asObject());
             maxWeightColumn.setCellValueFactory(cellData -> cellData.getValue().maxWeightProperty().asObject());
             maxSpeedColumn.setCellValueFactory(cellData -> cellData.getValue().speedProperty().asObject());
             activeColumn.setCellValueFactory(cellData -> cellData.getValue().activeProperty());
             plateColumn.setCellValueFactory(cellData -> cellData.getValue().plateProperty());
-            /**/
+            
             cargarData();
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ListVehicleController.class.getName()).log(Level.SEVERE, null, ex);
         }
-    }
+        
+    }    
     
-    private ObservableList<Vehicle> getVehicles() {
-        /*
-         * type_vh = 0 Vehículos de cargas
-         */
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(Vehicle.class);
-        //criteria.add(Restrictions.eq("id_warehouse",this.warehouse_id);
-        
-        criteria.add(Restrictions.conjunction()
-                     .add(Restrictions.eq("id_warehouse",this.warehouse_id))
-                     .add(Restrictions.eq("type_vh", 0)));
-        
-        
-        List lista = criteria.list();
-        ObservableList<Vehicle> returnable;
-        returnable = FXCollections.observableArrayList();
-        for (int i = 0; i < lista.size(); i++) {
-            returnable.add((Vehicle) lista.get(i));
-        }
-        session.close();
-        sessionFactory.close();
-        return returnable;
-    }
-    
-    private void cargarData() throws SQLException, ClassNotFoundException {
+     private void cargarData() throws SQLException, ClassNotFoundException {
         vehiculos = FXCollections.observableArrayList();
         vehiculosView = FXCollections.observableArrayList();
         vehiculos = getVehicles();
@@ -161,23 +109,11 @@ public class ListVehicleController implements Initializable {
         tableVehicle.setItems(null);
         tableVehicle.setItems(vehiculosView);
     }
- 
-    @FXML
-    private void deleteVehicle(ActionEvent event) throws SQLException, ClassNotFoundException {
-        if (selected_id > 0) {
-            ContextFX.getInstance().setId(selected_id);
-            Integer id_vehicle = ContextFX.getInstance().getId();
-            deleteSelectedVehicle(selected_id);
-            for (int i = 0; i < vehiculos.size(); i++) {
-                if(vehiculos.get(i).getId_vehicle().compareTo(id_vehicle) == 0){
-                    vehiculos.remove(i);
-                }
-            }
-            cargarData();
-        }
-    }
-    
-    private void deleteSelectedVehicle(int cod) {
+     
+     private ObservableList<Vehicle> getVehicles() {
+        /*
+         * type_vh = 1 Vehículos de entregas
+         */
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
@@ -185,11 +121,37 @@ public class ListVehicleController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Vehicle.class);
-        Vehicle veh = new Vehicle();
-        veh.setId_vehicle(cod);
-        session.delete(veh);
-        session.getTransaction().commit();
+        //criteria.add(Restrictions.eq("id_warehouse",this.warehouse_id);
+        this.warehouse_id  = 1;
+        
+        criteria.add(Restrictions.conjunction()
+                     .add(Restrictions.eq("id_warehouse",this.warehouse_id))
+                     .add(Restrictions.eq("type_vh", 1)));
+        
+        
+        List lista = criteria.list();
+        ObservableList<Vehicle> returnable;
+        returnable = FXCollections.observableArrayList();
+        for (int i = 0; i < lista.size(); i++) {
+            returnable.add((Vehicle) lista.get(i));
+        }
         session.close();
         sessionFactory.close();
+        return returnable;
     }
+    
+    @FXML
+    private void goCreateDeliveryVehicle() throws IOException {
+        ContextFX.getInstance().setId(this.warehouse_id);
+        main.showNewDeliveryVehicle();
+    } 
+    
+    @FXML
+    private void goEditDeliveryVehicle() throws IOException {
+        if (selected_id > 0) {
+            ContextFX.getInstance().setId(selected_id);
+            main.showEditDeliveryVehicle();
+        }
+    }
+    
 }
