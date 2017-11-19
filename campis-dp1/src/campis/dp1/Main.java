@@ -2,13 +2,10 @@ package campis.dp1;
 
 import java.io.IOException;
 import javafx.application.Application;
-import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.BorderPane;
-import javafx.scene.layout.Pane;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
@@ -459,7 +456,7 @@ public class Main extends Application {
       
     public static void showEditDeliveryVehicle() throws IOException {
         FXMLLoader loader = new FXMLLoader();
-        loader.setLocation(Main.class.getResource("views/dispatch/edit.fxml"));
+        loader.setLocation(Main.class.getResource("views/dispatch/editDeliveryVehicle.fxml"));
         BorderPane editVehicle = loader.load();
         mainLayout.setCenter(editVehicle);
     }

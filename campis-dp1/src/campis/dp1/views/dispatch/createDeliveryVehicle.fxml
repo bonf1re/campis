@@ -16,30 +16,33 @@
                   <Font size="28.0" />
                </font>
             </Label>
+            
             <Label layoutX="76.0" layoutY="157.0" text="Peso máximo:">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
             <JFXTextField fx:id="lblWeight" layoutX="230.0" layoutY="142.0" />
+            <Label fx:id="lblWeightMessage" layoutX="245.0" layoutY="147.0" prefHeight="17.0" prefWidth="139.0" textFill="RED" />
+            
             <Label layoutX="76.0" layoutY="266.0" text="Velocidad máxima:">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
-            <JFXTextField  fx:id="lblSpeed" layoutX="230.0" layoutY="254.0" />
+            <JFXTextField fx:id="lblSpeed" layoutX="230.0" layoutY="254.0" />
+            <Label fx:id="lblSpeedMessage" layoutX="245.0" layoutY="256.0" prefHeight="17.0" prefWidth="139.0" textFill="RED" />
+            
             <Label layoutX="539.0" layoutY="157.0" text="Placa:">
                <font>
                   <Font size="15.0" />
                </font>
             </Label>
             <JFXTextField fx:id="lblPlate" layoutX="606.0" layoutY="152.0" />
+            <Label fx:id="lblPlateMessage" layoutX="621.0" layoutY="157.0" prefHeight="17.0" prefWidth="139.0" textFill="RED" />
+            
             <Button layoutX="356.0" layoutY="418.0" mnemonicParsing="false" onAction="#insertDeliveryVehicle" text="Guardar" />
             <Button layoutX="519.0" layoutY="418.0" mnemonicParsing="false" onAction="#goListDeliveryVehicles" text="Cancelar" />
-            
-             <Label fx:id="lblWeightMessage" layoutX="279.0" layoutY="175.0" prefHeight="17.0" prefWidth="139.0" textFill="RED" />
-            <Label fx:id="lblSpeedMessage" layoutX="275.0" layoutY="264.0" prefHeight="17.0" prefWidth="139.0" textFill="RED" />
-            <Label fx:id="lblPlateMessage" layoutX="660.0" layoutY="181.0" prefHeight="17.0" prefWidth="139.0" textFill="RED" />
          </children>
       </AnchorPane>
    </center>
