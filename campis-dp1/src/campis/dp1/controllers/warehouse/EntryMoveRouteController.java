@@ -213,7 +213,7 @@ public class EntryMoveRouteController implements Initializable{
         session.getTransaction().commit();
         session.close();
         sessionFactory.close();
-        gu.popupNotif("Notificación", "Estos movimientos ya fueron grabados", "Continuar");
+        gu.popupNotif("Notificación", "Los movimientos fueron grabados", "Continuar");
         if (gu.popup2Options(" ", "¿Desea volver a la lista de movimientos?", "Sí", "No, gracias") == true) {
             goEntryMoveList();
         }

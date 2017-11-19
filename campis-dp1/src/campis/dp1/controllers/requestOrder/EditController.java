@@ -269,7 +269,7 @@ public class EditController implements Initializable {
         query.setParameter("newTotal", Float.parseFloat(amountField.getText()));
         query.setParameter("newStatus", (String) statesField.getValue());
         query.setParameter("newPrior", priorityField.getValue());
-        query.setParameter("id_district", id_dist);
+        query.setParameter("newDist", id_dist);
         query.setParameter("address", addressField.getText());
         query.setParameter("odlIdRequest", codGen);
         int result = query.executeUpdate();
