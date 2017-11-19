@@ -8,6 +8,7 @@ import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -66,15 +67,16 @@ public class PermissionDisplay {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Criteria criteria = session.createCriteria(View.class);
-        criteria.add(Restrictions.eq("id_view",cod));
-        String descrip;
-        List rsType = criteria.list();
-        View result = (View) rsType.get(0);
-        descrip = result.getDescription();
+        String queryStr = "select description as description\n" +
+                            "from campis.view\n" +
+                            " WHERE id_view =" + cod;
+        SQLQuery query = session.createSQLQuery(queryStr);
+        List list = query.list();
+        String returnable = (String) list.get(0);
+
         session.close();
         sessionFactory.close();
 
-        return descrip;
+        return returnable;
     }
 }
