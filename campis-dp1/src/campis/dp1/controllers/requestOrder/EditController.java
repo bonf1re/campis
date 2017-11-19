@@ -148,7 +148,9 @@ public class EditController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
+        ContextFX.getInstance().setBaseTotAmount(0f);
+        ContextFX.getInstance().setDiscount(0f);
+        ContextFX.getInstance().setTotAmount(0f);
         codGen = ContextFX.getInstance().getVar();
         List<Object[]> dists = getDistricts();
         for (Object[] dist : dists) {
@@ -324,6 +326,7 @@ public class EditController implements Initializable {
     @FXML
     private void goListRequestOrder() throws IOException {
         ContextFX.getInstance().setBaseTotAmount(0f);
+        ContextFX.getInstance().setDiscount(0f);
         ContextFX.getInstance().setTotAmount(0f);
         productsView = ContextFX.getInstance().getTempList();
         productsView.clear();

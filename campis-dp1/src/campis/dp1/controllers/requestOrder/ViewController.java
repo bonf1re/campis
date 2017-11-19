@@ -105,6 +105,10 @@ public class ViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ContextFX.getInstance().setBaseTotAmount(0f);
+        ContextFX.getInstance().setDiscount(0f);
+        ContextFX.getInstance().setTotAmount(0f);
+        
         IGV = ContextFX.getInstance().getIGV() + 1;
         id = ContextFX.getInstance().getId();
         ContextFX.getInstance().setId(id);
@@ -268,7 +272,7 @@ public class ViewController implements Initializable {
             String state = "ENTREGA";
             baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
             baseTotalAmount = baseTotalAmount + base_amount;
-            discountTotal = ContextFX.getInstance().getTotAmount();
+            discountTotal = ContextFX.getInstance().getDiscount();
             // cantidad neta de descuento por promocion
             Float promo = (base_amount - ((list.get(i).getQuantity()/n_discount * n_tocount) * products.get(0).getBase_price()));
             //
@@ -276,6 +280,7 @@ public class ViewController implements Initializable {
             discountTotal = discountTotal + base_amount * disc + promo;
             totalAmount = baseTotalAmount - discountTotal;
             float f = getFreight(distr);
+            freightTotal = ContextFX.getInstance().getFreight();
             freightTotal = freightTotal + baseTotalAmount * f;
             totalAmount = totalAmount + freightTotal;
             this.freightField.setText(Float.toString((freightTotal*100)/100));

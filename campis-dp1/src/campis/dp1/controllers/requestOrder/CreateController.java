@@ -130,6 +130,7 @@ public class CreateController implements Initializable {
         productsView.clear();
         ContextFX.getInstance().setTempList(productsView);
         ContextFX.getInstance().setBaseTotAmount(0f);
+        ContextFX.getInstance().setDiscount(0f);
         ContextFX.getInstance().setTotAmount(0f);
         main.showListRequestOrder();
     }
@@ -362,7 +363,9 @@ public class CreateController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        
+        ContextFX.getInstance().setBaseTotAmount(0f);
+        ContextFX.getInstance().setDiscount(0f);
+        ContextFX.getInstance().setTotAmount(0f);
         this.selected_id = 0;
         tablaProd.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
