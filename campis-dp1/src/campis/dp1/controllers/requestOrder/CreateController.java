@@ -35,6 +35,7 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import java.util.TimeZone;
 import javafx.collections.FXCollections;
@@ -212,7 +213,6 @@ public class CreateController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(SaleCondition.class);
-        criteria.add(Restrictions.eq("id_to_take", cod));
         criteria.add(Restrictions.le("initial_date", today.getTime()));
         criteria.add(Restrictions.ge("final_date", today.getTime()));
         List<SaleCondition> list = criteria.list();
@@ -227,28 +227,30 @@ public class CreateController implements Initializable {
     }
 
     private Float verifyConditions(ObservableList<SaleCondition> discounts, Product prod, int quant) {
+        Integer type, maxQ, taken_id, n_d_aux, n_c_aux;
+        Float returnable = Float.valueOf(0);
+        
         n_discount = 1;
         n_tocount = 1;
-        Integer n_d_aux, n_c_aux;
-        Float returnable = Float.valueOf(0);
+        
         for (int i = 0; i < discounts.size(); i++) {
-            int type = discounts.get(i).getId_sale_condition_type();
-            if (type == 1) {
-                int maxQ = discounts.get(i).getLimits();
-                if (maxQ < quant) {
-                    returnable = returnable + discounts.get(i).getAmount() / 100;
-                }
-            } else if (type == 2) {
-                int type_prod = prod.getId_product_type();
-                if (type_prod == type) {
-                    int maxQ = discounts.get(i).getLimits();
-                    if (maxQ < quant) {
-                        returnable = returnable + discounts.get(i).getAmount() / 100;
-                    }
-                }
-            }
+            maxQ = discounts.get(i).getLimits();
+            if (maxQ > quant) continue; 
+            type = discounts.get(i).getId_sale_condition_type();
+            taken_id = discounts.get(i).getId_to_take();
             n_d_aux = discounts.get(i).getN_discount();
             n_c_aux = discounts.get(i).getN_tocount();
+            
+            if (type == 1) {
+                if (Objects.equals(prod.getId_product(), taken_id))
+                    returnable = returnable + discounts.get(i).getAmount() / 100;
+
+            } else if (type == 2) {
+                if (Objects.equals(prod.getId_product_type(), taken_id)) {
+                    returnable = returnable + discounts.get(i).getAmount() / 100;
+                }
+            }
+            
             if (n_d_aux != 1 || n_c_aux != 1) {
                 n_discount = n_d_aux;
                 n_tocount = n_c_aux;
@@ -288,15 +290,20 @@ public class CreateController implements Initializable {
         productsView = ContextFX.getInstance().getTempList();
         products = getProduct(cod);
         ObservableList<SaleCondition> discounts = getDiscount(cod);
+        
+        //porcentaje de descuento
         Float disc = verifyConditions(discounts, products.get(0), quant);
+        //
         Float base_amount = quant * products.get(0).getBase_price();
         String state = "ENTREGA";
         baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
         baseTotalAmount = baseTotalAmount + base_amount;
         discountTotal = ContextFX.getInstance().getDiscount();
         
-        discountTotal = discountTotal + base_amount * disc + 
-                        (base_amount - ((quant/n_discount * n_tocount) * products.get(0).getBase_price()));
+        // cantidad neta de descuento por porcentaje
+        Float promo = (base_amount - ((quant/n_discount * n_tocount) * products.get(0).getBase_price()));
+        
+        discountTotal = discountTotal + base_amount * disc + promo;
         freightTotal = ContextFX.getInstance().getFreight();
         totalAmount = baseTotalAmount - discountTotal;
         ContextFX.getInstance().setDiscount(discountTotal);
