@@ -27,6 +27,7 @@ public class Vehicle {
     boolean active;
     Integer id_warehouse;
     String plate;
+    Integer type_vh;
     
     public Vehicle(){
         super();
@@ -48,6 +49,15 @@ public class Vehicle {
         this.active = active;
         this.id_warehouse = id_warehouse;
         this.plate = plate;
+    }
+    
+    public Vehicle(Double max_weight, Integer speed, boolean active, Integer id_warehouse, String plate, int type_vh) {
+        this.max_weight = max_weight;
+        this.speed = speed;
+        this.active = active;
+        this.id_warehouse = id_warehouse;
+        this.plate = plate;
+        this.type_vh = type_vh;
     }
 
     public Vehicle(Vehicle vh, int i) {
