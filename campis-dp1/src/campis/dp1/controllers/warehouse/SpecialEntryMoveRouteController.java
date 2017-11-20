@@ -174,6 +174,8 @@ public class SpecialEntryMoveRouteController implements Initializable{
                 zone_q.executeUpdate();
                 
                 Batch batch = batch_list.get(j);
+                System.out.println("campis.dp1.controllers.warehouse.SpecialEntryMoveRouteController.saveEntryMove()");
+                System.out.println(batch.getId_supplier());
                 // batch save
                 batch.setType_batch(3);
                 int id_batch = (int) session.save(new Batch(batch));

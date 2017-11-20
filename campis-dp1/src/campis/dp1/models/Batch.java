@@ -21,6 +21,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "batch")
 public class Batch {
+
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     private int id_batch;
@@ -35,6 +36,8 @@ public class Batch {
     private String location;
     private boolean state;
     private String heritage="--";
+    private int id_supplier;
+    
     
     public Batch(){
         super();
@@ -85,6 +88,7 @@ public class Batch {
         this.quantity = batch.quantity;
         this.state = batch.state;
         this.type_batch = batch.type_batch;
+        this.id_supplier = batch.getId_supplier();
     }
     
     public Batch(Batch batch, int r) {
@@ -188,4 +192,17 @@ public class Batch {
         System.out.println("-Heritage: "+this.heritage);
     }
     
+    /**
+     * @return the id_supplier
+     */
+    public int getId_supplier() {
+        return id_supplier;
+    }
+
+    /**
+     * @param id_supplier the id_supplier to set
+     */
+    public void setId_supplier(int id_supplier) {
+        this.id_supplier = id_supplier;
+    }
 }
