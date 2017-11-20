@@ -19,11 +19,11 @@ public class Parameters {
     Float pound;
     Float euro;
 
-    private Parameters() {
+    public Parameters() {
         super();
     }
 
-    private Parameters(Float igv, Float dollar, Float euro) {
+    public Parameters(Float igv, Float dollar, Float euro) {
         this.igv = igv;
         this.dollar = dollar;
         this.euro = euro;
@@ -59,6 +59,18 @@ public class Parameters {
 
     public void setEuro(Float euro) {
         this.euro = euro;
+    }
+
+    public float roundingMethod(Float num, int exp) {  
+        if (exp < 0) {
+            throw new IllegalArgumentException();
+        }
+
+        long factor = (long) Math.pow(10, exp);
+        num = num * factor;
+        long tmp = Math.round(num);
+        
+        return (float) tmp / factor;
     }
 
 }

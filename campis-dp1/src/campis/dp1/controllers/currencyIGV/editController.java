@@ -8,6 +8,7 @@ package campis.dp1.controllers.currencyIGV;
 import campis.dp1.ContextFX;
 import static campis.dp1.controllers.products.EditController.searchCodMeasure;
 import static campis.dp1.controllers.products.EditController.searchCodType;
+import campis.dp1.models.Parameters;
 import com.jfoenix.controls.JFXCheckBox;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
@@ -42,11 +43,15 @@ public class editController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        this.dolarField.setText(Float.toString((ContextFX.getInstance().getDollar()*100)/100));
+        Parameters pam = new Parameters();
+        float dol = pam.roundingMethod(ContextFX.getInstance().getDollar(), 2);
+        float eur = pam.roundingMethod(ContextFX.getInstance().getEuro(), 2);
+        float igv = pam.roundingMethod(ContextFX.getInstance().getIGV(), 2);
+        this.dolarField.setText(Float.toString(dol));
         this.dolarField.disableProperty().set(true);
-        this.euroField.setText(Float.toString((ContextFX.getInstance().getEuro()*100)/100));
+        this.euroField.setText(Float.toString(eur));
         this.euroField.disableProperty().set(true);
-        this.igvField.setText(Float.toString((ContextFX.getInstance().getIGV()*100)/100));
+        this.igvField.setText(Float.toString(igv));
         this.igvField.disableProperty().set(true);
     }
 
@@ -73,6 +78,7 @@ public class editController implements Initializable {
         float dol = Float.parseFloat(this.dolarField.getText());
         float eur = Float.parseFloat(this.euroField.getText());
         float igv = Float.parseFloat(this.igvField.getText());
+        
         updateCurrencyIGV(dol, eur, igv);
         this.dolarField.disableProperty().set(true);
         this.euroField.disableProperty().set(true);
