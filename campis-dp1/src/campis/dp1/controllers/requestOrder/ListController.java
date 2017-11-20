@@ -108,7 +108,6 @@ public class ListController implements Initializable{
 
     private void loadData() {
         requestList = FXCollections.observableArrayList();
-        requestView = FXCollections.observableArrayList();
         requestList = getRequests();
         for (int i = 0; i < requestList.size(); i++) {
             name = getName(requestList.get(i).getId_client());

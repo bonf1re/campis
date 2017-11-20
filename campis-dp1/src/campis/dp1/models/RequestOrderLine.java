@@ -24,6 +24,20 @@ import org.hibernate.criterion.Restrictions;
 @Entity
 @Table (name = "request_order_line")
 public class RequestOrderLine {
+
+    /**
+     * @return the discount
+     */
+    public Float getDiscount() {
+        return discount;
+    }
+
+    /**
+     * @param discount the discount to set
+     */
+    public void setDiscount(Float discount) {
+        this.discount = discount;
+    }
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     Integer id_request_order_line;
@@ -31,6 +45,7 @@ public class RequestOrderLine {
     Float cost;
     Integer id_request_order;
     Integer id_product;
+    Float discount;
     
     public RequestOrderLine() {
         super();
@@ -42,6 +57,15 @@ public class RequestOrderLine {
         this.cost = costo;
         this.id_request_order = idReqOrd;
         this.id_product = idProd;
+    }
+    
+    public RequestOrderLine(int quantity, float costo,
+                            int idReqOrd, int idProd, float discount) {
+        this.quantity = quantity;
+        this.cost = costo;
+        this.id_request_order = idReqOrd;
+        this.id_product = idProd;
+        this.discount = discount;
     }
     
     public Integer getId_request_order_line() {

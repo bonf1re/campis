@@ -14,6 +14,7 @@ import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import campis.dp1.models.Permission;
+import campis.dp1.models.RequestLineDisplay;
 import campis.dp1.models.View;
 import javafx.scene.control.Button;
 
@@ -22,6 +23,34 @@ import javafx.scene.control.Button;
  * @author Eddy
  */
 public class ContextFX {
+
+    /**
+     * @return the igvTot
+     */
+    public Float getIgvTot() {
+        return igvTot;
+    }
+
+    /**
+     * @param igvTot the igvTot to set
+     */
+    public void setIgvTot(Float igvTot) {
+        this.igvTot = igvTot;
+    }
+
+    /**
+     * @return the reqList
+     */
+    public ObservableList<RequestLineDisplay> getReqList() {
+        return reqList;
+    }
+
+    /**
+     * @param reqList the reqList to set
+     */
+    public void setReqList(ObservableList<RequestLineDisplay> reqList) {
+        this.reqList = reqList;
+    }
 
     /**
      * @return the n_discount
@@ -70,6 +99,7 @@ public class ContextFX {
     Float totAmount = 0.0f;
     Float discount = 0.0f;
     Float freight = 0.0f;
+    private Float igvTot = 0.0f;
     Float dollar = 0.0f;
     Float euro = 0.0f;
     Float igv = 0.0f;
@@ -78,6 +108,7 @@ public class ContextFX {
     Integer num = 0; // Useful to save any integer variable.
     Integer var = 0;
     String word = null;
+    private ObservableList<RequestLineDisplay> reqList = FXCollections.observableArrayList();
     ObservableList<ProductDisplay> tempList = FXCollections.observableArrayList();
     ObservableList<BatchDisplay> tempBatchList = FXCollections.observableArrayList();
     ArrayList<Object> polymorphic_list = new ArrayList<Object>();
