@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" 
+            minWidth="-Infinity" prefHeight="500.0" prefWidth="967.0" 
+            xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="campis.dp1.controllers.dispatch.ListDeliveriesController">
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Text layoutX="52.0" layoutY="65.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Guias de Remisión">
+               <font>
+                  <Font size="30.0" />
+               </font>
+            </Text>
+            <TableView fx:id="tableDelivery" layoutX="52.0" layoutY="104.0" prefHeight="357.0" prefWidth="656.0">
+              <columns>
+                <TableColumn fx:id="idCol" prefWidth="124.0" text="id" />
+                <TableColumn fx:id="addressCol" prefWidth="252.0" text="Address" />
+                  <TableColumn fx:id="vehicleCol" prefWidth="159.0" text="Vehicle" />
+                  <TableColumn fx:id="id_doCol" prefWidth="121.0" text="id_disp_order" />
+              </columns>
+            </TableView>
+            <Button fx:id="createButton" onAction="#goCreateDelivery" layoutX="775.0" layoutY="184.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="97.0" text="Crear" />
+            <Button fx:id="editButton" onAction="#goEditDelivery" layoutX="775.0" layoutY="241.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="97.0" text="Editar" />
+            <Button fx:id="deleteButton" onAction="#goDeleteDelivery" layoutX="775.0" layoutY="304.0" mnemonicParsing="false" prefHeight="42.0" prefWidth="97.0" text="Eliminar" />
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

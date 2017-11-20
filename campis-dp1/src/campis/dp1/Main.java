@@ -434,6 +434,28 @@ public class Main extends Application {
         mainLayout.setCenter(newNormalDeparture);
      }
     
+    /*Deliveries*/
+     public static void showDeliveryList() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/dispatch/listDeliveries.fxml"));
+        BorderPane newNormalDeparture = loader.load();
+        mainLayout.setCenter(newNormalDeparture);
+     }
+     
+     public static void showCreateDelivery() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/dispatch/createDelivery.fxml"));
+        BorderPane newNormalDeparture = loader.load();
+        mainLayout.setCenter(newNormalDeparture);
+     }
+     
+     public static void showEditDelivery() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/dispatch/editDelivery.fxml"));
+        BorderPane newNormalDeparture = loader.load();
+        mainLayout.setCenter(newNormalDeparture);
+     }
+     
     /*Batches x dispatch*/
     public static void showListDispatchBatch() throws IOException {
         FXMLLoader loader = new FXMLLoader();
