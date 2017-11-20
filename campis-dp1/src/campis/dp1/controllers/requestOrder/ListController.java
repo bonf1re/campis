@@ -85,6 +85,8 @@ public class ListController implements Initializable{
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.selected_id = 0;
+        this.searchField.setText("");
+        requestView = FXCollections.observableArrayList();
         ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "request_orders");
         requestTable.getSelectionModel().selectedItemProperty().addListener(
         (observable, oldValue, newValue) -> {
