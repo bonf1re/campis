@@ -15,60 +15,63 @@
    <bottom>
       <AnchorPane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
-            <JFXTextField fx:id="subtotalField" layoutX="678.0" layoutY="457.0" />
-            <Label layoutX="103.0" layoutY="14.0" text="Crear Orden de Venta">
+            <Label layoutX="109.0" layoutY="47.0" text="Crear Orden de Venta">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label layoutX="156.0" layoutY="52.0" text="Nombre Cliente:" />
-            <JFXTextField fx:id="nameClientField" layoutX="273.0" layoutY="52.0" prefHeight="25.0" prefWidth="210.0" />
-            <Label layoutX="156.0" layoutY="138.0" text="Fecha Delivery:" />
-            <JFXDatePicker fx:id="deliveryDate" layoutX="251.0" layoutY="134.0" />
-            <TableView fx:id="tablaProd" layoutX="156.0" layoutY="243.0" prefHeight="200.0" prefWidth="657.0">
+            <Label layoutX="154.0" layoutY="115.0" text="Nombre del cliente:" />
+            <Label layoutX="155.0" layoutY="179.0" text="Fecha Delivery:" />
+            <JFXDatePicker fx:id="deliveryDate" layoutX="293.0" layoutY="174.0" />
+            <TableView fx:id="tablaProd" layoutX="150.0" layoutY="243.0" prefHeight="163.0" prefWidth="657.0">
               <columns>
-                <TableColumn fx:id="idColumn" prefWidth="75.0" text="Código" />
-                <TableColumn fx:id="nameColumn" prefWidth="75.0" text="Nombre" />
-                  <TableColumn fx:id="typeColumn" prefWidth="75.0" text="Tipo Producto" />
-                  <TableColumn fx:id="quantityColumn" prefWidth="75.0" text="Cantidad" />
-                  <TableColumn fx:id="unitaryAmountColumn" prefWidth="75.0" text="Monto Unitario" />
-                  <TableColumn fx:id="finalAmountColumn" prefWidth="75.0" text="Monto Final" />
-                  <TableColumn fx:id="stateColumn" prefWidth="75.0" text="Estado" />
+                <TableColumn fx:id="idColumn" prefWidth="43.0" text="COD" />
+                <TableColumn fx:id="nameColumn" prefWidth="151.0" text="Nombre" />
+                  <TableColumn fx:id="quantityColumn" prefWidth="57.0" text="#" />
+                  <TableColumn fx:id="unitaryAmountColumn" prefWidth="85.0" text="M. Unit." />
+                  <TableColumn fx:id="finalAmountColumn" prefWidth="87.0" text="M. Final" />
+                  <TableColumn fx:id="discountColumn" prefWidth="90.0" text="Desc." />
+                  <TableColumn fx:id="stateColumn" prefWidth="143.0" text="Estado" />
               </columns>
-               <columnResizePolicy>
-                  <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-               </columnResizePolicy>
             </TableView>
-            <Label layoutX="156.0" layoutY="211.0" text="Productos:" />
-            <Label layoutX="566.0" layoutY="464.0" prefHeight="17.0" prefWidth="62.0" text="Subtotal:" />
-            <Button layoutX="839.0" layoutY="243.0" mnemonicParsing="false" onAction="#goAddItem" prefHeight="35.0" prefWidth="86.0" text="Añadir Item" />
-            <Button layoutX="838.0" layoutY="300.0" mnemonicParsing="false" onAction="#deleteItem" prefHeight="35.0" prefWidth="88.0" text="Eliminar Item" />
-            <Button layoutX="840.0" layoutY="356.0" mnemonicParsing="false" onAction="#createRequestOrder" prefHeight="35.0" prefWidth="85.0" text="Crear" />
-            <Button layoutX="839.0" layoutY="408.0" mnemonicParsing="false" onAction="#goListRequestOrder" prefHeight="35.0" prefWidth="87.0" text="Cancelar" />
-            <Label layoutX="515.0" layoutY="52.0" text="Código Cliente:" />
-            <Label layoutX="156.0" layoutY="177.0" text="Estado:" />
-            <Label layoutX="504.0" layoutY="177.0" text="Prioridad:" />
-            <JFXComboBox fx:id="priorityField" layoutX="595.0" layoutY="173.0" prefHeight="25.0" prefWidth="75.0" />
-            <JFXTextField fx:id="discountField" layoutX="678.0" layoutY="491.0" />
-            <Label layoutX="566.0" layoutY="498.0" prefHeight="17.0" prefWidth="66.0" text="Descuentos:" />
-            <JFXTextField fx:id="amountField" layoutX="678.0" layoutY="553.0" />
-            <Label layoutX="566.0" layoutY="560.0" text="Monto Total:" />
-            <JFXComboBox fx:id="clientField" layoutX="633.0" layoutY="52.0" onAction="#setNameClientAction" />
-            <Label fx:id="messageField1" layoutX="271.0" layoutY="165.0" prefHeight="17.0" prefWidth="165.0" textFill="RED" />
-            <Label fx:id="messageField2" layoutX="596.0" layoutY="165.0" prefHeight="17.0" prefWidth="165.0" textFill="#fc0000" />
-            <JFXTextField fx:id="statesField" layoutX="273.0" layoutY="173.0" prefHeight="25.0" prefWidth="136.0" unFocusColor="#4d4d4d08" />
-            <Label layoutX="156.0" layoutY="94.0" text="Dirección de Despacho:" />
-            <JFXTextField fx:id="addressField" layoutX="294.0" layoutY="94.0" prefHeight="25.0" prefWidth="189.0" />
-            <Label layoutX="515.0" layoutY="94.0" text="Distrito:" />
-            <JFXComboBox fx:id="districtField" layoutX="578.0" layoutY="94.0" onAction="#setDistrictAction" prefHeight="25.0" prefWidth="111.0" />
-            <JFXTextField fx:id="freightField" layoutX="678.0" layoutY="520.0" prefHeight="21.0" prefWidth="135.0" />
-            <Label layoutX="566.0" layoutY="527.0" text="Flete:" />
-            <Label layoutX="663.0" layoutY="464.0" text="S/." />
-            <Label layoutX="663.0" layoutY="498.0" text="S/." />
-            <Label layoutX="663.0" layoutY="527.0" text="S/." />
-            <Label layoutX="663.0" layoutY="560.0" text="S/." />
-            <Label layoutX="506.0" layoutY="211.0" text="IGV:" />
-            <JFXTextField fx:id="igvField" layoutX="595.0" layoutY="207.0" prefHeight="25.0" prefWidth="42.0" unFocusColor="#4d4d4d08" />
+            <Label layoutX="565.0" layoutY="418.0" prefHeight="17.0" prefWidth="62.0" text="Subtotal:" />
+            <Button layoutX="834.0" layoutY="255.0" mnemonicParsing="false" onAction="#goAddItem" prefHeight="35.0" prefWidth="98.0" text="Añadir Item" />
+            <Button layoutX="831.0" layoutY="325.0" mnemonicParsing="false" onAction="#deleteItem" prefHeight="35.0" prefWidth="105.0" text="Eliminar Item" />
+            <Button layoutX="346.0" layoutY="537.0" mnemonicParsing="false" onAction="#createRequestOrder" prefHeight="35.0" prefWidth="85.0" text="Crear" />
+            <Button layoutX="452.0" layoutY="537.0" mnemonicParsing="false" onAction="#goListRequestOrder" prefHeight="35.0" prefWidth="87.0" text="Cancelar" />
+            <Label layoutX="505.0" layoutY="115.0" text="Código del cliente:" />
+            <Label layoutX="154.0" layoutY="211.0" text="Estado:" />
+            <Label layoutX="507.0" layoutY="179.0" text="Prioridad:" />
+            <JFXComboBox fx:id="priorityField" layoutX="637.0" layoutY="174.0" prefHeight="26.0" prefWidth="58.0" />
+            <Label layoutX="565.0" layoutY="438.0" prefHeight="17.0" prefWidth="85.0" text="Descuento:" />
+            <Label layoutX="561.0" layoutY="513.0" text="Monto Total:">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Label>
+            <JFXComboBox fx:id="clientField" layoutX="635.0" layoutY="110.0" onAction="#setNameClientAction" />
+            <Label fx:id="messageField1" layoutX="154.0" layoutY="410.0" prefHeight="17.0" prefWidth="165.0" textFill="RED" />
+            <Label fx:id="messageField2" layoutX="154.0" layoutY="411.0" prefHeight="17.0" prefWidth="165.0" textFill="#fc0000" />
+            <JFXTextField fx:id="statesField" layoutX="295.0" layoutY="206.0" prefHeight="25.0" prefWidth="136.0" unFocusColor="#4d4d4d08" />
+            <Label layoutX="155.0" layoutY="146.0" text="Departamento:" />
+            <JFXComboBox fx:id="districtField" layoutX="295.0" layoutY="141.0" onAction="#setDistrictAction" prefHeight="26.0" prefWidth="188.0" />
+            <Label layoutX="565.0" layoutY="458.0" text="Flete:" />
+            <Label layoutX="663.0" layoutY="418.0" text="S/." />
+            <Label layoutX="663.0" layoutY="438.0" text="S/. -" textFill="#9a1515" />
+            <Label layoutX="663.0" layoutY="458.0" text="S/." />
+            <Label layoutX="663.0" layoutY="513.0" text="S/." />
+            <Label layoutX="506.0" layoutY="211.0" text="IGV a aplicar:" />
+            <JFXComboBox fx:id="nameClientField" layoutX="297.0" layoutY="110.0" onAction="#setIDClientAction" prefHeight="26.0" prefWidth="187.0" />
+            <Label fx:id="subtotalField" contentDisplay="RIGHT" layoutX="740.0" layoutY="418.0" text="field" textAlignment="RIGHT" />
+            <Label fx:id="discountField" contentDisplay="RIGHT" layoutX="740.0" layoutY="438.0" text="field" textAlignment="RIGHT" textFill="#d01818" />
+            <Label fx:id="freightField" contentDisplay="RIGHT" layoutX="740.0" layoutY="458.0" text="field" textAlignment="RIGHT" />
+            <Label layoutX="565.0" layoutY="478.0" text="IGV:" />
+            <Label layoutX="663.0" layoutY="478.0" text="S/." />
+            <Label fx:id="IGVField" contentDisplay="RIGHT" layoutX="740.0" layoutY="478.0" text="field" textAlignment="RIGHT" />
+            <Label fx:id="amountField" contentDisplay="RIGHT" layoutX="740.0" layoutY="513.0" text="field" textAlignment="RIGHT">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Label>
+            <Label fx:id="igvField" layoutX="641.0" layoutY="211.0" text="i" />
          </children>
       </AnchorPane>
    </bottom>

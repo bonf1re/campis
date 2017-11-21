@@ -14,6 +14,7 @@ import campis.dp1.models.District;
 import campis.dp1.models.Parameters;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
+import campis.dp1.models.RequestLineDisplay;
 import campis.dp1.models.RequestOrder;
 import campis.dp1.models.RequestOrderLine;
 import campis.dp1.models.SaleCondition;
@@ -25,19 +26,15 @@ import static java.lang.Boolean.FALSE;
 import static java.lang.Boolean.TRUE;
 import java.net.URL;
 import java.sql.Timestamp;
-import java.text.DecimalFormat;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.time.LocalDate;
-import java.time.LocalDateTime;
-import static java.time.temporal.TemporalQueries.zoneId;
-import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.GregorianCalendar;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
-import java.util.TimeZone;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
@@ -65,6 +62,7 @@ public class CreateController implements Initializable {
     float totalAmount = 0;
     float baseTotalAmount = 0;
     float discountTotal = 0;
+    float igvTotal = 0;
     float freightTotal = 0;
     Integer n_discount = 1;
     Integer n_tocount = 1;
@@ -72,39 +70,36 @@ public class CreateController implements Initializable {
     Parameters param = new Parameters();
     String message = "";
     private ObservableList<Product> products;
-    private ObservableList<ProductDisplay> productsView = FXCollections.observableArrayList();
+    private ObservableList<RequestLineDisplay> requestLineView = FXCollections.observableArrayList();
+    
 
     @FXML
-    private JFXTextField amountField;
+    private TableView<RequestLineDisplay> tablaProd;
+    @FXML
+    private TableColumn<RequestLineDisplay, Integer> idColumn;
+    @FXML
+    private TableColumn<RequestLineDisplay, String> nameColumn;
 
     @FXML
-    private TableView<ProductDisplay> tablaProd;
+    private TableColumn<RequestLineDisplay, Integer> quantityColumn;
     @FXML
-    private TableColumn<ProductDisplay, Integer> idColumn;
+    private TableColumn<RequestLineDisplay, Float> unitaryAmountColumn;
     @FXML
-    private TableColumn<ProductDisplay, String> nameColumn;
+    private TableColumn<RequestLineDisplay, Float> finalAmountColumn;
     @FXML
-    private TableColumn<ProductDisplay, Integer> typeColumn;
+    private TableColumn<RequestLineDisplay, Float> discountColumn;
+
     @FXML
-    private TableColumn<ProductDisplay, Integer> quantityColumn;
+    private TableColumn<RequestLineDisplay, String> stateColumn;
     @FXML
-    private TableColumn<ProductDisplay, Float> unitaryAmountColumn;
-    @FXML
-    private TableColumn<ProductDisplay, Float> finalAmountColumn;
-    @FXML
-    private TableColumn<ProductDisplay, String> stateColumn;
-    @FXML
-    private JFXTextField nameClientField;
+    private JFXComboBox<String> nameClientField;
     @FXML
     private JFXDatePicker deliveryDate;
     @FXML
     private JFXTextField statesField;
     @FXML
     private JFXComboBox<String> priorityField;
-    @FXML
-    private JFXTextField subtotalField;
-    @FXML
-    private JFXTextField discountField;
+
     @FXML
     private JFXComboBox<Integer> clientField;
     @FXML
@@ -115,10 +110,24 @@ public class CreateController implements Initializable {
     private JFXTextField addressField;
     @FXML
     private JFXComboBox<String> districtField;
+
     @FXML
-    private JFXTextField freightField;
+    private Label igvField;
+    
     @FXML
-    private JFXTextField igvField;
+    private Label subtotalField;
+
+    @FXML
+    private Label discountField;
+
+    @FXML
+    private Label freightField;
+
+    @FXML
+    private Label IGVField;
+
+    @FXML
+    private Label amountField;
 
     @FXML
     private void goAddItem() throws IOException {
@@ -127,10 +136,14 @@ public class CreateController implements Initializable {
 
     @FXML
     private void goListRequestOrder() throws IOException {
-        productsView.clear();
-        ContextFX.getInstance().setTempList(productsView);
+        requestLineView.clear();
+        ContextFX.getInstance().setReqList(requestLineView);
         ContextFX.getInstance().setBaseTotAmount(0f);
+        ContextFX.getInstance().setDiscount(0f);
         ContextFX.getInstance().setTotAmount(0f);
+        ContextFX.getInstance().setDiscount(0f);
+        ContextFX.getInstance().setIgvTot(0f);
+        
         main.showListRequestOrder();
     }
 
@@ -157,7 +170,7 @@ public class CreateController implements Initializable {
         Date date_delivery = getDate(deliveryDate.getValue());
         int idDist = getDistrict(this.districtField.getValue());
         Boolean verify = verifyDates(currentTimestamp,date_delivery);
-        if (verify == TRUE) {
+        if (verify) {
             int prior = Integer.parseInt(priorityField.getValue());
             Configuration configuration = new Configuration();
             configuration.configure("hibernate.cfg.xml");
@@ -165,12 +178,16 @@ public class CreateController implements Initializable {
             SessionFactory sessionFactory = configuration.buildSessionFactory();
             Session session = sessionFactory.openSession();
             session.beginTransaction();
-            RequestOrder requestOrder = new RequestOrder(Timestamp.valueOf(formatIn.format(currentTimestamp)),
+            RequestOrder requestOrder = new RequestOrder(
+                    Timestamp.valueOf(formatIn.format(currentTimestamp)),
                     Timestamp.valueOf((String) formatIn.format(date_delivery)),
                     Float.parseFloat(subtotalField.getText()),
                     Float.parseFloat(amountField.getText()),
+                    Float.parseFloat(IGVField.getText()),
+                    Float.parseFloat(freightField.getText()),
+                    Float.parseFloat(discountField.getText()),                   
                     (String) statesField.getText(),
-                    clientField.getValue(), prior, idDist, addressField.getText());
+                    clientField.getValue(), prior, idDist);
             session.save(requestOrder);
             session.getTransaction().commit();
             session.close();
@@ -202,7 +219,7 @@ public class CreateController implements Initializable {
         return returnable;
     }
 
-    private ObservableList<SaleCondition> getDiscount(int cod) {
+    private ObservableList<SaleCondition> getDiscount() {
         Calendar today = Calendar.getInstance();
         today.set(Calendar.HOUR_OF_DAY, 0);
         
@@ -213,7 +230,6 @@ public class CreateController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(SaleCondition.class);
-        criteria.add(Restrictions.eq("id_to_take", cod));
         criteria.add(Restrictions.le("initial_date", today.getTime()));
         criteria.add(Restrictions.ge("final_date", today.getTime()));
         List<SaleCondition> list = criteria.list();
@@ -228,28 +244,30 @@ public class CreateController implements Initializable {
     }
 
     private Float verifyConditions(ObservableList<SaleCondition> discounts, Product prod, int quant) {
+        Integer type, maxQ, taken_id, n_d_aux, n_c_aux;
+        Float returnable = Float.valueOf(0);
+        
         n_discount = 1;
         n_tocount = 1;
-        Integer n_d_aux, n_c_aux;
-        Float returnable = Float.valueOf(0);
+        
         for (int i = 0; i < discounts.size(); i++) {
-            int type = discounts.get(i).getId_sale_condition_type();
-            if (type == 1) {
-                int maxQ = discounts.get(i).getLimits();
-                if (maxQ < quant) {
-                    returnable = returnable + discounts.get(i).getAmount() / 100;
-                }
-            } else if (type == 2) {
-                int type_prod = prod.getId_product_type();
-                if (type_prod == type) {
-                    int maxQ = discounts.get(i).getLimits();
-                    if (maxQ < quant) {
-                        returnable = returnable + discounts.get(i).getAmount() / 100;
-                    }
-                }
-            }
+            maxQ = discounts.get(i).getLimits();
+            if (maxQ > quant) continue; 
+            type = discounts.get(i).getId_sale_condition_type();
+            taken_id = discounts.get(i).getId_to_take();
             n_d_aux = discounts.get(i).getN_discount();
             n_c_aux = discounts.get(i).getN_tocount();
+            
+            if (type == 1) {
+                if (Objects.equals(prod.getId_product(), taken_id))
+                    returnable = returnable + discounts.get(i).getAmount() / 100;
+
+            } else if (type == 2) {
+                if (Objects.equals(prod.getId_product_type(), taken_id)) {
+                    returnable = returnable + discounts.get(i).getAmount() / 100;
+                }
+            }
+            
             if (n_d_aux != 1 || n_c_aux != 1) {
                 n_discount = n_d_aux;
                 n_tocount = n_c_aux;
@@ -277,52 +295,57 @@ public class CreateController implements Initializable {
 
     @FXML
     private void setDistrictAction() {
-        Float freight = getFreight(this.districtField.getValue());
-        freightTotal = freightTotal + baseTotalAmount * freight;
-        totalAmount = totalAmount + freightTotal;
-        freightTotal = param.roundingMethod(freightTotal, 2);
-        totalAmount = param.roundingMethod(totalAmount, 2);
-        this.freightField.setText(Float.toString(freightTotal));
-        this.amountField.setText(Float.toString(totalAmount));
+        float noIGVamount;
+        freightTotal = getFreight(this.districtField.getValue());
+        noIGVamount = baseTotalAmount - discountTotal + freightTotal;
+        igvTotal = noIGVamount * (IGV);
+        totalAmount = noIGVamount * (IGV+1);
+        this.freightField.setText(String.format("%.2f", freightTotal));
+        this.amountField.setText(String.format("%.2f", totalAmount));
     }
 
     private void loadData(int cod, int quant) {
         products = FXCollections.observableArrayList();
-        productsView = ContextFX.getInstance().getTempList();
+        requestLineView = ContextFX.getInstance().getReqList();
         products = getProduct(cod);
-        ObservableList<SaleCondition> discounts = getDiscount(cod);
+        ObservableList<SaleCondition> discounts = getDiscount();
+        
+        //porcentaje de descuento
         Float disc = verifyConditions(discounts, products.get(0), quant);
+        //
         Float base_amount = quant * products.get(0).getBase_price();
-        String state = "ENTREGA";
+        String state = "POR ENTREGAR";
         baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
         baseTotalAmount = baseTotalAmount + base_amount;
         discountTotal = ContextFX.getInstance().getDiscount();
         
-        discountTotal = discountTotal + base_amount * disc + 
-                        (base_amount - ((quant/n_discount * n_tocount) * products.get(0).getBase_price()));
+        // cantidad neta de descuento por promocion
+        Float promo = (base_amount - ((quant/n_discount * n_tocount) * products.get(0).getBase_price()));
+        //
+        discountTotal = discountTotal + base_amount * disc + promo;
         freightTotal = ContextFX.getInstance().getFreight();
-        totalAmount = baseTotalAmount - discountTotal;
+        igvTotal = (baseTotalAmount - discountTotal + freightTotal) * IGV;
+        totalAmount = (baseTotalAmount - discountTotal + freightTotal)*(IGV+1);
         ContextFX.getInstance().setDiscount(discountTotal);
-        ContextFX.getInstance().setFreight(freightTotal);
         ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
+        ContextFX.getInstance().setIgvTot(igvTotal);
         ContextFX.getInstance().setTotAmount(totalAmount);
-        baseTotalAmount = param.roundingMethod(baseTotalAmount, 2);
-        discountTotal = param.roundingMethod(discountTotal, 2);
-        this.subtotalField.setText(Float.toString(baseTotalAmount));
-        this.discountField.setText(Float.toString(discountTotal));
-        totalAmount = totalAmount*IGV;
-        totalAmount = param.roundingMethod(totalAmount, 2);
-        this.amountField.setText(Float.toString(totalAmount));
-        ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
-                products.get(0).getDescription(), products.get(0).getP_stock(), quantity,
-                base_amount, state, products.get(0).getBase_price(),
-                products.get(0).getId_unit_of_measure(), products.get(0).getId_product_type(),
-                products.get(0).getMax_qt());
-        productsView.add(prod);
-        ContextFX.getInstance().setTempList(productsView);
-        productsView = ContextFX.getInstance().getTempList();
+        this.subtotalField.setText(String.format("%.2f",baseTotalAmount));
+        this.discountField.setText(String.format("%.2f",discountTotal));
+        this.freightField.setText(String.format("%.2f",freightTotal));
+        this.IGVField.setText(String.format("%.2f",igvTotal));
+        this.amountField.setText(String.format("%.2f",totalAmount));
+        RequestLineDisplay prod = new RequestLineDisplay(products.get(0).getId_product(), products.get(0).getName(),
+                quantity,
+                products.get(0).getBase_price(),
+                base_amount,
+                (base_amount * disc + promo),
+                state);
+        requestLineView.add(prod);
+        ContextFX.getInstance().setReqList(requestLineView);
+        
         tablaProd.setItems(null);
-        tablaProd.setItems(productsView);
+        tablaProd.setItems(requestLineView);
     }
 
     private List<Client> getClients() {
@@ -362,16 +385,27 @@ public class CreateController implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         
+        
+        subtotalField.setText(String.format("%.2f", baseTotalAmount));
+        discountField.setText(String.format("%.2f", discountTotal));
+        freightField.setText(String.format("%.2f", freightTotal));
+        IGVField.setText(String.format("%.2f", igvTotal));
+        amountField.setText(String.format("%.2f", totalAmount));
+        
+        
+        
         this.selected_id = 0;
         tablaProd.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (newValue == null) {
                         return;
                     }
-                    this.selected_id = newValue.codProdProperty().getValue().intValue();
+                    this.selected_id = newValue.getId_product().getValue().intValue();
                 });
         try {
-            IGV = ContextFX.getInstance().getIGV() + 1;
+            IGV = ContextFX.getInstance().getIGV();
+            igvField.setText(String.format("%.2f", IGV));
+            
             statesField.setText("EN PROGRESO");
             priorityField.getItems().addAll("1", "2", "3");
             List<Object[]> dists = getDistricts();
@@ -382,28 +416,31 @@ public class CreateController implements Initializable {
             for (int i = 0; i < clients.size(); i++) {
                 clientField.getItems().add(clients.get(i).getId_client());
             }
+            for (int i = 0; i < clients.size(); i++) {
+                nameClientField.getItems().add(clients.get(i).getName());
+            }
             id = ContextFX.getInstance().getId();
             quantity = ContextFX.getInstance().getQuantity();
             num = ContextFX.getInstance().getNum();
             this.igvField.setText(Float.toString((ContextFX.getInstance().getIGV()*100)/100));
             num = num + 1;
             ContextFX.getInstance().setNum(num);
-            idColumn.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
-            nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-            typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty().asObject());
-            quantityColumn.setCellValueFactory(cellData -> cellData.getValue().cStockProperty().asObject());
-            unitaryAmountColumn.setCellValueFactory(cellData -> cellData.getValue().precioBProperty().asObject());
-            finalAmountColumn.setCellValueFactory(cellData -> cellData.getValue().pesoProperty().asObject());
-            stateColumn.setCellValueFactory(cellData -> cellData.getValue().marcaProperty());
+            idColumn.setCellValueFactory(cellData -> cellData.getValue().getId_product().asObject());
+            nameColumn.setCellValueFactory(cellData -> cellData.getValue().getName());
+            quantityColumn.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
+            unitaryAmountColumn.setCellValueFactory(cellData -> cellData.getValue().getBase_price().asObject());
+            finalAmountColumn.setCellValueFactory(cellData -> cellData.getValue().getFinal_price().asObject());
+            stateColumn.setCellValueFactory(cellData -> cellData.getValue().getStatus());
+            discountColumn.setCellValueFactory(cellData -> cellData.getValue().getDiscount().asObject());
             loadData(id, quantity);
         } catch (NullPointerException e) {
-            idColumn.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
-            nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-            typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty().asObject());
-            quantityColumn.setCellValueFactory(cellData -> cellData.getValue().cStockProperty().asObject());
-            unitaryAmountColumn.setCellValueFactory(cellData -> cellData.getValue().precioBProperty().asObject());
-            finalAmountColumn.setCellValueFactory(cellData -> cellData.getValue().pesoProperty().asObject());
-            stateColumn.setCellValueFactory(cellData -> cellData.getValue().marcaProperty());
+            idColumn.setCellValueFactory(cellData -> cellData.getValue().getId_product().asObject());
+            nameColumn.setCellValueFactory(cellData -> cellData.getValue().getName());
+            quantityColumn.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
+            unitaryAmountColumn.setCellValueFactory(cellData -> cellData.getValue().getBase_price().asObject());
+            finalAmountColumn.setCellValueFactory(cellData -> cellData.getValue().getFinal_price().asObject());
+            stateColumn.setCellValueFactory(cellData -> cellData.getValue().getStatus());
+            discountColumn.setCellValueFactory(cellData -> cellData.getValue().getDiscount().asObject());
         }
     }
 
@@ -423,11 +460,14 @@ public class CreateController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         for (int i = 0; i < tablaProd.getItems().size(); i++) {
-            ProductDisplay prod = tablaProd.getItems().get(i);
-            Integer idprod = prod.codProdProperty().getValue();
-            Integer quant = prod.cStockProperty().getValue();
-            Float cost = prod.precioBProperty().getValue();
-            RequestOrderLine reqOrdLine = new RequestOrderLine(quant, cost, codReqOrd, idprod);
+            RequestLineDisplay req = tablaProd.getItems().get(i);
+           
+            RequestOrderLine reqOrdLine = new RequestOrderLine(
+                    req.getQuantity().getValue(),
+                    req.getBase_price().getValue(),
+                    codReqOrd,
+                    req.getId_product().getValue(),
+                    req.getDiscount().getValue());
             session.save(reqOrdLine);
         }
         session.getTransaction().commit();
@@ -443,10 +483,11 @@ public class CreateController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         for (int i = 0; i < tablaProd.getItems().size(); i++) {
-            ProductDisplay prod = tablaProd.getItems().get(i);
-            Integer idprod = prod.codProdProperty().getValue();
-            Integer quant = prod.cStockProperty().getValue();
-            DispatchOrderLine dispOrdLine = new DispatchOrderLine(codDispOrd, idprod, quant);
+            RequestLineDisplay req = tablaProd.getItems().get(i);
+            
+            DispatchOrderLine dispOrdLine = new DispatchOrderLine(codDispOrd, 
+                                                req.getId_product().getValue(), 
+                                                req.getQuantity().getValue());
             session.save(dispOrdLine);
         }
         session.getTransaction().commit();
@@ -461,7 +502,8 @@ public class CreateController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        DispatchOrder dispatch = new DispatchOrder(codReqOrd, Integer.valueOf(this.priorityField.getValue()), this.statesField.getText());
+        DispatchOrder dispatch = new DispatchOrder(codReqOrd, 
+                Integer.valueOf(this.priorityField.getValue()), this.statesField.getText());
         session.save(dispatch);
         session.getTransaction().commit();
         session.close();
@@ -472,11 +514,18 @@ public class CreateController implements Initializable {
     @FXML
     private void setNameClientAction(ActionEvent event) {
         int codCli = clientField.getValue();
-        String name = getClient(codCli);
-        nameClientField.setText(name);
+        String name = getClientById(codCli);
+        nameClientField.setValue(name);
+    }
+    
+    @FXML
+    private void setIDClientAction(ActionEvent event) {
+        String nameCli = nameClientField.getValue();
+        int id = getClientByName(nameCli);
+        clientField.setValue(id);
     }
 
-    private String getClient(int codCli) {
+    private String getClientById(int codCli) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
@@ -490,10 +539,25 @@ public class CreateController implements Initializable {
         sessionFactory.close();
         return returnable;
     }
+    
+    private int getClientByName(String nameCli) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        Criteria criteria = session.createCriteria(Client.class);
+        criteria.add(Restrictions.eq("name", nameCli));
+        List<Client> list = criteria.list();
+        Integer returnable = list.get(0).getId_client();
+        session.close();
+        sessionFactory.close();
+        return returnable;
+    }
 
     private Boolean verifyDates(Date creation, Date delivery) {
         //Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-        Boolean flag = TRUE;
+        
         /*
         if (creation.compareTo(currentTimestamp) <= 0) {
             flag = FALSE;
@@ -501,27 +565,32 @@ public class CreateController implements Initializable {
         }
         */
         if (delivery.compareTo(creation) < 0) {
-            flag = FALSE;
             message = "Fecha debe ser mayor a la fecha de creación";
+            return false;
         }
-        return flag;
+        return true;
     }
 
-    private void deleteItems(int codProd, int quantity, float price) {
-        float base_price = quantity * price;
-        ObservableList<SaleCondition> discounts = getDiscount(codProd);
-        Float disc = verifyConditions(discounts, products.get(0), quantity);
-        discountTotal = discountTotal - base_price * disc;
-        baseTotalAmount = baseTotalAmount - base_price;
-        totalAmount = baseTotalAmount + discountTotal + freightTotal;
+    private void deleteItems(RequestLineDisplay rd) {
+        
+               
+        discountTotal = discountTotal - rd.getDiscount().getValue();
+        baseTotalAmount = baseTotalAmount - 
+                (rd.getBase_price().getValue() * rd.getQuantity().getValue());
+        igvTotal = (baseTotalAmount - discountTotal + freightTotal) * (IGV);
+        totalAmount = (baseTotalAmount - discountTotal + freightTotal) * (IGV+1);
+        
+        
         ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
+        ContextFX.getInstance().setDiscount(discountTotal);
         ContextFX.getInstance().setTotAmount(totalAmount);
         baseTotalAmount = param.roundingMethod(baseTotalAmount, 2);
         discountTotal = param.roundingMethod(discountTotal, 2);
         totalAmount = param.roundingMethod(totalAmount, 2);
         this.subtotalField.setText(Float.toString(baseTotalAmount));
         this.discountField.setText(Float.toString(discountTotal));
-        this.amountField.setText(Float.toString(totalAmount));
+        this.IGVField.setText(Float.toString(discountTotal));
+        //this.amountField.setText(Float.toString(totalAmount));
     }
 
     @FXML
@@ -529,15 +598,14 @@ public class CreateController implements Initializable {
         if (selected_id > 0) {
             ContextFX.getInstance().setId(selected_id);
             Integer id_prod = ContextFX.getInstance().getId();
-            for (int i = 0; i < productsView.size(); i++) {
-                if (productsView.get(i).codProdProperty().getValue().compareTo(id_prod) == 0) {
-                    deleteItems(productsView.get(i).codProdProperty().getValue(),
-                            productsView.get(i).cStockProperty().getValue(), productsView.get(i).precioBProperty().getValue());
-                    productsView.remove(i);
+            for (int i = 0; i < requestLineView.size(); i++) {
+                if (requestLineView.get(i).getId_product().getValue().compareTo(id_prod) == 0) {
+                    deleteItems(requestLineView.get(i));
+                    requestLineView.remove(i);
                 }
             }
             tablaProd.setItems(null);
-            tablaProd.setItems(productsView);
+            tablaProd.setItems(requestLineView);
         }
     }
 
