@@ -622,7 +622,7 @@ public class DepartureMoveCreateController implements Initializable{
         sendable.add(3); // index + 2
         sendable.add(new ArrayList<>(this.original_batches)); // 1
         int[] motive_arr = new int[2];
-        motive_arr[0] = cbMotive.getSelectionModel().getSelectedIndex()+3;
+        motive_arr[0] = cbMotive.getSelectionModel().getSelectedIndex()+4;
         motive_arr[1] = -1;
         if (motive_arr[0]==4) motive_arr[1] = warehouses.get(cbWh.getSelectionModel().getSelectedIndex()).getId();
         sendable.add(motive_arr);
@@ -740,7 +740,8 @@ public class DepartureMoveCreateController implements Initializable{
     }
 
     private void setupComboBoxes(Session session) {
-        cbMotive.getItems().addAll("Despacho","Transferencia","Perdida","Roto");
+        //cbMotive.getItems().addAll("Despacho","Transferencia","Perdida","Roto");
+        cbMotive.getItems().addAll("Transferencia","Perdida","Roto");
         Criteria criteria = session.createCriteria(Warehouse.class);
         List rs = criteria.list();
         ObservableList<String> wh_names = FXCollections.observableArrayList();

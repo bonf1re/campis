@@ -31,6 +31,15 @@ public class RequestOrderLine {
     Float cost;
     Integer id_request_order;
     Integer id_product;
+
+    public Float getDiscount() {
+        return discount;
+    }
+
+    public void setDiscount(Float discount) {
+        this.discount = discount;
+    }
+    Float discount;
     
     public RequestOrderLine() {
         super();
@@ -42,6 +51,15 @@ public class RequestOrderLine {
         this.cost = costo;
         this.id_request_order = idReqOrd;
         this.id_product = idProd;
+    }
+    
+    public RequestOrderLine(int quantity, float costo,
+                            int idReqOrd, int idProd, float dscto) {
+        this.quantity = quantity;
+        this.cost = costo;
+        this.id_request_order = idReqOrd;
+        this.id_product = idProd;
+        this.discount = dscto;
     }
     
     public Integer getId_request_order_line() {
@@ -93,7 +111,6 @@ public class RequestOrderLine {
         session.beginTransaction();
         Criteria criteria = session.createCriteria(RequestOrderLine.class);
         criteria.add(Restrictions.eq("id_request_order_line", cod));
-        String descrip;
         List rsMeasure = criteria.list();
         RequestOrderLine result = (RequestOrderLine)rsMeasure.get(0);
         session.close();
