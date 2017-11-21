@@ -113,8 +113,6 @@ public class SelectRequest4Dispatch implements Initializable{
     private JFXTextField priorityField;
     
     @FXML
-    private JFXTextField addressField;
-    @FXML
     private JFXTextField districtField;
     @FXML
     private JFXTextField freightField;
@@ -257,7 +255,6 @@ public class SelectRequest4Dispatch implements Initializable{
         this.stateField.setText(request.getStatus());
         this.priorityField.setText(Integer.toString(request.getPriority()));
         this.districtField.setText(distr);
-        this.addressField.setText(request.getAddress());
         idColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId_product()).asObject());
         nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProdName()));
         typeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTypeName()));
@@ -286,7 +283,7 @@ public class SelectRequest4Dispatch implements Initializable{
     }
     
     @FXML
-    void goDepartureMove(){
+    void goDispatchMoveCreate() throws IOException{
         Configuration conf2 = new Configuration();
             conf2.configure("hibernate.cfg.xml");
             conf2.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
@@ -317,8 +314,8 @@ public class SelectRequest4Dispatch implements Initializable{
         }
         
         sendable.add(id_prod_qt_pairs);
-        ContextFX.getInstance().setPolymorphic_list(id_prod_qt_pairs);
-        //main.showDispatchMoveCreate();
+        ContextFX.getInstance().setPolymorphic_list(sendable);
+        main.showDispatchMoveCreate();
     }
 
     private int checkQts() {

@@ -802,5 +802,17 @@ public class Main extends Application {
         mainLayout.setCenter(selectreqorder);
     }
 
+
+    public static void showDispatchMoveRoute() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public static void showDispatchMoveCreate() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/dispatch/dispatchmovecreate.fxml"));
+        BorderPane selectreqorder = loader.load();
+        mainLayout.setCenter(selectreqorder);
+    }
+
     
 }
