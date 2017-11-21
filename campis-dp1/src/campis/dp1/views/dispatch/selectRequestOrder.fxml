@@ -27,7 +27,7 @@
             <JFXDatePicker fx:id="creationDate" disable="true" editable="false" layoutX="185.0" layoutY="132.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
             <Label layoutX="423.0" layoutY="141.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" text="Fecha Delivery:" />
             <JFXDatePicker fx:id="deliveryDate" disable="true" editable="false" layoutX="511.0" layoutY="132.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
-            <TableView fx:id="tablaProd" disable="true" layoutX="64.0" layoutY="243.0" prefHeight="200.0" prefWidth="749.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css">
+            <TableView fx:id="tablaProd" layoutX="64.0" layoutY="243.0" prefHeight="200.0" prefWidth="749.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css">
               <columns>
                 <TableColumn fx:id="idColumn" prefWidth="53.0" text="Código" />
                 <TableColumn fx:id="nameColumn" prefWidth="136.0" text="Nombre" />
@@ -65,7 +65,7 @@
             <Label layoutX="666.0" layoutY="560.0" text="S/." />
             <Label layoutX="427.0" layoutY="217.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" text="IGV:" />
             <JFXTextField fx:id="igvField" disable="true" editable="false" layoutX="513.0" layoutY="208.0" prefHeight="25.0" prefWidth="52.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
-            <JFXComboBox layoutX="822.0" layoutY="20.0" prefHeight="26.0" prefWidth="65.0" />
+            <JFXComboBox fx:id="cbRequestOrderId" layoutX="822.0" layoutY="20.0" prefHeight="26.0" prefWidth="65.0" />
             <Button layoutX="843.0" layoutY="308.0" mnemonicParsing="false" onAction="#goDepartureMove" prefHeight="35.0" prefWidth="87.0" text="Continuar" />
             <Label layoutX="63.0" layoutY="20.0" text="Seleccionar Orden de Venta">
                <font>

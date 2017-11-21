@@ -7,20 +7,35 @@ package campis.dp1.controllers.dispatch;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
+import campis.dp1.controllers.warehouse.EntryMoveListController;
+import campis.dp1.models.Area_;
 import campis.dp1.models.Client;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
+import campis.dp1.models.ProductWH_Move;
 import campis.dp1.models.RequestOrder;
 import campis.dp1.models.RequestOrderLine;
+import campis.dp1.models.RequestOrderLineDisplay;
 import campis.dp1.models.SaleCondition;
+import campis.dp1.models.utils.GraphicsUtils;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
+import java.sql.SQLException;
 import java.text.DecimalFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.beans.property.IntegerProperty;
+import javafx.beans.property.SimpleFloatProperty;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -28,12 +43,16 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.StringConverter;
+import javax.persistence.Tuple;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import org.hibernate.criterion.Restrictions;
+import org.hibernate.query.Query;
 
 
 /**
@@ -53,11 +72,9 @@ public class SelectRequest4Dispatch implements Initializable{
     Integer n_tocount = 1;
     float IGV = 0.0f;
     
-    private ObservableList<Product> products;
-    private ObservableList<ProductDisplay> productsView;
+    private ObservableList<RequestOrderLineDisplay> rqLineView;
 
-    @FXML
-    private JFXTextField amountField;
+    
     @FXML
     private JFXTextField nameClientField;
     @FXML
@@ -65,21 +82,27 @@ public class SelectRequest4Dispatch implements Initializable{
     @FXML
     private JFXDatePicker deliveryDate;
     @FXML
-    private TableView<ProductDisplay> tablaProd;
+    private TableView<RequestOrderLineDisplay> tablaProd;
     @FXML
-    private TableColumn<ProductDisplay, Integer> idColumn;
+    private TableColumn<RequestOrderLineDisplay, Integer> idColumn;
     @FXML
-    private TableColumn<ProductDisplay, String> nameColumn;
+    private TableColumn<RequestOrderLineDisplay, String> nameColumn;
     @FXML
-    private TableColumn<ProductDisplay, Integer> typeColumn;
+    private TableColumn<RequestOrderLineDisplay, String> typeColumn;
     @FXML
-    private TableColumn<ProductDisplay, Integer> quantityColumn;
+    private TableColumn<RequestOrderLineDisplay, Integer> totalQtColumn;
     @FXML
-    private TableColumn<ProductDisplay, Float> unitaryAmountColumn;
+    private TableColumn<RequestOrderLineDisplay, Integer> dspQtColumn;
     @FXML
-    private TableColumn<ProductDisplay, Float> finalAmountColumn;
+    private TableColumn<RequestOrderLineDisplay, Integer> missQtColumn;
     @FXML
-    private TableColumn<ProductDisplay, String> stateColumn;
+    private TableColumn<RequestOrderLineDisplay, Float> finalAmountColumn;
+    @FXML
+    private JFXComboBox<Integer> cbRequestOrderId;  
+    private ArrayList<RequestOrder> listRequestOrder;
+    
+    @FXML
+    private TableColumn<RequestOrder, String> stateColumn;
     @FXML
     private JFXTextField subtotalField;
     @FXML
@@ -88,10 +111,7 @@ public class SelectRequest4Dispatch implements Initializable{
     private JFXTextField clientField;
     @FXML
     private JFXTextField priorityField;
-    @FXML
-    private Label messageField1;
-    @FXML
-    private Label messageField2;
+    
     @FXML
     private JFXTextField addressField;
     @FXML
@@ -102,17 +122,134 @@ public class SelectRequest4Dispatch implements Initializable{
     private JFXTextField stateField;
     @FXML
     private JFXTextField igvField;
+    private RequestOrder requestOrder;
+    
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        IGV = ContextFX.getInstance().getIGV() + 1;
-        //id = ContextFX.getInstance().getId();
-        //ContextFX.getInstance().setId(id);
-        List<RequestOrderLine> list = getReqOrdLine(id);
-        RequestOrder request = getRequestOrder(id);
-        String nameCli = getNameCli(request.getId_client());
-        distr = getNameDistric(request.getId_district());
-        this.igvField.setText(Float.toString((ContextFX.getInstance().getIGV()*100)/100));
+        Configuration conf2 = new Configuration();
+        conf2.configure("hibernate.cfg.xml");
+        conf2.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionF2 = conf2.buildSessionFactory();
+        Session s2 = sessionF2.openSession();
+        s2.beginTransaction();
+        Criteria criteria = s2.createCriteria(RequestOrder.class);
+        criteria.add(Restrictions.eq("status", "EN PROGRESO"));
+        this.listRequestOrder = new ArrayList<>(criteria.list());
+        try{
+        setupCbRequestOrderId();
+        setupFields(s2);
+        }catch(Exception e){
+            e.printStackTrace();
+        }
+        s2.close();
+        sessionF2.close();
+        
+    }
+    
+    
+    private void setupCbRequestOrderId() {
+        ArrayList<Integer> ro_ids = new ArrayList<>();
+        for (RequestOrder requestOrder1 : this.listRequestOrder) {
+            ro_ids.add(requestOrder1.getId_request_order());
+        }
+        ObservableList rq_olist = FXCollections.observableArrayList(ro_ids);
+        cbRequestOrderId.setItems(null);
+        cbRequestOrderId.setItems(rq_olist);
+        cbRequestOrderId.getSelectionModel().selectFirst();
+        this.id = this.listRequestOrder.get(0).getId_request_order();
+        this.requestOrder = this.listRequestOrder.get(0);
+        
+        
+        cbRequestOrderId.getSelectionModel().selectedItemProperty().addListener(
+        (observable, oldValue, newValue) -> {
+            if (newValue == null) {
+                return;
+            }
+            int index_rq=cbRequestOrderId.getSelectionModel().getSelectedIndex();
+            this.requestOrder= listRequestOrder.get(index_rq);
+            this.id = requestOrder.getId_request_order();
+            Configuration conf2 = new Configuration();
+            conf2.configure("hibernate.cfg.xml");
+            conf2.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionF2 = conf2.buildSessionFactory();
+            Session s2 = sessionF2.openSession();
+            s2.beginTransaction();
+            List<RequestOrderLine> list = getReqOrdLine(id,s2);
+            loadData(list,s2);
+            s2.close();
+            sessionF2.close();
+            }
+        );
+    }
+
+    private String getNameDistric(int cod, Session session) {
+        String qryStr = "SELECT name FROM campis.district WHERE id_district=" + cod;
+        SQLQuery query = session.createSQLQuery(qryStr);
+        List list = query.list();
+        String returnable = (String) list.get(0);
+        return returnable;
+    }
+
+    private String getNameCli(Integer id_client,Session session) {
+        Query query = session.createSQLQuery("SELECT name FROM campis.client WHERE id_client = "+id_client);        
+        String name = (String)query.list().get(0);
+        return name;
+    }
+   
+
+    private void loadData(List<RequestOrderLine> list, Session session) {
+        this.rqLineView = FXCollections.observableArrayList();
+        Query query = session.createSQLQuery("SELECT * FROM campis.request_order_line WHERE id_request_order = "+this.id);
+        ArrayList<Object[]> rows = new ArrayList<>(query.list());
+        for (Object[] row : rows) {
+            RequestOrderLine rq_line = new RequestOrderLine((int)row[1], ((BigDecimal)row[2]).floatValue(),(int) row[3],(int) row[4],((BigDecimal)row[5]).floatValue());
+            Query query_n = session.createSQLQuery("SELECT name FROM campis.product WHERE id_product = "+rq_line.getId_product());
+            String p_name = (String)query_n.list().get(0);
+            Query query_t = session.createSQLQuery("SELECT id_product_type FROM campis.product WHERE id_product = "+rq_line.getId_product());
+            int id_pd_t = (int)query_t.list().get(0);
+            query_t = session.createSQLQuery("SELECT description FROM campis.product_type WHERE id_product_type = "+id_pd_t);
+            String p_t_name = (String) query_t.list().get(0);
+            int miss_qt = rq_line.getQuantity();
+            try{
+                Query query_d_o = session.createSQLQuery("SELECT id_dispatch_order FROM campis.dispatch_order WHERE id_request_order = "+this.id);
+                ArrayList<Integer> dispatch_order_list = new ArrayList<>(query_d_o.list());
+                for (Integer dispatch_id : dispatch_order_list) {
+                    Query query_d_o_l = session.createSQLQuery("SELECT quantity FROM campis.dispatch_order_line WHERE id_product = "+rq_line.getId_product()+
+                                                                " AND id_dispatch_order = "+dispatch_id);
+                    ArrayList<Integer> qt_s = new ArrayList<>(query_d_o_l.list());
+                    for (Integer qt_ : qt_s) {
+                        miss_qt-=qt_;
+                    }
+                }
+            }catch(Exception e){
+                
+            }
+            rqLineView.add(new RequestOrderLineDisplay(rq_line, p_name, p_t_name, 0, miss_qt));
+        }
+        
+        tablaProd.setItems(null);
+        tablaProd.setItems(rqLineView);
+        
+        
+    }
+
+
+    private List<RequestOrderLine> getReqOrdLine(Integer id,Session session) {
+        Criteria criteria = session.createCriteria(RequestOrderLine.class);
+        criteria.add(Restrictions.eq("id_request_order", id));
+        List<RequestOrderLine> rsRequestOrderLine = criteria.list();
+        return rsRequestOrderLine;
+    }
+
+
+
+    private void setupFields(Session session) {
+        List<RequestOrderLine> list = getReqOrdLine(id,session);
+        RequestOrder request = this.requestOrder;
+        String nameCli = getNameCli(request.getId_client(),session);
+        distr = getNameDistric(request.getId_district(),session);
+        this.igvField.setText("19%");
         this.nameClientField.setText(nameCli);
         this.clientField.setText(Integer.toString(request.getId_client()));
         this.creationDate.setValue(request.getCreation_date().toLocalDateTime().toLocalDate());
@@ -121,226 +258,72 @@ public class SelectRequest4Dispatch implements Initializable{
         this.priorityField.setText(Integer.toString(request.getPriority()));
         this.districtField.setText(distr);
         this.addressField.setText(request.getAddress());
-        idColumn.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
-        nameColumn.setCellValueFactory(cellData -> cellData.getValue().nameProperty());
-        typeColumn.setCellValueFactory(cellData -> cellData.getValue().typeProperty().asObject());
-        quantityColumn.setCellValueFactory(cellData -> cellData.getValue().cStockProperty().asObject());
-        unitaryAmountColumn.setCellValueFactory(cellData -> cellData.getValue().precioBProperty().asObject());
-        finalAmountColumn.setCellValueFactory(cellData -> cellData.getValue().pesoProperty().asObject());
-        stateColumn.setCellValueFactory(cellData -> cellData.getValue().marcaProperty());
-        loadData(list);
-    }
-
-    private String getNameDistric(int cod) {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        String qryStr = "SELECT name FROM campis.district WHERE id_district=" + cod;
-        SQLQuery query = session.createSQLQuery(qryStr);
-        List list = query.list();
-        String returnable = (String) list.get(0);
-        session.close();
-        sessionFactory.close();
-        return returnable;
-    }
-
-    private String getNameCli(Integer id_client) {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(Client.class);
-        criteria.add(Restrictions.eq("id_client", id_client));
-        List<Client> list = criteria.list();
-        String name = list.get(0).getName();
-        session.close();
-        sessionFactory.close();
-        return name;
-    }
-
-    private RequestOrder getRequestOrder(Integer id) {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(RequestOrder.class);
-        criteria.add(Restrictions.eq("id_request_order", id));
-        List<RequestOrder> list = criteria.list();
-        RequestOrder returnable;
-        returnable = (RequestOrder) list.get(0);
-        session.close();
-        sessionFactory.close();
-        return returnable;
-    }
-
-    private ObservableList<SaleCondition> getDiscount(int cod) {
-        Calendar today = Calendar.getInstance();
-        today.set(Calendar.HOUR_OF_DAY, 0);
-        
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(SaleCondition.class);
-        criteria.add(Restrictions.eq("id_to_take", cod));
-        criteria.add(Restrictions.ge("initial_date", today.getTime()));
-        criteria.add(Restrictions.le("final_date", today.getTime()));
-        
-        List<SaleCondition> list = criteria.list();
-        ObservableList<SaleCondition> returnable;
-        returnable = FXCollections.observableArrayList();
-        for (int i = 0; i < list.size(); i++) {
-            returnable.add(list.get(i));
-        }
-        session.close();
-        sessionFactory.close();
-        return returnable;
-    }
-
-    private Float verifyConditions(ObservableList<SaleCondition> discounts, Product prod, int quant) {
-        n_discount = 1;
-        n_tocount = 1;
-        Integer n_d_aux, n_c_aux;
-
-        
-        Float returnable = Float.valueOf(0);
-        for (int i = 0; i < discounts.size(); i++) {
-            
-            int type = discounts.get(i).getId_sale_condition_type();
-            if (type == 1) {
-                int maxQ = discounts.get(i).getLimits();
-                if (maxQ < quant) {
-                returnable = returnable + discounts.get(i).getAmount() / 100;
-                }
-            } else if (type == 2) {
-                int type_prod = prod.getId_product_type();
-                if (type_prod == type) {
-                    int maxQ = discounts.get(i).getLimits();
-                    if (maxQ < quant) {
-                        returnable = returnable + discounts.get(i).getAmount() / 100;
+        idColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId_product()).asObject());
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProdName()));
+        typeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTypeName()));
+        totalQtColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getQuantity()).asObject());
+        dspQtColumn.setCellFactory(
+                TextFieldTableCell.<RequestOrderLineDisplay,Integer>forTableColumn(new StringConverter<Integer>(){
+                    @Override
+                    public String toString(Integer value){
+                        return value.toString();
                     }
-                }
-            }
-            n_d_aux = discounts.get(i).getN_discount();
-            n_c_aux = discounts.get(i).getN_tocount();
-            if (n_d_aux != 1 || n_c_aux != 1) {
-                n_discount = n_d_aux;
-                n_tocount = n_c_aux;
-            }
-        }
-        return returnable;
+                    @Override
+                    public Integer fromString(String string){
+                        return Integer.parseInt(string);
+                    }       
+            }));    
+        dspQtColumn.setCellValueFactory(cellData -> cellData.getValue().getDspQt().asObject());
+        missQtColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getMissQt()).asObject());
+        finalAmountColumn.setCellValueFactory(cellData -> new SimpleFloatProperty(cellData.getValue().getQuantity()*cellData.getValue().getCost()).asObject());
+        this.tablaProd.setEditable(true);
+        loadData(list,session);
     }
     
-    private Float getFreight(String cad) {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        String qryStr = "SELECT freight FROM campis.district WHERE name = '" + cad + "';";
-        SQLQuery query = session.createSQLQuery(qryStr);
-        List list = query.list();
-        Float returnable = ((Double) list.get(0)).floatValue();
-        session.close();
-        sessionFactory.close();
-        return returnable;
+    @FXML 
+    void goListDepartureMove() throws IOException{
+        main.showWhDepartureMoveList();
     }
-
-    private void loadData(List<RequestOrderLine> list) {
-        products = FXCollections.observableArrayList();
-        productsView = ContextFX.getInstance().getTempList();
-        for (int i = 0; i < list.size(); i++) {
-            products = getProduct(list.get(i).getId_product());
-            ObservableList<SaleCondition> discounts = getDiscount(list.get(i).getId_product());
-            Float disc = verifyConditions(discounts, products.get(0), list.get(i).getQuantity());
-            Float base_amount = list.get(i).getQuantity() * list.get(i).getCost();
-            String state = "ENTREGA";
-            baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
-            baseTotalAmount = baseTotalAmount + base_amount;
-            discountTotal = ContextFX.getInstance().getTotAmount();
-            discountTotal = discountTotal + base_amount * disc + 
-                        (base_amount - ((list.get(i).getQuantity()/n_discount * n_tocount) * products.get(0).getBase_price()));
-            totalAmount = baseTotalAmount - discountTotal;
-            float f = getFreight(distr);
-            freightTotal = freightTotal + baseTotalAmount * f;
-            totalAmount = totalAmount + freightTotal;
-            this.freightField.setText(Float.toString((freightTotal*100)/100));
-            this.amountField.setText(Float.toString((totalAmount*100)/100));
-            ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
-            ContextFX.getInstance().setTotAmount(totalAmount);
-            //this.amountField.setText(Float.toString(totalAmount));
-            this.subtotalField.setText(Float.toString((baseTotalAmount*100)/100));
-            this.discountField.setText(Float.toString((discountTotal*100)/100));
-            totalAmount = (totalAmount * IGV*100)/100;
-            this.amountField.setText(Float.toString((totalAmount*100)/100));
-
-            ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
-                    products.get(0).getDescription(), products.get(0).getP_stock(), list.get(i).getQuantity(),
-                    base_amount, state, products.get(0).getBase_price(),
-                    products.get(0).getId_unit_of_measure(),
-                    products.get(0).getId_product_type(), products.get(0).getMax_qt());
-            productsView.add(prod);
-        }
-        ContextFX.getInstance().setTempList(productsView);
-        productsView = ContextFX.getInstance().getTempList();
-        tablaProd.setItems(null);
-        tablaProd.setItems(productsView);
-        ContextFX.getInstance().setBaseTotAmount(0f);
-        ContextFX.getInstance().setTotAmount(0f);
-        
-    }
-
-    private ObservableList<Product> getProduct(Integer id_product) {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(Product.class);
-        criteria.add(Restrictions.eq("id_product", id_product));
-        List<Product> list = criteria.list();
-        ObservableList<Product> returnable;
-        returnable = FXCollections.observableArrayList();
-        returnable.add(list.get(0));
-        session.close();
-        sessionFactory.close();
-        return returnable;
-    }
-
-    private List<RequestOrderLine> getReqOrdLine(int id) {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        Criteria criteria = session.createCriteria(RequestOrderLine.class);
-        criteria.add(Restrictions.eq("id_request_order", id));
-        List<RequestOrderLine> rsRequestOrderLine = criteria.list();
-        session.close();
-        sessionFactory.close();
-        return rsRequestOrderLine;
-    }
-
+    
     @FXML
-    private void goListRequestOrder() throws IOException {
-        productsView.clear();
-        ContextFX.getInstance().setTempList(productsView);
-        main.showListRequestOrder();
+    void goDepartureMove(){
+        ContextFX.getInstance().setId(1);
+        //  Check quantities
+        GraphicsUtils gu = new GraphicsUtils();
+        int check_rs = checkQts();
+        if (check_rs==-1){
+            gu.popupError("Error", "No puede insertar valores negativos.", "Volver");
+            return;
+        }else if (check_rs==-2){
+            gu.popupError("Error", "No puede despachar mayor cantidad de la faltante para esta orden.", "Volver");
+            return;
+        }
+        // Send Id_Request_Order, Id_product Quantity per line
+        ArrayList<Object> sendable = new ArrayList<>();
+        sendable.add(this.id);
+        ArrayList<Object> id_prod_qt_pairs = new ArrayList<>();
+        for (RequestOrderLineDisplay requestOrderLineDisplay : rqLineView) {
+            ArrayList<Integer> dd_pair = new ArrayList<Integer>();
+            dd_pair.add(requestOrderLineDisplay.getId_product());
+            dd_pair.add(requestOrderLineDisplay.getDspQt().get());
+            id_prod_qt_pairs.add(dd_pair);
+        }
+        
+        sendable.add(id_prod_qt_pairs);
+        ContextFX.getInstance().setPolymorphic_list(id_prod_qt_pairs);
+        //main.showDispatchMoveCreate();
     }
 
-    private void goListBills() throws IOException {
-        main.showBillList();
+    private int checkQts() {
+        for (RequestOrderLineDisplay requestOrderLineDisplay : rqLineView) {
+            if (requestOrderLineDisplay.getDspQt().get()<0){
+                return -1;
+            }
+            if (requestOrderLineDisplay.getDspQt().get()>requestOrderLineDisplay.getMissQt()){
+                return -2;
+            }
+        }
+        return 0;
     }
+    
 }

@@ -96,6 +96,12 @@ public class DepartureMoveListController implements Initializable {
         ContextFX.getInstance().setMode(0);
         main.showWhDepartureMoveCreate();
     }
+    
+    @FXML
+    void goSelectRequest4Dispatch() throws IOException{
+        ContextFX.getInstance().setId(warehouse_id);
+        main.showSelectRequestOrder();
+    }
 
     @FXML
     void goWhEntryMoveList() throws IOException {

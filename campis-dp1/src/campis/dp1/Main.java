@@ -795,11 +795,12 @@ public class Main extends Application {
         mainLayout.setCenter(entries);
     }
 
-    public void showSelectRequestOrder() throws IOException {
+    public static void showSelectRequestOrder() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/dispatch/selectRequestOrder.fxml"));
         BorderPane selectreqorder = loader.load();
         mainLayout.setCenter(selectreqorder);
     }
+
     
 }
