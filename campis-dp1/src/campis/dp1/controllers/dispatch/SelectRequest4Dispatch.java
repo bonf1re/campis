@@ -287,7 +287,14 @@ public class SelectRequest4Dispatch implements Initializable{
     
     @FXML
     void goDepartureMove(){
-        ContextFX.getInstance().setId(1);
+        Configuration conf2 = new Configuration();
+            conf2.configure("hibernate.cfg.xml");
+            conf2.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionF2 = conf2.buildSessionFactory();
+            Session s2 = sessionF2.openSession();
+            s2.beginTransaction();
+        int principal_wh_id = (int) s2.createSQLQuery("SELECT id_warehouse FROM campis.wh_config WHERE wh_type = 0").list().get(0);
+        ContextFX.getInstance().setId(principal_wh_id);
         //  Check quantities
         GraphicsUtils gu = new GraphicsUtils();
         int check_rs = checkQts();
