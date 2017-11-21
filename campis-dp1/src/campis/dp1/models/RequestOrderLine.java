@@ -45,6 +45,7 @@ public class RequestOrderLine {
     Float cost;
     Integer id_request_order;
     Integer id_product;
+
     Float discount;
     
     public RequestOrderLine() {
@@ -117,7 +118,6 @@ public class RequestOrderLine {
         session.beginTransaction();
         Criteria criteria = session.createCriteria(RequestOrderLine.class);
         criteria.add(Restrictions.eq("id_request_order_line", cod));
-        String descrip;
         List rsMeasure = criteria.list();
         RequestOrderLine result = (RequestOrderLine)rsMeasure.get(0);
         session.close();
