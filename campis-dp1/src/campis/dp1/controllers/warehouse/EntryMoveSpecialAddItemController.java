@@ -268,4 +268,11 @@ public class EntryMoveSpecialAddItemController implements Initializable {
         //ContextFX.getInstance().setMode(1);
         main.showWhEntryMoveSpecialCreate();
     }
+    
+    @FXML
+    private void goBackCreateEspecialEntry2() throws IOException {
+        ContextFX.getInstance().setId(warehouse_id);
+        ContextFX.getInstance().setMode(0);
+        main.showWhEntryMoveSpecialCreate();
+    }
 }

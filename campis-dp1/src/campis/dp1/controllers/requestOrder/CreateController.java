@@ -10,6 +10,8 @@ import campis.dp1.Main;
 import campis.dp1.models.Client;
 import campis.dp1.models.DispatchOrder;
 import campis.dp1.models.DispatchOrderLine;
+import campis.dp1.models.District;
+import campis.dp1.models.Parameters;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.RequestLineDisplay;
@@ -65,7 +67,7 @@ public class CreateController implements Initializable {
     Integer n_discount = 1;
     Integer n_tocount = 1;
     float IGV = 0.0f;
-    
+    Parameters param = new Parameters();
     String message = "";
     private ObservableList<Product> products;
     private ObservableList<RequestLineDisplay> requestLineView = FXCollections.observableArrayList();
@@ -582,6 +584,9 @@ public class CreateController implements Initializable {
         ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
         ContextFX.getInstance().setDiscount(discountTotal);
         ContextFX.getInstance().setTotAmount(totalAmount);
+        baseTotalAmount = param.roundingMethod(baseTotalAmount, 2);
+        discountTotal = param.roundingMethod(discountTotal, 2);
+        totalAmount = param.roundingMethod(totalAmount, 2);
         this.subtotalField.setText(Float.toString(baseTotalAmount));
         this.discountField.setText(Float.toString(discountTotal));
         this.IGVField.setText(Float.toString(discountTotal));

@@ -1,0 +1,33 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.TableColumn?>
+<?import javafx.scene.control.TableView?>
+<?import javafx.scene.layout.AnchorPane?>
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.text.Font?>
+
+<BorderPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="500.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.dispatch.ListDispatchBatchController">
+   <center>
+      <AnchorPane prefHeight="200.0" prefWidth="200.0" BorderPane.alignment="CENTER">
+         <children>
+            <Label fx:id="titleText" layoutX="38.0" layoutY="35.0" text="&lt;Lotes actualmente en: &gt;">
+               <font>
+                  <Font size="25.0" />
+               </font>
+            </Label>
+            <TableView fx:id="batchTable" layoutX="38.0" layoutY="96.0" prefHeight="349.0" prefWidth="852.0">
+              <columns>
+                <TableColumn fx:id="id_batchCol" prefWidth="75.0" text="id_batch" />
+                <TableColumn fx:id="quantityCol" prefWidth="75.0" text="Quantity" />
+                  <TableColumn fx:id="arrival_dateCol" prefWidth="181.0" text="Arrival date" />
+                  <TableColumn fx:id="exp_dateCol" prefWidth="170.0" text="Expiration date" />
+                  <TableColumn fx:id="id_pordCol" prefWidth="159.0" text="id_product" />
+                  <TableColumn fx:id="type_batchCol" prefWidth="110.0" text="type_batch" />
+                  <TableColumn fx:id="herCol" minWidth="0.0" prefWidth="81.0" text="Heritage" />
+              </columns>
+            </TableView>
+         </children>
+      </AnchorPane>
+   </center>
+</BorderPane>

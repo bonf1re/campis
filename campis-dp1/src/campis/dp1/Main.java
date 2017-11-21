@@ -434,6 +434,36 @@ public class Main extends Application {
         mainLayout.setCenter(newNormalDeparture);
      }
     
+    /*Deliveries*/
+     public static void showDeliveryList() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/dispatch/listDeliveries.fxml"));
+        BorderPane newNormalDeparture = loader.load();
+        mainLayout.setCenter(newNormalDeparture);
+     }
+     
+     public static void showCreateDelivery() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/dispatch/createDelivery.fxml"));
+        BorderPane newNormalDeparture = loader.load();
+        mainLayout.setCenter(newNormalDeparture);
+     }
+     
+     public static void showEditDelivery() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/dispatch/editDelivery.fxml"));
+        BorderPane newNormalDeparture = loader.load();
+        mainLayout.setCenter(newNormalDeparture);
+     }
+     
+    /*Batches x dispatch*/
+    public static void showListDispatchBatch() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/dispatch/listDispatchBatch.fxml"));
+        BorderPane listDepartures = loader.load();
+        mainLayout.setCenter(listDepartures);
+     }
+    
     /* RequestOrder */
     
     public static void showListRequestOrder() throws IOException {
@@ -573,6 +603,36 @@ public class Main extends Application {
     }
 
     /* End RequestOrder*/
+    
+    /* Suppliers */
+    public static void showListSupplier() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/suppliers/list.fxml"));
+        BorderPane listSupplier = loader.load();
+        mainLayout.setCenter(listSupplier);  
+    }
+    
+    public static void showSupplierCreate() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/suppliers/create.fxml"));
+        BorderPane newSupplier = loader.load();
+        mainLayout.setCenter(newSupplier);    
+    }
+    
+     public static void showSupplierEdit() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/suppliers/edit.fxml"));
+        BorderPane editSupplier = loader.load();
+        mainLayout.setCenter(editSupplier);      
+    }
+     
+     public static void showSupplierVisualize() throws IOException{
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/suppliers/view.fxml"));
+        BorderPane viewSupplier = loader.load();
+        mainLayout.setCenter(viewSupplier);       
+     }
+     /* End Suppliers */
     
     /**  
      * @param args the command line arguments
@@ -726,6 +786,13 @@ public class Main extends Application {
         loader.setLocation(Main.class.getResource("views/bulkLoad/execute.fxml"));
         BorderPane ex = loader.load();
         mainLayout.setCenter(ex);
+    }
+
+    public static void showEntryMoveList() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/entrymovelist.fxml"));
+        BorderPane entries = loader.load();
+        mainLayout.setCenter(entries);
     }
     
 }

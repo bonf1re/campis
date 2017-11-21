@@ -24,22 +24,31 @@ import com.jfoenix.controls.JFXButton;
 public class DispatchSidebarController implements Initializable {
     private Main main;
     private int id_role;
-    @FXML
-    private JFXButton entriesButton;
-
+    
     @FXML
     private JFXButton depButton;
     
     @FXML
-    private void goListEntries() throws IOException {
-        main.showListEntries();
+    private JFXButton delButton;
+    
+    @FXML
+    private JFXButton batchxdispButton;
+    
+    @FXML
+    private void goDepartureMoveList() throws IOException {
+        main.showWhDepartureMoveList();
     }
     
     @FXML
-    private void goListDepartures() throws IOException {
-        main.showListDepartures();
-
+    private void goDeliveryList() throws IOException {
+        main.showDeliveryList();
     }
+    
+    @FXML
+    private void goListDispatchBatch() throws IOException {
+        main.showListDispatchBatch();
+    }
+    
     /**
      * Initializes the controller class.
      */
@@ -50,7 +59,7 @@ public class DispatchSidebarController implements Initializable {
             View entView = View.getView("entries_dispatch");
             View depView = View.getView("departures_dispatch");
             if (!Permission.canVisualize(id_role, entView.getId_view()))
-                entriesButton.setVisible(false);
+                delButton.setVisible(false);
             if (!Permission.canVisualize(id_role, depView.getId_view()))
                 depButton.setVisible(false);
         } catch(NullPointerException e) {

@@ -12,6 +12,7 @@ import campis.dp1.models.DispatchMoveDisplay;
 import campis.dp1.models.DispatchMove;
 import campis.dp1.models.Permission;
 import campis.dp1.models.View;
+import com.jfoenix.controls.JFXComboBox;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -67,18 +68,16 @@ public class ListEntryController implements Initializable {
     @FXML
     private TableColumn<DispatchMoveDisplay, Integer> idIngresCol;
     @FXML
-    private TableColumn<DispatchMoveDisplay,  String> prov_AlmCol;
+    private TableColumn<DispatchMoveDisplay,  String> provCol;
     @FXML
     private TableColumn<DispatchMoveDisplay, String> dateCol;
     @FXML
     private TableColumn<DispatchMoveDisplay, String> reasonsCol;
+    @FXML
+    private JFXComboBox cbWarehouse;
     
-    private ObservableList<DispatchMove> getEntries() {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
+    private ObservableList<DispatchMove> getEntries(Session session) {
+        
         int typeOwner1 = 3;
         int typeOwner2 = 4;
         int typeOwner3 = 5;
@@ -101,15 +100,14 @@ public class ListEntryController implements Initializable {
         for (int i = 0; i < lista.size(); i++) {
             returnable.add((DispatchMove)lista.get(i));
         }
-        session.close();
-        sessionFactory.close();
+        
         return returnable;        
     }
     
-    private void loadData() throws SQLException, ClassNotFoundException  {
+    private void loadData(Session session) throws SQLException, ClassNotFoundException  {
         entries = FXCollections.observableArrayList();
         entriesView = FXCollections.observableArrayList();
-        entries = getEntries();
+        entries = getEntries(session);
         
         for (int i = 0; i < entries.size(); i++) {
             String reason = getReason(entries.get(i).getReason());
@@ -197,11 +195,21 @@ public class ListEntryController implements Initializable {
         
         try {
             idIngresCol.setCellValueFactory(cellData -> cellData.getValue().id_dispatch_moveProperty().asObject());
-            prov_AlmCol.setCellValueFactory(cellData -> cellData.getValue().type_owner_textProperty());
+            provCol.setCellValueFactory(cellData -> cellData.getValue().type_owner_textProperty());
             dateCol.setCellValueFactory(cellData -> cellData.getValue().arrival_dateProperty());
             reasonsCol.setCellValueFactory(cellData -> cellData.getValue().reason_textProperty());
+            
+            
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
              
-            loadData();
+            loadData(session);
+            
+            session.close();
+            sessionFactory.close();
         } catch (SQLException | ClassNotFoundException ex) {
             Logger.getLogger(ListController.class.getName()).log(Level.SEVERE, null, ex);
         }

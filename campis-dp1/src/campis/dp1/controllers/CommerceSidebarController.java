@@ -13,6 +13,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
 import com.jfoenix.controls.JFXButton;
+import javafx.event.ActionEvent;
 import javafx.fxml.Initializable;
 import javafx.fxml.FXML;
 
@@ -45,7 +46,7 @@ public class CommerceSidebarController implements Initializable {
     private JFXButton refButton;
     
     @FXML
-    private JFXButton curButton;
+    private JFXButton supButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -55,6 +56,7 @@ public class CommerceSidebarController implements Initializable {
             View scView = View.getView("sale_conditions");
             View rsView = View.getView("request_statuses");
             View cliView = View.getView("clients");
+            //View supView = View.getView("suppliers");
             View freView = View.getView("districts");
             View comView = View.getView("complaints");
             View refView = View.getView("refunds");
@@ -66,6 +68,8 @@ public class CommerceSidebarController implements Initializable {
                 rsButton.setVisible(false);
             if (!Permission.canVisualize(id_role, cliView.getId_view()))
                 cliButton.setVisible(false);
+            /*if (!Permission.canVisualize(id_role, supView.getId_view()))
+                supButton.setVisible(false);*/
             if (!Permission.canVisualize(id_role, comView.getId_view()))
                 comButton.setVisible(false);
             if (!Permission.canVisualize(id_role, refView.getId_view()))
@@ -115,6 +119,11 @@ public class CommerceSidebarController implements Initializable {
     @FXML
     private void goCurrencyIGV() throws IOException {
         main.showCurrencyIGV();
+    }
+
+    @FXML
+    private void goListSupplier(ActionEvent event) throws IOException {
+        main.showListSupplier();
     }
 
 }

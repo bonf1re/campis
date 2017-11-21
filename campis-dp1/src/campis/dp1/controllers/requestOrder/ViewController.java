@@ -8,6 +8,7 @@ package campis.dp1.controllers.requestOrder;
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Client;
+import campis.dp1.models.Parameters;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.RequestOrder;
@@ -52,6 +53,7 @@ public class ViewController implements Initializable {
     Integer n_discount = 1;
     Integer n_tocount = 1;
     float IGV = 0.0f;
+    Parameters param = new Parameters();
     
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView;
@@ -283,14 +285,18 @@ public class ViewController implements Initializable {
             freightTotal = ContextFX.getInstance().getFreight();
             freightTotal = freightTotal + baseTotalAmount * f;
             totalAmount = totalAmount + freightTotal;
-            this.freightField.setText(Float.toString((freightTotal*100)/100));
-            this.amountField.setText(Float.toString((totalAmount*100)/100));
             ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
             ContextFX.getInstance().setTotAmount(totalAmount);
-            //this.amountField.setText(Float.toString(totalAmount));
-            this.subtotalField.setText(Float.toString((baseTotalAmount*100)/100));
-            this.discountField.setText(Float.toString((discountTotal*100)/100));
-            totalAmount = (totalAmount * IGV*100)/100;
+            freightTotal = param.roundingMethod(freightTotal, 2);
+            totalAmount = param.roundingMethod(totalAmount, 2);
+            this.freightField.setText(Float.toString(freightTotal));
+            this.amountField.setText(Float.toString(totalAmount));
+            baseTotalAmount = param.roundingMethod(baseTotalAmount, 2);
+            discountTotal = param.roundingMethod(discountTotal, 2);
+            this.subtotalField.setText(Float.toString(baseTotalAmount));
+            this.discountField.setText(Float.toString(discountTotal));
+            totalAmount = totalAmount * IGV;
+            totalAmount = param.roundingMethod(totalAmount, 2);
             this.amountField.setText(Float.toString((totalAmount*100)/100));
 
             ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),
