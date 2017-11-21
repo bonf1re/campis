@@ -41,9 +41,7 @@ public class DispatchSidebarController implements Initializable {
     
     @FXML
     private void goDeliveryList() throws IOException {
-        //TODO
-        //main.showDeliveryList();
-
+        main.showDeliveryList();
     }
     
     @FXML
