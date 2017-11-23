@@ -16,6 +16,7 @@ import java.io.IOException;
 import static java.lang.Boolean.TRUE;
 import java.net.URL;
 import java.sql.SQLException;
+import java.sql.Timestamp;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -29,6 +30,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -129,12 +131,16 @@ public class ListController implements Initializable{
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Criteria criteria = session.createCriteria(RequestOrder.class);
-        List list = criteria.list();
-        ObservableList<RequestOrder> returnable;
-        returnable = FXCollections.observableArrayList();
-        for (int i = 0; i < list.size(); i++) {
-            returnable.add((RequestOrder) list.get(i));
+        String qryStr = "SELECT * FROM campis.request_order;";
+        SQLQuery qry = session.createSQLQuery(qryStr);
+        List<Object[]> rows = qry.list();
+        ObservableList<RequestOrder> returnable = FXCollections.observableArrayList();
+        for (Object[] row : rows) {
+            RequestOrder req = new RequestOrder(Integer.parseInt(row[0].toString()),Timestamp.valueOf(row[1].toString()), Timestamp.valueOf(row[2].toString()), 
+                    Float.parseFloat(row[3].toString()), Float.parseFloat(row[4].toString()), row[5].toString(), 
+                    Integer.parseInt(row[6].toString()), Integer.parseInt(row[7].toString()), Integer.parseInt(row[8].toString()), 
+                    row[9].toString());
+            returnable.add(req);
         }
         session.close();
         sessionFactory.close();
