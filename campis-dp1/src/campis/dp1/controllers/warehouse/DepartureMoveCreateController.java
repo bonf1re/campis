@@ -28,6 +28,7 @@ import campis.dp1.models.utils.RoutingUtils;
 import campis.dp1.services.TabuSearchService;
 import com.jfoenix.controls.JFXComboBox;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -573,11 +574,11 @@ public class DepartureMoveCreateController implements Initializable{
        for (int i = 0; i < batch_list.size(); i++) {
            Batch batch_i = batch_list.get(i);
            Query query_i = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+batch_i.getId_product());
-           double weight_i = batch_i.getQuantity()*(Double)query_i.list().get(0);
+           double weight_i = batch_i.getQuantity()*((BigDecimal)query_i.list().get(0)).floatValue();
             for (int j = 0; j < batch_list.size(); j++) {
                 Batch batch_j = batch_list.get(j);
                 Query query_j = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+batch_j.getId_product());
-                double weight_j = batch_j.getQuantity()*(Double)query_j.list().get(0);
+                double weight_j = batch_j.getQuantity()*((BigDecimal)query_j.list().get(0)).floatValue();
                 if (weight_i > weight_j && j<i){
                     // For Zone
                     WarehouseZone swap_z = new WarehouseZone(zone_list.get(i),0);
@@ -637,7 +638,7 @@ public class DepartureMoveCreateController implements Initializable{
             int counter = 0;
             for (int j=batch_list.size()-1;j>=0;j--) {
                 Query query = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+String.valueOf(batch_list.get(j).getId_product()));
-                double total_batch_weight = batch_list.get(j).getQuantity()*(double)(query.list().get(0));
+                double total_batch_weight = batch_list.get(j).getQuantity()*((BigDecimal)(query.list().get(0))).floatValue();
                 max_cp=max_cp-total_batch_weight;
                 if (max_cp<=0){
                     // here it ends
