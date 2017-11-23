@@ -26,6 +26,48 @@ import org.hibernate.criterion.Restrictions;
 @Table (name="request_order")
 
 public class RequestOrder {
+
+    /**
+     * @return the igv_amount
+     */
+    public Float getIgv_amount() {
+        return igv_amount;
+    }
+
+    /**
+     * @param igv_amount the igv_amount to set
+     */
+    public void setIgv_amount(Float igv_amount) {
+        this.igv_amount = igv_amount;
+    }
+
+    /**
+     * @return the freight_amount
+     */
+    public Float getFreight_amount() {
+        return freight_amount;
+    }
+
+    /**
+     * @param freight_amount the freight_amount to set
+     */
+    public void setFreight_amount(Float freight_amount) {
+        this.freight_amount = freight_amount;
+    }
+
+    /**
+     * @return the discount_amount
+     */
+    public Float getDiscount_amount() {
+        return discount_amount;
+    }
+
+    /**
+     * @param discount_amount the discount_amount to set
+     */
+    public void setDiscount_amount(Float discount_amount) {
+        this.discount_amount = discount_amount;
+    }
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     Integer id_request_order;
@@ -38,6 +80,10 @@ public class RequestOrder {
     Integer priority;
     Integer id_district;
     String address;
+    private Float igv_amount;
+    private Float freight_amount;
+    private Float discount_amount;
+    
     
 
     public RequestOrder() {
@@ -69,6 +115,7 @@ public class RequestOrder {
         this.address =  address;
     }
     
+
     public RequestOrder(int id,Timestamp creation_date, Timestamp delivery_date,
                         float base_amount, float total_amount, String status, 
                         int id_client,int priority,int id_district,String address) {
@@ -81,7 +128,24 @@ public class RequestOrder {
         this.id_client = id_client;
         this.priority = priority;
         this.id_district = id_district;
+    }
+    public RequestOrder(Timestamp creation_date, Timestamp delivery_date,
+                        float base_amount, float total_amount, 
+                        float igv_amount, float freight_amount, float discount_amount,
+                        String status,
+                        int id_client,int priority,int id_district) {
+        this.creation_date = creation_date;
+        this.delivery_date = delivery_date;
+        this.status = status;
+        this.base_amount = base_amount;
+        this.total_amount = total_amount;
+        this.id_client = id_client;
+        this.priority = priority;
+        this.id_district = id_district;
         this.address =  address;
+        this.freight_amount = freight_amount;
+        this.igv_amount = igv_amount;
+        this.discount_amount = discount_amount;
     }
     
     public Integer getId_request_order() {
