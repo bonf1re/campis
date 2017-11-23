@@ -14,6 +14,8 @@ import campis.dp1.models.CNode;
 import campis.dp1.models.CRack;
 import campis.dp1.models.Coord;
 import campis.dp1.models.Coordinates;
+import campis.dp1.models.DispatchOrder;
+import campis.dp1.models.DispatchOrderLine;
 import campis.dp1.models.Product;
 import campis.dp1.models.Rack;
 import campis.dp1.models.TabuProblem;
@@ -160,6 +162,7 @@ public class DepartureMoveRouteController implements Initializable{
         if (motive_arr[0]==3){ // To dispatch
             mov_type=3;
             type_batch=1;
+            saveDispatchOrder(session);
         }else if (motive_arr[0]==4){ // Transfer to another warehouse
             mov_type=2;
             type_batch=7;
@@ -248,7 +251,10 @@ public class DepartureMoveRouteController implements Initializable{
         
         session.getTransaction().commit();
         session.close();
-        sessionFactory.close();        
+        sessionFactory.close();
+        GraphicsUtils gu = new GraphicsUtils();
+        gu.popupNotif("Movimiento Completado", "Ha grabado exitosamente la orden de despacho.","Terminar");
+        goDepartureMoveList();
     }
     
     @FXML
@@ -366,5 +372,54 @@ public class DepartureMoveRouteController implements Initializable{
         str.deleteCharAt(her.indexOf(']')-1);
         
         return Integer.parseInt(str.toString());
+    }
+
+    private void saveDispatchOrder(Session session) {
+        ArrayList<Object> dispatchOrder_and_lines= ContextFX.getInstance().getDispatchOrder();
+        DispatchOrder d_order = (DispatchOrder)dispatchOrder_and_lines.remove(0);
+        int id_request_order = d_order.getId_request_order();
+        int id_d_order = (int) session.save(d_order);
+        for (int i = 0; i < dispatchOrder_and_lines.size(); i++) {
+            DispatchOrderLine d_order_line = (DispatchOrderLine) dispatchOrder_and_lines.get(i);
+            d_order_line.setId_dispatch_order(id_d_order);
+            session.save(d_order_line);
+        }
+        
+        // Verfify id_request_order
+        if (orderComplete(session,id_request_order) == true){
+            Query query = session.createSQLQuery("UPDATE campis.request_order SET satus = 'FINALIZADO' WHERE id_request_order = "+id_request_order);
+        }
+    }
+
+    private boolean orderComplete(Session session,int id_request_order) {
+        
+        Query request_query = session.createSQLQuery("SELECT id_product,quantity FROM campis.request_order_line WHERE id_request_order = "+id_request_order);
+        ArrayList<Object> request_rs = new ArrayList<Object>(request_query.list());
+        
+        for (int i = 0; i < request_rs.size(); i++) {
+            Object[] rs_pair = (Object[]) request_rs.get(i);
+            int id_product =(int) rs_pair[0];
+            int prod_qt = (int) rs_pair[1];
+            Query dispatch_query = session.createSQLQuery("SELECT id_dispatch_order FROM campis.dispatch_order WHERE \n"+
+                                                    "id_request_order = "+id_request_order);
+            ArrayList<Object> dispatch_rs = new ArrayList<>(dispatch_query.list());
+            
+            for (int j = 0; j < dispatch_rs.size(); j++) {
+                int id_dispatch_order = (int) dispatch_rs.get(j);
+                Query dispatch_line_query = session.createSQLQuery("SELECT quantity FROM campis.dispatch_order_line WHERE \n"+
+                                                    "id_dispatch_order = "+id_dispatch_order+" AND id_product = "+id_product);
+                
+                ArrayList<Object> dispatch_line_rs = new ArrayList<Object>(dispatch_line_query.list());
+                for (int k = 0; k < dispatch_line_rs.size(); k++) {
+                    prod_qt -= (int) dispatch_line_rs.get(k);
+                }
+            }
+                            
+
+            if (prod_qt >0 ) return false;
+        }
+
+        
+        return true;
     }
 }

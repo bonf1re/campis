@@ -7,16 +7,9 @@ package campis.dp1.controllers.dispatch;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
-import campis.dp1.controllers.warehouse.EntryMoveListController;
-import campis.dp1.models.Area_;
-import campis.dp1.models.Client;
-import campis.dp1.models.Product;
-import campis.dp1.models.ProductDisplay;
-import campis.dp1.models.ProductWH_Move;
 import campis.dp1.models.RequestOrder;
 import campis.dp1.models.RequestOrderLine;
 import campis.dp1.models.RequestOrderLineDisplay;
-import campis.dp1.models.SaleCondition;
 import campis.dp1.models.utils.GraphicsUtils;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
@@ -24,16 +17,9 @@ import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
-import java.sql.SQLException;
-import java.text.DecimalFormat;
 import java.util.ArrayList;
-import java.util.Calendar;
 import java.util.List;
 import java.util.ResourceBundle;
-import java.util.logging.Level;
-import java.util.logging.Logger;
-import javafx.beans.property.IntegerProperty;
-import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -95,18 +81,14 @@ public class SelectRequest4Dispatch implements Initializable{
     private TableColumn<RequestOrderLineDisplay, Integer> dspQtColumn;
     @FXML
     private TableColumn<RequestOrderLineDisplay, Integer> missQtColumn;
-    @FXML
-    private TableColumn<RequestOrderLineDisplay, Float> finalAmountColumn;
+    
     @FXML
     private JFXComboBox<Integer> cbRequestOrderId;  
     private ArrayList<RequestOrder> listRequestOrder;
     
     @FXML
     private TableColumn<RequestOrder, String> stateColumn;
-    @FXML
-    private JFXTextField subtotalField;
-    @FXML
-    private JFXTextField discountField;
+    
     @FXML
     private JFXTextField clientField;
     @FXML
@@ -114,8 +96,7 @@ public class SelectRequest4Dispatch implements Initializable{
     
     @FXML
     private JFXTextField districtField;
-    @FXML
-    private JFXTextField freightField;
+    
     @FXML
     private JFXTextField stateField;
     @FXML
@@ -271,8 +252,7 @@ public class SelectRequest4Dispatch implements Initializable{
                     }       
             }));    
         dspQtColumn.setCellValueFactory(cellData -> cellData.getValue().getDspQt().asObject());
-        missQtColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getMissQt()).asObject());
-        finalAmountColumn.setCellValueFactory(cellData -> new SimpleFloatProperty(cellData.getValue().getQuantity()*cellData.getValue().getCost()).asObject());
+        missQtColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getMissQt()).asObject());        
         this.tablaProd.setEditable(true);
         loadData(list,session);
     }
@@ -307,6 +287,7 @@ public class SelectRequest4Dispatch implements Initializable{
         sendable.add(this.id);
         ArrayList<Object> id_prod_qt_pairs = new ArrayList<>();
         for (RequestOrderLineDisplay requestOrderLineDisplay : rqLineView) {
+            if (requestOrderLineDisplay.getDspQt().get() == 0 ) continue;
             ArrayList<Integer> dd_pair = new ArrayList<Integer>();
             dd_pair.add(requestOrderLineDisplay.getId_product());
             dd_pair.add(requestOrderLineDisplay.getDspQt().get());

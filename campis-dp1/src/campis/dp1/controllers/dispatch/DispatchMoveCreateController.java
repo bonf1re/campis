@@ -14,6 +14,8 @@ import campis.dp1.models.CNode;
 import campis.dp1.models.CRack;
 import campis.dp1.models.Coord;
 import campis.dp1.models.Coordinates;
+import campis.dp1.models.DispatchOrder;
+import campis.dp1.models.DispatchOrderLine;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductWH_Move;
 import campis.dp1.models.TabuProblem;
@@ -182,13 +184,11 @@ public class DispatchMoveCreateController implements Initializable{
         sortPerWeight(this.created_batches,zone_sel,session);
         
         sendBatches_n_Routes(this.created_batches,this.original_batches,zone_sel,session);
-        
+        sendDispatchOrder(session);
         ContextFX.getInstance().setId(this.id_warehouse);
         session.close();
-        sessionFactory.close();
-        
-        return; // for now lol
-        // main.showDispatchMoveRoute();
+        sessionFactory.close();        
+        main.showWhDepartureMoveRoute();
     }
     
     private double weight_check() {
@@ -555,11 +555,11 @@ public class DispatchMoveCreateController implements Initializable{
        for (int i = 0; i < batch_list.size(); i++) {
            Batch batch_i = batch_list.get(i);
            Query query_i = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+batch_i.getId_product());
-           double weight_i = batch_i.getQuantity()*(Double)query_i.list().get(0);
+           double weight_i = batch_i.getQuantity()*((BigDecimal)query_i.list().get(0)).floatValue();
             for (int j = 0; j < batch_list.size(); j++) {
                 Batch batch_j = batch_list.get(j);
                 Query query_j = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+batch_j.getId_product());
-                double weight_j = batch_j.getQuantity()*(Double)query_j.list().get(0);
+                double weight_j = batch_j.getQuantity()*((BigDecimal)query_j.list().get(0)).floatValue();
                 if (weight_i > weight_j && j<i){
                     // For Zone
                     WarehouseZone swap_z = new WarehouseZone(zone_list.get(i),0);
@@ -601,9 +601,12 @@ public class DispatchMoveCreateController implements Initializable{
     private void sendBatches_n_Routes(ArrayList<Batch> batch_list, ArrayList<Batch> original_batches, ArrayList<WarehouseZone> zone_list, Session session) {
         routingSetup(session);
         ArrayList<Object> sendable = new ArrayList<>();
-        sendable.add(3); // index + 2
-        sendable.add(this.id_request_order);
+        sendable.add(3); // index + 2        
         sendable.add(new ArrayList<>(this.original_batches)); // 1
+        int[] motive_arr = new int[2];
+        motive_arr[0]=3;
+        motive_arr[1]=1;
+        sendable.add(motive_arr); // 3 equals dispatch movement in router
         // the idea is to send list of zones, list of batches, vehicle and route per row
         ObservableList<Vehicle> vh_list = FXCollections.observableArrayList(this.vh2View);
         sortPerCapacity(vh_list);            
@@ -614,7 +617,7 @@ public class DispatchMoveCreateController implements Initializable{
             ArrayList<Batch> r_batches = new ArrayList<>();
             for (int j=batch_list.size()-1;j>=0;j--) {
                 Query query = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+String.valueOf(batch_list.get(j).getId_product()));
-                double total_batch_weight = batch_list.get(j).getQuantity()*(double)(query.list().get(0));
+                double total_batch_weight = batch_list.get(j).getQuantity()*((BigDecimal)(query.list().get(0))).floatValue();
                 max_cp=max_cp-total_batch_weight;
                 if (max_cp<=0){
                     // here it ends
@@ -633,7 +636,7 @@ public class DispatchMoveCreateController implements Initializable{
             aux.add(r_zones);
             aux.add(vh);
             System.out.println(r_zones.toString());
-            ArrayList<Coord> route =generateRoute(r_zones,session);
+            ArrayList<Coord> route = generateRoute(r_zones,session);
             aux.add(new ArrayList<Coord>(route));
             aux.add(false); // to know whether this move has been saved or not
             sendable.add(aux);
@@ -701,5 +704,21 @@ public class DispatchMoveCreateController implements Initializable{
         }
         this.routesGraph.setup(this.real_map);
         
+    }
+
+    private void sendDispatchOrder(Session session) {
+        ArrayList<Object> sendable = new ArrayList<>();
+        int priority = (int) session.createSQLQuery("SELECT priority \n"+
+                                                    "FROM campis.request_order \n"+
+                                                    "WHERE id_request_order = "+id_request_order)
+                                                    .list()
+                                                    .get(0);
+        DispatchOrder dispatch_sendable = new DispatchOrder(id_request_order, priority, "POR DESPACHAR");
+       sendable.add(dispatch_sendable);
+        for (ProductWH_Move productWH_Move : prodList) {
+            DispatchOrderLine d_line_sendable = new DispatchOrderLine(id_request_order,productWH_Move.getId_product(), productWH_Move.getCant().get());
+            sendable.add(d_line_sendable);
+        }
+        ContextFX.getInstance().setDispatchOrder(sendable);
     }
 }

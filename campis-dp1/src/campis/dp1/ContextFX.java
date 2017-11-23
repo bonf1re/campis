@@ -452,4 +452,15 @@ public class ContextFX {
     public void setLabeltoPrint3(String labeltoPrint3) {
         this.labeltoPrint3 = labeltoPrint3;
     }
+    
+    ArrayList<Object> dispatchOrder;
+    public void setDispatchOrder(ArrayList<Object> lll){
+        this.dispatchOrder = new ArrayList<>(lll);
+    }
+
+    public ArrayList<Object> getDispatchOrder() {
+        ArrayList<Object> returnable = new ArrayList<>(this.dispatchOrder);
+        this.dispatchOrder = null;
+        return returnable;
+    }
 }
