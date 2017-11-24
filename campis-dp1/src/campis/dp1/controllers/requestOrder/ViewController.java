@@ -8,6 +8,7 @@ package campis.dp1.controllers.requestOrder;
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Client;
+import campis.dp1.models.Parameters;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.RequestOrder;
@@ -20,6 +21,7 @@ import java.net.URL;
 import java.text.DecimalFormat;
 import java.util.Calendar;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -51,6 +53,7 @@ public class ViewController implements Initializable {
     Integer n_discount = 1;
     Integer n_tocount = 1;
     float IGV = 0.0f;
+    Parameters param = new Parameters();
     
     private ObservableList<Product> products;
     private ObservableList<ProductDisplay> productsView;
@@ -104,6 +107,10 @@ public class ViewController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        ContextFX.getInstance().setBaseTotAmount(0f);
+        ContextFX.getInstance().setDiscount(0f);
+        ContextFX.getInstance().setTotAmount(0f);
+        
         IGV = ContextFX.getInstance().getIGV() + 1;
         id = ContextFX.getInstance().getId();
         ContextFX.getInstance().setId(id);
@@ -190,7 +197,6 @@ public class ViewController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(SaleCondition.class);
-        criteria.add(Restrictions.eq("id_to_take", cod));
         criteria.add(Restrictions.ge("initial_date", today.getTime()));
         criteria.add(Restrictions.le("final_date", today.getTime()));
         
@@ -206,35 +212,35 @@ public class ViewController implements Initializable {
     }
 
     private Float verifyConditions(ObservableList<SaleCondition> discounts, Product prod, int quant) {
+        Integer type, maxQ, taken_id, n_d_aux, n_c_aux;
+        Float returnable = Float.valueOf(0);
+        
         n_discount = 1;
         n_tocount = 1;
-        Integer n_d_aux, n_c_aux;
-
         
-        Float returnable = Float.valueOf(0);
         for (int i = 0; i < discounts.size(); i++) {
-            
-            int type = discounts.get(i).getId_sale_condition_type();
-            if (type == 1) {
-                int maxQ = discounts.get(i).getLimits();
-                if (maxQ < quant) {
-                returnable = returnable + discounts.get(i).getAmount() / 100;
-                }
-            } else if (type == 2) {
-                int type_prod = prod.getId_product_type();
-                if (type_prod == type) {
-                    int maxQ = discounts.get(i).getLimits();
-                    if (maxQ < quant) {
-                        returnable = returnable + discounts.get(i).getAmount() / 100;
-                    }
-                }
-            }
+            maxQ = discounts.get(i).getLimits();
+            if (maxQ > quant) continue; 
+            type = discounts.get(i).getId_sale_condition_type();
+            taken_id = discounts.get(i).getId_to_take();
             n_d_aux = discounts.get(i).getN_discount();
             n_c_aux = discounts.get(i).getN_tocount();
+            
+            if (type == 1) {
+                if (Objects.equals(prod.getId_product(), taken_id))
+                    returnable = returnable + discounts.get(i).getAmount() / 100;
+
+            } else if (type == 2) {
+                if (Objects.equals(prod.getId_product_type(), taken_id)) {
+                    returnable = returnable + discounts.get(i).getAmount() / 100;
+                }
+            }
+            
             if (n_d_aux != 1 || n_c_aux != 1) {
                 n_discount = n_d_aux;
                 n_tocount = n_c_aux;
             }
+            
         }
         return returnable;
     }
@@ -261,26 +267,36 @@ public class ViewController implements Initializable {
         for (int i = 0; i < list.size(); i++) {
             products = getProduct(list.get(i).getId_product());
             ObservableList<SaleCondition> discounts = getDiscount(list.get(i).getId_product());
+            //porcentaje de descuento
             Float disc = verifyConditions(discounts, products.get(0), list.get(i).getQuantity());
+            //
             Float base_amount = list.get(i).getQuantity() * list.get(i).getCost();
             String state = "ENTREGA";
             baseTotalAmount = ContextFX.getInstance().getBaseTotAmount();
             baseTotalAmount = baseTotalAmount + base_amount;
-            discountTotal = ContextFX.getInstance().getTotAmount();
-            discountTotal = discountTotal + base_amount * disc + 
-                        (base_amount - ((list.get(i).getQuantity()/n_discount * n_tocount) * products.get(0).getBase_price()));
+            discountTotal = ContextFX.getInstance().getDiscount();
+            // cantidad neta de descuento por promocion
+            Float promo = (base_amount - ((list.get(i).getQuantity()/n_discount * n_tocount) * products.get(0).getBase_price()));
+            //
+            
+            discountTotal = discountTotal + base_amount * disc + promo;
             totalAmount = baseTotalAmount - discountTotal;
             float f = getFreight(distr);
+            freightTotal = ContextFX.getInstance().getFreight();
             freightTotal = freightTotal + baseTotalAmount * f;
             totalAmount = totalAmount + freightTotal;
-            this.freightField.setText(Float.toString((freightTotal*100)/100));
-            this.amountField.setText(Float.toString((totalAmount*100)/100));
             ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
             ContextFX.getInstance().setTotAmount(totalAmount);
-            //this.amountField.setText(Float.toString(totalAmount));
-            this.subtotalField.setText(Float.toString((baseTotalAmount*100)/100));
-            this.discountField.setText(Float.toString((discountTotal*100)/100));
-            totalAmount = (totalAmount * IGV*100)/100;
+            freightTotal = param.roundingMethod(freightTotal, 2);
+            totalAmount = param.roundingMethod(totalAmount, 2);
+            this.freightField.setText(Float.toString(freightTotal));
+            this.amountField.setText(Float.toString(totalAmount));
+            baseTotalAmount = param.roundingMethod(baseTotalAmount, 2);
+            discountTotal = param.roundingMethod(discountTotal, 2);
+            this.subtotalField.setText(Float.toString(baseTotalAmount));
+            this.discountField.setText(Float.toString(discountTotal));
+            totalAmount = totalAmount * IGV;
+            totalAmount = param.roundingMethod(totalAmount, 2);
             this.amountField.setText(Float.toString((totalAmount*100)/100));
 
             ProductDisplay prod = new ProductDisplay(products.get(0).getId_product(), products.get(0).getName(),

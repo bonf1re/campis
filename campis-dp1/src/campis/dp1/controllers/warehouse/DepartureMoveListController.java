@@ -24,6 +24,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
@@ -78,12 +79,28 @@ public class DepartureMoveListController implements Initializable {
     @FXML
     JFXComboBox<String> cbWarehouses;
     ArrayList<Warehouse> listWarehouses=new ArrayList<>();
-
+    @FXML
+    private Button distpachSaleOrderButton;
+    
+    @FXML
+    void goSelectRequestOrder() throws IOException {
+        ContextFX.getInstance().setId(warehouse_id);
+        ContextFX.getInstance().setMode(0);
+        main.showSelectRequestOrder();
+    }
+    
+    
     @FXML
     void goWhDepartureMoveCreate() throws IOException {
         ContextFX.getInstance().setId(warehouse_id);
         ContextFX.getInstance().setMode(0);
         main.showWhDepartureMoveCreate();
+    }
+    
+    @FXML
+    void goSelectRequest4Dispatch() throws IOException{
+        ContextFX.getInstance().setId(warehouse_id);
+        main.showSelectRequestOrder();
     }
 
     @FXML
@@ -156,6 +173,12 @@ public class DepartureMoveListController implements Initializable {
         }
         whDepartureMoveTable.setItems(null);
         whDepartureMoveTable.setItems(whMovesView);
+        
+        if (((int)session.createSQLQuery("SELECT wh_type FROM campis.wh_config WHERE id_warehouse ="+this.warehouse_id).list().get(0))!=0){
+                distpachSaleOrderButton.setDisable(true);
+            }else{
+                distpachSaleOrderButton.setDisable(false);
+            }
     }
 
     private ObservableList<WarehouseMove> getWhMoves(Session session) {
@@ -192,6 +215,7 @@ public class DepartureMoveListController implements Initializable {
             }
             cbWarehouses.getItems().addAll(wh_names);
             cbWarehouses.getSelectionModel().selectFirst();
+            
     }
 
     private void setupCbWarehouse() {

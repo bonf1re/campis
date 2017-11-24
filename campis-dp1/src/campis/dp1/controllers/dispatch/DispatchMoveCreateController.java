@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package campis.dp1.controllers.warehouse;
+package campis.dp1.controllers.dispatch;
 
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
@@ -14,6 +14,9 @@ import campis.dp1.models.CNode;
 import campis.dp1.models.CRack;
 import campis.dp1.models.Coord;
 import campis.dp1.models.Coordinates;
+import campis.dp1.models.DispatchOrder;
+import campis.dp1.models.DispatchOrderLine;
+import campis.dp1.models.Product;
 import campis.dp1.models.ProductWH_Move;
 import campis.dp1.models.TabuProblem;
 import campis.dp1.models.TabuSolution;
@@ -32,11 +35,13 @@ import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
+import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.stream.Collectors;
+import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
@@ -49,6 +54,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import jdk.nashorn.internal.runtime.Context;
@@ -63,7 +69,7 @@ import org.hibernate.query.Query;
  *
  * @author sergio
  */
-public class DepartureMoveCreateController implements Initializable{
+public class DispatchMoveCreateController implements Initializable{
     private Main main;
     private int id_warehouse;
     
@@ -106,10 +112,9 @@ public class DepartureMoveCreateController implements Initializable{
     private TableColumn<ProductWH_Move, Integer> stockCol;
 
     @FXML
-    private TableColumn<ProductWH_Move, String> delCol;
+    private TableColumn<ProductWH_Move, Float> weightCol;
 
-    @FXML
-    private JFXComboBox<String> cbMotive;
+
  
     @FXML
     private TableView<Vehicle> vh1Table;
@@ -123,16 +128,14 @@ public class DepartureMoveCreateController implements Initializable{
     private TableColumn<Vehicle, String> pc2Col;
     @FXML
     private TableColumn<Vehicle, String> cp2Col;
+    
     @FXML
-    private JFXComboBox<String>  cbWh;
-    private ArrayList<Warehouse> warehouses = new ArrayList<>();
+    Text totalWeightText;
+    private int id_request_order;
+   
     
-    
-    
-    
-    
-    
-    public void goDepartureMoveRoute() throws IOException{
+    @FXML
+    public void goDispatchMoveRoute() throws IOException{
         GraphicsUtils gu = new GraphicsUtils();
         // Verify stock and capacity
         double total_weight = weight_check();
@@ -181,11 +184,10 @@ public class DepartureMoveCreateController implements Initializable{
         sortPerWeight(this.created_batches,zone_sel,session);
         
         sendBatches_n_Routes(this.created_batches,this.original_batches,zone_sel,session);
-        
+        sendDispatchOrder(session);
         ContextFX.getInstance().setId(this.id_warehouse);
         session.close();
-        sessionFactory.close();
-        
+        sessionFactory.close();        
         main.showWhDepartureMoveRoute();
     }
     
@@ -209,32 +211,18 @@ public class DepartureMoveCreateController implements Initializable{
         return total_weight;
     }
     
-    public void goWhDepartureMoveList() throws IOException{
+    @FXML
+    public void goSelectRequest4Dispatch() throws IOException{
         ContextFX.getInstance().setId(this.id_warehouse);
-        main.showWhDepartureMoveList();
+        main.showSelectRequestOrder();
     }
     
-    public void searchProds() throws IOException{
-        ContextFX.getInstance().setId(this.id_warehouse);
-        this.polymorphic_list = new ArrayList<>();
-        polymorphic_list.add(this.prodList);
-        polymorphic_list.add(this.vh1View);
-        polymorphic_list.add(this.vh2View);
-        // 0 - prodList
-        // 1 - vh1View
-        // 2 - vh2View
-        ContextFX.getInstance().setPolymorphic_list(polymorphic_list);
-        main.showWhDepartureAddItem();
-    }
+   
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.id_warehouse = ContextFX.getInstance().getId();
-        this.mode = ContextFX.getInstance().getMode();
-        if(this.mode!=0){
-            this.polymorphic_list = ContextFX.getInstance().getPolymorphic_list();
-            System.out.println(((ObservableList)this.polymorphic_list.get(0)).size());
-        }
+        
         
         // DB connection
         Configuration configuration = new Configuration();
@@ -244,14 +232,9 @@ public class DepartureMoveCreateController implements Initializable{
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         
-        
-        // ComboBoxes
-        setupComboBoxes(session);
-        
         // Listeners
         vh1Table_listener();
         vh2Table_listener();
-        cbMotive_Listener();
         
         
         // Table Setups
@@ -284,54 +267,52 @@ public class DepartureMoveCreateController implements Initializable{
             }));
             cantCol.setCellValueFactory(cellData -> cellData.getValue().getCant().asObject());
             stockCol.setCellValueFactory(cellData -> cellData.getValue().getStock().asObject());
-            delCol.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
-            
-            Callback<TableColumn<ProductWH_Move, String>, TableCell<ProductWH_Move, String>> cellFactory
-                    = //
-                new Callback<TableColumn<ProductWH_Move, String>, TableCell<ProductWH_Move, String>>() {
-                @Override
-                public TableCell<ProductWH_Move, String> call(TableColumn<ProductWH_Move, String> param) {
-                    final TableCell<ProductWH_Move, String> cell = new TableCell<ProductWH_Move, String>() {
-                    final Button btn = new Button("Eliminar");
-
-                    @Override
-                    public void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                            setText(null);
-                        } else {
-                            btn.setOnAction(event -> {
-                                getTableView().getItems().remove(getIndex());
-                            });
-                            setGraphic(btn);
-                            setText(null);
-                        }
-                    }
-                };
-                    return cell;
-            }
-                };
-            delCol.setCellFactory(cellFactory);
-            productsTable.setEditable(true);
+            weightCol.setCellValueFactory(cellData -> new SimpleFloatProperty(
+                                                    cellData.getValue().getWeight()*
+                                                    cellData.getValue().getCant().get()
+                                                    ).asObject());
+            productsTable.setEditable(false);
     } catch (Exception ex) {
-            Logger.getLogger(WarehouseListController.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(DispatchMoveCreateController.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
 
    
 
     private void load_ProductsData(Session session) {
-        if (this.mode!=0){
-            // Add previously added products and their quantities
-            // 0 - prodList
-            // 1 - vh1View
-            // 2 - vh2View
-            ObservableList aux_prod = (ObservableList) this.polymorphic_list.get(0);
-            this.prodList = FXCollections.observableArrayList(aux_prod);
-            this.productsTable.setItems(null);
-            this.productsTable.setItems(prodList);
+        ArrayList<Object> p_list = (ArrayList<Object>) ContextFX.getInstance().getPolymorphic_list();
+        this.id_request_order = (int) p_list.remove(0);
+        this.prodList = FXCollections.observableArrayList();
+        float total_weight = 0;
+        ArrayList<Object> aux_tuple_prod = (ArrayList<Object>)(p_list.get(0));
+        for (Object object : aux_tuple_prod) {
+            ArrayList<Integer> tuple_prod =  (ArrayList<Integer>) object;
+            System.out.println(tuple_prod);
+            System.out.println(tuple_prod.get(0));
+            int id_prod = tuple_prod.get(0);
+            Object[] row = (Object[])(new ArrayList<Object[]>(
+                                            session.createSQLQuery("SELECT * \n"+
+                                            "FROM campis.product WHERE id_product = "+
+                                            id_prod).list())
+                                    ).get(0);
+            Product aux_prod = new Product(row[1].toString(),row[2].toString(),
+                                           (int)row[3],(int)row[4],
+                                           ((BigDecimal)row[5]).floatValue(),row[6].toString(),
+                                           ((BigDecimal)row[7]).floatValue(),(int)row[8],
+                                           (int)row[9],(int)row[10],
+                                           (int)row[11]);
+            aux_prod.setId_product(tuple_prod.get(0));
+            int prod_stock = (int )session.createSQLQuery("SELECT p_stock \n"+
+                                                    "FROM campis.productxwarehouse \n"+
+                                                    "WHERE id_warehouse = "+this.id_warehouse+
+                                                    " AND id_product = "+tuple_prod.get(0))
+                                                    .list().get(0);
+            prodList.add(new ProductWH_Move(aux_prod, tuple_prod.get(1), prod_stock));
+            total_weight+=aux_prod.getWeight()*tuple_prod.get(1);
         }
+        this.productsTable.setItems(null);
+        this.productsTable.setItems(prodList);
+        this.totalWeightText.setText(Float.toString(total_weight));
     }
 
     private void load_Vh1Data(Session session) {
@@ -620,13 +601,12 @@ public class DepartureMoveCreateController implements Initializable{
     private void sendBatches_n_Routes(ArrayList<Batch> batch_list, ArrayList<Batch> original_batches, ArrayList<WarehouseZone> zone_list, Session session) {
         routingSetup(session);
         ArrayList<Object> sendable = new ArrayList<>();
-        sendable.add(3); // index + 2
+        sendable.add(3); // index + 2        
         sendable.add(new ArrayList<>(this.original_batches)); // 1
         int[] motive_arr = new int[2];
-        motive_arr[0] = cbMotive.getSelectionModel().getSelectedIndex()+4;
-        motive_arr[1] = -1;
-        if (motive_arr[0]==4) motive_arr[1] = warehouses.get(cbWh.getSelectionModel().getSelectedIndex()).getId();
-        sendable.add(motive_arr);
+        motive_arr[0]=3;
+        motive_arr[1]=1;
+        sendable.add(motive_arr); // 3 equals dispatch movement in router
         // the idea is to send list of zones, list of batches, vehicle and route per row
         ObservableList<Vehicle> vh_list = FXCollections.observableArrayList(this.vh2View);
         sortPerCapacity(vh_list);            
@@ -635,7 +615,6 @@ public class DepartureMoveCreateController implements Initializable{
             double max_cp = vh.getMax_weight();
             ArrayList<WarehouseZone> r_zones = new ArrayList<>();
             ArrayList<Batch> r_batches = new ArrayList<>();
-            int counter = 0;
             for (int j=batch_list.size()-1;j>=0;j--) {
                 Query query = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+String.valueOf(batch_list.get(j).getId_product()));
                 double total_batch_weight = batch_list.get(j).getQuantity()*((BigDecimal)(query.list().get(0))).floatValue();
@@ -657,7 +636,7 @@ public class DepartureMoveCreateController implements Initializable{
             aux.add(r_zones);
             aux.add(vh);
             System.out.println(r_zones.toString());
-            ArrayList<Coord> route =generateRoute(r_zones,session);
+            ArrayList<Coord> route = generateRoute(r_zones,session);
             aux.add(new ArrayList<Coord>(route));
             aux.add(false); // to know whether this move has been saved or not
             sendable.add(aux);
@@ -727,33 +706,19 @@ public class DepartureMoveCreateController implements Initializable{
         
     }
 
-    private void cbMotive_Listener() {
-        this.cbMotive.getSelectionModel().selectedItemProperty().addListener(
-        (observable, oldValue, newValue) -> {
-            if (this.cbMotive.getSelectionModel().getSelectedIndex()==0){
-                this.cbWh.setDisable(false);
-            }else{
-                this.cbWh.setDisable(true);
-            }
-            
+    private void sendDispatchOrder(Session session) {
+        ArrayList<Object> sendable = new ArrayList<>();
+        int priority = (int) session.createSQLQuery("SELECT priority \n"+
+                                                    "FROM campis.request_order \n"+
+                                                    "WHERE id_request_order = "+id_request_order)
+                                                    .list()
+                                                    .get(0);
+        DispatchOrder dispatch_sendable = new DispatchOrder(id_request_order, priority, "POR DESPACHAR");
+       sendable.add(dispatch_sendable);
+        for (ProductWH_Move productWH_Move : prodList) {
+            DispatchOrderLine d_line_sendable = new DispatchOrderLine(id_request_order,productWH_Move.getId_product(), productWH_Move.getCant().get());
+            sendable.add(d_line_sendable);
         }
-        );
-    }
-
-    private void setupComboBoxes(Session session) {
-        //cbMotive.getItems().addAll("Despacho","Transferencia","Perdida","Roto");
-        cbMotive.getItems().addAll("Transferencia","Perdida","Roto");
-        Criteria criteria = session.createCriteria(Warehouse.class);
-        List rs = criteria.list();
-        ObservableList<String> wh_names = FXCollections.observableArrayList();
-        for (Object r : rs) {
-            Warehouse whhh = (Warehouse)r;
-            if (whhh.getId() != this.id_warehouse){
-                warehouses.add(whhh);
-                wh_names.add(whhh.getName());
-            }
-        }        
-        cbWh.getItems().addAll(wh_names);
-        this.cbWh.setDisable(true);
+        ContextFX.getInstance().setDispatchOrder(sendable);
     }
 }

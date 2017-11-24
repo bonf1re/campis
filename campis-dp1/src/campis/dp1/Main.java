@@ -434,6 +434,28 @@ public class Main extends Application {
         mainLayout.setCenter(newNormalDeparture);
      }
     
+    /*Deliveries*/
+     public static void showDeliveryList() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/dispatch/listDeliveries.fxml"));
+        BorderPane newNormalDeparture = loader.load();
+        mainLayout.setCenter(newNormalDeparture);
+     }
+     
+     public static void showCreateDelivery() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/dispatch/createDelivery.fxml"));
+        BorderPane newNormalDeparture = loader.load();
+        mainLayout.setCenter(newNormalDeparture);
+     }
+     
+     public static void showEditDelivery() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/dispatch/editDelivery.fxml"));
+        BorderPane newNormalDeparture = loader.load();
+        mainLayout.setCenter(newNormalDeparture);
+     }
+     
     /*Batches x dispatch*/
     public static void showListDispatchBatch() throws IOException {
         FXMLLoader loader = new FXMLLoader();
@@ -772,5 +794,25 @@ public class Main extends Application {
         BorderPane entries = loader.load();
         mainLayout.setCenter(entries);
     }
+
+    public static void showSelectRequestOrder() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/dispatch/selectRequestOrder.fxml"));
+        BorderPane selectreqorder = loader.load();
+        mainLayout.setCenter(selectreqorder);
+    }
+
+
+    public static void showDispatchMoveRoute() {
+        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    }
+
+    public static void showDispatchMoveCreate() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/dispatch/dispatchmovecreate.fxml"));
+        BorderPane selectreqorder = loader.load();
+        mainLayout.setCenter(selectreqorder);
+    }
+
     
 }

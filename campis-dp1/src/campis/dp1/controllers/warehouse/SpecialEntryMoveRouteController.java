@@ -178,6 +178,7 @@ public class SpecialEntryMoveRouteController implements Initializable{
                 System.out.println(batch.getId_supplier());
                 // batch save
                 batch.setType_batch(3);
+                batch.setState(true);
                 int id_batch = (int) session.save(new Batch(batch));
 
                 // move save
