@@ -164,7 +164,7 @@ public class EntryMoveSpecialCreateController implements Initializable {
            if (newValue.compareTo("Provedor") == 0){
                suppliersText.setVisible(true);
                supplierCb.setVisible(true);
-               setupSuppliersCb();
+               //setupSuppliersCb();
            } else {
                suppliersText.setVisible(false);
                supplierCb.setVisible(false);
