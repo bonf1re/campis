@@ -193,7 +193,7 @@ public class CreateController implements Initializable {
             session.close();
             sessionFactory.close();
             createRequestOrderLine(requestOrder.getId_request_order());
-            createDispatchOrder(requestOrder.getId_request_order());
+            //createDispatchOrder(requestOrder.getId_request_order());
             ContextFX.getInstance().setTempList(null);
             this.goListRequestOrder();
         } else {
