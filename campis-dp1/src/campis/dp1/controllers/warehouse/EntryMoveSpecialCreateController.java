@@ -16,6 +16,7 @@ import campis.dp1.models.CRack;
 import campis.dp1.models.Coord;
 import campis.dp1.models.Coordinates;
 import campis.dp1.models.ProductWH_Move;
+import campis.dp1.models.Supplier;
 import campis.dp1.models.TabuProblem;
 import campis.dp1.models.TabuSolution;
 import campis.dp1.models.Vehicle;
@@ -28,8 +29,10 @@ import campis.dp1.models.utils.GraphicsUtils;
 import campis.dp1.models.utils.ListUtils;
 import campis.dp1.models.utils.RoutingUtils;
 import campis.dp1.services.TabuSearchService;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
+import java.math.BigDecimal;
 import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
@@ -40,6 +43,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
+import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -50,9 +54,11 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -110,9 +116,6 @@ public class EntryMoveSpecialCreateController implements Initializable {
      
     @FXML
     private TableColumn<ProductWH_Move, String> delCol;
-
-    @FXML
-    private JFXTextField cbMotive;
     
     @FXML
     private TableView<Vehicle> vh1Table;
@@ -127,21 +130,55 @@ public class EntryMoveSpecialCreateController implements Initializable {
     private TableColumn<Vehicle, String> pc2Col;
     @FXML
     private TableColumn<Vehicle, String> cp2Col;
+    
+    @FXML
+    private JFXComboBox<String> motiveCb;
+    private Integer selectedMotive_id;
+    @FXML
+    private JFXComboBox<String> supplierCb;
+    private Integer selectedSupplier_id;
+    
+    @FXML
+    private Text suppliersText;
+    
+    private ObservableList<Supplier> suppliers; 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.id_warehouse = ContextFX.getInstance().getId();
         //.getItems().addAll("Hallazgo","Proveedores");
-        cbMotive.setText("Hallazgo");
+        motiveCb.getItems().add("Hallazgo");
+        motiveCb.getItems().add("Provedor");
         
+        //TODO - Desabilitar la cbde provedores
+        suppliersText.setVisible(false);
+        supplierCb.setVisible(false);
+        setupSuppliersCb();
+        
+        //Trigger para la de motivo
+        motiveCb.getSelectionModel().selectedItemProperty().addListener( (ObservableValue<? extends String> options, String oldValue, String newValue) -> {
+           System.out.println(newValue);
+           
+           //TODO - hacer que se habilite o desanbilite provedores
+           if (newValue.compareTo("Provedor") == 0){
+               suppliersText.setVisible(true);
+               supplierCb.setVisible(true);
+               //setupSuppliersCb();
+           } else {
+               suppliersText.setVisible(false);
+               supplierCb.setVisible(false);
+           }
+        }); 
+        
+   
         this.mode = ContextFX.getInstance().getMode();
         if(this.mode!=0){
             this.polymorphic_list = ContextFX.getInstance().getPolymorphic_list();
             System.out.println(((ObservableList)this.polymorphic_list.get(0)).size());
+            //TODO - ver que los selecionadso en la cb se mantengan
         }
 
-        
         // ComboBoxes
         //setupComboBoxes(session);
         
@@ -173,6 +210,41 @@ public class EntryMoveSpecialCreateController implements Initializable {
             Logger.getLogger(WarehouseListController.class.getName()).log(Level.SEVERE, null, ex);
         }
     
+    }
+    
+    private ObservableList<Supplier> getSuppliers() {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr = "SELECT * FROM campis.supplier;";
+        SQLQuery qry = session.createSQLQuery(qryStr);
+        List<Object[]> rows = qry.list();
+        ObservableList<Supplier> returnable = FXCollections.observableArrayList();
+        for (Object[] row : rows) {
+            Supplier sup = new Supplier(Integer.parseInt(row[0].toString()),row[1].toString(),
+                                row[2].toString(),row[3].toString(),row[4].toString(),row[5].toString());
+            returnable.add(sup);
+        }
+        session.close();
+        sessionFactory.close();
+        return returnable;
+    }
+    
+    @FXML
+    private void setupSuppliersCb() {
+        //Listar suppliers
+        this.suppliers = getSuppliers();
+        
+        System.out.println("campis.dp1.controllers.warehouse.EntryMoveSpecialCreateController.setupSuppliersCb()");
+        System.out.println(suppliers.size());
+        
+        for (int i = 0; i < suppliers.size(); i++) {
+            supplierCb.getItems().add(this.suppliers.get(i).getName());
+        }
+
     }
     
     private void load_ProductsData(Session session) {
@@ -218,6 +290,7 @@ public class EntryMoveSpecialCreateController implements Initializable {
                     }       
             }));
             cant_x_lote.setCellValueFactory(cellData -> cellData.getValue().getNum().asObject());
+            
             delCol.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
             
             Callback<TableColumn<ProductWH_Move, String>, TableCell<ProductWH_Move, String>> cellFactory
@@ -374,7 +447,11 @@ public class EntryMoveSpecialCreateController implements Initializable {
         for (ProductWH_Move p : tableProd.getItems()) {
             
             System.out.println(p.getWeight());
-            total_weight-=p.getWeight();
+            System.out.println("campis.dp1.controllers.warehouse.EntryMoveSpecialCreateController.weight_check()");
+            System.out.println(p.getWeight());
+            System.out.println(p.getCant());
+            System.out.println(p.getQtLt());
+            total_weight-=p.getWeight()*p.getCant().get()*p.getQtLt().get();
             batches_counter++;
         }
         if (batches_counter==0) return -1;
@@ -388,6 +465,7 @@ public class EntryMoveSpecialCreateController implements Initializable {
             System.out.println("No hay suficientes carritos para el piso a transportar o no se ha seleccionado algo.");
             return;
         }
+        
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
         configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
@@ -397,6 +475,7 @@ public class EntryMoveSpecialCreateController implements Initializable {
         
         List aux = getMarked(session);
         List zone_sel = getZones((ArrayList<Batch>)aux,session);
+        
         if (zone_sel.size() != aux.size()){
             System.out.println("No se pudo colocar todos los lotes, abortando.");
             return;
@@ -559,7 +638,7 @@ public class EntryMoveSpecialCreateController implements Initializable {
                 }
                 if (total_batch_weight<0){
                     Query query = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+String.valueOf(batch_list.get(j).getId_product()));
-                    total_batch_weight = batch_list.get(j).getQuantity()*(double)(query.list().get(0));
+                    total_batch_weight = batch_list.get(j).getQuantity()*((BigDecimal)(query.list().get(0))).floatValue();
                     weightDict wd = new weightDict(batch_list.get(j).getId_product(), total_batch_weight);
                     weights.add(wd);
                 }
@@ -608,7 +687,13 @@ public class EntryMoveSpecialCreateController implements Initializable {
             System.out.println("La cantidad maxima permitida para el producto es: "+max_qt);
                         
             int b_num= item.getNum().get();
+            int id_supplier = getIdSupplier();
             
+            /*
+             id_supplier = 0 HALLAZGO
+             id_supplier != 0 id_provedor
+            */
+
             if (b_num < max_qt){
                 for (int j = 0; j < item.getQtLt().get(); j++) {
                     Batch new_batch = new Batch();
@@ -618,6 +703,7 @@ public class EntryMoveSpecialCreateController implements Initializable {
                     new_batch.setQuantity(b_num);
                     new_batch.setArrival_date(currentTimestamp);
                     new_batch.setExpiration_date(item.getExp_date());
+                    new_batch.setId_supplier(id_supplier);
                     
                     returnable.add(new_batch);
                 }                 
@@ -631,10 +717,10 @@ public class EntryMoveSpecialCreateController implements Initializable {
                         
                         new_batch.setId_product(item.getId_product());
                         new_batch.setId_batch(-1);
-                        //new_batch.setQuantity(b_num);
                         new_batch.setQuantity(max_qt);
                         new_batch.setArrival_date(currentTimestamp);
                         new_batch.setExpiration_date(item.getExp_date());
+                        new_batch.setId_supplier(id_supplier);
                     
                         returnable.add(new_batch);
                     }
@@ -647,6 +733,7 @@ public class EntryMoveSpecialCreateController implements Initializable {
                     new_batch.setQuantity(item.getNum().get() - max_qt*(number_batches-1));
                     new_batch.setArrival_date(currentTimestamp);
                     new_batch.setExpiration_date(item.getExp_date());
+                    new_batch.setId_supplier(id_supplier);
                     
                     returnable.add(new_batch);
                 }    
@@ -657,17 +744,35 @@ public class EntryMoveSpecialCreateController implements Initializable {
         return returnable;
     }
      
+     private int getIdSupplier(){
+         int id = 0;
+         
+         if (motiveCb.getValue().compareTo("Hallazgo") == 0){
+             id = 0;
+         } else { //buscamos el id del provedor
+            String prov = supplierCb.getValue();
+            
+            for (int i=0; i<this.suppliers.size(); i++){
+                if (prov.compareTo(suppliers.get(i).getName()) == 0){
+                    id = suppliers.get(i).getId_supplier();
+                }
+            }           
+         }
+         
+         return id;       
+     }
+     
    
     
      private void sortPerWeight(ArrayList<Batch> batch_list, ArrayList<WarehouseZone> zone_list, Session session) {
        for (int i = 0; i < batch_list.size(); i++) {
            Batch batch_i = batch_list.get(i);
            Query query_i = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+batch_i.getId_product());
-           double weight_i = batch_i.getQuantity()*(Double)query_i.list().get(0);
+           double weight_i = batch_i.getQuantity()*((BigDecimal)query_i.list().get(0)).floatValue();
             for (int j = 0; j < batch_list.size(); j++) {
                 Batch batch_j = batch_list.get(j);
                 Query query_j = session.createSQLQuery("SELECT weight FROM campis.product WHERE id_product = "+batch_j.getId_product());
-                double weight_j = batch_j.getQuantity()*(Double)query_j.list().get(0);
+                double weight_j = batch_j.getQuantity()*((BigDecimal)query_j.list().get(0)).floatValue();
                 if (weight_i > weight_j && j<i){
                     // For Zone
                     WarehouseZone swap_z = new WarehouseZone(zone_list.get(i),0);
