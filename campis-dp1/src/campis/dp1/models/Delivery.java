@@ -15,7 +15,7 @@ public class Delivery {
     private String location;
     private String vh_plate;
     private Integer id_dispatch_order;
-    private Boolean invoiced;
+    //private Boolean invoiced;
     
     /**
      * @return the id_delivery
@@ -73,19 +73,6 @@ public class Delivery {
         this.id_dispatch_order = id_dispatch_order;
     }
     
-    /**
-     * @return the invoiced
-     */
-    public Boolean getInvoiced() {
-        return invoiced;
-    }
-
-    /**
-     * @param invoiced the invoiced to set
-     */
-    public void setInvoiced(Boolean invoiced) {
-        this.invoiced = invoiced;
-    }
     
     public Delivery(Integer id, String address, String vh_plate, Integer id_do){
         this.id_delivery  = id;
@@ -98,7 +85,7 @@ public class Delivery {
         this.location = address;
         this.vh_plate = vh_plate;
         this.id_dispatch_order = id_do;  
-        this.invoiced = false;
+        //this.invoiced = false;
     }
     
     public Delivery(){

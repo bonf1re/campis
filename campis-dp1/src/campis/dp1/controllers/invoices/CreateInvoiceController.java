@@ -92,12 +92,18 @@ public class CreateInvoiceController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        String qryStr = "SELECT * FROM campis.delivery WHERE invoiced = false;";
+        String qryStr = "SELECT * FROM campis.delivery;";
         SQLQuery qry = session.createSQLQuery(qryStr);
         List<Object[]> rows = qry.list();
         ObservableList<Delivery> returnable = FXCollections.observableArrayList();
         
         for (Object[] row : rows) {
+            // Verify that it does not have a invoice already created
+            int id_dispatch_order = (int) row[3];
+            
+            if (session.createSQLQuery("SELECT  * FROM campis.invoice WHERE id_dispatch_order = "+id_dispatch_order).list().size()>0)
+                continue;
+
             Delivery sup = new Delivery(Integer.parseInt(row[0].toString()),
                                         row[1].toString(),
                                         row[2].toString(),
@@ -240,7 +246,7 @@ public class CreateInvoiceController implements Initializable {
                 RequestOrderLine aux_ro = null;
                 
                 for (RequestOrderLine ro_line: ro_lines){
-                    if (line.getId_prod() == ro_line.getId_product()){
+                    if (line.getId_prod().intValue() == ro_line.getId_product().intValue()){
                         
                         System.out.println("P L S");
                         
@@ -249,40 +255,60 @@ public class CreateInvoiceController implements Initializable {
                         aux_ro = new RequestOrderLine(ro_line.getId_request_order_line(), 
                                                      ro_line.getQuantity(),
                         ro_line.getCost(), ro_line.getId_request_order(), ro_line.getId_product(), ro_line.getDiscount());
+                        
+                        break;
                     }
                 } 
                 
+                if (aux_ro != null) {
+                    System.out.println("PLS x2");
+                }
+         
                 System.out.println("campis.dp1.controllers.invoices.CreateInvoiceController.insertInvoice()");
                 System.out.println(aux_ro.getDiscount());
                 System.out.println(line.getQuantity());
                 System.out.println(aux_ro.getQuantity());
                 
+                try{
+                    float try_line = 1*line.getQuantity();
+                }catch(Exception e){
+                    System.out.println("error in line");
+                    e.printStackTrace();
+                }
+                
+                try{
+                    float try_dcto = 1*aux_ro.getQuantity();
+                }catch(Exception e){
+                    System.out.println("error in aux_ro");
+                    e.printStackTrace();
+                }
                 
                 float desc = 0*line.getQuantity()/aux_ro.getQuantity();
                 float final_cost  = (aux_ro.getCost()*line.getQuantity()) - desc;
                 total += final_cost;
                 
-                String qryStr7 = "INSERT INTO campis.invoice_line VALUES(DEFAULT,'" + line.getId_dispatch_order()+ "',"
-                    + "'"+line.getId_prod()+"',"
-                    + "'"+line.getQuantity()+"',"
-                    + "'"+aux_ro.getCost()+"',"
-                    + "'"+desc+"',"
-                    + "'"+aux_ro.getQuantity()+"',"
-                    + "'"+final_cost+"')";
+                String qryStr7 = "INSERT INTO campis.invoice_line VALUES(DEFAULT," + line.getId_dispatch_order()+ ","
+                    + line.getId_prod() + ","
+                    + line.getQuantity() + ","
+                    + aux_ro.getCost() + ","
+                    + desc + ","
+                    + aux_ro.getQuantity() + ","
+                    + final_cost+ ")";
+                
                 SQLQuery qry7 = session.createSQLQuery(qryStr7);
                 qry7.executeUpdate();
                 
             }
             
             //Actulizamos el costo de la factura
-            String qryStr8 = "UPDATE invoice SET total = " + total;
+            String qryStr8 = "UPDATE campis.invoice SET total = " + total + "WHERE id_invoice = " + aux_id_invoice ;
             SQLQuery qry8 = session.createSQLQuery(qryStr8);
             qry8.executeUpdate();
             
             //Actulizamos la guia de remision
-            String qryStr9 = "UPDATE delivery SET invoiced = " + true;
-            SQLQuery qry9 = session.createSQLQuery(qryStr8);
-            qry9.executeUpdate();
+//            String qryStr9 = "UPDATE delivery SET invoiced = " + true + "WHERE id_delivery = " + this.selected_del;
+//            SQLQuery qry9 = session.createSQLQuery(qryStr8);
+//            qry9.executeUpdate();
             
             session.getTransaction().commit();
             session.close();

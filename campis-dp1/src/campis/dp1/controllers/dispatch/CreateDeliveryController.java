@@ -143,8 +143,7 @@ public class CreateDeliveryController implements Initializable {
             session.beginTransaction();
             String qryStr = "INSERT INTO campis.delivery VALUES(DEFAULT,'" + d.getLocation()+ "',"
                     + "'"+d.getVh_plate()+"',"
-                    + "'"+d.getId_dispatch_order()+"',"
-                    + "'"+d.getInvoiced()+"')";
+                    + "'"+d.getId_dispatch_order()+"')";
             SQLQuery qry = session.createSQLQuery(qryStr);
             qry.executeUpdate();
             session.getTransaction().commit();
