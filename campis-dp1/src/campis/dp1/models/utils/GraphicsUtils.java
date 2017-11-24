@@ -92,7 +92,7 @@ public class GraphicsUtils {
         int padding_x = 0;
         float scaling_factor_y = 1;
         float scaling_factor_x = 1;
-
+        
         // Padding / Scaling 
         if (canvas_width / x > 1 && canvas_height / y > 1) {
             // Padding 
@@ -104,9 +104,11 @@ public class GraphicsUtils {
                 //mult = (int) canvas_width/y;
             }
 
-            padding_y = (int) (((int) canvas_height) - mult * y) / 4;
-            padding_x = (int) (((int) canvas_width) - mult * x) / 4;
-
+            padding_y = (int) (((int) canvas_height) - mult * y) / 2;
+            padding_x = (int) (((int) canvas_width) - mult * x) / 2;
+            
+            
+            
             if (padding_y > 0) {
                 padding_y += mult / 2;
             }
@@ -123,13 +125,16 @@ public class GraphicsUtils {
             scaling_factor_x = x / canvas_width;
             if (scaling_factor_y > scaling_factor_x) {
                 // padding at x
-                padding_x = (int) Math.abs(canvas_width - x / scaling_factor_x) / 4;
+                padding_x = (int) Math.abs(canvas_width - x / scaling_factor_x) / 2;
             } else {
                 // padding at y
-                padding_y = (int) Math.abs(canvas_height - y / scaling_factor_y) / 4;
+                padding_y = (int) Math.abs(canvas_height - y / scaling_factor_y) / 2;
             }
 
         }
+        
+        
+        
 
         for (int j = 0; j < y; j += scaling_factor_y) {
             for (int i = 0; i < x; i += scaling_factor_x) {
@@ -145,6 +150,14 @@ public class GraphicsUtils {
                     gc.setFill(Color.BLUE);
                     gc.fillRect(i * mult / scaling_factor_x + padding_x, j * mult / scaling_factor_y + padding_y, mult, mult);
                 }
+            }
+        }
+        
+        for (int j = 0; j < y; j+= scaling_factor_y) {
+            for (int i = 0; i < x; i+= scaling_factor_y) {
+                gc.setStroke(Color.LIGHTBLUE);
+                gc.setFill(Color.TRANSPARENT);
+                gc.strokeRect(i * mult / scaling_factor_x + padding_x, j * mult / scaling_factor_y + padding_y, mult, mult);
             }
         }
     }
@@ -175,8 +188,8 @@ public class GraphicsUtils {
                 //mult = (int) canvas_width/y;
             }
 
-            padding_y = (int) (((int) canvas_height) - mult * y) / 4;
-            padding_x = (int) (((int) canvas_width) - mult * x) / 4;
+            padding_y = (int) (((int) canvas_height) - mult * y) / 2;
+            padding_x = (int) (((int) canvas_width) - mult * x) / 2;
 
             if (padding_y > 0) {
                 padding_y += mult / 2;
@@ -194,10 +207,10 @@ public class GraphicsUtils {
             scaling_factor_x = x / canvas_width;
             if (scaling_factor_y > scaling_factor_x) {
                 // padding at x
-                padding_x = (int) Math.abs(canvas_width - x / scaling_factor_x) / 4;
+                padding_x = (int) Math.abs(canvas_width - x / scaling_factor_x) / 2;
             } else {
                 // padding at y
-                padding_y = (int) Math.abs(canvas_height - y / scaling_factor_y) / 4;
+                padding_y = (int) Math.abs(canvas_height - y / scaling_factor_y) / 2;
             }
 
         }
@@ -218,6 +231,16 @@ public class GraphicsUtils {
                 }
             }
         }
+        
+        
+        for (int j = 0; j < y; j+= scaling_factor_y) {
+            for (int i = 0; i < x; i+= scaling_factor_y) {
+                gc.setStroke(Color.LIGHTBLUE);
+                gc.setFill(Color.TRANSPARENT);
+                gc.strokeRect(i * mult / scaling_factor_x + padding_x, j * mult / scaling_factor_y + padding_y, mult, mult);
+            }
+        }
+        
 
         // Draw route
         for (int k = 0; k < route.size() - 1; k++) {
@@ -282,6 +305,8 @@ public class GraphicsUtils {
 
             }
         }
+        
+         
     }
 
     private boolean overbound(int ini_y, int ini_x, Coord c1, Coord c2) {
