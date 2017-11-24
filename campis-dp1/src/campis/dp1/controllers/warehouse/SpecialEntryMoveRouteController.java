@@ -104,7 +104,7 @@ public class SpecialEntryMoveRouteController implements Initializable{
         /*
         0 - indice
         1 -
-*/
+        */
         
         this.vhText.setText("Vehicle: "+ vh.getPlate() + " \nde capacidad : "+vh.getMax_weight());
         this.pCounterField.setText("<"+String.valueOf(this.routing_data.get(0))+"/"+String.valueOf(this.routing_data.size()-1)+">");
@@ -355,12 +355,5 @@ public class SpecialEntryMoveRouteController implements Initializable{
         }
     }
 
-    private int singleHer(Batch batch) {
-        String her = batch.getHeritage();
-        StringBuilder str = new StringBuilder(her);
-        str.deleteCharAt(her.indexOf('['));
-        str.deleteCharAt(her.indexOf(']')-1);
-        
-        return Integer.parseInt(str.toString());
-    }
+    
 }

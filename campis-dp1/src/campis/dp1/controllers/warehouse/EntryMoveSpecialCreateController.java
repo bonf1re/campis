@@ -290,6 +290,7 @@ public class EntryMoveSpecialCreateController implements Initializable {
                     }       
             }));
             cant_x_lote.setCellValueFactory(cellData -> cellData.getValue().getNum().asObject());
+            
             delCol.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
             
             Callback<TableColumn<ProductWH_Move, String>, TableCell<ProductWH_Move, String>> cellFactory
@@ -446,7 +447,11 @@ public class EntryMoveSpecialCreateController implements Initializable {
         for (ProductWH_Move p : tableProd.getItems()) {
             
             System.out.println(p.getWeight());
-            total_weight-=p.getWeight();
+            System.out.println("campis.dp1.controllers.warehouse.EntryMoveSpecialCreateController.weight_check()");
+            System.out.println(p.getWeight());
+            System.out.println(p.getCant());
+            System.out.println(p.getQtLt());
+            total_weight-=p.getWeight()*p.getCant().get()*p.getQtLt().get();
             batches_counter++;
         }
         if (batches_counter==0) return -1;
