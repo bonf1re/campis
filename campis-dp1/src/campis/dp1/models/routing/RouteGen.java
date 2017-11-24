@@ -22,7 +22,7 @@ import java.lang.String;
 public class RouteGen {
     private CGraph paths;
     private int[][] map;
-    private double alpha = 0.3;
+    private double alpha = 0.35;
     private Map<String,Route> dict = new HashMap<>();    
     
     public void printDict(){
@@ -73,6 +73,10 @@ public class RouteGen {
                 route = this.calculateRoute(normalize_start(new Coord(prods.get(i-1).getY(),prods.get(i-1).getX())),
                     normalize_start(new Coord(prods.get(i).getY(),prods.get(i).getX())));
             }else{
+                route = this.calculateRoute(normalize_start(new Coord(prods.get(i-1).getY(),prods.get(i-1).getX())),
+                    normalize_start(new Coord(prods.get(i).getY(),prods.get(i).getX())));
+                this.addRoute(route);
+                cost+=route.getCost();
                 route = this.calculateRoute(normalize_start(new Coord(prods.get(i).getY(),prods.get(i).getX())),
                     new Coord(0,0));
             }
@@ -95,6 +99,9 @@ public class RouteGen {
                 route = this.calculateRoute(normalize_start(new Coord(prods.get(i-1).getY(),prods.get(i-1).getX())),
                     normalize_start(new Coord(prods.get(i).getY(),prods.get(i).getX())));
             }else{
+                route = this.calculateRoute(normalize_start(new Coord(prods.get(i-1).getY(),prods.get(i-1).getX())),
+                    normalize_start(new Coord(prods.get(i).getY(),prods.get(i).getX())));
+                returnable.add(route);
                 route = this.calculateRoute(normalize_start(new Coord(prods.get(i).getY(),prods.get(i).getX())),
                     new Coord(0,0));
             }
@@ -190,7 +197,7 @@ public class RouteGen {
         ArrayList<String> keys =  new ArrayList<String>(this.paths.keySet());
         for (int i = 0; i < keys.size(); i++) {
             CNode node = this.paths.getNode(keys.get(i));
-            if (adyacent_c(node.getPos(),c_destiny)==true){
+            if (frontTofront(node.getPos(),c_destiny)==true){
                 destiny_nodes.add(node);
                 if (destiny_nodes.size()==2) break;
             }            
@@ -198,7 +205,7 @@ public class RouteGen {
         
         for (int i = 0; i < keys.size(); i++) {
             CNode node = this.paths.getNode(keys.get(i));
-            if (adyacent_c(node.getPos(),c_origin)==true){
+            if (frontTofront(node.getPos(),c_origin)==true){
                 origin_nodes.add(node);
                 if (origin_nodes.size()==2) break;
             }            
@@ -244,7 +251,6 @@ public class RouteGen {
                     if (previous_c!=null &&  same_coord(ver_coord,previous_c)) continue;
                     if (same_coord(ver_coord,origin_corner.getPos())){
                          Coord chosen = ver_coord;
-                        //returnable.increaseCost(chosen.c_distance(returnable.getPaths().get(returnable.getPaths().size()-1)));
                         returnable.addPath(new Coord(chosen));
                         destiny_corner = this.paths.getNode(chosen.y, chosen.x);
                         exit_loop = true;
@@ -255,7 +261,6 @@ public class RouteGen {
                     aux_nodes.add(ver_coord);
                     int cost = ver_coord.c_distance(c_origin);
                     aux_costs.add(cost);
-
                 }
                 if (exit_loop==true) break;
                 if (aux_nodes.size()==0){
@@ -289,6 +294,12 @@ public class RouteGen {
                 continue;
         }
         // OPT 2
+        // Check if route order matches the coordinates
+        Coord last_c = real_returnable.getPaths().get(real_returnable.getPaths().size()-1);
+        Coord first_c = real_returnable.getPaths().get(0);
+        if (first_c.c_distance(c_origin) >0 || last_c.c_distance(c_destiny)>0){
+            reverseRoute(real_returnable);
+        }
         OPT2_coords(real_returnable,opt2_counter);
         
         return real_returnable;
