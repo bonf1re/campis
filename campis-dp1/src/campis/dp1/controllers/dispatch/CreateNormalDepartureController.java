@@ -10,7 +10,6 @@ import campis.dp1.Main;
 import static campis.dp1.controllers.products.EditController.getMeasure;
 import campis.dp1.models.Batch;
 import campis.dp1.models.BatchDisplay;
-import campis.dp1.models.Client;
 import campis.dp1.models.DispatchMove;
 import campis.dp1.models.DispatchOrder;
 import campis.dp1.models.DispatchOrderLine;

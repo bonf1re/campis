@@ -8,9 +8,11 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
-<?import com.jfoenix.controls.JFXTextField?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.warehouse.EntryMoveSpecialCreateController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" 
+            prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" 
+            xmlns:fx="http://javafx.com/fxml/1" 
+            fx:controller="campis.dp1.controllers.warehouse.EntryMoveSpecialCreateController">
    <center>
       <Pane prefHeight="530.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
@@ -20,7 +22,7 @@
                </font>
             </Text>
             <Button layoutX="229.0" layoutY="482.0" mnemonicParsing="false" onAction="#searchProds" text="Agregar Producto/s" />
-            <TableView fx:id="vh1Table" layoutX="604.0" layoutY="152.0" prefHeight="120.0" prefWidth="300.0" styleClass="batch_table">
+            <TableView fx:id="vh1Table" layoutX="602.0" layoutY="102.0" prefHeight="120.0" prefWidth="300.0" styleClass="batch_table">
                <columns>
                   <TableColumn fx:id="pc1Col" prefWidth="75.0" text="Placa" />
                   <TableColumn fx:id="cp1Col" prefWidth="75.0" text="Capacidad" />
@@ -29,7 +31,7 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <TableView fx:id="vh2Table" layoutX="610.0" layoutY="323.0" prefHeight="120.0" prefWidth="300.0" styleClass="batch_table">
+            <TableView fx:id="vh2Table" layoutX="608.0" layoutY="273.0" prefHeight="120.0" prefWidth="300.0" styleClass="batch_table">
                <columns>
                   <TableColumn fx:id="pc2Col" prefWidth="75.0" text="Placa" />
                   <TableColumn fx:id="cp2Col" prefWidth="75.0" text="Capacidad" />
@@ -38,15 +40,15 @@
                   <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
                </columnResizePolicy>
             </TableView>
-            <Text layoutX="601.0" layoutY="137.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vehículos">
+            <Text layoutX="599.0" layoutY="87.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Vehículos">
                <font>
                   <Font size="16.0" />
                </font>
             </Text>
-            <Text layoutX="870.0" layoutY="140.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lista" />
-            <Text layoutX="816.0" layoutY="307.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Seleccionados" />
-            <Button layoutX="760.0" layoutY="281.0" mnemonicParsing="false" onAction="#delVh" prefHeight="31.0" prefWidth="42.0" text="^" />
-            <Button layoutX="699.0" layoutY="281.0" mnemonicParsing="false" onAction="#addVh" prefHeight="0.0" prefWidth="42.0" text="v" />
+            <Text layoutX="868.0" layoutY="90.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Lista" />
+            <Text layoutX="814.0" layoutY="257.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Seleccionados" />
+            <Button layoutX="758.0" layoutY="231.0" mnemonicParsing="false" onAction="#delVh" prefHeight="31.0" prefWidth="42.0" text="^" />
+            <Button layoutX="697.0" layoutY="231.0" mnemonicParsing="false" onAction="#addVh" prefHeight="0.0" prefWidth="42.0" text="v" />
             <TableView fx:id="tableProd" layoutX="35.0" layoutY="126.0" prefHeight="341.0" prefWidth="538.0">
                <columns>
                   <TableColumn fx:id="id_prod" prefWidth="56.0" text="Id_prodcuto" />
@@ -56,12 +58,18 @@
                   <TableColumn fx:id="delCol" prefWidth="105.0" text="Eliminar" />
                </columns>
             </TableView>
-            <JFXTextField fx:id="cbMotive" layoutX="716.0" layoutY="464.0"/>
-            <Text layoutX="645.0" layoutY="486.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Motivo:" wrappingWidth="67.52587890625">
+            <Text layoutX="624.0" layoutY="449.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Motivo:" wrappingWidth="67.52587890625">
                <font>
                   <Font size="18.0" />
                </font>
             </Text>
+            <Text fx:id="suppliersText" layoutX="620.0" layoutY="504.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Provedores:">
+               <font>
+                  <Font size="18.0" />
+               </font>
+            </Text>
+            <JFXComboBox fx:id="motiveCb" layoutX="747.0" layoutY="420.0" prefHeight="31.0" prefWidth="150.0" />
+            <JFXComboBox fx:id="supplierCb" layoutX="747.0" layoutY="477.0" prefHeight="31.0" prefWidth="150.0" />
          </children>
       </Pane>
    </center>

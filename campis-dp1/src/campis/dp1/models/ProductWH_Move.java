@@ -50,6 +50,7 @@ public class ProductWH_Move extends Product{
         this.setName(result.getName());
         this.setP_stock(result.getP_stock());
         this.setTrademark(result.getTrademark());
+        /*Aqui esta guardando mal el peso*/
         this.setWeight(result.getWeight());
         this.setMax_qt(result.getMax_qt());
         this.qtLt = new SimpleIntegerProperty(-1);
