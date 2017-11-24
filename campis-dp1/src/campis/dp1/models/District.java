@@ -5,11 +5,16 @@
  */
 package campis.dp1.models;
 
+import java.util.List;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
 
 @Entity
 @Table(name="district")
@@ -72,5 +77,25 @@ public class District {
     public District(String name, Float freight) {
         this.name = name;
         this.freight = freight;
+    }
+
+    public static String getName(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String queryStr = "select name\n" +
+                            "from campis.district\n" +
+                            " WHERE id_district =" + cod;
+        SQLQuery query = session.createSQLQuery(queryStr);
+        List list = query.list();
+        String returnable = (String) list.get(0);
+
+        session.close();
+        sessionFactory.close();
+
+        return returnable;
     }
 }
