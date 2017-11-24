@@ -125,5 +125,10 @@ public class CommerceSidebarController implements Initializable {
     private void goListSupplier(ActionEvent event) throws IOException {
         main.showListSupplier();
     }
+    
+    @FXML
+    private void goListInvoices(ActionEvent event) throws IOException {
+        main.showListInvoice();
+    }
 
 }

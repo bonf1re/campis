@@ -52,6 +52,16 @@ public class RequestOrderLine {
         super();
     }
     
+    public RequestOrderLine(int id_ro_line, int quantity, float cost, int id_ro,
+                            int id_prod, float disc) {
+        this.id_request_order_line = id_ro_line;
+        this.quantity = quantity;
+        this.cost = cost;
+        this.id_request_order = id_ro;
+        this.id_product = id_prod;
+        this.discount = disc;
+    }
+    
     public RequestOrderLine(int quantity, float costo,
                             int idReqOrd, int idProd) {
         this.quantity = quantity;
