@@ -185,7 +185,7 @@ public class CreateInvoiceController implements Initializable {
             
             //Listamos las lineas de la orden de venta
             String qryStr4 = "SELECT * FROM campis.request_order_line WHERE id_request_order = " + aux_id_ro;
-            SQLQuery qry4 = session.createSQLQuery(qryStr3);
+            SQLQuery qry4 = session.createSQLQuery(qryStr4);
             List<Object[]> rows4 = qry4.list();
             ObservableList<RequestOrderLine> ro_lines = FXCollections.observableArrayList();
             
@@ -222,8 +222,8 @@ public class CreateInvoiceController implements Initializable {
             
             //Obtenemos el id de la factura ingresada 
             String qryStr6 = "SELECT * FROM campis.invoice WHERE id_dispatch_order = " +aux_id_do;
-            SQLQuery qry6 = session.createSQLQuery(qryStr2);
-            List<Object[]> rows6 = qry2.list();
+            SQLQuery qry6 = session.createSQLQuery(qryStr6);
+            List<Object[]> rows6 = qry6.list();
             
             System.out.println("campis.dp1.controllers.invoices.CreateInvoiceController.insertInvoice()");          
             Integer aux_id_invoice = 0;
@@ -241,11 +241,24 @@ public class CreateInvoiceController implements Initializable {
                 
                 for (RequestOrderLine ro_line: ro_lines){
                     if (line.getId_prod() == ro_line.getId_product()){
-                        aux_ro = ro_line;
+                        
+                        System.out.println("P L S");
+                        
+                        System.out.println(ro_line.getDiscount());
+                        
+                        aux_ro = new RequestOrderLine(ro_line.getId_request_order_line(), 
+                                                     ro_line.getQuantity(),
+                        ro_line.getCost(), ro_line.getId_request_order(), ro_line.getId_product(), ro_line.getDiscount());
                     }
                 } 
                 
-                float desc = aux_ro.getDiscount()*line.getQuantity()/aux_ro.getQuantity();
+                System.out.println("campis.dp1.controllers.invoices.CreateInvoiceController.insertInvoice()");
+                System.out.println(aux_ro.getDiscount());
+                System.out.println(line.getQuantity());
+                System.out.println(aux_ro.getQuantity());
+                
+                
+                float desc = 0*line.getQuantity()/aux_ro.getQuantity();
                 float final_cost  = (aux_ro.getCost()*line.getQuantity()) - desc;
                 total += final_cost;
                 
@@ -263,12 +276,12 @@ public class CreateInvoiceController implements Initializable {
             
             //Actulizamos el costo de la factura
             String qryStr8 = "UPDATE invoice SET total = " + total;
-            SQLQuery qry8 = session.createSQLQuery(qryStr2);
+            SQLQuery qry8 = session.createSQLQuery(qryStr8);
             qry8.executeUpdate();
             
             //Actulizamos la guia de remision
             String qryStr9 = "UPDATE delivery SET invoiced = " + true;
-            SQLQuery qry9 = session.createSQLQuery(qryStr2);
+            SQLQuery qry9 = session.createSQLQuery(qryStr8);
             qry9.executeUpdate();
             
             session.getTransaction().commit();
