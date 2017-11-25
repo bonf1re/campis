@@ -55,6 +55,7 @@
             </Label>
             <JFXComboBox fx:id="cmbCampaign" layoutX="228.0" layoutY="76.0" prefHeight="26.0" prefWidth="101.0" />
             <Button layoutX="714.0" layoutY="75.0" mnemonicParsing="false" onAction="#goCampaigns" prefHeight="29.0" prefWidth="112.0" text="Ver campañas" />
+            <Label fx:id="validationLabel" layoutX="77.0" layoutY="545.0" text="Label" textFill="RED" />
          </children>
       </AnchorPane>
    </center>
