@@ -346,10 +346,15 @@ public class CreateController implements Initializable {
         this.freightField.setText(Float.toString(param.roundingMethod(freightTotal, 2)));
         this.amountField.setText(Float.toString(param.roundingMethod(totalAmount, 2)));
     }
+    
+    
+    
 
     private void loadData(int cod, int quant) {
         products = FXCollections.observableArrayList();
         requestLineView = ContextFX.getInstance().getReqList();
+        
+        
         products = getProduct(cod);
         ObservableList<SaleCondition> discounts = getDiscount();
         

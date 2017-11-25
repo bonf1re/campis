@@ -16,6 +16,7 @@ import campis.dp1.models.Product;
 import campis.dp1.models.ProductType;
 import campis.dp1.models.SaleConditionType;
 import campis.dp1.models.SaleCondition;
+import campis.dp1.models.utils.GraphicsUtils;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
@@ -120,6 +121,10 @@ public class EditSaleConditionController implements Initializable {
 
     @FXML
     private JFXTextField countLabel;
+    
+    @FXML
+    private Label errorMessage;
+
 
     public boolean validation() {
         boolean campaignCBValid = campaignCB.getValue() == null;
@@ -158,6 +163,7 @@ public class EditSaleConditionController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.errorMessage.setText("");
         SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
         id = ContextFX.getInstance().getId();
         listCampaigns = getCampaigns();
@@ -170,6 +176,7 @@ public class EditSaleConditionController implements Initializable {
         for (int i = 0; i < listSaleConditionTypes.size(); i++) {
             typeCB.getItems().addAll(listSaleConditionTypes.get(i).getDescription());
         }
+        campaignDates();
         
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -213,6 +220,7 @@ public class EditSaleConditionController implements Initializable {
         }
         
         loadObjectives();
+        
         session.close();
         sessionFactory.close();
 
@@ -390,6 +398,19 @@ public class EditSaleConditionController implements Initializable {
                 
             }
             
+            GraphicsUtils g = new GraphicsUtils();
+            
+            if (n_d < n_c) {
+                g.popupError("Error", "Promoción ingresada no es válida.", "OK");
+                //this.errorMessage.setText("Promoción ingresada no es válida.");
+                return;
+            }
+            if (date_init.after(date_end)) {
+                g.popupError("Error", "Fechas ingresadas no válidas.", "OK");
+                //this.errorMessage.setText("Fechas ingresadas no válidas.");
+                return;
+            }
+            
             Configuration configuration = new Configuration();
             configuration.configure("hibernate.cfg.xml");
             configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
@@ -466,5 +487,26 @@ public class EditSaleConditionController implements Initializable {
             
         }
                 
+    }
+    
+    @FXML
+    public void campaignDates () {
+        String cmp = this.campaignCB.getValue();
+        for (int i = 0; i < listCampaigns.size() ; i++ ){
+            if (listCampaigns.get(i).getName().equals(cmp)) {
+                if(listCampaigns.get(i).getId_campaign() == 0){
+                    this.pckBegin.setValue(null);
+                    this.pckEnd.setValue(null);
+                    this.pckBegin.setDisable(false);
+                    this.pckEnd.setDisable(false);
+                    
+                } else {
+                    this.pckBegin.setValue(listCampaigns.get(i).getInitial_date().toLocalDateTime().toLocalDate());
+                    this.pckEnd.setValue(listCampaigns.get(i).getFinal_date().toLocalDateTime().toLocalDate());
+                    this.pckBegin.setDisable(true);
+                    this.pckEnd.setDisable(true);
+                }
+            }
+        }
     }
 }

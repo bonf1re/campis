@@ -9,6 +9,7 @@ package campis.dp1.controllers.campaigns;
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Campaign;
+import campis.dp1.models.utils.GraphicsUtils;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
@@ -25,6 +26,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javax.persistence.Query;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -60,8 +62,12 @@ public class EditController implements Initializable {
     @FXML
     private JFXTextField nameField;
     
+    @FXML
+    private Label errorMessage;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.errorMessage.setText("");
         id = ContextFX.getInstance().getId();
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -102,6 +108,14 @@ public class EditController implements Initializable {
         
         Date date_init = getDate(pckBegin.getValue());
         Date date_end = getDate(pckEnd.getValue());
+        
+        GraphicsUtils g = new GraphicsUtils();
+        
+        if (date_init.after(date_end)) {
+            g.popupError("Error", "Fechas ingresadas no válidas.", "OK");
+            //this.errorMessage.setText("Fechas ingresadas no válidas.");
+            return;
+        }
         
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");

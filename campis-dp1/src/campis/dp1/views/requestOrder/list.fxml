@@ -45,6 +45,7 @@
             </Label>
             <JFXTextField fx:id="searchField_District" layoutX="488.0" layoutY="101.0" prefHeight="31.0" prefWidth="133.0" />
             <Button layoutX="643.0" layoutY="104.0" mnemonicParsing="false" onAction="#searchDistrict" prefHeight="29.0" prefWidth="77.0" text="Buscar" />
+            <Label fx:id="validationLabel" layoutX="77.0" layoutY="544.0" text="Label" textFill="RED" />
          </children>
       </AnchorPane>
    </center>

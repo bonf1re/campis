@@ -203,7 +203,7 @@ public class ListSaleConditionController implements Initializable {
         else dateEnd = null;
         if (initDate != null & endDate != null){
             if (initDate.isAfter(endDate)) {
-                this.validationLabel.setText("Las fechas ingresadas no son válidas");
+                this.validationLabel.setText("Las fechas ingresadas no son válidas.");
                 return;
             }
         }

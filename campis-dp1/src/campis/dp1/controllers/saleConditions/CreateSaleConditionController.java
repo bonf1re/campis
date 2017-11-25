@@ -11,6 +11,7 @@ import campis.dp1.models.Product;
 import campis.dp1.models.ProductType;
 import campis.dp1.models.SaleCondition;
 import campis.dp1.models.SaleConditionType;
+import campis.dp1.models.utils.GraphicsUtils;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
@@ -114,6 +115,9 @@ public class CreateSaleConditionController implements Initializable {
     @FXML
     private JFXTextField countLabel;
     
+    @FXML
+    private Label errorMessage;
+    
 
     public boolean validation() {
         boolean campaignCBValid = campaignCB.getValue() == null;
@@ -152,9 +156,12 @@ public class CreateSaleConditionController implements Initializable {
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        
+        this.pckBegin.setDisable(false);
+        this.pckEnd.setDisable(false);
         disLabel.disableProperty().set(true);
         countLabel.disableProperty().set(true);
-        
+        this.errorMessage.setText("");
         
         
         listCampaigns = getCampaigns();
@@ -194,6 +201,7 @@ public class CreateSaleConditionController implements Initializable {
     }
     
     
+    
     public static List<SaleConditionType> getConditionTypes() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -218,10 +226,7 @@ public class CreateSaleConditionController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Criteria criteria = session.createCriteria(Campaign.class)
-                .setProjection(Projections.projectionList()
-                .add(Projections.property("name"),"name"))
-                .setResultTransformer(Transformers.aliasToBean(Campaign.class));
+        Criteria criteria = session.createCriteria(Campaign.class);
         List<Campaign> types = criteria.list();
         session.close();
         sessionFactory.close();
@@ -377,12 +382,10 @@ public class CreateSaleConditionController implements Initializable {
             Date date_end = getDate(pckEnd.getValue());
             Integer n_d =1, n_c =1;
             Float amount = 0f;
-            Configuration configuration = new Configuration();
-            configuration.configure("hibernate.cfg.xml");
-            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
-            SessionFactory sessionFactory = configuration.buildSessionFactory();
-            Session session = sessionFactory.openSession();
-            session.beginTransaction();
+            
+            GraphicsUtils g = new GraphicsUtils();
+            
+            
             setIds(campaignCB.getValue(),typeCB.getValue(),objectiveCB.getValue());
             
             if (amountField.disableProperty().get()){
@@ -391,6 +394,26 @@ public class CreateSaleConditionController implements Initializable {
             }else{
                 amount = Float.parseFloat(amountField.getText());
             }
+            
+            if (n_d < n_c) {
+                g.popupError("Error", "Promoción ingresada no es válida.", "OK");
+                //this.errorMessage.setText("Promoción ingresada no es válida.");
+                return;
+            }
+            if (date_init.after(date_end)) {
+                g.popupError("Error", "Fechas ingresadas no válidas.", "OK");
+                
+                //this.errorMessage.setText("Fechas ingresadas no válidas.");
+                return;
+            }
+            
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+            
             
             SaleCondition sc = new SaleCondition(Timestamp.valueOf(formatIn.format(date_init)),
                                                  Timestamp.valueOf(formatIn.format(date_end)),
@@ -408,6 +431,27 @@ public class CreateSaleConditionController implements Initializable {
             session.close();
             sessionFactory.close(); 
             this.goListSaleConditions();
+        }
+    }
+    
+    @FXML
+    public void campaignDates () {
+        String cmp = this.campaignCB.getValue();
+        for (int i = 0; i < listCampaigns.size() ; i++ ){
+            if (listCampaigns.get(i).getName().equals(cmp)) {
+                if(listCampaigns.get(i).getId_campaign() == 0){
+                    this.pckBegin.setValue(null);
+                    this.pckEnd.setValue(null);
+                    this.pckBegin.setDisable(false);
+                    this.pckEnd.setDisable(false);
+                    
+                } else {
+                    this.pckBegin.setValue(listCampaigns.get(i).getInitial_date().toLocalDateTime().toLocalDate());
+                    this.pckEnd.setValue(listCampaigns.get(i).getFinal_date().toLocalDateTime().toLocalDate());
+                    this.pckBegin.setDisable(true);
+                    this.pckEnd.setDisable(true);
+                }
+            }
         }
     }
 }

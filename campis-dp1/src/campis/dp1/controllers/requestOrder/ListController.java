@@ -15,7 +15,6 @@ import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import static java.lang.Boolean.TRUE;
 import java.net.URL;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -26,6 +25,7 @@ import javafx.collections.ObservableList;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
@@ -67,6 +67,9 @@ public class ListController implements Initializable{
     private TableColumn<RequestDisplay, Integer> priorityColumn;
     @FXML
     private TableColumn<RequestDisplay, String> districtColumn;
+    @FXML
+    private Label validationLabel;
+    
     
     @FXML
     private Button createButton;
@@ -77,6 +80,8 @@ public class ListController implements Initializable{
     @FXML
     private Button deleteButton;
     
+    
+    
     @FXML
     private void goCreateRequestOrder() throws IOException {
         main.showCreateRequestOrder();
@@ -86,6 +91,7 @@ public class ListController implements Initializable{
     public void initialize(URL location, ResourceBundle resources) {
         this.selected_id = 0;
         this.searchField.setText("");
+        this.validationLabel.setText("");
         requestView = FXCollections.observableArrayList();
         ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "request_orders");
         requestTable.getSelectionModel().selectedItemProperty().addListener(
@@ -110,6 +116,7 @@ public class ListController implements Initializable{
 
     private void loadData() {
         requestList = FXCollections.observableArrayList();
+        requestView = FXCollections.observableArrayList();
         requestList = getRequests();
         for (int i = 0; i < requestList.size(); i++) {
             name = getName(requestList.get(i).getId_client());
@@ -199,13 +206,24 @@ public class ListController implements Initializable{
         if (selected_id > 0) {
             ContextFX.getInstance().setId(selected_id);
             Integer id_request = ContextFX.getInstance().getId();
-            deleteRequest(id_request);
+            
             for (int i = 0; i < requestList.size(); i++) {
                 if(requestList.get(i).getId_request_order().compareTo(id_request) == 0){
-                    requestList.remove(i);
+                    if ("EN PROGRESO".equals(requestList.get(i).getStatus())){
+                        requestList.remove(i);
+                        deleteRequest(id_request);
+                        loadData();
+                        this.validationLabel.setText("");
+                        break;
+                    }else{
+                        this.validationLabel.setText("No se puede eliminar una orden de "
+                                + "venta en proceso");
+                        break;
+                    }
+                    
                 }
             }
-            loadData();
+            
         }
     }
 

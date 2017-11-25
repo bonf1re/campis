@@ -11,6 +11,7 @@ import static campis.dp1.controllers.products.CreateController.getTypes;
 import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.ProductType;
+import campis.dp1.models.RequestLineDisplay;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
@@ -53,6 +54,7 @@ public class AddItemController implements Initializable {
     private ObservableList<ProductDisplay> productsView;
     private ObservableList<Product> products;
     private int selected_id;
+    ObservableList<RequestLineDisplay> reqListV = FXCollections.observableArrayList();
 
     @FXML
     private JFXTextField codField;
@@ -219,6 +221,12 @@ public class AddItemController implements Initializable {
         int cQuant = getQuantProduct(selected_id);
         int quant = Integer.parseInt(quantityField.getText());
         if ( quant <= cQuant && quant > 0) {
+            for (int i = 0; i < reqListV.size(); i++){
+                if (selected_id == reqListV.get(i).getId_product().getValue()){
+                    messageLabel.setText("Este producto ya ha sido agregado");
+                    return;
+                }
+            }
             ContextFX.getInstance().setQuantity(quant);
             this.goCreateRequestOrder();
         }else{
@@ -228,6 +236,7 @@ public class AddItemController implements Initializable {
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+        reqListV.setAll(ContextFX.getInstance().getReqList());
         tableProd.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> {
                     if (newValue == null) {
