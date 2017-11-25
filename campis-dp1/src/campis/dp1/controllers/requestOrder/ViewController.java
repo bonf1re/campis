@@ -72,8 +72,8 @@ public class ViewController implements Initializable {
     @FXML
     private TableColumn<RequestLineDisplay, Float> discountColumn;
 
-    @FXML
-    private TableColumn<RequestLineDisplay, String> stateColumn;
+  //  @FXML
+  //  private TableColumn<RequestLineDisplay, String> stateColumn;
     
     @FXML
     private Label messageField1;
@@ -146,7 +146,7 @@ public class ViewController implements Initializable {
         quantityColumn.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
         unitaryAmountColumn.setCellValueFactory(cellData -> cellData.getValue().getBase_price().asObject());
         finalAmountColumn.setCellValueFactory(cellData -> cellData.getValue().getFinal_price().asObject());
-        stateColumn.setCellValueFactory(cellData -> cellData.getValue().getStatus());
+//        stateColumn.setCellValueFactory(cellData -> cellData.getValue().getStatus());
         discountColumn.setCellValueFactory(cellData -> cellData.getValue().getDiscount().asObject());
         loadData(list);
     }
@@ -204,7 +204,7 @@ public class ViewController implements Initializable {
     private void loadData(List<RequestOrderLine> list) {
 
         for (int i = 0; i < list.size(); i++) {
-            Product p = getProduct(list.get(0).getId_product());
+            Product p = getProduct(list.get(i).getId_product());
             RequestLineDisplay prod = new RequestLineDisplay(list.get(i).getId_product(), p.getName(),
                 list.get(i).getQuantity(),
                 list.get(i).getCost(),
