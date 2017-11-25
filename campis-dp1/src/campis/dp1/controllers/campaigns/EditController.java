@@ -9,6 +9,7 @@ package campis.dp1.controllers.campaigns;
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.Campaign;
+import campis.dp1.models.utils.GraphicsUtils;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
 import com.jfoenix.controls.JFXTextField;
@@ -108,8 +109,11 @@ public class EditController implements Initializable {
         Date date_init = getDate(pckBegin.getValue());
         Date date_end = getDate(pckEnd.getValue());
         
+        GraphicsUtils g = new GraphicsUtils();
+        
         if (date_init.after(date_end)) {
-            this.errorMessage.setText("Fechas ingresadas no válidas.");
+            g.popupError("Error", "Fechas ingresadas no válidas.", "OK");
+            //this.errorMessage.setText("Fechas ingresadas no válidas.");
             return;
         }
         

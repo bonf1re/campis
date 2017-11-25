@@ -16,6 +16,7 @@ import campis.dp1.models.Product;
 import campis.dp1.models.ProductType;
 import campis.dp1.models.SaleConditionType;
 import campis.dp1.models.SaleCondition;
+import campis.dp1.models.utils.GraphicsUtils;
 
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
@@ -175,6 +176,7 @@ public class EditSaleConditionController implements Initializable {
         for (int i = 0; i < listSaleConditionTypes.size(); i++) {
             typeCB.getItems().addAll(listSaleConditionTypes.get(i).getDescription());
         }
+        campaignDates();
         
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -218,7 +220,7 @@ public class EditSaleConditionController implements Initializable {
         }
         
         loadObjectives();
-        campaignDates();
+        
         session.close();
         sessionFactory.close();
 
@@ -396,12 +398,16 @@ public class EditSaleConditionController implements Initializable {
                 
             }
             
+            GraphicsUtils g = new GraphicsUtils();
+            
             if (n_d < n_c) {
-                this.errorMessage.setText("Promoción ingresada no es válida.");
+                g.popupError("Error", "Promoción ingresada no es válida.", "OK");
+                //this.errorMessage.setText("Promoción ingresada no es válida.");
                 return;
             }
             if (date_init.after(date_end)) {
-                this.errorMessage.setText("Fechas ingresadas no válidas.");
+                g.popupError("Error", "Fechas ingresadas no válidas.", "OK");
+                //this.errorMessage.setText("Fechas ingresadas no válidas.");
                 return;
             }
             

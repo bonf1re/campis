@@ -11,6 +11,7 @@ import campis.dp1.models.Product;
 import campis.dp1.models.ProductType;
 import campis.dp1.models.SaleCondition;
 import campis.dp1.models.SaleConditionType;
+import campis.dp1.models.utils.GraphicsUtils;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
@@ -382,6 +383,9 @@ public class CreateSaleConditionController implements Initializable {
             Integer n_d =1, n_c =1;
             Float amount = 0f;
             
+            GraphicsUtils g = new GraphicsUtils();
+            
+            
             setIds(campaignCB.getValue(),typeCB.getValue(),objectiveCB.getValue());
             
             if (amountField.disableProperty().get()){
@@ -392,11 +396,14 @@ public class CreateSaleConditionController implements Initializable {
             }
             
             if (n_d < n_c) {
-                this.errorMessage.setText("Promoción ingresada no es válida.");
+                g.popupError("Error", "Promoción ingresada no es válida.", "OK");
+                //this.errorMessage.setText("Promoción ingresada no es válida.");
                 return;
             }
             if (date_init.after(date_end)) {
-                this.errorMessage.setText("Fechas ingresadas no válidas.");
+                g.popupError("Error", "Fechas ingresadas no válidas.", "OK");
+                
+                //this.errorMessage.setText("Fechas ingresadas no válidas.");
                 return;
             }
             
