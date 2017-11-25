@@ -542,10 +542,11 @@ public class CreateInvoiceController implements Initializable {
 
         String create_date = ro.getCreation_date().toString();
         String delivery_date = ro.getDelivery_date().toString();
-        createPdf(dest, invoice_lines, client, district, create_date, delivery_date);
+        Double freight_data = Invoice.getFreight(aux_id_invoice);
+        createPdf(dest, invoice_lines, client, district, create_date, delivery_date, freight_data);
     }
 
-    public void createPdf(String dest, List<InvoiceLine> invoice_lines, String client, String district_data, String create_date_data, String delivery_date_data) throws IOException, DocumentException {
+    public void createPdf(String dest, List<InvoiceLine> invoice_lines, String client, String district_data, String create_date_data, String delivery_date_data, Double freight_data) throws IOException, DocumentException {
         Document document = new Document();
         PdfWriter.getInstance(document, new FileOutputStream(dest));
         document.open();
@@ -610,8 +611,8 @@ public class CreateInvoiceController implements Initializable {
         table.addCell("Marca");
         table.addCell("Cantidad");
         table.addCell("Monto Unitario");
-        table.addCell("Moncuento");
         table.addCell("Monto Subtotal");
+        table.addCell("Descuento");
         table.addCell("Desto Final");
         Float discount_counter = 0.0f;
         Float subtotal_counter = 0.0f;
@@ -623,6 +624,7 @@ public class CreateInvoiceController implements Initializable {
             table.addCell(invoice_lines.get(i).getQuantity().toString());
             table.addCell(invoice_lines.get(i).getCost().toString());
             Float cost = invoice_lines.get(i).getQuantity() * invoice_lines.get(i).getCost();
+            subtotal_counter += cost;
             table.addCell(cost.toString());
             table.addCell(invoice_lines.get(i).getDiscount().toString());
             table.addCell(invoice_lines.get(i).getFinal_cost().toString());
@@ -642,8 +644,8 @@ public class CreateInvoiceController implements Initializable {
         subtotal.setBorder(Rectangle.NO_BORDER);
         PdfPCell discount = new PdfPCell(new Phrase("S/. " + discount_counter.toString()));
         discount.setBorder(Rectangle.NO_BORDER);
-        Float monto_total = subtotal_counter - discount_counter;
-        PdfPCell freight = new PdfPCell(new Phrase("S/. " ));
+        Double monto_total = subtotal_counter - discount_counter + freight_data;
+        PdfPCell freight = new PdfPCell(new Phrase("S/. " + freight_data.toString()));
         freight.setBorder(Rectangle.NO_BORDER);
         PdfPCell total = new PdfPCell(new Phrase("S/. " + monto_total.toString()));
         total.setBorder(Rectangle.NO_BORDER);
