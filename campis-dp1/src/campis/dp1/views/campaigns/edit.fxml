@@ -29,6 +29,7 @@
             <JFXDatePicker fx:id="pckEnd" layoutX="381.0" layoutY="431.0" prefHeight="26.0" prefWidth="175.0" />
             <JFXTextField fx:id="nameField" layoutX="382.0" layoutY="171.0" />
             <JFXTextArea fx:id="descrField" layoutX="378.0" layoutY="241.0" prefHeight="73.0" prefWidth="225.0" />
+            <Label fx:id="errorMessage" layoutX="219.0" layoutY="486.0" text="Label" textFill="RED" />
          </children>
       </AnchorPane>
    </center>

@@ -25,6 +25,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javax.persistence.Query;
 import org.hibernate.Criteria;
 import org.hibernate.Session;
@@ -60,8 +61,12 @@ public class EditController implements Initializable {
     @FXML
     private JFXTextField nameField;
     
+    @FXML
+    private Label errorMessage;
+    
     @Override
     public void initialize(URL url, ResourceBundle rb) {
+        this.errorMessage.setText("");
         id = ContextFX.getInstance().getId();
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
@@ -102,6 +107,11 @@ public class EditController implements Initializable {
         
         Date date_init = getDate(pckBegin.getValue());
         Date date_end = getDate(pckEnd.getValue());
+        
+        if (date_init.after(date_end)) {
+            this.errorMessage.setText("Fechas ingresadas no válidas.");
+            return;
+        }
         
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");

@@ -27,7 +27,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <JFXComboBox fx:id="campaignCB" editable="true" layoutX="383.0" layoutY="75.0" prefHeight="24.0" prefWidth="172.0" />
+            <JFXComboBox fx:id="campaignCB" editable="true" onAction="#campaignDates" layoutX="383.0" layoutY="75.0" prefHeight="24.0" prefWidth="172.0" />
             <JFXTextField fx:id="amountField" layoutX="381.0" layoutY="234.0" prefHeight="26.0" prefWidth="176.0" />
             <Label layoutX="220.0" layoutY="368.0" text="Fecha de Inicio:" />
 
@@ -49,6 +49,7 @@
             <JFXTextField fx:id="disLabel" alignment="CENTER" layoutX="691.0" layoutY="226.0" prefHeight="26.0" prefWidth="30.0" />
             <JFXTextField fx:id="countLabel" alignment="CENTER" layoutX="729.0" layoutY="226.0" prefHeight="26.0" prefWidth="30.0" />
             <Label layoutX="721.0" layoutY="239.0" text="x" />
+            <Label fx:id="errorMessage" layoutX="219.0" layoutY="483.0" text="Label" textFill="RED" />
          </children>
       </AnchorPane>
    </center>
