@@ -13,15 +13,13 @@ import javafx.beans.property.StringProperty;
  */
 public class RefundDisplay {
     final IntegerProperty id_refund;
-    final IntegerProperty id_complaint;
-    final IntegerProperty id_request_order;
+    final IntegerProperty id_invoice;
     final StringProperty status;
     
     public RefundDisplay(Integer id_refund, Integer id_complaint, String status) {
         this.id_refund = new SimpleIntegerProperty(id_refund);
-        this.id_complaint = new SimpleIntegerProperty(id_complaint);
+        this.id_invoice = new SimpleIntegerProperty(id_complaint);
         this.status = new SimpleStringProperty(status);
-        this.id_request_order = new SimpleIntegerProperty(Complaint.getComplaint(id_complaint).getId_request_order());
     }
 
     /**
@@ -34,8 +32,8 @@ public class RefundDisplay {
     /**
      * @return the id_complaint
      */
-    public IntegerProperty getId_complaint() {
-        return id_complaint;
+    public IntegerProperty getId_invoice() {
+        return id_invoice;
     }
 
     /**
@@ -43,12 +41,5 @@ public class RefundDisplay {
      */
     public StringProperty getStatus() {
         return status;
-    }
-
-    /**
-     * @return the id_request_order
-     */
-    public IntegerProperty getId_request_order() {
-        return id_request_order;
     }
 }

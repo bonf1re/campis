@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import com.jfoenix.controls.JFXComboBox?>
 <?import com.jfoenix.controls.JFXDatePicker?>
 <?import com.jfoenix.controls.JFXTextField?>
 <?import javafx.scene.control.Button?>
@@ -11,11 +10,11 @@
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.text.Font?>
 
-<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.refunds.CreateController">
+<BorderPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="967.0" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.refunds.ViewController">
    <bottom>
       <AnchorPane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="702.0" layoutY="20.0" text="Factura N° :">
+            <Label layoutX="669.0" layoutY="20.0" text="Devolución N° :">
                <font>
                   <Font size="20.0" />
                </font>
@@ -24,8 +23,6 @@
             <JFXTextField fx:id="nameClientField" disable="true" editable="false" layoutX="185.0" layoutY="53.0" prefHeight="25.0" prefWidth="210.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
             <Label layoutX="75.0" layoutY="141.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" text="Fecha Creación:" />
             <JFXDatePicker fx:id="creationDate" disable="true" editable="false" layoutX="185.0" layoutY="132.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
-            <Label layoutX="423.0" layoutY="141.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" text="Fecha Delivery:" />
-            <JFXDatePicker fx:id="deliveryDate" disable="true" editable="false" layoutX="511.0" layoutY="132.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
             <TableView fx:id="tablaProd" layoutX="64.0" layoutY="249.0" prefHeight="248.0" prefWidth="843.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css">
               <columns>
                 <TableColumn fx:id="idColumn" prefWidth="53.0" text="Código" />
@@ -37,26 +34,16 @@
               </columns>
             </TableView>
             <Label layoutX="75.0" layoutY="217.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" text="Productos:" />
-            <Button layoutX="384.0" layoutY="527.0" mnemonicParsing="false" onAction="#goListDepartureMove" prefHeight="35.0" prefWidth="87.0" text="Regresar" />
+            <Button layoutX="423.0" layoutY="527.0" mnemonicParsing="false" onAction="#goListDepartureMove" prefHeight="35.0" prefWidth="87.0" text="Aceptar" />
             <Label layoutX="434.0" layoutY="58.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" text="Código Cliente:" />
             <Label layoutX="75.0" layoutY="183.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" text="Estado:" />
-            <Label layoutX="423.0" layoutY="183.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" text="Prioridad:" />
             <Label fx:id="messageField1" layoutX="271.0" layoutY="165.0" prefHeight="17.0" prefWidth="165.0" textFill="RED" />
             <Label fx:id="messageField2" layoutX="596.0" layoutY="165.0" prefHeight="17.0" prefWidth="165.0" textFill="#fc0000" />
             <Label layoutX="75.0" layoutY="102.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" text="Departamento" />
             <JFXTextField fx:id="clientField" disable="true" editable="false" layoutX="515.0" layoutY="49.0" prefHeight="25.0" prefWidth="52.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
             <JFXTextField fx:id="districtField" disable="true" editable="false" layoutX="164.0" layoutY="93.0" prefHeight="25.0" prefWidth="141.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
             <JFXTextField fx:id="stateField" disable="true" editable="false" layoutX="151.0" layoutY="174.0" prefHeight="25.0" prefWidth="153.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
-            <JFXTextField fx:id="priorityField" disable="true" editable="false" layoutX="513.0" layoutY="174.0" prefHeight="25.0" prefWidth="52.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
-            <Label layoutX="427.0" layoutY="217.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" text="IGV:" />
-            <JFXTextField fx:id="igvField" disable="true" editable="false" layoutX="513.0" layoutY="208.0" prefHeight="25.0" prefWidth="52.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
-            <JFXComboBox fx:id="cbRequestOrderId" layoutX="822.0" layoutY="20.0" prefHeight="26.0" prefWidth="65.0" />
-            <Button layoutX="541.0" layoutY="527.0" mnemonicParsing="false" onAction="#goCreateRefund" prefHeight="35.0" prefWidth="87.0" text="Grabar" />
-            <Label layoutX="63.0" layoutY="20.0" text="Devolución">
-               <font>
-                  <Font size="20.0" />
-               </font>
-            </Label>
+            <JFXTextField fx:id="cbRequestOrderId" disable="true" editable="false" layoutX="830.0" layoutY="23.0" prefHeight="25.0" prefWidth="52.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
          </children>
       </AnchorPane>
    </bottom>

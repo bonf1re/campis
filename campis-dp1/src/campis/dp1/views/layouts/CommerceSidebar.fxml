@@ -12,10 +12,7 @@
       <JFXButton fx:id="supButton" onAction="#goListSupplier" prefHeight="42.0" prefWidth="110.0" styleClass="option" text="Proveedor" textAlignment="CENTER" />
       <JFXButton fx:id="curButton" onAction="#goCurrencyIGV" prefWidth="110.0" styleClass="option" text="Tipos de Cambio e IGV" textAlignment="CENTER" wrapText="true" />
       <JFXButton fx:id="freButton" onAction="#goListFreights" prefHeight="46.0" prefWidth="110.0" styleClass="option" text="Flete" />
-      <JFXButton fx:id="comButton" onAction="#goListComplaint" prefHeight="46.0" prefWidth="110.0" styleClass="option" text="Reclamos" />
       <JFXButton fx:id="refButton" onAction="#goListRefund" prefHeight="46.0" prefWidth="110.0" styleClass="option" text="Devoluc." />
-      <JFXButton fx:id="invButton" onAction="#goListInvoices" layoutX="10.0" layoutY="446.0" prefHeight="46.0" prefWidth="110.0" styleClass="option" text="Facturación" />
+      <JFXButton fx:id="invButton" layoutX="10.0" layoutY="446.0" onAction="#goListInvoices" prefHeight="46.0" prefWidth="110.0" styleClass="option" text="Facturación" />
    </children>
 </VBox>
-
-
