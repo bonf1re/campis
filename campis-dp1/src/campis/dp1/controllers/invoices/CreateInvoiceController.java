@@ -6,11 +6,27 @@
 package campis.dp1.controllers.invoices;
 
 import campis.dp1.Main;
+import com.itextpdf.text.Document;
+import campis.dp1.models.Client;
+import java.io.File;
+import campis.dp1.models.District;
+import campis.dp1.models.Product;
+import java.io.FileOutputStream;
 import campis.dp1.models.Invoice;
 import campis.dp1.models.InvoiceLine;
 import campis.dp1.models.Delivery;
+import campis.dp1.models.DispatchOrder;
 import campis.dp1.models.DispatchOrderLine;
+import campis.dp1.models.RequestOrder;
 import campis.dp1.models.RequestOrderLine;
+import com.itextpdf.text.DocumentException;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.JFXComboBox;
 import java.io.IOException;
 import java.net.URL;
@@ -49,7 +65,7 @@ public class CreateInvoiceController implements Initializable {
     private ObservableList<Delivery> deliveries;
     private Integer selected_del; 
     private String selected_type; 
-    
+    private Integer aux_id_invoice;
     /**
      * Initializes the controller class.
      */
@@ -136,7 +152,7 @@ public class CreateInvoiceController implements Initializable {
     }
     
      @FXML
-    private void insertInvoice(ActionEvent event) throws IOException {
+    private void insertInvoice(ActionEvent event) throws IOException, DocumentException {
         
         //Cuando creas la factura de verias marcar como facturada esa guia de remision
            
@@ -232,7 +248,7 @@ public class CreateInvoiceController implements Initializable {
             List<Object[]> rows6 = qry6.list();
             
             System.out.println("campis.dp1.controllers.invoices.CreateInvoiceController.insertInvoice()");          
-            Integer aux_id_invoice = 0;
+            aux_id_invoice = 0;
             for (Object[] row : rows6) {
                 aux_id_invoice = Integer.parseInt(row[0].toString());
                 System.out.println("Factura: " + row[0].toString());
@@ -318,7 +334,7 @@ public class CreateInvoiceController implements Initializable {
             session.getTransaction().commit();
             session.close();
             sessionFactory.close();
-            
+            createInvoicePdf();
             this.goListInvoices(event);
         }
     }
@@ -339,5 +355,146 @@ public class CreateInvoiceController implements Initializable {
     private void goListInvoices(ActionEvent event) throws IOException {
         main.showListInvoice();
     }
-    
+
+    public void createInvoicePdf() throws IOException, DocumentException {
+        String dest = "reports/invoices/FACTURA_" + aux_id_invoice  + ".pdf";
+        File file = new File(dest);
+
+        List<InvoiceLine> invoice_lines =  Invoice.getInvoiceLines(aux_id_invoice);
+        Integer id_ro = Invoice.getIdDispatchOrder(aux_id_invoice);
+        RequestOrder ro = RequestOrder.getRO(DispatchOrder.getRequestOrder(id_ro));
+        String client = Client.getName(ro.getId_client());
+        String district = District.getName(ro.getId_district());
+
+        String create_date = ro.getCreation_date().toString();
+        String delivery_date = ro.getDelivery_date().toString();
+        createPdf(dest, invoice_lines, client, district, create_date, delivery_date);
+    }
+
+    public void createPdf(String dest, List<InvoiceLine> invoice_lines, String client, String district_data, String create_date_data, String delivery_date_data) throws IOException, DocumentException {
+        Document document = new Document();
+        PdfWriter.getInstance(document, new FileOutputStream(dest));
+        document.open();
+        Font smallfont = new Font(FontFamily.HELVETICA, 10);
+        PdfPCell blank = new PdfPCell(new Phrase(""));
+        blank.setBorder(Rectangle.NO_BORDER);
+
+        PdfPTable titulo = new PdfPTable(1);
+        titulo.setTotalWidth(new float[]{ 160 });
+        titulo.setLockedWidth(true);
+        PdfPCell cell = new PdfPCell(new Phrase("FACTURA"));
+        cell.setFixedHeight(30);
+        cell.setBorder(Rectangle.NO_BORDER);
+        titulo.addCell(cell);
+
+        PdfPTable info = new PdfPTable(5);
+
+        PdfPCell nombre_cli_label = new PdfPCell(new Phrase("Nombre del Cliente:"));
+        nombre_cli_label.setBorder(Rectangle.NO_BORDER);
+        PdfPCell address_dispatch_label = new PdfPCell(new Phrase("Dirección de Despacho:"));
+        address_dispatch_label.setBorder(Rectangle.NO_BORDER);
+        PdfPCell create_date_label = new PdfPCell(new Phrase("Fecha de Creación:"));
+        create_date_label.setBorder(Rectangle.NO_BORDER);
+        PdfPCell district_label = new PdfPCell(new Phrase("Distrito:"));
+        district_label.setBorder(Rectangle.NO_BORDER);
+        PdfPCell delivery_date_label = new PdfPCell(new Phrase("Fecha Delivery:"));
+        delivery_date_label.setBorder(Rectangle.NO_BORDER);
+        PdfPCell igv_label = new PdfPCell(new Phrase("IGV:"));
+        igv_label.setBorder(Rectangle.NO_BORDER);
+        
+        PdfPCell nombre_cli = new PdfPCell(new Phrase(client));
+        nombre_cli.setBorder(Rectangle.NO_BORDER);
+        PdfPCell create_date = new PdfPCell(new Phrase(create_date_data));
+        create_date.setBorder(Rectangle.NO_BORDER);
+        PdfPCell district = new PdfPCell(new Phrase(district_data));
+        district.setBorder(Rectangle.NO_BORDER);
+        PdfPCell delivery_date = new PdfPCell(new Phrase(delivery_date_data));
+        delivery_date.setBorder(Rectangle.NO_BORDER);
+        PdfPCell igv = new PdfPCell(new Phrase("0.19"));
+        igv.setBorder(Rectangle.NO_BORDER);
+
+        info.addCell(nombre_cli_label);
+        info.addCell(nombre_cli);
+        info.addCell(blank);
+        info.addCell(district_label);
+        info.addCell(district);
+
+        info.addCell(create_date_label);
+        info.addCell(create_date);
+        info.addCell(blank);
+        info.addCell(delivery_date_label);
+        info.addCell(delivery_date);
+
+        info.addCell(igv_label);
+        info.addCell(igv);
+        info.addCell(blank);
+        info.addCell(blank);
+        info.addCell(blank);
+            
+        PdfPTable table = new PdfPTable(7);
+        table.addCell("Nombre");
+        table.addCell("Marca");
+        table.addCell("Cantidad");
+        table.addCell("Monto Unitario");
+        table.addCell("Moncuento");
+        table.addCell("Monto Subtotal");
+        table.addCell("Desto Final");
+        Float discount_counter = 0.0f;
+        Float subtotal_counter = 0.0f;
+        for(int i = 0; i < invoice_lines.size(); i++) {
+            Product pro = Product.getProduct(invoice_lines.get(i).getId_product());
+            discount_counter += invoice_lines.get(i).getDiscount();
+            table.addCell(pro.getName());
+            table.addCell(pro.getTrademark());
+            table.addCell(invoice_lines.get(i).getQuantity().toString());
+            table.addCell(invoice_lines.get(i).getCost().toString());
+            Float cost = invoice_lines.get(i).getQuantity() * invoice_lines.get(i).getCost();
+            table.addCell(cost.toString());
+            table.addCell(invoice_lines.get(i).getDiscount().toString());
+            table.addCell(invoice_lines.get(i).getFinal_cost().toString());
+        }
+
+        PdfPTable totales = new PdfPTable(6);
+        PdfPCell subtotal_label = new PdfPCell(new Phrase("Subtotal:"));
+        subtotal_label.setBorder(Rectangle.NO_BORDER);
+        PdfPCell discount_label = new PdfPCell(new Phrase("Descuento:"));
+        discount_label.setBorder(Rectangle.NO_BORDER);
+        PdfPCell freight_label = new PdfPCell(new Phrase("Flete:"));
+        freight_label.setBorder(Rectangle.NO_BORDER);
+        PdfPCell total_label = new PdfPCell(new Phrase("Total:"));
+        total_label.setBorder(Rectangle.NO_BORDER);
+
+        PdfPCell subtotal = new PdfPCell(new Phrase("S/. " + subtotal_counter.toString()));
+        subtotal.setBorder(Rectangle.NO_BORDER);
+        PdfPCell discount = new PdfPCell(new Phrase("S/. " + discount_counter.toString()));
+        discount.setBorder(Rectangle.NO_BORDER);
+        Float monto_total = subtotal_counter - discount_counter;
+        PdfPCell freight = new PdfPCell(new Phrase("S/. " ));
+        freight.setBorder(Rectangle.NO_BORDER);
+        PdfPCell total = new PdfPCell(new Phrase("S/. " + monto_total.toString()));
+        total.setBorder(Rectangle.NO_BORDER);
+
+        blank.setColspan(4);
+        totales.addCell(blank);
+        totales.addCell(subtotal_label);
+        totales.addCell(subtotal);
+
+        totales.addCell(blank);
+        totales.addCell(discount_label);
+        totales.addCell(discount);
+
+        totales.addCell(blank);
+        totales.addCell(freight_label);
+        totales.addCell(freight);
+
+        totales.addCell(blank);
+        totales.addCell(total_label);
+        totales.addCell(total);
+
+        document.add(titulo);
+        document.add(info);
+        document.add(table);
+        document.add(totales);
+        document.close();
+    }
 }
