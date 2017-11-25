@@ -503,6 +503,7 @@ public class EntryMoveSpecialCreateController implements Initializable {
         
         Criteria criteria = session.createCriteria(WarehouseZone.class);
         criteria.add(Restrictions.eq("free",true));
+        criteria.add(Restrictions.eq("id_warehouse",this.id_warehouse));
         List zones = criteria.list();
         
         criteria = session.createCriteria(Area.class);

@@ -783,6 +783,7 @@ public class RefundEntryCreateController implements Initializable {
         session.beginTransaction();
         Criteria criteria = session.createCriteria(WarehouseZone.class);
         criteria.add(Restrictions.eq("free",true));
+        criteria.add(Restrictions.eq("id_warehouse",this.id_warehouse));
         List zones = criteria.list();
         
         for (int i = 0; i < zones.size(); i++) {
