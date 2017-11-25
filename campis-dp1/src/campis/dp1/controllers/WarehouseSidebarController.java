@@ -33,7 +33,7 @@ public class WarehouseSidebarController implements Initializable {
     private JFXButton tipoProductButton;
     
     @FXML
-    private JFXButton entriesButton;
+    private JFXButton enttriesButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -42,12 +42,15 @@ public class WarehouseSidebarController implements Initializable {
             View whView = View.getView("warehouse");
             View productView = View.getView("products");
             View ptView = View.getView("product_types");
+            View entryView = View.getView("entries_warehouse");
             if (!Permission.canVisualize(id_role, whView.getId_view()))
                 whButton.setVisible(false);
             if (!Permission.canVisualize(id_role, productView.getId_view()))
                 productButton.setVisible(false);
             if (!Permission.canVisualize(id_role, ptView.getId_view()))
                 tipoProductButton.setVisible(false);
+            if (!Permission.canVisualize(id_role, entryView.getId_view()))
+                enttriesButton.setVisible(false);
         } catch(NullPointerException e) {
         }
     }
