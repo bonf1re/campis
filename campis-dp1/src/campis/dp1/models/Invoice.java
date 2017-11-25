@@ -5,6 +5,16 @@
  */
 package campis.dp1.models;
 
+import java.math.BigDecimal;
+import java.util.ArrayList;
+import java.util.List;
+import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
+import org.hibernate.Session;
+import org.hibernate.SessionFactory;
+import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
+
 /**
  *
  * @author Gina Bustamante
@@ -15,6 +25,8 @@ public class Invoice {
     private Integer id_dispatch_order;
     private Integer id_type;
     private Double total;
+    private Double igv;
+    private Double freight;
     
      public Invoice(){
         super();
@@ -25,12 +37,16 @@ public class Invoice {
         this.id_dispatch_order = id_dispatch_order;
         this.id_type = id_type;
         this.total = total;
+        this.igv = 0.0;
+        this.freight = 0.0;
     }
       
     public Invoice(Integer id_dispatch_order, Integer id_type, Double total){
         this.id_dispatch_order = id_dispatch_order;
         this.id_type = id_type;
         this.total = total;
+        this.igv = 0.0;
+        this.freight = 0.0;
     }
 
     /**
@@ -89,4 +105,78 @@ public class Invoice {
         this.total = total;
     }
     
+    public static Invoice getInvoice(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Invoice.class);
+        criteria.add(Restrictions.eq("id_invoice",cod));
+        String descrip;
+        List rsMeasure = criteria.list();
+        Invoice result = (Invoice)rsMeasure.get(0);
+        session.close();
+        sessionFactory.close();
+
+        return result;
+    }
+
+    public static List<InvoiceLine> getInvoiceLines(Integer id) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(InvoiceLine.class)
+                .add(Restrictions.eq("id_invoice", id));
+
+        ArrayList<InvoiceLine> request_ordes_lines = new ArrayList<>(criteria.list());
+        session.close();
+        sessionFactory.close();
+
+        return request_ordes_lines;
+    }
+
+    public static Integer getIdDispatchOrder(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String queryStr = "select id_dispatch_order\n" +
+                            "from campis.invoice\n" +
+                            " WHERE id_invoice =" + cod;
+        SQLQuery query = session.createSQLQuery(queryStr);
+        List list = query.list();
+        Integer returnable = (Integer) list.get(0);
+
+        session.close();
+        sessionFactory.close();
+
+        return returnable;
+    }
+
+    public static Double getFreight(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String queryStr = "select freight\n" +
+                            "from campis.invoice\n" +
+                            " WHERE id_invoice =" + cod;
+        SQLQuery query = session.createSQLQuery(queryStr);
+        List list = query.list();
+        Double returnable = ((BigDecimal) list.get(0)).doubleValue();
+
+        session.close();
+        sessionFactory.close();
+
+        return returnable;
+    }
 }
