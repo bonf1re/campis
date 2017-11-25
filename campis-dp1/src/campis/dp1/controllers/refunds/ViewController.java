@@ -12,6 +12,7 @@ import campis.dp1.models.InvoiceLine;
 import campis.dp1.models.InvoiceLineDisplay;
 import campis.dp1.models.Refund;
 import campis.dp1.models.RefundLine;
+import campis.dp1.models.RequestOrder;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
 import java.net.URL;
@@ -26,6 +27,8 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import javafx.scene.control.cell.TextFieldTableCell;
+import javafx.util.StringConverter;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -96,15 +99,105 @@ public class ViewController implements Initializable {
         Session s2 = sessionF2.openSession();
         s2.beginTransaction();
         Criteria criteria = s2.createCriteria(Invoice.class);
+        criteria.add(Restrictions.eq("id_invoice", idref));
         this.listInvoice = new ArrayList<>(criteria.list());
         try {
             setupCbRefundId(idref);
-            //setupFields(s2);
+            setupFields(s2);
         } catch (Exception e) {
             e.printStackTrace();
         }
         s2.close();
         sessionF2.close();
+    }
+    
+    private String getNameCli(Integer id_dispatch_order, Session session) {
+        Query query = session.createSQLQuery("SELECT id_request_order FROM campis.dispatch_order WHERE id_dispatch_order = " + id_dispatch_order);
+        Integer id_request_order = (Integer) query.list().get(0);
+        Query query2 = session.createSQLQuery("SELECT id_client FROM campis.request_order WHERE id_request_order = " + id_request_order);
+        Integer id_client = (Integer) query2.list().get(0);
+        Query query3 = session.createSQLQuery("SELECT name FROM campis.client WHERE id_client = " + id_client);
+        String name = (String) query3.list().get(0);
+        return name;
+    }
+
+    private Integer getIdCli(Integer id_dispatch_order, Session session) {
+        Query query = session.createSQLQuery("SELECT id_request_order FROM campis.dispatch_order WHERE id_dispatch_order = " + id_dispatch_order);
+        Integer id_request_order = (Integer) query.list().get(0);
+        Query query2 = session.createSQLQuery("SELECT id_client FROM campis.request_order WHERE id_request_order = " + id_request_order);
+        Integer id_client = (Integer) query2.list().get(0);
+        return id_client;
+    }
+    
+    private String getNameDistric(int id_dispatch_order, Session session) {
+        Query query = session.createSQLQuery("SELECT id_request_order FROM campis.dispatch_order WHERE id_dispatch_order = " + id_dispatch_order);
+        Integer id_request_order = (Integer) query.list().get(0);
+        Query query2 = session.createSQLQuery("SELECT id_district FROM campis.request_order WHERE id_request_order = " + id_request_order);
+        Integer id_district = (Integer) query2.list().get(0);
+        String qryStr = "SELECT name FROM campis.district WHERE id_district=" + id_district;
+        SQLQuery query3 = session.createSQLQuery(qryStr);
+        List list = query3.list();
+        String returnable = (String) list.get(0);
+        return returnable;
+    }
+    
+    private List<RequestOrder> getRequestOrder(int cod, Session session) {
+        Query query = session.createSQLQuery("SELECT id_request_order FROM campis.dispatch_order WHERE id_dispatch_order = " + cod);
+        Integer id_request_order = (Integer) query.list().get(0);
+        Criteria criteria = session.createCriteria(RequestOrder.class);
+        criteria.add(Restrictions.eq("id_request_order", id_request_order));
+        List<RequestOrder> rsRequestLine = criteria.list();
+        return rsRequestLine;
+    }
+    
+    private void setupFields(Session session) {
+        this.selected_quantity = 1;
+        tablaProd.getSelectionModel().selectedItemProperty().addListener(
+            (observable, oldValue, newValue) -> {
+                if (newValue == null) {
+                    return;
+                }
+                this.selected_quantity = newValue.getQuantity().getValue().intValue();
+                System.out.println("kshakdjaskjasdsadas"+selected_quantity);
+                }
+            );
+        List<InvoiceLine> list = getInvoiceLine(id, session);
+        Invoice invo = this.invoice;
+        List<RequestOrder> request2 = getRequestOrder(invo.getId_dispatch_order(), session);
+        RequestOrder request = request2.get(0);
+        String nameCli = getNameCli(invo.getId_dispatch_order(), session);
+        distr = getNameDistric(invo.getId_dispatch_order(), session);
+        Integer idCli = getIdCli(invo.getId_dispatch_order(), session);
+        this.nameClientField.setText(nameCli);
+        this.clientField.setText(Integer.toString(idCli));
+        this.creationDate.setValue(request.getCreation_date().toLocalDateTime().toLocalDate());
+        this.stateField.setText("Por Ingresar");
+        this.districtField.setText(distr);
+        idColumn.setCellValueFactory(cellData -> cellData.getValue().getId_product().asObject());
+        nameColumn.setCellValueFactory(cellData -> cellData.getValue().getNameproduct());
+        typeColumn.setCellValueFactory(cellData -> cellData.getValue().getTypeproduct());
+        totalQtColumn.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
+        refundQtColumn.setCellValueFactory(cellData -> cellData.getValue().getQtRef().asObject());
+        refundMaxQtColumn.setCellValueFactory(cellData -> cellData.getValue().getQtRefMax().asObject());
+        refundQtColumn.setCellFactory(
+                TextFieldTableCell.<InvoiceLineDisplay,Integer>forTableColumn(new StringConverter<Integer>(){
+                    @Override
+                    public String toString(Integer value) {
+                        if ((selected_quantity > -1 && selected_quantity < value) || (value < 0))
+                            return "0";
+                        return value.toString();
+                    }
+                    @Override
+                    public Integer fromString(String string) {
+                        return Integer.parseInt(string);
+                    }
+                }));
+
+                refundQtColumn.setCellValueFactory(
+                    cellData->cellData.getValue().getQtRef().asObject()
+                );
+        this.tablaProd.setEditable(true);
+        loadData(session);
     }
     
     private Invoice getInvoice(int idref){
