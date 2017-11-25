@@ -6,16 +6,23 @@
 package campis.dp1.controllers.invoices;
 
 import campis.dp1.Main;
+import campis.dp1.controllers.suppliers.ListController;
 import campis.dp1.models.Invoice;
 import campis.dp1.models.InvoiceLine;
 import campis.dp1.models.Delivery;
+import campis.dp1.models.DeliveryDisplay;
 import campis.dp1.models.DispatchOrderLine;
+import campis.dp1.models.DispatchOrderLineDisplay;
 import campis.dp1.models.RequestOrderLine;
 import com.jfoenix.controls.JFXComboBox;
 import java.io.IOException;
 import java.net.URL;
+import java.sql.SQLException;
 import java.util.List;
+import java.util.Objects;
 import java.util.ResourceBundle;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javafx.beans.value.ObservableValue;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
@@ -23,6 +30,8 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -47,8 +56,27 @@ public class CreateInvoiceController implements Initializable {
     private JFXComboBox<String> deliveryCb;
     
     private ObservableList<Delivery> deliveries;
+    private ObservableList<DispatchOrderLine> do_lines;
+    private ObservableList<DispatchOrderLineDisplay> do_linesView;
     private Integer selected_del; 
+    private Integer selected_do; 
     private String selected_type; 
+    
+    @FXML
+    private TableView<DispatchOrderLineDisplay> tableDelivery;
+    @FXML
+    private TableColumn<DispatchOrderLineDisplay, Integer> idCol;
+    @FXML
+    private TableColumn<DispatchOrderLineDisplay, String> prodCol;
+    @FXML
+    private TableColumn<DispatchOrderLineDisplay, Integer> cantCol;
+    @FXML
+    private TableColumn<DispatchOrderLineDisplay, String> unitCol;
+    @FXML
+    private TableColumn<DispatchOrderLineDisplay, Double> weigthCol;
+    
+    private ObservableList<Delivery> delievries;
+    private ObservableList<DeliveryDisplay> deliveriesView;
     
     /**
      * Initializes the controller class.
@@ -56,13 +84,21 @@ public class CreateInvoiceController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         setUpDeliveryCb();
-       
+        
+        setupDeliveriesTable();
+
         typeCb.getItems().add("Boleta");
         typeCb.getItems().add("Factura");
         
         deliveryCb.getSelectionModel().selectedItemProperty().addListener( (ObservableValue<? extends String> options, String oldValue, String newValue) -> {
             System.out.println(newValue);
-            this.selected_del = Integer.parseInt(newValue);         
+            this.selected_del = Integer.parseInt(newValue);     
+            
+            try {
+                loadData_deliveries();
+            } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(ListController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }); 
         
         typeCb.getSelectionModel().selectedItemProperty().addListener( (ObservableValue<? extends String> options, String oldValue, String newValue) -> {
@@ -70,9 +106,79 @@ public class CreateInvoiceController implements Initializable {
             this.selected_type = newValue;         
         }); 
         
-    }  
+    }
     
-     @FXML
+    private void setupDeliveriesTable() {
+        idCol.setCellValueFactory(cellData -> cellData.getValue().id_dispatch_order_lineProperty().asObject());
+        prodCol.setCellValueFactory(cellData -> cellData.getValue().product_nameProperty());
+        cantCol.setCellValueFactory(cellData -> cellData.getValue().quantityProperty().asObject());
+        unitCol.setCellValueFactory(cellData -> cellData.getValue().unit_of_measure_nameProperty());
+        weigthCol.setCellValueFactory(cellData -> cellData.getValue().weigthProperty().asObject());       
+    }
+    
+    private void loadData_deliveries() throws SQLException, ClassNotFoundException {
+//        //Obtenemos el dispatch order
+//        for (int i = 0; i < this.delievries.size(); i++) {
+//            if (Objects.equals(this.selected_del, this.delievries.get(i).getId_delivery())) {
+//                this.selected_do = this.delievries.get(i).getId_dispatch_order();
+//            }
+//        }
+//       
+//        //Obtenemos las lineas de las ordenes de despacho
+//        this.do_lines = getDispatchOrderLines(this.selected_do);
+//        
+//        //llenamos la tabla con las líneas de la orden de despacho
+//        ObservableList<DispatchOrderLineDisplay>  delieveriesView = FXCollections.observableArrayList();
+//        
+//        for (int i = 0; i < this.do_lines.size(); i++) {
+//            DispatchOrderLine aux = this.do_lines.get(i);
+//            
+//            //String nombProd = getNameProd(aux.getId_prod()); 
+//            Integer unid  = 0;
+//            String nombProd = "test";
+//            String unid_name = " ";
+//            double w = 0.0;
+//            
+//            DispatchOrderLineDisplay d = new DispatchOrderLineDisplay(aux.getId_dispatch_order_line(), 
+//                                                                     aux.getId_dispatch_order(), 
+//                                                                     aux.getId_prod(), nombProd, aux.getQuantity(), 
+//                                                                     unid, unid_name, w, aux.isDelivered());
+
+            
+            //deliveriesView.add(d);
+//        }
+        
+    }    
+    
+     private ObservableList<DispatchOrderLine> getDispatchOrderLines(int aux_id_do) {
+         //Enlistamos las dispatch order lines
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr3 = "SELECT * FROM campis.dispatch_order_line WHERE id_dispatch_order = " + aux_id_do;
+        SQLQuery qry3 = session.createSQLQuery(qryStr3);
+        List<Object[]> rows3 = qry3.list();
+        ObservableList<DispatchOrderLine> do_lines = FXCollections.observableArrayList();
+
+        for (Object[] row : rows3) {
+            DispatchOrderLine sup = new DispatchOrderLine(Integer.parseInt(row[0].toString()),
+                                        Integer.parseInt(row[1].toString()),
+                                        Integer.parseInt(row[2].toString()),
+                                        Integer.parseInt(row[3].toString()));
+            do_lines.add(sup);
+
+        }
+        
+        session.close();
+        sessionFactory.close();
+        
+        return do_lines;
+     }
+     
+    @FXML
     private void setUpDeliveryCb() {
        this.deliveries = getDeliveries();
        
@@ -218,10 +324,16 @@ public class CreateInvoiceController implements Initializable {
             
             //Una vez que tenemos todo, insertamos la factura en la tabla factura
             Integer type = getType(this.selected_type);
-            
+            Float freigth  = getFreigth();
+              
             Invoice i = new Invoice(aux_id_do, type, 0.0); //El total inicialmente en 0
+            
+            Double igv = i.getTotal()*0.18;
+            
             String qryStr5 = "INSERT INTO campis.invoice VALUES(DEFAULT,'" + i.getId_dispatch_order()+ "',"
                     + "'"+i.getId_type()+"',"
+                    + "'"+freigth+"',"
+                    + "'"+igv+"',"
                     + "'"+i.getTotal()+"')";
             SQLQuery qry5 = session.createSQLQuery(qryStr5);
             qry5.executeUpdate();
@@ -321,6 +433,63 @@ public class CreateInvoiceController implements Initializable {
             
             this.goListInvoices(event);
         }
+    }
+    
+    private float getFreigth(){
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();  
+        
+        //Obetenemos el id de la orden de despacho
+        String qryStr = "SELECT * FROM campis.delivery WHERE id_delivery = " + this.selected_del;
+        SQLQuery qry = session.createSQLQuery(qryStr);
+        List<Object[]> rows = qry.list();
+
+        System.out.println("campis.dp1.controllers.invoices.CreateInvoiceController.insertInvoice()");          
+        Integer aux_id_do = 0;
+        for (Object[] row : rows) {
+            aux_id_do = Integer.parseInt(row[3].toString());
+            System.out.println("Orden de despacho: " + row[3].toString());
+        }
+
+        //Obtenemos el id de la orden de venta
+        String qryStr2 = "SELECT * FROM campis.dispatch_order WHERE id_dispatch_order = " + aux_id_do;
+        SQLQuery qry2 = session.createSQLQuery(qryStr2);
+        List<Object[]> rows2 = qry2.list();
+
+        System.out.println("campis.dp1.controllers.invoices.CreateInvoiceController.insertInvoice()");          
+        Integer aux_id_ro = 0;
+        Integer freigth = 0;
+        for (Object[] row : rows2) {
+            aux_id_ro = Integer.parseInt(row[1].toString());
+            System.out.println("Orden de venta: " + row[1].toString());
+        }
+        
+         //Listamos las lineas de la orden de venta
+        String qryStr4 = "SELECT * FROM campis.request_order WHERE id_request_order = " + aux_id_ro;
+        SQLQuery qry4 = session.createSQLQuery(qryStr4);
+        List<Object[]> rows4 = qry4.list();
+//        ObservableList<RequestOrderLine> ro_lines = FXCollections.observableArrayList();
+//
+//        System.out.println("campis.dp1.controllers.invoices.CreateInvoiceController.insertInvoice()");
+//        System.out.println(rows4.size());
+        
+        float fre = 0;
+        
+        for (Object[] row : rows4) {
+            fre = Float.parseFloat(row[11].toString());
+            System.out.println("freight: " + row[11].toString());
+        }
+            
+        
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
+        
+        return fre;
     }
     
     private int getType(String type){
