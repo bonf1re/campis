@@ -165,6 +165,7 @@ public class SelectRequest4Dispatch implements Initializable{
             s2.beginTransaction();
             List<RequestOrderLine> list = getReqOrdLine(id,s2);
             loadData(list,s2);
+            setupFields(s2);
             s2.close();
             sessionF2.close();
             }

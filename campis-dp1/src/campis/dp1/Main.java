@@ -845,5 +845,12 @@ public class Main extends Application {
         mainLayout.setCenter(selectreqorder);
     }
 
+    public static void showSelectRefund4Entry() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/warehouse/selectRefund.fxml"));
+        BorderPane selectreqorder = loader.load();
+        mainLayout.setCenter(selectreqorder);
+    }
+
     
 }
