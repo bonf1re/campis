@@ -10,7 +10,8 @@ import campis.dp1.controllers.suppliers.ListController;
 import campis.dp1.models.Invoice;
 import campis.dp1.models.InvoiceLine;
 import campis.dp1.models.Delivery;
-import campis.dp1.models.DeliveryDisplay;
+import campis.dp1.models.Product;
+import campis.dp1.models.UnitOfMeasure;
 import campis.dp1.models.DispatchOrderLine;
 import campis.dp1.models.DispatchOrderLineDisplay;
 import campis.dp1.models.RequestOrderLine;
@@ -32,6 +33,7 @@ import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
+import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -57,7 +59,7 @@ public class CreateInvoiceController implements Initializable {
     
     private ObservableList<Delivery> deliveries;
     private ObservableList<DispatchOrderLine> do_lines;
-    private ObservableList<DispatchOrderLineDisplay> do_linesView;
+    private ObservableList<DispatchOrderLineDisplay>  delieveriesView;
     private Integer selected_del; 
     private Integer selected_do; 
     private String selected_type; 
@@ -73,18 +75,15 @@ public class CreateInvoiceController implements Initializable {
     @FXML
     private TableColumn<DispatchOrderLineDisplay, String> unitCol;
     @FXML
-    private TableColumn<DispatchOrderLineDisplay, Double> weigthCol;
-    
-    private ObservableList<Delivery> delievries;
-    private ObservableList<DeliveryDisplay> deliveriesView;
+    private TableColumn<DispatchOrderLineDisplay, Float> weigthCol;
+
     
     /**
      * Initializes the controller class.
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        setUpDeliveryCb();
-        
+        setUpDeliveryCb();      
         setupDeliveriesTable();
 
         typeCb.getItems().add("Boleta");
@@ -117,38 +116,42 @@ public class CreateInvoiceController implements Initializable {
     }
     
     private void loadData_deliveries() throws SQLException, ClassNotFoundException {
-//        //Obtenemos el dispatch order
-//        for (int i = 0; i < this.delievries.size(); i++) {
-//            if (Objects.equals(this.selected_del, this.delievries.get(i).getId_delivery())) {
-//                this.selected_do = this.delievries.get(i).getId_dispatch_order();
-//            }
-//        }
-//       
-//        //Obtenemos las lineas de las ordenes de despacho
-//        this.do_lines = getDispatchOrderLines(this.selected_do);
-//        
-//        //llenamos la tabla con las líneas de la orden de despacho
-//        ObservableList<DispatchOrderLineDisplay>  delieveriesView = FXCollections.observableArrayList();
-//        
-//        for (int i = 0; i < this.do_lines.size(); i++) {
-//            DispatchOrderLine aux = this.do_lines.get(i);
-//            
-//            //String nombProd = getNameProd(aux.getId_prod()); 
-//            Integer unid  = 0;
-//            String nombProd = "test";
-//            String unid_name = " ";
-//            double w = 0.0;
-//            
-//            DispatchOrderLineDisplay d = new DispatchOrderLineDisplay(aux.getId_dispatch_order_line(), 
-//                                                                     aux.getId_dispatch_order(), 
-//                                                                     aux.getId_prod(), nombProd, aux.getQuantity(), 
-//                                                                     unid, unid_name, w, aux.isDelivered());
+        //Obtenemos el dispatch order
+        for (int i = 0; i < this.deliveries.size(); i++) {
+            if (Objects.equals(this.selected_del, this.deliveries.get(i).getId_delivery())) {
+                this.selected_do = this.deliveries.get(i).getId_dispatch_order();
+            }
+        }
+       
+        //Obtenemos las lineas de las ordenes de despacho
+        this.do_lines = getDispatchOrderLines(this.selected_do);
+        
+        //llenamos la tabla con las líneas de la orden de despacho
+        delieveriesView = FXCollections.observableArrayList();
+        
+        for (int i = 0; i < this.do_lines.size(); i++) {
+            DispatchOrderLine aux = this.do_lines.get(i);
+            
+            Product aux_prod = Product.getProduct(aux.getId_prod());
+            
+            String nombProd = aux_prod.getName();
+            Float w = aux_prod.getWeight()*aux.getQuantity();
+            Integer unid  = aux_prod.getId_unit_of_measure();
+            String unid_name = UnitOfMeasure.getName(unid);
+            
+            DispatchOrderLineDisplay d = new DispatchOrderLineDisplay(aux.getId_dispatch_order_line(), 
+                                                                     aux.getId_dispatch_order(), 
+                                                                     aux.getId_prod(), nombProd, aux.getQuantity(), 
+                                                                     unid, unid_name, w, aux.isDelivered());
 
             
-            //deliveriesView.add(d);
-//        }
+            delieveriesView.add(d);
+        }
         
+        this.tableDelivery.setItems(null);
+        this.tableDelivery.setItems(delieveriesView);
     }    
+    
     
      private ObservableList<DispatchOrderLine> getDispatchOrderLines(int aux_id_do) {
          //Enlistamos las dispatch order lines
