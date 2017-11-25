@@ -14,5 +14,8 @@
       <JFXButton fx:id="freButton" onAction="#goListFreights" prefHeight="46.0" prefWidth="110.0" styleClass="option" text="Flete" />
       <JFXButton fx:id="comButton" onAction="#goListComplaint" prefHeight="46.0" prefWidth="110.0" styleClass="option" text="Reclamos" />
       <JFXButton fx:id="refButton" onAction="#goListRefund" prefHeight="46.0" prefWidth="110.0" styleClass="option" text="Devoluc." />
+      <JFXButton fx:id="invButton" onAction="#goListInvoices" layoutX="10.0" layoutY="446.0" prefHeight="46.0" prefWidth="110.0" styleClass="option" text="Facturación" />
    </children>
 </VBox>
+
+
