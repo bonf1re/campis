@@ -30,12 +30,16 @@ import campis.dp1.models.routing.GraspResults;
 import campis.dp1.models.routing.RouteGen;
 import campis.dp1.models.utils.RoutingUtils;
 import campis.dp1.services.TabuSearchService;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.lang.reflect.Array;
 import java.net.URL;
 import java.sql.Date;
 import java.sql.SQLException;
 import java.sql.Timestamp;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.List;
@@ -418,12 +422,27 @@ public class DepartureMoveRouteController implements Initializable{
         
         return Integer.parseInt(str.toString());
     }
+    
+    public void recordLog(int id) throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter("logs.txt", true));
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        java.util.Date date = new java.util.Date();
+        writer.append(System.lineSeparator() + dateFormat.format(date));
+        writer.append(System.lineSeparator() + ContextFX.getInstance().getUser().getFirstname() + " " + ContextFX.getInstance().getUser().getLastname()  +" creo una orden de despacho de id: " + id);     
+        writer.close();
+    }
 
     private void saveDispatchOrder(Session session) {
         ArrayList<Object> dispatchOrder_and_lines= ContextFX.getInstance().getDispatchOrder();
         DispatchOrder d_order = (DispatchOrder)dispatchOrder_and_lines.remove(0);
         int id_request_order = d_order.getId_request_order();
         int id_d_order = (int) session.save(d_order);
+        
+        try {
+                this.recordLog(id_d_order);
+        } catch (IOException e) {            
+        }
+        
         for (int i = 0; i < dispatchOrder_and_lines.size(); i++) {
             DispatchOrderLine d_order_line = (DispatchOrderLine) dispatchOrder_and_lines.get(i);
             d_order_line.setId_dispatch_order(id_d_order);
