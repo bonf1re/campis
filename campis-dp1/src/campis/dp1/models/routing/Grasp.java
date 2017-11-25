@@ -22,7 +22,7 @@ public class Grasp {
     private ArrayList<Coord> prodList;
     //private CGraph paths;
     //private int[][] map;
-    private double alpha = 0.3;
+    private double alpha = 0.35;
     private RouteGen routeGen;
     
     public Grasp(int[][] real_map, CGraph routesGraph, ArrayList<Coord> batchesCoords){

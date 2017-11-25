@@ -32,13 +32,14 @@
    <right>
       <Pane prefHeight="600.0" prefWidth="616.0" BorderPane.alignment="CENTER">
          <children>
-            <Canvas fx:id="mapCanvas" height="376.0" layoutX="34.0" layoutY="91.0" width="544.0" />
+            <Canvas fx:id="mapCanvas" height="376.0" layoutX="61.0" layoutY="91.0" width="544.0" />
             <Button layoutX="93.0" layoutY="543.0" mnemonicParsing="false" onAction="#goDepartureMoveList" text="Volver" />
-            <Text layoutX="358.0" layoutY="57.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mapa" />
+            <Text layoutX="315.0" layoutY="61.0" strokeType="OUTSIDE" strokeWidth="0.0" text="Mapa" />
             <Button layoutY="543.0" mnemonicParsing="false" onAction="#saveDepartureMove" text="Grabar" />
             <Button layoutX="408.0" layoutY="543.0" mnemonicParsing="false" onAction="#nextRoute" text="&gt;" />
             <Button layoutX="316.0" layoutY="543.0" mnemonicParsing="false" onAction="#prevRoute" text="&lt;" />
             <Text fx:id="pCounterField" layoutX="355.0" layoutY="561.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;x/x&gt;" />
+            <Button layoutX="275.0" layoutY="492.0" mnemonicParsing="false" onAction="#VisualizeMyRoute" prefHeight="26.0" prefWidth="119.0" text="Generar Ruta" textAlignment="CENTER" />
          </children>
       </Pane>
    </right>

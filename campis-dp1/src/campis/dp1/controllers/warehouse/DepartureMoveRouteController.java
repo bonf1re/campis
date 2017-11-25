@@ -108,6 +108,51 @@ public class DepartureMoveRouteController implements Initializable{
     private Text pCounterField;
     @FXML
     private Text vhText;
+    
+    @FXML
+    public void VisualizeMyRoute(){
+        GraphicsUtils gu = new GraphicsUtils();
+        this.y=this.wh.getWidth();
+        this.x=this.wh.getLength();
+        this.real_map=gu.initMap(this.y,this.x);
+        this.crackList=gu.putCRacks(id_warehouse, real_map);
+        setupCRacksGraph();
+        gc = mapCanvas.getGraphicsContext2D();
+        int index= (int) this.routing_data.get(0);
+        ArrayList<Object> routing_sub_data = (ArrayList<Object>) this.routing_data.get(index);
+        //ArrayList<Coord> route = (ArrayList<Coord>) routing_sub_data.get(3);
+        ArrayList<Coord> route = generateRoute((ArrayList<WarehouseZone>)routing_sub_data.get(1));
+        gu.drawVisualizationMap(gc, y, x,this.real_map, route);
+    }
+    
+    private ArrayList<Coord> generateRoute(ArrayList<WarehouseZone> r_zones){
+        RoutingUtils utils=new RoutingUtils();
+        ArrayList<Coord> batchesCoords = readPositions(r_zones);
+        System.out.println(batchesCoords);
+        setupCRacksGraph();
+        Grasp graspSolution = new Grasp(this.real_map,this.routesGraph, batchesCoords);
+        GraspResults gResults = graspSolution.execute();
+        ArrayList<Coordinates> tabuInput = utils.toCoordinates(gResults.getProducts()); // orden de productos
+        RouteGen routeGen = graspSolution.getRouteGen();
+        routeGen.printDict();
+        utils.printCoords(gResults.getRoute());
+        utils.printCoordinates(tabuInput);
+        TabuSearchService tabu = new TabuSearchService();
+        TabuProblem tabuProblem = new TabuProblem(routeGen);
+        TabuSolution tabuSolution = tabu.search(tabuProblem, tabuInput);
+        
+        return new ArrayList<Coord>(utils.getRoute(tabuSolution.getOrder(),routeGen));
+        
+    }
+    
+    private ArrayList<Coord> readPositions(ArrayList<WarehouseZone> r_zones) {
+        ArrayList<Coord> returnable =  new ArrayList<>();
+        for (WarehouseZone r_zone : r_zones) {
+            returnable.add(new Coord(r_zone.getPos_y(),r_zone.getPos_x()));
+        }
+        
+        return returnable;
+    }
 
     
     
