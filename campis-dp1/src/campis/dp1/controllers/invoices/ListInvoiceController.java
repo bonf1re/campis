@@ -102,7 +102,9 @@ public class ListInvoiceController implements Initializable {
             Invoice sup = new Invoice(Integer.parseInt(row[0].toString()),
                                       Integer.parseInt(row[1].toString()),
                                       Integer.parseInt(row[2].toString()),
-                                      Double.parseDouble(row[3].toString()));
+                                      Double.parseDouble(row[3].toString()),
+                                      Double.parseDouble(row[4].toString()),
+                                      Double.parseDouble(row[5].toString()));
             returnable.add(sup);
         }
         session.close();

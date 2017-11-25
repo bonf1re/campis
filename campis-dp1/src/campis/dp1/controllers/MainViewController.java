@@ -4,8 +4,13 @@ import campis.dp1.ContextFX;
 import javafx.fxml.FXML;
 import campis.dp1.Main;
 import campis.dp1.models.utils.GraphicsUtils;
+import java.io.BufferedWriter;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.net.URL;
+import java.text.DateFormat;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 import javafx.fxml.Initializable;
@@ -24,15 +29,27 @@ public class MainViewController implements Initializable {
     private Main main;
     @FXML
     private Label user_name;
+    
+    public void recordLog() throws IOException {
+        BufferedWriter writer = new BufferedWriter(new FileWriter("logs.txt", true));
+        DateFormat dateFormat = new SimpleDateFormat("yyyy/MM/dd HH:mm:ss");
+        Date date = new Date();
+        writer.append(System.lineSeparator() + dateFormat.format(date));
+        writer.append(System.lineSeparator() + ContextFX.getInstance().getUser().getFirstname() + " " + ContextFX.getInstance().getUser().getLastname()  +" se acaba de logear a CAMPIS.");     
+        writer.close();
+    }
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
             getCurrencyIGV();
             user_name.setText(ContextFX.getInstance().getUser().getFirstname());
+            try {
+                this.recordLog();
+            } catch (IOException e) {            
+            }
         } catch(NullPointerException e) {
-        }
-
+        }                
     }
     
     private void getCurrencyIGV() {

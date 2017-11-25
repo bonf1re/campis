@@ -36,38 +36,28 @@ public class Invoice {
     private Double igv;
     private Double total;
 
-    public Double getFreight() {
-        return freight;
-    }
-
-    public void setFreight(Double freight) {
-        this.freight = freight;
-    }
-
-    public Double getIgv() {
-        return igv;
-    }
-
-    public void setIgv(Double igv) {
-        this.igv = igv;
-    }
-    
      public Invoice(){
         super();
     }
     
-    public Invoice(Integer id_invoice, Integer id_dispatch_order, Integer id_type, Double total){
+    public Invoice(Integer id_invoice, Integer id_dispatch_order, Integer id_type, 
+                   Double freight, Double igv, Double total){
         this.id_invoice = id_invoice;
         this.id_dispatch_order = id_dispatch_order;
         this.id_type = id_type;
+        this.freight = freight;
+        this.igv = igv;
         this.total = total;
         this.igv = 0.0;
         this.freight = 0.0;
     }
       
-    public Invoice(Integer id_dispatch_order, Integer id_type, Double total){
+    public Invoice(Integer id_dispatch_order, Integer id_type, Double freight, 
+                   Double igv, Double total){
         this.id_dispatch_order = id_dispatch_order;
         this.id_type = id_type;
+        this.freight = freight;
+        this.igv = igv;
         this.total = total;
         this.igv = 0.0;
         this.freight = 0.0;
@@ -127,6 +117,34 @@ public class Invoice {
      */
     public void setTotal(Double total) {
         this.total = total;
+    }
+
+      /**
+     * @return the freight
+     */
+    public Double getFreight() {
+        return freight;
+    }
+
+    /**
+     * @param freight the freight to set
+     */
+    public void setFreight(Double freight) {
+        this.freight = freight;
+    }
+
+    /**
+     * @return the igv
+     */
+    public Double getIgv() {
+        return igv;
+    }
+
+    /**
+     * @param igv the igv to set
+     */
+    public void setIgv(Double igv) {
+        this.igv = igv;
     }
     
     public static Invoice getInvoice(int cod) {
