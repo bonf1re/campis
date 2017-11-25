@@ -16,18 +16,16 @@ public class Refund {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     Integer id_refund;
-    Integer id_complaint;
-    String type_refund;
+    Integer id_invoice;
     String status;
 
     public Refund() {
         super();
     }
 
-    public Refund(String type_refund, Integer id_complaint) {
-        this.type_refund = type_refund;
-        this.status = "En proceso";
-        this.id_complaint = id_complaint;
+    public Refund(Integer id_invoice) {
+        this.status = "Completa";
+        this.id_invoice = id_invoice;
     }
 
     /**
@@ -47,29 +45,15 @@ public class Refund {
     /**
      * @return the id_complaint
      */
-    public Integer getId_complaint() {
-        return id_complaint;
+    public Integer getId_invoice() {
+        return id_invoice;
     }
 
     /**
      * @param id_complaint the id_complaint to set
      */
-    public void setId_complaint(Integer id_complaint) {
-        this.id_complaint = id_complaint;
-    }
-
-    /**
-     * @return the type_refund
-     */
-    public String getType_refund() {
-        return type_refund;
-    }
-
-    /**
-     * @param type_refund the type_refund to set
-     */
-    public void setType_refund(String type_refund) {
-        this.type_refund = type_refund;
+    public void setId_invoice(Integer id_invoice) {
+        this.id_invoice = id_invoice;
     }
 
     /**

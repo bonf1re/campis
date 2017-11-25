@@ -115,11 +115,24 @@ public class RequestOrder {
         this.address =  address;
     }
     
-    
+
+    public RequestOrder(int id,Timestamp creation_date, Timestamp delivery_date,
+                        float base_amount, float total_amount, String status, 
+                        int id_client,int priority,int id_district,String address) {
+        this.id_request_order = id;
+        this.creation_date = creation_date;
+        this.delivery_date = delivery_date;
+        this.status = status;
+        this.base_amount = base_amount;
+        this.total_amount = total_amount;
+        this.id_client = id_client;
+        this.priority = priority;
+        this.id_district = id_district;
+    }
     public RequestOrder(Timestamp creation_date, Timestamp delivery_date,
                         float base_amount, float total_amount, 
                         float igv_amount, float freight_amount, float discount_amount,
-                        String status, 
+                        String status,
                         int id_client,int priority,int id_district) {
         this.creation_date = creation_date;
         this.delivery_date = delivery_date;
@@ -129,6 +142,7 @@ public class RequestOrder {
         this.id_client = id_client;
         this.priority = priority;
         this.id_district = id_district;
+        this.address =  address;
         this.freight_amount = freight_amount;
         this.igv_amount = igv_amount;
         this.discount_amount = discount_amount;

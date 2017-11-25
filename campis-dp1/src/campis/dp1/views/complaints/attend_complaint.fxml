@@ -22,11 +22,12 @@
                </font>
             </Label>
             <JFXTextField fx:id="descriptionField" editable="false" layoutX="400.0" layoutY="117.0" prefHeight="21.0" prefWidth="399.0" />
-            <JFXComboBox fx:id="requestField" layoutX="398.0" layoutY="201.0" prefHeight="20.0" prefWidth="399.0" />
-            <JFXComboBox fx:id="typeField" layoutX="400.0" layoutY="275.0" prefHeight="25.0" prefWidth="402.0" />
+            <JFXComboBox fx:id="typeField" layoutX="400.0" layoutY="275.0" prefHeight="25.0" prefWidth="166.0" />
             <Label layoutX="217.0" layoutY="279.0" text="Tipo de Devolución :" />
-            <JFXComboBox fx:id="statusField" layoutX="403.0" layoutY="344.0" prefHeight="25.0" prefWidth="402.0" />
+            <JFXComboBox fx:id="statusField" layoutX="403.0" layoutY="344.0" prefHeight="25.0" prefWidth="164.0" />
             <Label layoutX="220.0" layoutY="348.0" text="Estado" />
+            <Button layoutX="656.0" layoutY="275.0" mnemonicParsing="false" onAction="#goEditRefund" prefHeight="31.0" prefWidth="87.0" text="Devoluciones" />
+            <JFXTextField fx:id="requestField" editable="false" layoutX="400.0" layoutY="201.0" />
          </children>
       </AnchorPane>
    </center>

@@ -5,6 +5,11 @@
  */
 package campis.dp1.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
 import java.math.BigDecimal;
 import java.util.ArrayList;
 import java.util.List;
@@ -19,8 +24,11 @@ import org.hibernate.criterion.Restrictions;
  *
  * @author Gina Bustamante
  */
+@Entity
+@Table (name="invoice")
 public class Invoice {
-    
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id_invoice;
     private Integer id_dispatch_order;
     private Integer id_type;
@@ -28,7 +36,6 @@ public class Invoice {
     private Double igv;
     private Double total;
 
-    
      public Invoice(){
         super();
     }

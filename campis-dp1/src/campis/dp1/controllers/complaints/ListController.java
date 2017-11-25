@@ -5,6 +5,10 @@ import campis.dp1.ContextFX;
 import campis.dp1.models.Complaint;
 import campis.dp1.models.ComplaintDisplay;
 import campis.dp1.models.Permission;
+import campis.dp1.models.Refund;
+import campis.dp1.models.RefundLine;
+import campis.dp1.models.RequestOrder;
+import campis.dp1.models.RequestOrderLine;
 import campis.dp1.models.View;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
@@ -24,6 +28,7 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -64,6 +69,23 @@ public class ListController implements Initializable {
             ContextFX.getInstance().setId(selected_id);
             main.goAttendComplaint(); 
         }
+        /*Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        List<RequestOrderLine> request_order_lines = RequestOrder.getRequestOrderLines(selected_id);
+        if (statusField.getValue().equals("Aceptado")) {
+            Refund refund = new Refund(typeField.getValue(), id);
+            session.save(refund);
+            for (int i = 0; i < request_order_lines.size(); i++) {
+                RefundLine refund_line = new RefundLine(request_order_lines.get(i).getId_request_order_line(), refund.getId_refund());
+                session.save(refund_line);
+            }
+        }
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();*/
     }
 
     @Override

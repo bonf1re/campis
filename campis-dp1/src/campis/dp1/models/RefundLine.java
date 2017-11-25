@@ -22,7 +22,6 @@ public class RefundLine {
     @Id
     @GeneratedValue(strategy=GenerationType.AUTO)
     Integer id_refund_line;
-    Integer id_request_order_line;
     Integer id_refund;
     Integer quantity;
 
@@ -30,9 +29,8 @@ public class RefundLine {
         super();
     }
 
-    public RefundLine(Integer id_request_order_line, Integer id_refund) {
-        this.id_request_order_line = id_request_order_line;
-        this.quantity = 0;
+    public RefundLine(Integer id_refund, Integer quant) {
+        this.quantity = quant;
         this.id_refund = id_refund;
     }  
 
@@ -48,20 +46,6 @@ public class RefundLine {
      */
     public void setId_refund_line(Integer id_refund_line) {
         this.id_refund_line = id_refund_line;
-    }
-
-    /**
-     * @return the id_request_order_line
-     */
-    public Integer getId_request_order_line() {
-        return id_request_order_line;
-    }
-
-    /**
-     * @param id_request_order_line the id_request_order_line to set
-     */
-    public void setId_request_order_line(Integer id_request_order_line) {
-        this.id_request_order_line = id_request_order_line;
     }
 
     /**
@@ -92,7 +76,7 @@ public class RefundLine {
         this.quantity = quantity;
     }
 
-    public Integer get_idProduct() {
+    /*public Integer get_idProduct() {
         return RequestOrderLine.getRequestOrderLine(id_request_order_line).getId_product();
-    }
+    }*/
 }

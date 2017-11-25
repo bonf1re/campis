@@ -68,6 +68,7 @@
         <mapping class="campis.dp1.models.District"/>
         <mapping class="campis.dp1.models.Parameters"/>
         <mapping class="campis.dp1.models.ProductWH"/>
+        <mapping class="campis.dp1.models.Invoice"/>
         
     </session-factory>
 

@@ -87,8 +87,11 @@ public class SelectRequest4Dispatch implements Initializable{
     private ArrayList<RequestOrder> listRequestOrder;
     
     @FXML
+    private JFXTextField subtotalField;
+    @FXML
+    private JFXTextField discountField;
+    @FXML
     private TableColumn<RequestOrder, String> stateColumn;
-    
     @FXML
     private JFXTextField clientField;
     @FXML
@@ -102,6 +105,12 @@ public class SelectRequest4Dispatch implements Initializable{
     @FXML
     private JFXTextField igvField;
     private RequestOrder requestOrder;
+    @FXML
+    private JFXTextField amountField;
+    @FXML
+    private Label messageField1;
+    @FXML
+    private Label messageField2;
     
 
     @Override

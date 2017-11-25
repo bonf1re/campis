@@ -29,6 +29,7 @@ import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.util.StringConverter;
+import org.hibernate.SQLQuery;
 
 /** 
  *
@@ -48,10 +49,27 @@ public class EditController implements Initializable {
     private TableColumn<RefundLineDisplay,Integer> quantityColumn;
     @FXML
     private TableColumn<RefundLineDisplay,String> productColumn;
-
+    
+    private Integer getIdCom(int id_ref){
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        SQLQuery qry = session.createSQLQuery("SELECT id_refund FROM campis.refund WHERE id_refund="+id_ref);
+        List<Object> rows = qry.list();
+        Integer id_com = Integer.parseInt(rows.get(0).toString());
+        session.getTransaction().commit();
+        session.close();
+        sessionFactory.close();
+        return id_com;
+    }
+    
     @FXML
     private void goListRefunds() throws IOException {
-        main.showListRefund();
+        id = getIdCom(id);
+        ContextFX.getInstance().setId(id);
+        main.goAttendComplaint();
     }
 
     @FXML
@@ -63,20 +81,20 @@ public class EditController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         for (int i = 0; i < refundLinesView.size(); i++) {
-            Query query = session.createQuery("update RefundLine set quantity = :newQuantity"
+            SQLQuery query = session.createSQLQuery("update campis.refund_line set quantity = :newQuantity"
                 + " where id_refund_line = :IdRefundLine");
             query.setParameter("newQuantity", refundLinesView.get(i).getQuantity().intValue());
             query.setParameter("IdRefundLine", refundLinesView.get(i).getId_refund_line().intValue());
             int result = query.executeUpdate();
 
-            Query query2 = session.createQuery("update ProductWH set p_stock = p_stock + :newQuantity"
+            SQLQuery query2 = session.createSQLQuery("update campis.productxwarehouse set p_stock = p_stock + :newQuantity"
                 + " where id_product = :IdPro and id_warehouse = 1");
             query2.setParameter("newQuantity", refundLinesView.get(i).getQuantity().intValue());
             query2.setParameter("IdPro", refundLinesView.get(i).getId_product().intValue());
             int result2 = query2.executeUpdate();            
         }
 
-        Query query = session.createQuery("update Refund set status= :newStatus"
+        SQLQuery query = session.createSQLQuery("update campis.refund set status= :newStatus"
                 + " where id_refund = :IdRefund");
             query.setParameter("newStatus", "Atendido");
             query.setParameter("IdRefund", id);
@@ -86,7 +104,6 @@ public class EditController implements Initializable {
         session.close();
         sessionFactory.close();
         this.goListRefunds();
-        
     }
     
     private ObservableList<RefundLine> getRefundLines() {
@@ -114,8 +131,9 @@ public class EditController implements Initializable {
         refundLines = FXCollections.observableArrayList();
         refundLinesView = FXCollections.observableArrayList();
         refundLines = getRefundLines();
+        int aux = 0;
         for (int i = 0; i < refundLines.size(); i++) {
-            RefundLineDisplay complaint = new RefundLineDisplay(refundLines.get(i).getId_refund_line(), refundLines.get(i).getId_request_order_line(), refundLines.get(i).getQuantity());
+            RefundLineDisplay complaint = new RefundLineDisplay(refundLines.get(i).getId_refund_line(), aux, refundLines.get(i).getQuantity());
             refundLinesView.add(complaint);
         }
         tableRefundLine.setItems(null);
