@@ -7,9 +7,11 @@ package campis.dp1.models;
 
 import javafx.beans.property.BooleanProperty;
 import javafx.beans.property.DoubleProperty;
+import javafx.beans.property.FloatProperty;
 import javafx.beans.property.IntegerProperty;
 import javafx.beans.property.SimpleBooleanProperty;
 import javafx.beans.property.SimpleDoubleProperty;
+import javafx.beans.property.SimpleFloatProperty;
 import javafx.beans.property.SimpleIntegerProperty;
 import javafx.beans.property.SimpleStringProperty;
 import javafx.beans.property.StringProperty;
@@ -27,12 +29,12 @@ public class DispatchOrderLineDisplay {
     private final IntegerProperty id_unit_of_measure; //
     private final StringProperty unit_of_measure_name; //
     private final BooleanProperty delivered;
-    private final DoubleProperty weigth; // prod*cant
+    private final FloatProperty weigth; // prod*cant
     
     public DispatchOrderLineDisplay(Integer id_dispatch_order_line, Integer id_dispatch_order,
                                     Integer id_product, String product_name, Integer quantity, 
                                     Integer id_unit_of_measure, String unit_of_measure_name,
-                                    Double weigth, Boolean delievred){
+                                    Float weigth, Boolean delievred){
         
         this.id_dispatch_order_line = new SimpleIntegerProperty(id_dispatch_order_line);
         this.id_dispatch_order = new SimpleIntegerProperty(id_dispatch_order);
@@ -42,7 +44,7 @@ public class DispatchOrderLineDisplay {
         this.id_unit_of_measure = new SimpleIntegerProperty(id_unit_of_measure);//
         this.unit_of_measure_name = new SimpleStringProperty(unit_of_measure_name); //
         this.delivered = new SimpleBooleanProperty(delievred);
-        this.weigth = new SimpleDoubleProperty(weigth); //
+        this.weigth = new SimpleFloatProperty(weigth); //
     }
     
     
@@ -82,7 +84,7 @@ public class DispatchOrderLineDisplay {
     }
     
      //
-    public DoubleProperty weigthProperty() {
+    public FloatProperty weigthProperty() {
         return weigth;
     }
 }
