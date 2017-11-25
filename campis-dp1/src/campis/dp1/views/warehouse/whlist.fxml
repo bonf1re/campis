@@ -19,7 +19,7 @@
                   <Font size="28.0" />
                </font>
             </Text>
-            <TableView fx:id="warehouseTable" layoutX="40.0" layoutY="79.0" prefHeight="321.0" prefWidth="750.0">
+            <TableView fx:id="warehouseTable" layoutX="80.0" layoutY="79.0" prefHeight="328.0" prefWidth="750.0">
               <columns>
                   <TableColumn fx:id="idCol" prefWidth="75.0" text="ID" />
                 <TableColumn fx:id="nameCol" prefWidth="75.0" text="Nombre" />
@@ -37,14 +37,13 @@
                   <Insets right="400.0" />
                </padding>
             </ButtonBar>
-            <Button fx:id="createButton" layoutX="832.0" layoutY="145.0" mnemonicParsing="false" onAction="#goWhCreate" prefHeight="35.0" prefWidth="85.0" text="Crear" />
-            <Button layoutX="832.0" layoutY="197.0" mnemonicParsing="false" onAction="#goWhVisualize" prefHeight="35.0" prefWidth="85.0" text="Visualizar" />
-            <Button fx:id="editButton" layoutX="832.0" layoutY="250.0" mnemonicParsing="false" onAction="#goWhEdit" prefHeight="35.0" prefWidth="85.0" text="Editar" />
-            <Button fx:id="deleteButton" layoutX="832.0" layoutY="304.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
-            <Button layoutX="301.0" layoutY="428.0" mnemonicParsing="false" onAction="#goWhEntryMoveList" prefHeight="35.0" prefWidth="102.0" text="Movimientos" />
-            <Button layoutX="154.0" layoutY="428.0" mnemonicParsing="false" onAction="#goAreaList" prefHeight="35.0" prefWidth="102.0" text="Areas" />
-            <Button fx:id="vehicleButton" layoutX="595.0" layoutY="428.0" mnemonicParsing="false" onAction="#goListVehicles" prefHeight="35.0" prefWidth="102.0" text="Vehiculos" />
-            <Button fx:id="rackButton" layoutX="449.0" layoutY="428.0" mnemonicParsing="false" onAction="#goListRacks" prefHeight="35.0" prefWidth="102.0" text="Racks" />
+            <Button fx:id="createButton" layoutX="853.0" layoutY="145.0" mnemonicParsing="false" onAction="#goWhCreate" prefHeight="35.0" prefWidth="85.0" text="Crear" />
+            <Button layoutX="853.0" layoutY="197.0" mnemonicParsing="false" onAction="#goWhVisualize" prefHeight="35.0" prefWidth="85.0" text="Visualizar" />
+            <Button fx:id="editButton" layoutX="853.0" layoutY="250.0" mnemonicParsing="false" onAction="#goWhEdit" prefHeight="35.0" prefWidth="85.0" text="Editar" />
+            <Button fx:id="deleteButton" layoutX="853.0" layoutY="304.0" mnemonicParsing="false" prefHeight="35.0" prefWidth="85.0" text="Eliminar" />
+            <Button layoutX="241.0" layoutY="428.0" mnemonicParsing="false" onAction="#goAreaList" prefHeight="35.0" prefWidth="102.0" text="Areas" />
+            <Button fx:id="vehicleButton" layoutX="568.0" layoutY="428.0" mnemonicParsing="false" onAction="#goListVehicles" prefHeight="35.0" prefWidth="102.0" text="Vehiculos" />
+            <Button fx:id="rackButton" layoutX="407.0" layoutY="428.0" mnemonicParsing="false" onAction="#goListRacks" prefHeight="35.0" prefWidth="102.0" text="Racks" />
          </children>
       </Pane>
    </center>
