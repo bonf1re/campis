@@ -65,7 +65,6 @@ public class RequestOrderLine {
         this.id_request_order = idReqOrd;
         this.id_product = idProd;
         this.discount = discount;
-        this.discount =  Float.parseFloat("0");
         System.out.println("c3");
     }
     
