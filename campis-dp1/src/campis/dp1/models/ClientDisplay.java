@@ -12,14 +12,16 @@ import javafx.beans.property.StringProperty;
 
 public class ClientDisplay {
     private final IntegerProperty id_client;
+    private final StringProperty dni;
     private final StringProperty name;
     private final StringProperty ruc;
     private final StringProperty email;
     private final StringProperty phone;
 
-    public ClientDisplay(int id, String name, String ruc, String email, String phone) {
+    public ClientDisplay(int id, String name, String dni, String ruc, String email, String phone) {
         this.id_client = new SimpleIntegerProperty(id);
         this.name = new SimpleStringProperty(name);
+        this.dni = new SimpleStringProperty(dni);
         this.ruc = new SimpleStringProperty(ruc);
         this.email = new SimpleStringProperty(email);
         this.phone = new SimpleStringProperty(phone);
@@ -37,6 +39,13 @@ public class ClientDisplay {
      */
     public StringProperty getName() {
         return name;
+    }
+    
+    /**
+     * @return the dni
+     */
+    public StringProperty getDni() {
+        return dni;
     }
 
     /**

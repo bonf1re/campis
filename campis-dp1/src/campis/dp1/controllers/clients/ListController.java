@@ -28,6 +28,8 @@ import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 import javafx.scene.control.Button;
+import javax.persistence.Query;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -44,6 +46,8 @@ public class ListController implements Initializable {
     private TableView<ClientDisplay> tableClient;
     @FXML
     private TableColumn<ClientDisplay,String> nameCol;
+    @FXML
+    private TableColumn<ClientDisplay,String> dniCol;
     @FXML
     private TableColumn<ClientDisplay,String> rucCol;
     @FXML
@@ -86,6 +90,7 @@ public class ListController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(Client.class);
+        criteria.add(Restrictions.eq("active",true));
         List lista = criteria.list();
         ObservableList<Client> returnable;
         returnable = FXCollections.observableArrayList();
@@ -102,7 +107,7 @@ public class ListController implements Initializable {
         clientsView = FXCollections.observableArrayList();
         clients = getClients();
         for (int i = 0; i < clients.size(); i++) {
-            ClientDisplay client = new ClientDisplay(clients.get(i).getId_client(), clients.get(i).getName(), clients.get(i).getRuc(), clients.get(i).getEmail(), clients.get(i).getPhone());
+            ClientDisplay client = new ClientDisplay(clients.get(i).getId_client(), clients.get(i).getName(), clients.get(i).getDni(), clients.get(i).getRuc(), clients.get(i).getEmail(), clients.get(i).getPhone());
             clientsView.add(client);
         }
         tableClient.setItems(null);
@@ -123,6 +128,7 @@ public class ListController implements Initializable {
         );
         try {
             nameCol.setCellValueFactory(cellData -> cellData.getValue().getName());
+            dniCol.setCellValueFactory(cellData -> cellData.getValue().getDni());
             rucCol.setCellValueFactory(cellData -> cellData.getValue().getRuc());
             phoneCol.setCellValueFactory(cellData -> cellData.getValue().getPhone());
             emailCol.setCellValueFactory(cellData -> cellData.getValue().getEmail());
@@ -140,10 +146,11 @@ public class ListController implements Initializable {
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
-        Criteria criteria = session.createCriteria(Client.class);
-        Client prod = new Client();
-        prod.setId_client(cod);
-        session.delete(prod);
+        Query query = session.createQuery("update Client set active = :newStatus "
+                    + "where id_client = :oldIdCli");
+        query.setParameter("newStatus", false);
+        query.setParameter("oldIdCli", cod);
+        int result = query.executeUpdate();
         session.getTransaction().commit();
         session.close();
         sessionFactory.close();

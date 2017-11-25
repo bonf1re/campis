@@ -14,6 +14,8 @@ import java.net.URL;
 import java.sql.SQLException;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
@@ -35,8 +37,6 @@ public class EditController implements Initializable{
     @FXML
     private JFXTextField nameField;
     @FXML
-    private JFXTextField dniField;
-    @FXML
     private JFXTextField rucField;
     @FXML
     private JFXTextField phoneField;
@@ -49,8 +49,6 @@ public class EditController implements Initializable{
     @FXML
     private Label emailMessage;
     @FXML
-    private Label dniMessage;
-    @FXML
     private Label rucMessage;
 
     @FXML
@@ -60,10 +58,9 @@ public class EditController implements Initializable{
 
     public boolean validation() {
         boolean nameValid = nameField.getText().length() == 0;
-        boolean docValid = (dniField.getText().length() == 0) && (rucField.getText().length() == 0);
+        boolean docValid = rucField.getText().length() == 0;
         boolean emailValid = emailField.getText().length() == 0;
-        
-        dniMessage.setText("");
+                
         nameMessage.setText("");
         rucMessage.setText("");
         emailMessage.setText("");
@@ -72,7 +69,6 @@ public class EditController implements Initializable{
             nameMessage.setText("Campo obligatorio");
 
         if (docValid) {
-            dniMessage.setText("DNI o RUC obligatorio");
             rucMessage.setText("DNI o RUC obligatorio");
         }
 
@@ -91,11 +87,8 @@ public class EditController implements Initializable{
             SessionFactory sessionFactory = configuration.buildSessionFactory();
             Session session = sessionFactory.openSession();
             session.beginTransaction();
-            Query query = session.createQuery("update Client set name = :newDescription, dni = :newDni, ruc = :newRuc"
-                    + " , phone = :newPhone, email = :newEmail, address = :newAddress where id_client = :oldIdClient");
-            query.setParameter("newDescription", nameField.getText());
-            query.setParameter("newDni", dniField.getText());
-            query.setParameter("newRuc", rucField.getText());
+            Query query = session.createQuery("update Client set phone = :newPhone, email = :newEmail, address = :newAddress"
+                    + " where id_client = :oldIdClient");
             query.setParameter("newPhone", phoneField.getText());
             query.setParameter("newEmail", emailField.getText());
             query.setParameter("newAddress", addressField.getText());
@@ -122,12 +115,27 @@ public class EditController implements Initializable{
         List rsType = criteria.list();
         Client result = (Client)rsType.get(0);
         this.nameField.setText(result.getName());
-        this.dniField.setText(result.getDni());
-        this.rucField.setText(result.getRuc());
+        
+        if (!result.getRuc().equals("--")) {
+            this.rucField.setText(result.getRuc());
+        } else {
+            this.rucField.setText(result.getDni());
+        }
+        
         this.phoneField.setText(result.getPhone());
         this.emailField.setText(result.getEmail());
         this.addressField.setText(result.getAddress());
         session.close();
         sessionFactory.close();
+        
+        phoneField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, 
+                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    phoneField.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
     } 
 }
