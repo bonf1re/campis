@@ -5,6 +5,7 @@
  */
 package campis.dp1.controllers.refunds;
 
+import campis.dp1.ContextFX;
 import campis.dp1.Main;
 import campis.dp1.models.DispatchOrder;
 import campis.dp1.models.Invoice;
@@ -223,16 +224,17 @@ public class CreateController implements Initializable {
             } catch (Exception e) {
 
             }
-            Query query_r = session.createSQLQuery("SELECT * FROM campis.refund WHERE id_invoice = " + rq_line.getId_invoice());
+            Query query_r = session.createSQLQuery("SELECT DISTINCT * FROM campis.refund WHERE id_invoice = " + rq_line.getId_invoice());
             List<Object[]> refs = query_r.list();
             List<Refund> retu = FXCollections.observableArrayList();
-            for (Object[] ref : refs) {
-                Refund refaux = new Refund(Integer.parseInt(ref[1].toString()));
-                retu.add(refaux);
-            }
             Integer maxqtTo = 0;
-            for (int i = 0; i < retu.size(); i++) {
-                Query query_qt = session.createSQLQuery("SELECT quantity FROM campis.invoice_line WHERE id_product=" + rq_line.getId_product());
+            for (Object[] ref : refs) {
+                Refund refaux = new Refund(Integer.parseInt(ref[0].toString()),Integer.parseInt(ref[1].toString()));
+                //retu.add(refaux);
+                Query query_qt = session.createSQLQuery("SELECT quantity FROM campis.refund_line \n"+
+                                                        "WHERE id_product=" + rq_line.getId_product()+" \n"+
+                                                        "AND id_refund = "+refaux.getId_refund());
+                
                 int maxqt = (Integer) query_qt.list().get(0);
                 maxqtTo = maxqtTo + maxqt;
             }
@@ -333,12 +335,13 @@ public class CreateController implements Initializable {
             /*Query qry2 = s2.createSQLQuery("INSERT INTO campis.refund_line VALUES(DEFAULT,"+idref+","+tablaProd.getItems().get(i).getQtRef().getValue()
                 +")");
         int idref2 = qry2.executeUpdate();*/
-            RefundLine refLine = new RefundLine(idref,tablaProd.getItems().get(i).getQtRef().getValue());
+            RefundLine refLine = new RefundLine(idref,tablaProd.getItems().get(i).getQtRef().getValue(),tablaProd.getItems().get(i).getId_product().getValue());
             s2.save(refLine);
         }
         s2.getTransaction().commit();
         s2.close();
         sessionF2.close();
-        this.goListDepartureMove(event);
+        ContextFX.getInstance().setId(cbRequestOrderId.getValue());
+        this.main.showViewRefund();
     }
 }
