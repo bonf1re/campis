@@ -117,10 +117,14 @@ public class ListSaleConditionController implements Initializable {
     @FXML
     private Button deleteButton;
     
+    @FXML
+    private Label validationLabel;
+    
     
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         this.selected_id = 0;
+        this.validationLabel.setText("");
         ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "sale_conditions");
         List<Campaign> cmpList = getCampaigns();
         cmbCampaign.getItems().add("");
@@ -197,8 +201,14 @@ public class ListSaleConditionController implements Initializable {
         else dateInit = null;
         if (endDate != null) dateEnd = getDate(endDate);
         else dateEnd = null;
+        if (initDate != null & endDate != null){
+            if (initDate.isAfter(endDate)) {
+                this.validationLabel.setText("Las fechas ingresadas no son válidas");
+                return;
+            }
+        }
 
-        
+        this.validationLabel.setText("");
         condiciones = FXCollections.observableArrayList();
         condicionesView = FXCollections.observableArrayList();
         condiciones = getSearchList(idCampaignSelected,dateInit,dateEnd);
