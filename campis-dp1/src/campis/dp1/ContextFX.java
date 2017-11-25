@@ -24,6 +24,8 @@ import javafx.scene.control.Button;
  */
 public class ContextFX {
 
+    private Integer id_refund;
+
     /**
      * @return the igvTot
      */
@@ -461,6 +463,16 @@ public class ContextFX {
     public ArrayList<Object> getDispatchOrder() {
         ArrayList<Object> returnable = new ArrayList<>(this.dispatchOrder);
         this.dispatchOrder = null;
+        return returnable;
+    }
+
+    public void setId_Refund(int id_refund) {
+        this.id_refund = id_refund;
+    }
+    
+    public Integer getId_Refund(){
+        Integer returnable = new Integer(this.id_refund);
+        this.id_refund=null;
         return returnable;
     }
 }

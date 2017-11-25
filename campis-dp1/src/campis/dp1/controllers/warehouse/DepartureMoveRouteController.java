@@ -452,6 +452,7 @@ public class DepartureMoveRouteController implements Initializable{
         // Verfify id_request_order
         if (orderComplete(session,id_request_order) == true){
             Query query = session.createSQLQuery("UPDATE campis.request_order SET satus = 'FINALIZADO' WHERE id_request_order = "+id_request_order);
+            query.executeUpdate();
         }
     }
 
