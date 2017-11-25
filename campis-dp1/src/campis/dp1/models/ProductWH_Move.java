@@ -96,6 +96,24 @@ public class ProductWH_Move extends Product{
         this.stock = new SimpleIntegerProperty(stock_s);
         this.exp_date = exp_date;
     }
+
+    public ProductWH_Move(Product result, int i, int i0, int i1) {
+        this.setId_product(result.getId_product());
+        this.setId_product_type(result.getId_product_type());
+        this.setId_unit_of_measure(result.getId_unit_of_measure());
+        this.setBase_price(result.getBase_price());
+        this.setC_stock(result.getC_stock());
+        this.setDescription(result.getDescription());
+        this.setName(result.getName());
+        this.setP_stock(result.getP_stock());
+        this.setTrademark(result.getTrademark());
+        this.setWeight(result.getWeight());
+        this.setMax_qt(result.getMax_qt());
+        this.qtLt = new SimpleIntegerProperty(i0);
+        this.num = new SimpleIntegerProperty(i1);
+        this.cant = new SimpleIntegerProperty(-1);
+        this.stock = new SimpleIntegerProperty(-1);
+    }
     
 
     public IntegerProperty getQtLt() {

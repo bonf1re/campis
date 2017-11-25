@@ -301,7 +301,7 @@ public class EntryMoveRouteController implements Initializable{
         int index= (int) this.routing_data.get(0);
         ArrayList<Object> routing_sub_data = (ArrayList<Object>) this.routing_data.get(index);
         ArrayList<Coord> route = (ArrayList<Coord>) routing_sub_data.get(3);
-        gu.drawVisualizationMap(gc, y, x,this.real_map, route);
+        gu.drawVisualizationMap(gc, y, x,this.real_map, route, this.batchesList);
     }
     
     

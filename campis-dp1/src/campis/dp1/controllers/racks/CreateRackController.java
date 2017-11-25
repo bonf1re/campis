@@ -198,7 +198,7 @@ public class CreateRackController implements Initializable {
                             x += i;
                             y += k;
                         } else {
-                            y += 1;
+                            y += i;
                             x += k;
                         }
                         WarehouseZone zone = new WarehouseZone(r.getId_warehouse(), r.getId_rack(), x, y, z, true);

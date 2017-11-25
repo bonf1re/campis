@@ -317,7 +317,7 @@ public class EntryMoveNormalCreateController implements Initializable{
         // then will add filter per area
         ArrayList<WarehouseZone> returnable =  new ArrayList<>();
         // For the moment, we will use pitagoric distance to select the top areas
-        // sorted insert
+        // sorted insertw
         
         Criteria criteria = session.createCriteria(WarehouseZone.class);
         criteria.add(Restrictions.eq("free",true));

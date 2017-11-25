@@ -37,6 +37,7 @@ import java.net.URL;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Collection;
 import java.util.List;
 import java.util.ResourceBundle;
 import java.util.logging.Level;
@@ -70,7 +71,7 @@ import org.hibernate.query.Query;
  *
  * @author sergio
  */
-public class EntryMoveSpecialCreateController implements Initializable {
+public class RefundEntryCreateController implements Initializable {
     private Main main;
     private int id_warehouse;
     //private ObservableList<ProductWH_Move> prodList = FXCollections.observableArrayList();
@@ -115,8 +116,6 @@ public class EntryMoveSpecialCreateController implements Initializable {
     @FXML
     private TableColumn<ProductWH_Move, Integer> cant_x_lote;
      
-    @FXML
-    private TableColumn<ProductWH_Move, String> delCol;
     
     @FXML
     private TableView<Vehicle> vh1Table;
@@ -131,57 +130,15 @@ public class EntryMoveSpecialCreateController implements Initializable {
     private TableColumn<Vehicle, String> pc2Col;
     @FXML
     private TableColumn<Vehicle, String> cp2Col;
+    private int id_refund;
     
-    @FXML
-    private JFXComboBox<String> motiveCb;
-    private Integer selectedMotive_id;
-    @FXML
-    private JFXComboBox<String> supplierCb;
-    private Integer selectedSupplier_id;
     
-    @FXML
-    private Text suppliersText;
-    
-    private ObservableList<Supplier> suppliers; 
 
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         this.id_warehouse = ContextFX.getInstance().getId();
-        //.getItems().addAll("Hallazgo","Proveedores");
-        motiveCb.getItems().add("Hallazgo");
-        motiveCb.getItems().add("Provedor");
-        
-        //TODO - Desabilitar la cbde provedores
-        suppliersText.setVisible(false);
-        supplierCb.setVisible(false);
-        setupSuppliersCb();
-        
-        //Trigger para la de motivo
-        motiveCb.getSelectionModel().selectedItemProperty().addListener( (ObservableValue<? extends String> options, String oldValue, String newValue) -> {
-           System.out.println(newValue);
-           
-           //TODO - hacer que se habilite o desanbilite provedores
-           if (newValue.compareTo("Provedor") == 0){
-               suppliersText.setVisible(true);
-               supplierCb.setVisible(true);
-               //setupSuppliersCb();
-           } else {
-               suppliersText.setVisible(false);
-               supplierCb.setVisible(false);
-           }
-        }); 
-        
-   
-        this.mode = ContextFX.getInstance().getMode();
-        if(this.mode!=0){
-            this.polymorphic_list = ContextFX.getInstance().getPolymorphic_list();
-            System.out.println(((ObservableList)this.polymorphic_list.get(0)).size());
-            //TODO - ver que los selecionadso en la cb se mantengan
-        }
-
-        // ComboBoxes
-        //setupComboBoxes(session);
+        this.polymorphic_list = ContextFX.getInstance().getPolymorphic_list();
         
         // Listeners
         vh1Table_listener();
@@ -213,116 +170,22 @@ public class EntryMoveSpecialCreateController implements Initializable {
     
     }
     
-    private ObservableList<Supplier> getSuppliers() {
-        Configuration configuration = new Configuration();
-        configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
-        SessionFactory sessionFactory = configuration.buildSessionFactory();
-        Session session = sessionFactory.openSession();
-        session.beginTransaction();
-        String qryStr = "SELECT * FROM campis.supplier;";
-        SQLQuery qry = session.createSQLQuery(qryStr);
-        List<Object[]> rows = qry.list();
-        ObservableList<Supplier> returnable = FXCollections.observableArrayList();
-        for (Object[] row : rows) {
-            Supplier sup = new Supplier(Integer.parseInt(row[0].toString()),row[1].toString(),
-                                row[2].toString(),row[3].toString(),row[4].toString(),row[5].toString());
-            returnable.add(sup);
-        }
-        session.close();
-        sessionFactory.close();
-        return returnable;
-    }
-    
-    @FXML
-    private void setupSuppliersCb() {
-        //Listar suppliers
-        this.suppliers = getSuppliers();
-        
-        System.out.println("campis.dp1.controllers.warehouse.EntryMoveSpecialCreateController.setupSuppliersCb()");
-        System.out.println(suppliers.size());
-        
-        for (int i = 0; i < suppliers.size(); i++) {
-            supplierCb.getItems().add(this.suppliers.get(i).getName());
-        }
-
-    }
-    
     private void load_ProductsData(Session session) {
-        if (this.mode!=0){
-            // Add previously added products and their quantities
-            // 0 - prodList
-            // 1 - vh1View
-            // 2 - vh2View
-            ObservableList aux_prod = (ObservableList) this.polymorphic_list.get(0);
-            this.prodList = FXCollections.observableArrayList(aux_prod);
-            this.tableProd.setItems(null);
-            this.tableProd.setItems(prodList);
-        }
+        this.id_refund = (int) this.polymorphic_list.remove(0);
+        ArrayList<ProductWH_Move> aux_prod = new ArrayList<ProductWH_Move>((Collection<? extends ProductWH_Move>) this.polymorphic_list.get(0));
+        this.prodList = FXCollections.observableArrayList(aux_prod);
+        this.tableProd.setItems(null);
+        this.tableProd.setItems(prodList);
+
     }
     
     private void setupProductsTable() {
          try{
             id_prod.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId_product()).asObject());
             prodCol.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
-            
-            cantLote.setCellFactory(
-                TextFieldTableCell.<ProductWH_Move,Integer>forTableColumn(new StringConverter<Integer>(){
-                    @Override
-                    public String toString(Integer value){
-                        return value.toString();
-                    }
-                    @Override
-                    public Integer fromString(String string){
-                        return Integer.parseInt(string);
-                    }       
-            }));
             cantLote.setCellValueFactory(cellData -> cellData.getValue().getQtLt().asObject());
-            
-            cant_x_lote.setCellFactory(
-                TextFieldTableCell.<ProductWH_Move,Integer>forTableColumn(new StringConverter<Integer>(){
-                    @Override
-                    public String toString(Integer value){
-                        return value.toString();
-                    }
-                    @Override
-                    public Integer fromString(String string){
-                        return Integer.parseInt(string);
-                    }       
-            }));
             cant_x_lote.setCellValueFactory(cellData -> cellData.getValue().getNum().asObject());
-            
-            delCol.setCellValueFactory(new PropertyValueFactory<>("DUMMY"));
-            
-            Callback<TableColumn<ProductWH_Move, String>, TableCell<ProductWH_Move, String>> cellFactory
-                    = //
-                new Callback<TableColumn<ProductWH_Move, String>, TableCell<ProductWH_Move, String>>() {
-                @Override
-                public TableCell<ProductWH_Move, String> call(TableColumn<ProductWH_Move, String> param) {
-                    final TableCell<ProductWH_Move, String> cell = new TableCell<ProductWH_Move, String>() {
-                    final Button btn = new Button("Eliminar");
 
-                    @Override
-                    public void updateItem(String item, boolean empty) {
-                        super.updateItem(item, empty);
-                        if (empty) {
-                            setGraphic(null);
-                            setText(null);
-                        } else {
-                            btn.setOnAction(event -> {
-                                getTableView().getItems().remove(getIndex());
-                            });
-                            setGraphic(btn);
-                            setText(null);
-                        }
-                    }
-                };
-                    return cell;
-            }};
-            
-            delCol.setCellFactory(cellFactory);
-            
-            tableProd.setEditable(true);
         } catch (Exception ex) {
                 Logger.getLogger(WarehouseListController.class.getName()).log(Level.SEVERE, null, ex);
         }
@@ -398,18 +261,6 @@ public class EntryMoveSpecialCreateController implements Initializable {
         }
     }
     
-    public void searchProds() throws IOException{
-        ContextFX.getInstance().setId(this.id_warehouse);
-        this.polymorphic_list = new ArrayList<>();
-        polymorphic_list.add(this.prodList);
-        polymorphic_list.add(this.vh1View);
-        polymorphic_list.add(this.vh2View);
-        // 0 - prodList
-        // 1 - vh1View
-        // 2 - vh2View
-        ContextFX.getInstance().setPolymorphic_list(polymorphic_list);
-        main.showWhEntryMoveAddProd();
-    }
     
     public void addVh(){
         try{
@@ -690,7 +541,7 @@ public class EntryMoveSpecialCreateController implements Initializable {
             System.out.println("La cantidad maxima permitida para el producto es: "+max_qt);
                         
             int b_num= item.getNum().get();
-            int id_supplier = getIdSupplier();
+            int id_supplier = 3;
             
             /*
              id_supplier = 0 HALLAZGO
@@ -746,24 +597,6 @@ public class EntryMoveSpecialCreateController implements Initializable {
         
         return returnable;
     }
-     
-     private int getIdSupplier(){
-         int id = 0;
-         
-         if (motiveCb.getValue().compareTo("Hallazgo") == 0){
-             id = 0;
-         } else { //buscamos el id del provedor
-            String prov = supplierCb.getValue();
-            
-            for (int i=0; i<this.suppliers.size(); i++){
-                if (prov.compareTo(suppliers.get(i).getName()) == 0){
-                    id = suppliers.get(i).getId_supplier();
-                }
-            }           
-         }
-         
-         return id;       
-     }
      
    
     
