@@ -12,6 +12,5 @@
       	<JFXButton fx:id="karButton" onAction="#goKardexReport" prefHeight="51.0" prefWidth="95.0" styleClass="option" text="Kardex" />
      	<JFXButton fx:id="expButton" onAction="#goExpirationReport" prefHeight="51.0" prefWidth="95.0" styleClass="option" text="Expiración" />
         <JFXButton fx:id="stockButton" onAction="#goStocksReport" prefHeight="51.0" prefWidth="95.0" styleClass="option" text="Stocks" />
-        <JFXButton fx:id="billButton" onAction="#goBills" prefHeight="51.0" prefWidth="95.0" styleClass="option" text="Facturas" />
    </children>
 </VBox>

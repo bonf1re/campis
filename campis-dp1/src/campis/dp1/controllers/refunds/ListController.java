@@ -6,6 +6,7 @@ import campis.dp1.models.Permission;
 import campis.dp1.models.Refund;
 import campis.dp1.models.RefundDisplay;
 import campis.dp1.models.View;
+import campis.dp1.models.utils.GraphicsUtils;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import static java.lang.Boolean.TRUE;
@@ -24,11 +25,13 @@ import javafx.scene.control.Button;
 import javafx.scene.control.TableColumn;
 import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
 
 public class ListController implements Initializable {
+
     private Main main;
     private ObservableList<Refund> refunds;
     private ObservableList<RefundDisplay> refundsView;
@@ -41,13 +44,15 @@ public class ListController implements Initializable {
     @FXML
     private TableView<RefundDisplay> tableRefund;
     @FXML
-    private TableColumn<RefundDisplay,String> typeRefundColumn;
+    private TableColumn<RefundDisplay, Integer> idComplaintColumn;
     @FXML
-    private TableColumn<RefundDisplay,Integer> idComplaintColumn;
+    private TableColumn<RefundDisplay, Integer> idRequestOrderColumn;
     @FXML
-    private TableColumn<RefundDisplay,Integer> idRequestOrderColumn;
+    private TableColumn<RefundDisplay, String> statusColumn;
     @FXML
-    private TableColumn<RefundDisplay,String> statusColumn;
+    private Button createButton;
+    @FXML
+    private Button confirmButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -59,18 +64,18 @@ public class ListController implements Initializable {
             editButton.setVisible(false);
         }
         tableRefund.getSelectionModel().selectedItemProperty().addListener(
-        (observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                return;
-            }
-            this.selected_id = newValue.getId_refund().getValue().intValue();
-            this.selected_status = newValue.getStatus().getValue().toString();
-            }
+                (observable, oldValue, newValue) -> {
+                    if (newValue == null) {
+                        return;
+                    }
+                    this.selected_id = newValue.getId_refund().getValue().intValue();
+                    this.selected_status = newValue.getStatus().getValue().toString();
+                }
         );
         try {
+            idRequestOrderColumn.setCellValueFactory(cellData -> cellData.getValue().getId_invoice().asObject());
             statusColumn.setCellValueFactory(cellData -> cellData.getValue().getStatus());
-            idComplaintColumn.setCellValueFactory(cellData -> cellData.getValue().getId_complaint().asObject());
-            idRequestOrderColumn.setCellValueFactory(cellData -> cellData.getValue().getId_request_order().asObject());
+            idComplaintColumn.setCellValueFactory(cellData -> cellData.getValue().getId_refund().asObject());
             /**/
             loadData();
         } catch (SQLException | ClassNotFoundException ex) {
@@ -81,7 +86,7 @@ public class ListController implements Initializable {
     private ObservableList<Refund> getRefunds() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -90,7 +95,7 @@ public class ListController implements Initializable {
         ObservableList<Refund> returnable;
         returnable = FXCollections.observableArrayList();
         for (int i = 0; i < lista.size(); i++) {
-            returnable.add((Refund)lista.get(i));
+            returnable.add((Refund) lista.get(i));
         }
         session.close();
         sessionFactory.close();
@@ -117,9 +122,50 @@ public class ListController implements Initializable {
             main.showEditRefund();
         }
     }
-    
+
     @FXML
     private void goCreateRefund(ActionEvent event) throws IOException {
         main.showCreateRefund();
+    }
+
+    private Refund getRefund(int id) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        SQLQuery qry = session.createSQLQuery("SELECT DISTINCT * FROM campis.refund WHERE id_refund = " + id);
+        List<Object[]> rows = qry.list();
+        Refund returnable = new Refund();
+        for (Object[] row : rows) {
+            returnable = new Refund(Integer.parseInt(row[0].toString()), Integer.parseInt(row[1].toString()));
+        }
+        return returnable;
+    }
+
+    @FXML
+    private void goConfirm(ActionEvent event) throws SQLException, ClassNotFoundException {
+        Refund refaux = getRefund(selected_id);
+        if (refaux.getStatus().compareTo("Por Ingresar") == 0) {
+            Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+            Criteria criteria = session.createCriteria(Refund.class);
+            Refund ref = new Refund();
+            ref.setId_refund(refaux.getId_refund());
+            session.delete(ref);
+            session.getTransaction().commit();
+            session.close();
+            sessionFactory.close();
+            loadData();
+        }else{
+            GraphicsUtils gu = new GraphicsUtils();
+            gu.popupError("Error de Devoluciones", "Error de estado de devolución, debe ser Por Llegar", "Aceptar");
+            loadData();
+        }
     }
 }

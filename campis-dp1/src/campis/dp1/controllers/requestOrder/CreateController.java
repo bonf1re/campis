@@ -130,8 +130,43 @@ public class CreateController implements Initializable {
     private Label amountField;
 
     @FXML
+    private Label clientMessage;
+
+    @FXML
+    private Label disMessage;
+
+    @FXML
+    private Label priMessage;
+
+    @FXML
+    private Label dateMessage;
+
+    @FXML
     private void goAddItem() throws IOException {
         main.showAddItem();
+    }
+
+    public boolean validation() {
+        boolean dateValid = deliveryDate.getValue() == null;
+        boolean clientValid = nameClientField.getValue() == null;
+        boolean priValid = priorityField.getValue() == null;
+        boolean districtValid = districtField.getValue() == null;
+
+        dateMessage.setText("");
+        clientMessage.setText("");
+        priMessage.setText("");
+        disMessage.setText("");
+
+        if (dateValid)
+            dateMessage.setText("Campo obligatorio");
+        if (clientValid)
+            clientMessage.setText("Campo obligatorio");
+        if (priValid)
+            priMessage.setText("Campo obligatorio");
+        if(districtValid)
+            disMessage.setText("Campo obligatorio");
+
+        return (!dateValid && !clientValid && !priValid && !districtValid);
     }
 
     @FXML
@@ -165,39 +200,41 @@ public class CreateController implements Initializable {
 
     @FXML
     private void createRequestOrder() throws IOException, ParseException {
-        Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
-        SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-        Date date_delivery = getDate(deliveryDate.getValue());
-        int idDist = getDistrict(this.districtField.getValue());
-        Boolean verify = verifyDates(currentTimestamp,date_delivery);
-        if (verify) {
-            int prior = Integer.parseInt(priorityField.getValue());
-            Configuration configuration = new Configuration();
-            configuration.configure("hibernate.cfg.xml");
-            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
-            SessionFactory sessionFactory = configuration.buildSessionFactory();
-            Session session = sessionFactory.openSession();
-            session.beginTransaction();
-            RequestOrder requestOrder = new RequestOrder(
-                    Timestamp.valueOf(formatIn.format(currentTimestamp)),
-                    Timestamp.valueOf((String) formatIn.format(date_delivery)),
-                    Float.parseFloat(subtotalField.getText()),
-                    Float.parseFloat(amountField.getText()),
-                    Float.parseFloat(IGVField.getText()),
-                    Float.parseFloat(freightField.getText()),
-                    Float.parseFloat(discountField.getText()),                   
-                    (String) statesField.getText(),
-                    clientField.getValue(), prior, idDist);
-            session.save(requestOrder);
-            session.getTransaction().commit();
-            session.close();
-            sessionFactory.close();
-            createRequestOrderLine(requestOrder.getId_request_order());
-            //createDispatchOrder(requestOrder.getId_request_order());
-            ContextFX.getInstance().setTempList(null);
-            this.goListRequestOrder();
-        } else {
-            messageField1.setText(message);
+        if (validation()) {
+            Timestamp currentTimestamp = new java.sql.Timestamp(Calendar.getInstance().getTime().getTime());
+            SimpleDateFormat formatIn = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            Date date_delivery = getDate(deliveryDate.getValue());
+            int idDist = getDistrict(this.districtField.getValue());
+            Boolean verify = verifyDates(currentTimestamp,date_delivery);
+            if (verify) {
+                int prior = Integer.parseInt(priorityField.getValue());
+                Configuration configuration = new Configuration();
+                configuration.configure("hibernate.cfg.xml");
+                configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+                SessionFactory sessionFactory = configuration.buildSessionFactory();
+                Session session = sessionFactory.openSession();
+                session.beginTransaction();
+                RequestOrder requestOrder = new RequestOrder(
+                        Timestamp.valueOf(formatIn.format(currentTimestamp)),
+                        Timestamp.valueOf((String) formatIn.format(date_delivery)),
+                        Float.parseFloat(subtotalField.getText()),
+                        Float.parseFloat(amountField.getText()),
+                        Float.parseFloat(IGVField.getText()),
+                        Float.parseFloat(freightField.getText()),
+                        Float.parseFloat(discountField.getText()),                   
+                        (String) statesField.getText(),
+                        clientField.getValue(), prior, idDist);
+                session.save(requestOrder);
+                session.getTransaction().commit();
+                session.close();
+                sessionFactory.close();
+                createRequestOrderLine(requestOrder.getId_request_order());
+                //createDispatchOrder(requestOrder.getId_request_order());
+                ContextFX.getInstance().setTempList(null);
+                this.goListRequestOrder();
+            } else {
+                messageField1.setText(message);
+            }
         }
     }
 

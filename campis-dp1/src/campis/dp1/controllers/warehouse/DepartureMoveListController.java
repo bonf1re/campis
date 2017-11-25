@@ -10,6 +10,7 @@ import campis.dp1.Main;
 import campis.dp1.models.Warehouse;
 import campis.dp1.models.WarehouseMove;
 import campis.dp1.models.WarehouseMoveDisplay;
+import campis.dp1.models.utils.GraphicsUtils;
 import com.jfoenix.controls.JFXComboBox;
 import java.io.IOException;
 import java.net.URL;
@@ -193,7 +194,6 @@ public class DepartureMoveListController implements Initializable {
         for (int i = 0; i < whList.size(); i++) {
             returnable.add((WarehouseMove) whList.get(i));
         }
-        
         return returnable;
     }
     

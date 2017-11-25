@@ -20,7 +20,7 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label layoutX="154.0" layoutY="115.0" text="Nombre del cliente:" />
+            <Label layoutX="154.0" layoutY="82.0" text="Nombre del cliente:" />
             <Label layoutX="155.0" layoutY="179.0" text="Fecha Delivery:" />
             <JFXDatePicker fx:id="deliveryDate" layoutX="293.0" layoutY="174.0" />
             <TableView fx:id="tablaProd" layoutX="150.0" layoutY="243.0" prefHeight="163.0" prefWidth="657.0">
@@ -38,28 +38,28 @@
             <Button layoutX="831.0" layoutY="325.0" mnemonicParsing="false" onAction="#deleteItem" prefHeight="35.0" prefWidth="105.0" text="Eliminar Item" />
             <Button layoutX="346.0" layoutY="537.0" mnemonicParsing="false" onAction="#createRequestOrder" prefHeight="35.0" prefWidth="85.0" text="Crear" />
             <Button layoutX="452.0" layoutY="537.0" mnemonicParsing="false" onAction="#goListRequestOrder" prefHeight="35.0" prefWidth="87.0" text="Cancelar" />
-            <Label layoutX="505.0" layoutY="115.0" text="Código del cliente:" />
-            <Label layoutX="154.0" layoutY="211.0" text="Estado:" />
-            <Label layoutX="507.0" layoutY="179.0" text="Prioridad:" />
-            <JFXComboBox fx:id="priorityField" layoutX="637.0" layoutY="174.0" prefHeight="26.0" prefWidth="58.0" />
+            <Label layoutX="500.0" layoutY="83.0" text="Código del cliente:" />
+            <Label layoutX="154.0" layoutY="220.0" text="Estado:" />
+            <Label layoutX="507.0" layoutY="133.0" text="Prioridad:" />
+            <JFXComboBox fx:id="priorityField" layoutX="621.0" layoutY="128.0" prefHeight="26.0" prefWidth="58.0" />
             <Label layoutX="565.0" layoutY="438.0" prefHeight="17.0" prefWidth="85.0" text="Descuento:" />
             <Label layoutX="561.0" layoutY="513.0" text="Monto Total:">
                <font>
                   <Font name="System Bold" size="13.0" />
                </font></Label>
-            <JFXComboBox fx:id="clientField" layoutX="635.0" layoutY="110.0" onAction="#setNameClientAction" />
+            <JFXComboBox fx:id="clientField" layoutX="630.0" layoutY="78.0" onAction="#setNameClientAction" />
             <Label fx:id="messageField1" layoutX="154.0" layoutY="410.0" prefHeight="17.0" prefWidth="165.0" textFill="RED" />
             <Label fx:id="messageField2" layoutX="154.0" layoutY="411.0" prefHeight="17.0" prefWidth="165.0" textFill="#fc0000" />
-            <JFXTextField fx:id="statesField" layoutX="295.0" layoutY="206.0" prefHeight="25.0" prefWidth="136.0" unFocusColor="#4d4d4d08" />
-            <Label layoutX="155.0" layoutY="146.0" text="Departamento:" />
-            <JFXComboBox fx:id="districtField" layoutX="295.0" layoutY="141.0" onAction="#setDistrictAction" prefHeight="26.0" prefWidth="188.0" />
+            <JFXTextField fx:id="statesField" layoutX="293.0" layoutY="216.0" prefHeight="25.0" prefWidth="136.0" unFocusColor="#4d4d4d08" />
+            <Label layoutX="155.0" layoutY="132.0" text="Departamento:" />
+            <JFXComboBox fx:id="districtField" layoutX="295.0" layoutY="127.0" onAction="#setDistrictAction" prefHeight="26.0" prefWidth="188.0" />
             <Label layoutX="565.0" layoutY="458.0" text="Flete:" />
             <Label layoutX="663.0" layoutY="418.0" text="S/." />
             <Label layoutX="663.0" layoutY="438.0" text="S/. -" textFill="#9a1515" />
             <Label layoutX="663.0" layoutY="458.0" text="S/." />
             <Label layoutX="663.0" layoutY="513.0" text="S/." />
-            <Label layoutX="506.0" layoutY="211.0" text="IGV a aplicar:" />
-            <JFXComboBox fx:id="nameClientField" layoutX="297.0" layoutY="110.0" onAction="#setIDClientAction" prefHeight="26.0" prefWidth="187.0" />
+            <Label layoutX="507.0" layoutY="179.0" text="IGV a aplicar:" />
+            <JFXComboBox fx:id="nameClientField" layoutX="297.0" layoutY="77.0" onAction="#setIDClientAction" prefHeight="26.0" prefWidth="187.0" />
             <Label fx:id="subtotalField" contentDisplay="RIGHT" layoutX="740.0" layoutY="418.0" text="field" textAlignment="RIGHT" />
             <Label fx:id="discountField" contentDisplay="RIGHT" layoutX="740.0" layoutY="438.0" text="field" textAlignment="RIGHT" textFill="#d01818" />
             <Label fx:id="freightField" contentDisplay="RIGHT" layoutX="740.0" layoutY="458.0" text="field" textAlignment="RIGHT" />
@@ -70,7 +70,11 @@
                <font>
                   <Font name="System Bold" size="13.0" />
                </font></Label>
-            <Label fx:id="igvField" layoutX="641.0" layoutY="211.0" text="i" />
+            <Label fx:id="igvField" layoutX="642.0" layoutY="179.0" text="i" />
+            <Label fx:id="clientMessage" layoutX="297.0" layoutY="107.0" prefHeight="17.0" prefWidth="180.0" textFill="RED" />
+            <Label fx:id="disMessage" layoutX="301.0" layoutY="154.0" prefHeight="17.0" prefWidth="180.0" textFill="RED" />
+            <Label fx:id="priMessage" layoutX="511.0" layoutY="154.0" prefHeight="17.0" prefWidth="180.0" textFill="RED" />
+            <Label fx:id="dateMessage" layoutX="289.0" layoutY="199.0" prefHeight="17.0" prefWidth="180.0" textFill="RED" />
          </children>
       </AnchorPane>
    </bottom>

@@ -607,6 +607,13 @@ public class Main extends Application {
         BorderPane newClient = loader.load();
         mainLayout.setCenter(newClient);    
     }
+    
+    public static void showViewRefund() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/refunds/view.fxml"));
+        BorderPane newClient = loader.load();
+        mainLayout.setCenter(newClient);    
+    }
 
     /* End RequestOrder*/
     
@@ -652,6 +659,13 @@ public class Main extends Application {
      public static void showCreateInvoice() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/invoices/createInvoice.fxml"));
+        BorderPane listSupplier = loader.load();
+        mainLayout.setCenter(listSupplier);  
+    }
+     
+    public static void showCreateInvoice2() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/invoices/createInvoice2.fxml"));
         BorderPane listSupplier = loader.load();
         mainLayout.setCenter(listSupplier);  
     }

@@ -11,14 +11,8 @@ import com.itextpdf.text.Document;
 import campis.dp1.models.Client;
 import java.io.File;
 import campis.dp1.models.District;
-import campis.dp1.models.Product;
 import java.io.FileOutputStream;
-import campis.dp1.models.Invoice;
-import campis.dp1.models.InvoiceLine;
-import campis.dp1.models.Delivery;
 import campis.dp1.models.DispatchOrder;
-import campis.dp1.models.DispatchOrderLine;
-import campis.dp1.models.RequestOrder;
 import campis.dp1.controllers.suppliers.ListController;
 import campis.dp1.models.Invoice;
 import campis.dp1.models.InvoiceLine;
@@ -514,6 +508,12 @@ public class CreateInvoiceController implements Initializable {
         main.showListInvoice();
     }
 
+    @FXML
+    private void goListInvoices2(ActionEvent event) throws IOException {
+        main.showCreateInvoice2();
+    }
+    
+    
     public void createInvoicePdf() throws IOException, DocumentException {
         String dest = "reports/invoices/FACTURA_" + aux_id_invoice  + ".pdf";
         File file = new File(dest);
