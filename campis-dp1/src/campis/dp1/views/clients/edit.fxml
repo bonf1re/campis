@@ -11,28 +11,25 @@
    <center>
       <AnchorPane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="220.0" layoutY="71.0" text="Razón Social" />
-            <Label layoutX="221.0" layoutY="119.0" text="DNI" />
+            <Label layoutX="210.0" layoutY="108.0" text="Identificador" />
             <Label layoutX="220.0" layoutY="178.0" text="RUC" />
-            <Button layoutX="373.0" layoutY="534.0" mnemonicParsing="false" onAction="#updateClient" prefHeight="21.0" prefWidth="72.0" text="Guardar" />
-            <Button layoutX="574.0" layoutY="534.0" mnemonicParsing="false" onAction="#goListClient" prefHeight="25.0" prefWidth="74.0" text="Cancelar" />
+            <Button layoutX="372.0" layoutY="520.0" mnemonicParsing="false" onAction="#updateClient" prefHeight="33.0" prefWidth="83.0" text="Guardar" />
+            <Button layoutX="573.0" layoutY="520.0" mnemonicParsing="false" onAction="#goListClient" prefHeight="33.0" prefWidth="85.0" text="Cancelar" />
             <Label layoutX="51.0" layoutY="37.0" text="Editar Cliente">
                <font>
                   <Font size="20.0" />
                </font>
             </Label>
-            <JFXTextField fx:id="nameField" layoutX="400.0" layoutY="63.0" prefHeight="21.0" prefWidth="399.0" />
-            <JFXTextField fx:id="dniField" layoutX="398.0" layoutY="113.0" prefHeight="21.0" prefWidth="399.0" />
+            <JFXTextField fx:id="nameField" disable="true" layoutX="398.0" layoutY="109.0" prefHeight="26.0" prefWidth="400.0" />
             <Label layoutX="220.0" layoutY="234.0" text="Telefono" />
             <Label layoutX="221.0" layoutY="292.0" text="Dirección" />
             <Label layoutX="221.0" layoutY="348.0" text="Correo" />
-            <JFXTextField fx:id="rucField" layoutX="398.0" layoutY="166.0" prefHeight="21.0" prefWidth="399.0" />
+            <JFXTextField fx:id="rucField" disable="true" layoutX="398.0" layoutY="166.0" prefHeight="21.0" prefWidth="399.0" />
             <JFXTextField fx:id="phoneField" layoutX="398.0" layoutY="230.0" prefHeight="21.0" prefWidth="399.0" />
             <JFXTextField fx:id="addressField" layoutX="400.0" layoutY="288.0" prefHeight="21.0" prefWidth="399.0" />
             <JFXTextField fx:id="emailField" layoutX="398.0" layoutY="344.0" prefHeight="21.0" prefWidth="399.0" />
-            <Label fx:id="nameMessage" layoutX="400.0" layoutY="96.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />
+            <Label fx:id="nameMessage" layoutX="402.0" layoutY="146.0" prefHeight="18.0" prefWidth="378.0" textFill="RED" />
             <Label fx:id="emailMessage" layoutX="400.0" layoutY="377.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />
-            <Label fx:id="dniMessage" layoutX="400.0" layoutY="149.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />
             <Label fx:id="rucMessage" layoutX="400.0" layoutY="206.0" prefHeight="17.0" prefWidth="395.0" textFill="RED" />
          </children>
       </AnchorPane>

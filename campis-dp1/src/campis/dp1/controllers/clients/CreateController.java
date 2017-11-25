@@ -2,10 +2,13 @@ package campis.dp1.controllers.clients;
 
 import campis.dp1.Main;
 import campis.dp1.models.Client;
+import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
 import java.io.IOException;
 import java.net.URL;
 import java.util.ResourceBundle;
+import javafx.beans.value.ChangeListener;
+import javafx.beans.value.ObservableValue;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import org.hibernate.Session;
@@ -23,8 +26,6 @@ public class CreateController implements Initializable {
     @FXML
     private JFXTextField nameField;
     @FXML
-    private JFXTextField dniField;
-    @FXML
     private JFXTextField rucField;
     @FXML
     private JFXTextField phoneField;
@@ -33,11 +34,13 @@ public class CreateController implements Initializable {
     @FXML
     private JFXTextField addressField;
     @FXML
+    private JFXComboBox identifier;
+    @FXML
     private Label nameMessage;
     @FXML
     private Label emailMessage;
     @FXML
-    private Label dniMessage;
+    private Label rucLabel;
     @FXML
     private Label rucMessage;
 
@@ -48,10 +51,9 @@ public class CreateController implements Initializable {
     
     public boolean validation() {
         boolean nameValid = nameField.getText().length() == 0;
-        boolean docValid = (dniField.getText().length() == 0) && (rucField.getText().length() == 0);
+        boolean docValid = rucField.getText().length() == 0;
         boolean emailValid = emailField.getText().length() == 0;
         
-        dniMessage.setText("");
         nameMessage.setText("");
         rucMessage.setText("");
         emailMessage.setText("");
@@ -60,7 +62,6 @@ public class CreateController implements Initializable {
             nameMessage.setText("Campo obligatorio");
 
         if (docValid) {
-            dniMessage.setText("DNI o RUC obligatorio");
             rucMessage.setText("DNI o RUC obligatorio");
         }
 
@@ -73,7 +74,18 @@ public class CreateController implements Initializable {
     @FXML
     private void insertClient() throws IOException {
         if (validation()) {
-            Client client = new Client(nameField.getText(), dniField.getText(), rucField.getText(), addressField.getText(), phoneField.getText(), emailField.getText());
+            String dni;
+            String ruc;
+            
+            if (identifier.getValue().equals("Razon Social")) {
+                dni = "--";
+                ruc = rucField.getText();
+            } else {
+                dni = rucField.getText();
+                ruc = "--";
+            }
+            
+            Client client = new Client(nameField.getText(), dni, ruc, addressField.getText(), phoneField.getText(), emailField.getText());
             Configuration configuration = new Configuration();
             configuration.configure("hibernate.cfg.xml");
             configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
@@ -94,6 +106,28 @@ public class CreateController implements Initializable {
      */
     @Override
     public void initialize(URL url, ResourceBundle rb) {
-        // TODO
+        identifier.getItems().addAll("Razon Social","Nombre");
+        
+        identifier.valueProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, 
+                String newValue) {
+                if (newValue.matches("Razon Social")) {
+                    rucLabel.setText("RUC");
+                } else {
+                    rucLabel.setText("DNI");
+                }
+            }
+        });
+        
+        phoneField.textProperty().addListener(new ChangeListener<String>() {
+            @Override
+            public void changed(ObservableValue<? extends String> observable, String oldValue, 
+                String newValue) {
+                if (!newValue.matches("\\d*")) {
+                    phoneField.setText(newValue.replaceAll("[^\\d]", ""));
+                }
+            }
+        });
     }
 }
