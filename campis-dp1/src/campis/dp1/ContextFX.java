@@ -25,6 +25,62 @@ import javafx.scene.control.Button;
 public class ContextFX {
 
     /**
+     * @return the selected_del
+     */
+    public Integer getSelected_del() {
+        return selected_del;
+    }
+
+    /**
+     * @param selected_del the selected_del to set
+     */
+    public void setSelected_del(Integer selected_del) {
+        this.selected_del = selected_del;
+    }
+
+    /**
+     * @return the selected_do
+     */
+    public Integer getSelected_do() {
+        return selected_do;
+    }
+
+    /**
+     * @param selected_do the selected_do to set
+     */
+    public void setSelected_do(Integer selected_do) {
+        this.selected_do = selected_do;
+    }
+
+    /**
+     * @return the selected_ro
+     */
+    public Integer getSelected_ro() {
+        return selected_ro;
+    }
+
+    /**
+     * @param selected_ro the selected_ro to set
+     */
+    public void setSelected_ro(Integer selected_ro) {
+        this.selected_ro = selected_ro;
+    }
+
+    /**
+     * @return the id_invoice
+     */
+    public Integer getId_invoice() {
+        return id_invoice;
+    }
+
+    /**
+     * @param id_invoice the id_invoice to set
+     */
+    public void setId_invoice(Integer id_invoice) {
+        this.id_invoice = id_invoice;
+    }
+
+    /**
      * @return the igvTot
      */
     public Float getIgvTot() {
@@ -113,6 +169,12 @@ public class ContextFX {
     ObservableList<BatchDisplay> tempBatchList = FXCollections.observableArrayList();
     ArrayList<Object> polymorphic_list = new ArrayList<Object>();
     Integer mode = 0;
+    
+    private Integer selected_del; 
+    private Integer selected_do; 
+    private Integer selected_ro; 
+    
+    private Integer id_invoice;
     
     public Integer getMode() {
         Integer returnable = new Integer(this.mode);

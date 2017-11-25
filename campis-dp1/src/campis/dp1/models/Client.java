@@ -11,10 +11,12 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
+import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
+import org.hibernate.criterion.Restrictions;
 
 /**
  *
@@ -132,5 +134,23 @@ public class Client {
         sessionFactory.close();
 
         return returnable;
+    }
+    
+    public static Client getClient(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(Client.class);
+        criteria.add(Restrictions.eq("id_client",cod));
+        String descrip;
+        List rsMeasure = criteria.list();
+        Client result = (Client)rsMeasure.get(0);
+        session.close();
+        sessionFactory.close();
+
+        return result;
     }
 }

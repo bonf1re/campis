@@ -27,12 +27,17 @@ public class InvoiceLineDisplay {
     private final FloatProperty final_cost;
     private final StringProperty nameProd;
     private final StringProperty typeProd;
+    private final StringProperty trademark; //
+
+    private final FloatProperty m_sub; //
+
     private final IntegerProperty qtref;
     private final IntegerProperty qtrefmax;
     
     public InvoiceLineDisplay(Integer id_invoice_line, Integer id_invoice, Integer id_product, 
                               String name, String type, Float cost, Float discount,Integer quant_ro, 
                               Float finalcost, Integer quant, Integer qtref, Integer qtrefmax) {
+        
         this.id_invoice_line = new SimpleIntegerProperty(id_invoice_line);
         this.id_invoice = new SimpleIntegerProperty(id_invoice);
         this.id_product = new SimpleIntegerProperty(id_product);
@@ -42,6 +47,37 @@ public class InvoiceLineDisplay {
         this.final_cost = new SimpleFloatProperty(finalcost);
         this.nameProd = new SimpleStringProperty(name);
         this.typeProd = new SimpleStringProperty(type);
+        this.trademark = new SimpleStringProperty(" ");
+
+        this.m_sub = new SimpleFloatProperty(0);
+       
+
+        this.quantity = new SimpleIntegerProperty(quant);
+        this.qtref = new SimpleIntegerProperty(qtref);
+        this.qtrefmax = new SimpleIntegerProperty(qtrefmax);
+    }
+    
+    public InvoiceLineDisplay(Integer id_invoice_line, Integer id_invoice, Integer id_product, 
+                              String name, String type, String trademark, 
+                              Float m_sub, 
+                              
+                              Float cost, Float discount,Integer quant_ro, 
+                              Float finalcost, Integer quant, Integer qtref, Integer qtrefmax) {
+        
+        this.id_invoice_line = new SimpleIntegerProperty(id_invoice_line);
+        this.id_invoice = new SimpleIntegerProperty(id_invoice);
+        this.id_product = new SimpleIntegerProperty(id_product);
+        this.cost = new SimpleFloatProperty(cost);
+        this.discount = new SimpleFloatProperty(discount);
+        this.quantity_ro = new SimpleIntegerProperty(quant_ro);
+        this.final_cost = new SimpleFloatProperty(finalcost);
+        this.nameProd = new SimpleStringProperty(name);
+        this.typeProd = new SimpleStringProperty(type);
+        this.trademark = new SimpleStringProperty(trademark);
+        
+        this.m_sub = new SimpleFloatProperty(m_sub);
+
+        
         this.quantity = new SimpleIntegerProperty(quant);
         this.qtref = new SimpleIntegerProperty(qtref);
         this.qtrefmax = new SimpleIntegerProperty(qtrefmax);
@@ -86,6 +122,18 @@ public class InvoiceLineDisplay {
     public StringProperty getTypeproduct() {
         return this.typeProd;
     }
+    
+    public StringProperty getTrademark() {
+        return this.trademark;
+    }
+    
+
+    
+    //
+    public FloatProperty getM_sub() {
+        return this.m_sub;
+    }
+    
     
     public IntegerProperty getQtRef() {
         return this.qtref;

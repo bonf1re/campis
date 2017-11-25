@@ -21,6 +21,7 @@ import javafx.beans.property.StringProperty;
  * @author Gina Bustamante
  */
 public class DispatchOrderLineDisplay {
+    
     private final IntegerProperty id_dispatch_order_line;
     private final IntegerProperty id_dispatch_order;
     private final IntegerProperty id_product;
@@ -30,6 +31,7 @@ public class DispatchOrderLineDisplay {
     private final StringProperty unit_of_measure_name; //
     private final BooleanProperty delivered;
     private final FloatProperty weigth; // prod*cant
+    
     
     public DispatchOrderLineDisplay(Integer id_dispatch_order_line, Integer id_dispatch_order,
                                     Integer id_product, String product_name, Integer quantity, 
@@ -46,7 +48,7 @@ public class DispatchOrderLineDisplay {
         this.delivered = new SimpleBooleanProperty(delievred);
         this.weigth = new SimpleFloatProperty(weigth); //
     }
-    
+
     
     public IntegerProperty id_dispatch_order_lineProperty() {
         return id_dispatch_order_line;
@@ -64,6 +66,7 @@ public class DispatchOrderLineDisplay {
     public StringProperty product_nameProperty() {
         return product_name;
     }
+    
     
     public IntegerProperty quantityProperty() {
         return quantity;
