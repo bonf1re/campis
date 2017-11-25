@@ -245,9 +245,6 @@ public class SelectRequest4Dispatch implements Initializable{
         this.stateField.setText(request.getStatus());
         this.priorityField.setText(Integer.toString(request.getPriority()));
         this.districtField.setText(distr);
-        this.subtotalField.setText(Float.toString(request.getBase_amount()));
-        this.discountField.setText(Float.toString(request.getDiscount_amount()));
-        this.amountField.setText(Float.toString(request.getTotal_amount()));
         idColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId_product()).asObject());
         nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getProdName()));
         typeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getTypeName()));
