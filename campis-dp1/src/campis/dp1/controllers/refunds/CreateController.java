@@ -5,7 +5,14 @@
  */
 package campis.dp1.controllers.refunds;
 
+import com.itextpdf.text.Document;
+import com.itextpdf.text.DocumentException;
+import java.io.File;
+import java.io.FileOutputStream;
 import campis.dp1.Main;
+import com.itextpdf.text.Rectangle;
+import com.itextpdf.text.pdf.PdfPCell;
+import com.itextpdf.text.pdf.PdfPTable;
 import campis.dp1.models.DispatchOrder;
 import campis.dp1.models.Invoice;
 import campis.dp1.models.InvoiceLine;
@@ -62,6 +69,7 @@ public class CreateController implements Initializable {
     Integer n_discount = 1;
     Integer n_tocount = 1;
     float IGV = 0.0f;
+    int idref;
     private Invoice invoice;
     private ObservableList<InvoiceLineDisplay> rqLineView;
     int selected_quantity;
@@ -328,7 +336,7 @@ public class CreateController implements Initializable {
         int idref = (int)qry.executeUpdate();*/
         s2.save(ref);
         
-        int idref = ref.getId_refund();
+        idref = ref.getId_refund();
         for (int i = 0; i < tablaProd.getItems().size(); i++) {
             /*Query qry2 = s2.createSQLQuery("INSERT INTO campis.refund_line VALUES(DEFAULT,"+idref+","+tablaProd.getItems().get(i).getQtRef().getValue()
                 +")");
@@ -341,4 +349,116 @@ public class CreateController implements Initializable {
         sessionF2.close();
         this.goListDepartureMove(event);
     }
+/*
+    public void createInvoicePdf() throws IOException, DocumentException {
+        String dest = "reports/crediteNotes/NOTA_CREDITO_" + idref  + ".pdf";
+        File file = new File(dest);
+
+        List<RefundLine> invoice_lines =  Refund.getRefundLines(idref);
+        Integer id_ro = Invoice.getIdDispatchOrder(Refund.getIdInvoice(idref));
+        RequestOrder ro = RequestOrder.getRO(DispatchOrder.getRequestOrder(id_ro));
+        String client = Client.getName(ro.getId_client());
+        String district = District.getName(ro.getId_district());
+
+        String create_date = ro.getCreation_date().toString();
+        String delivery_date = ro.getDelivery_date().toString();
+        createPdf(dest, invoice_lines, client, district, create_date, delivery_date);
+    }
+
+    public void createPdf(String dest, List<InvoiceLine> invoice_lines, String client, String district_data, String create_date_data, String delivery_date_data) throws IOException, DocumentException {
+        Document document = new Document();
+        PdfWriter.getInstance(document, new FileOutputStream(dest));
+        document.open();
+        Font smallfont = new Font(FontFamily.HELVETICA, 10);
+        PdfPCell blank = new PdfPCell(new Phrase(""));
+        blank.setBorder(Rectangle.NO_BORDER);
+
+        PdfPTable titulo = new PdfPTable(1);
+        titulo.setTotalWidth(new float[]{ 160 });
+        titulo.setLockedWidth(true);
+        PdfPCell cell = new PdfPCell(new Phrase("NOTA CREDITO"));
+        cell.setFixedHeight(30);
+        cell.setBorder(Rectangle.NO_BORDER);
+        titulo.addCell(cell);
+
+        PdfPTable info = new PdfPTable(5);
+
+        PdfPCell nombre_cli_label = new PdfPCell(new Phrase("Nombre del Cliente:"));
+        nombre_cli_label.setBorder(Rectangle.NO_BORDER);
+        PdfPCell address_dispatch_label = new PdfPCell(new Phrase("Dirección de Despacho:"));
+        address_dispatch_label.setBorder(Rectangle.NO_BORDER);
+        PdfPCell create_date_label = new PdfPCell(new Phrase("Fecha de Creación:"));
+        create_date_label.setBorder(Rectangle.NO_BORDER);
+        PdfPCell district_label = new PdfPCell(new Phrase("Distrito:"));
+        district_label.setBorder(Rectangle.NO_BORDER);
+        PdfPCell delivery_date_label = new PdfPCell(new Phrase("Fecha Delivery:"));
+        delivery_date_label.setBorder(Rectangle.NO_BORDER);
+        PdfPCell igv_label = new PdfPCell(new Phrase("IGV:"));
+        igv_label.setBorder(Rectangle.NO_BORDER);
+        
+        PdfPCell nombre_cli = new PdfPCell(new Phrase(client));
+        nombre_cli.setBorder(Rectangle.NO_BORDER);
+        PdfPCell create_date = new PdfPCell(new Phrase(create_date_data));
+        create_date.setBorder(Rectangle.NO_BORDER);
+        PdfPCell district = new PdfPCell(new Phrase(district_data));
+        district.setBorder(Rectangle.NO_BORDER);
+        PdfPCell delivery_date = new PdfPCell(new Phrase(delivery_date_data));
+        delivery_date.setBorder(Rectangle.NO_BORDER);
+        PdfPCell igv = new PdfPCell(new Phrase("0.19"));
+        igv.setBorder(Rectangle.NO_BORDER);
+
+        info.addCell(nombre_cli_label);
+        info.addCell(nombre_cli);
+        info.addCell(blank);
+        info.addCell(district_label);
+        info.addCell(district);
+
+        info.addCell(create_date_label);
+        info.addCell(create_date);
+        info.addCell(blank);
+        info.addCell(delivery_date_label);
+        info.addCell(delivery_date);
+
+        info.addCell(igv_label);
+        info.addCell(igv);
+        info.addCell(blank);
+        info.addCell(blank);
+        info.addCell(blank);
+            
+        PdfPTable table = new PdfPTable(4);
+        table.addCell("Nombre");
+        table.addCell("Marca");
+        table.addCell("Cantidad");
+        table.addCell("Monto Unitario");
+        table.addCell("Monto Subtotal");
+        Float subtotal_counter = 0.0f;
+        for(int i = 0; i < invoice_lines.size(); i++) {
+            Product pro = Product.getProduct(invoice_lines.get(i).getId_product());
+            table.addCell(pro.getName());
+            table.addCell(pro.getTrademark());
+            table.addCell(invoice_lines.get(i).getQuantity().toString());
+            table.addCell(invoice_lines.get(i).getCost().toString());
+            Float cost = invoice_lines.get(i).getQuantity() * invoice_lines.get(i).getCost();
+            subtotal_counter += cost;
+            table.addCell(cost.toString());
+        }
+
+        PdfPTable totales = new PdfPTable(6);
+        PdfPCell subtotal_label = new PdfPCell(new Phrase("Total:"));
+        subtotal_label.setBorder(Rectangle.NO_BORDER);
+
+        PdfPCell subtotal = new PdfPCell(new Phrase("S/. " + subtotal_counter.toString()));
+        subtotal.setBorder(Rectangle.NO_BORDER);
+
+        blank.setColspan(4);
+        totales.addCell(blank);
+        totales.addCell(subtotal_label);
+        totales.addCell(subtotal);
+
+        document.add(titulo);
+        document.add(info);
+        document.add(table);
+        document.add(totales);
+        document.close();
+    }*/
 }
