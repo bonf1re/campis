@@ -33,8 +33,8 @@ import org.hibernate.cfg.Configuration;
  *
  * @author Eddy
  */
-public class ViewController implements Initializable{
-    
+public class ViewController implements Initializable {
+
     Main main;
     private ArrayList<Invoice> listInvoice;
     Integer id, idref;
@@ -49,7 +49,7 @@ public class ViewController implements Initializable{
     private Invoice invoice;
     private ObservableList<InvoiceLineDisplay> rqLineView;
     int selected_quantity;
-    
+
     @FXML
     private JFXTextField nameClientField;
     @FXML
@@ -83,7 +83,7 @@ public class ViewController implements Initializable{
 
     @Override
     public void initialize(URL location, ResourceBundle resources) {
-        /*idref = ContextFX.getInstance().getId();
+        idref = ContextFX.getInstance().getId();
         Configuration conf2 = new Configuration();
         conf2.configure("hibernate.cfg.xml");
         conf2.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
@@ -94,7 +94,7 @@ public class ViewController implements Initializable{
         this.listInvoice = new ArrayList<>(criteria.list());
         try {
             setupCbRefundId(idref);
-            setupFields(s2);
+            //setupFields(s2);
         } catch (Exception e) {
             e.printStackTrace();
         }
@@ -102,41 +102,37 @@ public class ViewController implements Initializable{
         sessionF2.close();
     }
     
-    private void setupCbRefundId() {
+    /*private Invoice getInvoice(int idref){
+        
+    }*/
+    
+    private void setupCbRefundId(int idref) {
         ArrayList<Integer> ro_ids = new ArrayList<>();
         for (Invoice invoiceOrder1 : this.listInvoice) {
             ro_ids.add(invoiceOrder1.getId_invoice());
         }
         ObservableList rq_olist = FXCollections.observableArrayList(ro_ids);
-        cbRequestOrderId.setText(rq_olist.get(0).toString());
-        cbRequestOrderId.getSelectionModel().selectFirst();
-        this.id = this.listInvoice.get(0).getId_invoice();
-        this.invoice = this.listInvoice.get(0);
+        cbRequestOrderId.setText(Integer.toString(idref));
+        //cbRequestOrderId.getSelectionModel().selectFirst();
+        //this.id = this.listInvoice.get(0).getId_invoice();
+        //this.invoice = this.listInvoice.get(0);
+        //this.invoice = getInvoice(idref);
+        this.id = invoice.getId_invoice();
+        Configuration conf2 = new Configuration();
+        conf2.configure("hibernate.cfg.xml");
+        conf2.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionF2 = conf2.buildSessionFactory();
+        Session s2 = sessionF2.openSession();
+        s2.beginTransaction();
+        //List<InvoiceLine> list = getInvoiceLine(id, s2);
+        //loadData(list, s2);
+        s2.close();
+        sessionF2.close();
 
-        cbRequestOrderId.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> {
-                    if (newValue == null) {
-                        return;
-                    }
-                    int index_rq = cbRequestOrderId.getSelectionModel().getSelectedIndex();
-                    this.invoice = listInvoice.get(index_rq);
-                    this.id = invoice.getId_invoice();
-                    Configuration conf2 = new Configuration();
-                    conf2.configure("hibernate.cfg.xml");
-                    conf2.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
-                    SessionFactory sessionF2 = conf2.buildSessionFactory();
-                    Session s2 = sessionF2.openSession();
-                    s2.beginTransaction();
-                    List<InvoiceLine> list = getInvoiceLine(id, s2);
-                    loadData(list, s2);
-                    s2.close();
-                    sessionF2.close();
-                }
-        );*/
     }
-    
+
     @FXML
     private void goListDepartureMove(ActionEvent event) {
     }
-    
+
 }

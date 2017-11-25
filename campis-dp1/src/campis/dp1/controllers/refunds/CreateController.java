@@ -227,7 +227,8 @@ public class CreateController implements Initializable {
             List<Object[]> refs = query_r.list();
             List<Refund> retu = FXCollections.observableArrayList();
             for (Object[] ref : refs) {
-                retu.add((Refund) ref[0]);
+                Refund refaux = new Refund(Integer.parseInt(ref[1].toString()));
+                retu.add(refaux);
             }
             Integer maxqtTo = 0;
             for (int i = 0; i < retu.size(); i++) {
