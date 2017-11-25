@@ -57,6 +57,7 @@ import javafx.scene.control.cell.TextFieldTableCell;
 import javafx.scene.text.Text;
 import javafx.util.Callback;
 import javafx.util.StringConverter;
+import jdk.nashorn.internal.runtime.arrays.ArrayLikeIterator;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -660,7 +661,8 @@ public class EntryMoveSpecialCreateController implements Initializable {
             aux.add(r_zones);
             aux.add(vh);
             System.out.println(r_zones.toString());
-            ArrayList<Coord> route =generateRoute(r_zones,session);
+            //ArrayList<Coord> route =generateRoute(r_zones,session);
+            ArrayList<Coord> route = new ArrayList<>();
             aux.add(new ArrayList<Coord>(route));
             aux.add(false); // to know whether this move has been saved or not
             sendable.add(aux);

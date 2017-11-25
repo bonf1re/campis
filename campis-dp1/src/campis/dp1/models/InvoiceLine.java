@@ -5,11 +5,20 @@
  */
 package campis.dp1.models;
 
+import javax.persistence.Entity;
+import javax.persistence.Table;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
 /**
  *
  * @author Gina Bustamante
  */
+@Entity
+@Table (name = "invoice_line")
 public class InvoiceLine {
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id_invoice_line; 
     private Integer id_invoice;
     private Integer id_product;
@@ -18,6 +27,10 @@ public class InvoiceLine {
     private Float discount;
     private Integer quantity_ro;
     private Float final_cost;
+
+    public InvoiceLine() {
+        super();
+    }
     
     public InvoiceLine (Integer id_invoice_line, Integer id_invoice, Integer id_product,
                         Integer quantity, Float cost, Float discount, Integer quantity_ro, 
