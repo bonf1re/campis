@@ -16,13 +16,11 @@ public class RefundDisplay {
     final IntegerProperty id_complaint;
     final IntegerProperty id_request_order;
     final StringProperty status;
-    final StringProperty type_refund;
     
-    public RefundDisplay(Integer id_refund, Integer id_complaint, String status, String type_refund) {
+    public RefundDisplay(Integer id_refund, Integer id_complaint, String status) {
         this.id_refund = new SimpleIntegerProperty(id_refund);
         this.id_complaint = new SimpleIntegerProperty(id_complaint);
         this.status = new SimpleStringProperty(status);
-        this.type_refund = new SimpleStringProperty(type_refund);
         this.id_request_order = new SimpleIntegerProperty(Complaint.getComplaint(id_complaint).getId_request_order());
     }
 
@@ -45,13 +43,6 @@ public class RefundDisplay {
      */
     public StringProperty getStatus() {
         return status;
-    }
-
-    /**
-     * @return the type_refund
-     */
-    public StringProperty getType_refund() {
-        return type_refund;
     }
 
     /**

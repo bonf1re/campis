@@ -86,10 +86,10 @@ public class AttendComplaintController implements Initializable {
         query.setParameter("oldIdProd", id);
         int result = query.executeUpdate();
         if (statusField.getValue().equals("Aceptado")) {
-            Refund refund = new Refund(typeField.getValue(), id);
+            Refund refund = new Refund(id);
             session.save(refund);
             for (int i = 0; i < request_order_lines.size(); i++) {
-                RefundLine refund_line = new RefundLine(request_order_lines.get(i).getId_request_order_line(), refund.getId_refund());
+                RefundLine refund_line = new RefundLine(refund.getId_refund(),0);
                 session.save(refund_line);
             }
         }

@@ -5,16 +5,43 @@
  */
 package campis.dp1.models;
 
+import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.Table;
+
 /**
  *
  * @author Gina Bustamante
  */
+@Entity
+@Table (name="invoice")
 public class Invoice {
-    
+    @Id
+    @GeneratedValue(strategy=GenerationType.AUTO)
     private Integer id_invoice;
     private Integer id_dispatch_order;
     private Integer id_type;
+    private Double freight;
+    private Double igv;
     private Double total;
+
+    public Double getFreight() {
+        return freight;
+    }
+
+    public void setFreight(Double freight) {
+        this.freight = freight;
+    }
+
+    public Double getIgv() {
+        return igv;
+    }
+
+    public void setIgv(Double igv) {
+        this.igv = igv;
+    }
     
      public Invoice(){
         super();

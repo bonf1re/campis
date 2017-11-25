@@ -15,7 +15,7 @@
    <bottom>
       <AnchorPane prefHeight="600.0" prefWidth="967.0" BorderPane.alignment="CENTER">
          <children>
-            <Label layoutX="630.0" layoutY="20.0" text="Orden de Venta N:">
+            <Label layoutX="702.0" layoutY="20.0" text="Factura N° :">
                <font>
                   <Font size="20.0" />
                </font>
@@ -51,7 +51,7 @@
             <Label layoutX="427.0" layoutY="217.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" text="IGV:" />
             <JFXTextField fx:id="igvField" disable="true" editable="false" layoutX="513.0" layoutY="208.0" prefHeight="25.0" prefWidth="52.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
             <JFXComboBox fx:id="cbRequestOrderId" layoutX="822.0" layoutY="20.0" prefHeight="26.0" prefWidth="65.0" />
-            <Button layoutX="541.0" layoutY="527.0" mnemonicParsing="false" onAction="#goDispatchMoveCreate" prefHeight="35.0" prefWidth="87.0" text="Continuar" />
+            <Button layoutX="541.0" layoutY="527.0" mnemonicParsing="false" onAction="#goCreateRefund" prefHeight="35.0" prefWidth="87.0" text="Grabar" />
             <Label layoutX="63.0" layoutY="20.0" text="Crear Devolución">
                <font>
                   <Font size="20.0" />

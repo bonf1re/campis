@@ -593,7 +593,14 @@ public class Main extends Application {
         BorderPane listComplaint = loader.load();
         mainLayout.setCenter(listComplaint);  
     }
-
+    
+    public static void showCreateRefund() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/refunds/create.fxml"));
+        BorderPane newRefund = loader.load();
+        mainLayout.setCenter(newRefund);    
+    }
+    
     public static void showEditRefund() throws IOException {
         FXMLLoader loader = new FXMLLoader();
         loader.setLocation(Main.class.getResource("views/refunds/edit.fxml"));

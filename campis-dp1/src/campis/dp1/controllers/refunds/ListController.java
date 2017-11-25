@@ -68,7 +68,6 @@ public class ListController implements Initializable {
             }
         );
         try {
-            typeRefundColumn.setCellValueFactory(cellData -> cellData.getValue().getType_refund());
             statusColumn.setCellValueFactory(cellData -> cellData.getValue().getStatus());
             idComplaintColumn.setCellValueFactory(cellData -> cellData.getValue().getId_complaint().asObject());
             idRequestOrderColumn.setCellValueFactory(cellData -> cellData.getValue().getId_request_order().asObject());
@@ -104,7 +103,7 @@ public class ListController implements Initializable {
         refundsView = FXCollections.observableArrayList();
         refunds = getRefunds();
         for (int i = 0; i < refunds.size(); i++) {
-            RefundDisplay complaint = new RefundDisplay(refunds.get(i).getId_refund(), refunds.get(i).getId_complaint(), refunds.get(i).getStatus(), refunds.get(i).getType_refund());
+            RefundDisplay complaint = new RefundDisplay(refunds.get(i).getId_refund(), refunds.get(i).getId_invoice(), refunds.get(i).getStatus());
             refundsView.add(complaint);
         }
         tableRefund.setItems(null);
@@ -117,5 +116,10 @@ public class ListController implements Initializable {
             ContextFX.getInstance().setId(selected_id);
             main.showEditRefund();
         }
+    }
+    
+    @FXML
+    private void goCreateRefund(ActionEvent event) throws IOException {
+        main.showCreateRefund();
     }
 }

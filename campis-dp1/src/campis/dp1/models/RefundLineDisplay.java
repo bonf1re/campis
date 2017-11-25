@@ -13,7 +13,6 @@ public class RefundLineDisplay {
     final IntegerProperty id_refund_line;
     final IntegerProperty order_request_quantity;
     final IntegerProperty quantity;
-    final IntegerProperty id_request_order_line;
     final StringProperty product_name;
     Integer id_product;
 
@@ -25,7 +24,6 @@ public class RefundLineDisplay {
         this.order_request_quantity = new SimpleIntegerProperty(rq.getQuantity());
         this.id_refund_line = new SimpleIntegerProperty(id);
         this.quantity = new SimpleIntegerProperty(quantity);
-        this.id_request_order_line = new SimpleIntegerProperty(id_request_order_line);
     }
 
     /**
@@ -47,13 +45,6 @@ public class RefundLineDisplay {
      */
     public IntegerProperty getQuantity() {
         return quantity;
-    }
-
-    /**
-     * @return the id_request_order_line
-     */
-    public IntegerProperty getId_request_order_line() {
-        return id_request_order_line;
     }
 
     /**

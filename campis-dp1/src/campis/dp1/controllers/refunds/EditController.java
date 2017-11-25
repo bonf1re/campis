@@ -131,8 +131,9 @@ public class EditController implements Initializable {
         refundLines = FXCollections.observableArrayList();
         refundLinesView = FXCollections.observableArrayList();
         refundLines = getRefundLines();
+        int aux = 0;
         for (int i = 0; i < refundLines.size(); i++) {
-            RefundLineDisplay complaint = new RefundLineDisplay(refundLines.get(i).getId_refund_line(), refundLines.get(i).getId_request_order_line(), refundLines.get(i).getQuantity());
+            RefundLineDisplay complaint = new RefundLineDisplay(refundLines.get(i).getId_refund_line(), aux, refundLines.get(i).getQuantity());
             refundLinesView.add(complaint);
         }
         tableRefundLine.setItems(null);
