@@ -6,6 +6,7 @@
 package campis.dp1.controllers.invoices;
 
 import campis.dp1.Main;
+import campis.dp1.ContextFX;
 import campis.dp1.controllers.suppliers.ListController;
 import campis.dp1.models.Invoice;
 import campis.dp1.models.InvoiceLine;
@@ -14,6 +15,8 @@ import campis.dp1.models.Product;
 import campis.dp1.models.UnitOfMeasure;
 import campis.dp1.models.DispatchOrderLine;
 import campis.dp1.models.DispatchOrderLineDisplay;
+import campis.dp1.models.Parameters;
+import campis.dp1.models.RequestOrder;
 import campis.dp1.models.RequestOrderLine;
 import com.jfoenix.controls.JFXComboBox;
 import java.io.IOException;
@@ -62,6 +65,7 @@ public class CreateInvoiceController implements Initializable {
     private ObservableList<DispatchOrderLineDisplay>  delieveriesView;
     private Integer selected_del; 
     private Integer selected_do; 
+    private Integer selected_ro; 
     private String selected_type; 
     
     @FXML
@@ -327,16 +331,13 @@ public class CreateInvoiceController implements Initializable {
             
             //Una vez que tenemos todo, insertamos la factura en la tabla factura
             Integer type = getType(this.selected_type);
-            Float freigth  = getFreigth();
-              
-            Invoice i = new Invoice(aux_id_do, type, 0.0); //El total inicialmente en 0
-            
-            Double igv = i.getTotal()*0.18;
-            
+                         
+            Invoice i = new Invoice(aux_id_do, type, 0.0, 0.0, 0.0); //El total inicialmente en 0
+                        
             String qryStr5 = "INSERT INTO campis.invoice VALUES(DEFAULT,'" + i.getId_dispatch_order()+ "',"
                     + "'"+i.getId_type()+"',"
-                    + "'"+freigth+"',"
-                    + "'"+igv+"',"
+                    + "'"+i.getFreight()+"',"
+                    + "'"+i.getIgv()+"',"
                     + "'"+i.getTotal()+"')";
             SQLQuery qry5 = session.createSQLQuery(qryStr5);
             qry5.executeUpdate();
@@ -355,6 +356,9 @@ public class CreateInvoiceController implements Initializable {
             
             //Insertamos las lineas
             float total = 0;
+            float total_weight = 0;
+            float total_weight_ro = 0;
+            
             for (DispatchOrderLine line: do_lines) {
                 //hallamos la reques order line correspondiente
                 
@@ -368,8 +372,9 @@ public class CreateInvoiceController implements Initializable {
                         System.out.println(ro_line.getDiscount());
                         
                         aux_ro = new RequestOrderLine(ro_line.getId_request_order_line(), 
-                                                     ro_line.getQuantity(),
-                        ro_line.getCost(), ro_line.getId_request_order(), ro_line.getId_product(), ro_line.getDiscount());
+                                                      ro_line.getQuantity(),ro_line.getCost(), 
+                                                      ro_line.getId_request_order(), 
+                                                      ro_line.getId_product(), ro_line.getDiscount());
                         
                         break;
                     }
@@ -384,29 +389,29 @@ public class CreateInvoiceController implements Initializable {
                 System.out.println(line.getQuantity());
                 System.out.println(aux_ro.getQuantity());
                 
-                try{
-                    float try_line = 1*line.getQuantity();
-                }catch(Exception e){
-                    System.out.println("error in line");
-                    e.printStackTrace();
-                }
-                
-                try{
-                    float try_dcto = 1*aux_ro.getQuantity();
-                }catch(Exception e){
-                    System.out.println("error in aux_ro");
-                    e.printStackTrace();
-                }
-                
-                float desc = 0*line.getQuantity()/aux_ro.getQuantity();
+                float desc = aux_ro.getDiscount()*line.getQuantity()/aux_ro.getQuantity();
                 float final_cost  = (aux_ro.getCost()*line.getQuantity()) - desc;
-                total += final_cost;
                 
-                InvoiceLine i_line = new InvoiceLine( aux_id_invoice, line.getId_prod(), 
+                InvoiceLine i_line = new InvoiceLine(aux_id_invoice, line.getId_prod(), 
                                                     line.getQuantity(), aux_ro.getCost(),
                                                     desc, aux_ro.getQuantity(),
                                                     final_cost);
                 
+                
+                /**** PARA CALCULOS POSTERIORES ****/
+                System.out.println("campis.dp1.controllers.invoices.CreateInvoiceController.insertInvoice()");
+                Product p = Product.getProduct(line.getId_prod());
+                
+                total_weight += line.getQuantity()*p.getWeight();
+                System.out.println("PESO OD: " + total_weight);
+                
+                total_weight_ro += aux_ro.getQuantity()*p.getWeight();
+                System.out.println("PESO RO: " + total_weight_ro);
+                
+                total += final_cost;
+                /***********************************/
+                
+               
                 String qryStr7 = "INSERT INTO campis.invoice_line VALUES(DEFAULT," + i_line.getId_invoice() + ","
                     + i_line.getId_product()+ ","
                     + i_line.getQuantity()+ ","
@@ -421,14 +426,18 @@ public class CreateInvoiceController implements Initializable {
             }
             
             //Actulizamos el costo de la factura
-            String qryStr8 = "UPDATE campis.invoice SET total = " + total + "WHERE id_invoice = " + aux_id_invoice ;
+            Parameters aux = new Parameters();
+            
+            Float freigth  = getFreigth()*total_weight/total_weight_ro;
+            Float igv = total*ContextFX.getInstance().getIGV();
+            
+            Float final_total = total + igv + freigth;
+
+            
+            String qryStr8 = "UPDATE campis.invoice SET" + " freight = " + freigth + ", igv = " + igv + ", total = " + final_total + "WHERE id_invoice = " + aux_id_invoice ;
             SQLQuery qry8 = session.createSQLQuery(qryStr8);
             qry8.executeUpdate();
             
-            //Actulizamos la guia de remision
-//            String qryStr9 = "UPDATE delivery SET invoiced = " + true + "WHERE id_delivery = " + this.selected_del;
-//            SQLQuery qry9 = session.createSQLQuery(qryStr8);
-//            qry9.executeUpdate();
             
             session.getTransaction().commit();
             session.close();
@@ -446,53 +455,26 @@ public class CreateInvoiceController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();  
         
-        //Obetenemos el id de la orden de despacho
-        String qryStr = "SELECT * FROM campis.delivery WHERE id_delivery = " + this.selected_del;
-        SQLQuery qry = session.createSQLQuery(qryStr);
-        List<Object[]> rows = qry.list();
-
-        System.out.println("campis.dp1.controllers.invoices.CreateInvoiceController.insertInvoice()");          
-        Integer aux_id_do = 0;
-        for (Object[] row : rows) {
-            aux_id_do = Integer.parseInt(row[3].toString());
-            System.out.println("Orden de despacho: " + row[3].toString());
-        }
-
         //Obtenemos el id de la orden de venta
-        String qryStr2 = "SELECT * FROM campis.dispatch_order WHERE id_dispatch_order = " + aux_id_do;
+        String qryStr2 = "SELECT * FROM campis.dispatch_order WHERE id_dispatch_order = " + selected_do;
         SQLQuery qry2 = session.createSQLQuery(qryStr2);
         List<Object[]> rows2 = qry2.list();
-
-        System.out.println("campis.dp1.controllers.invoices.CreateInvoiceController.insertInvoice()");          
-        Integer aux_id_ro = 0;
-        Integer freigth = 0;
+       
+        this.selected_ro = 0;
         for (Object[] row : rows2) {
-            aux_id_ro = Integer.parseInt(row[1].toString());
+            selected_ro = Integer.parseInt(row[1].toString());
             System.out.println("Orden de venta: " + row[1].toString());
         }
         
-         //Listamos las lineas de la orden de venta
-        String qryStr4 = "SELECT * FROM campis.request_order WHERE id_request_order = " + aux_id_ro;
-        SQLQuery qry4 = session.createSQLQuery(qryStr4);
-        List<Object[]> rows4 = qry4.list();
-//        ObservableList<RequestOrderLine> ro_lines = FXCollections.observableArrayList();
-//
-//        System.out.println("campis.dp1.controllers.invoices.CreateInvoiceController.insertInvoice()");
-//        System.out.println(rows4.size());
-        
-        float fre = 0;
-        
-        for (Object[] row : rows4) {
-            fre = Float.parseFloat(row[11].toString());
-            System.out.println("freight: " + row[11].toString());
-        }
-            
+        RequestOrder ro = RequestOrder.getRO(selected_ro);
+        System.out.println("campis.dp1.controllers.invoices.CreateInvoiceController.getFreigth()");
+        System.out.println(ro.getFreight_amount());
         
         session.getTransaction().commit();
         session.close();
         sessionFactory.close();
         
-        return fre;
+        return ro.getFreight_amount();
     }
     
     private int getType(String type){
