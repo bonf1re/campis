@@ -24,6 +24,15 @@ public class RefundLine {
     Integer id_refund_line;
     Integer id_refund;
     Integer quantity;
+    Integer id_product;
+
+    public Integer getId_product() {
+        return id_product;
+    }
+
+    public void setId_product(Integer id_product) {
+        this.id_product = id_product;
+    }
 
     public RefundLine() {
         super();
@@ -32,7 +41,13 @@ public class RefundLine {
     public RefundLine(Integer id_refund, Integer quant) {
         this.quantity = quant;
         this.id_refund = id_refund;
-    }  
+    }
+    
+    public RefundLine(Integer id_refund, Integer quant, Integer id_product) {
+        this.quantity = quant;
+        this.id_refund = id_refund;
+        this.id_product = id_product;
+    }
 
     /**
      * @return the id_refund_line
