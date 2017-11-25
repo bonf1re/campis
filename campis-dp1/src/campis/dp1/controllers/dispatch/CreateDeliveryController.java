@@ -107,13 +107,19 @@ public class CreateDeliveryController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(DispatchOrder.class);
-        criteria.add(Restrictions.eq("status", "POR DESPACHAR"));
+        //criteria.add(Restrictions.eq("status", "POR DESPACHAR"));
         
         ObservableList<DispatchOrder> returnable = FXCollections.observableArrayList();
         
         List list = criteria.list();
         
         for (int i = 0; i < list.size(); i++) {
+            // Verify that it does not have a delivery created
+            int id_dispatch_order = ((DispatchOrder)list.get(i)).getId_dispatch_order();
+            
+            if (session.createSQLQuery("SELECT  * FROM campis.delivery WHERE id_dispatch_order = "+id_dispatch_order).list().size()>0)
+                continue;
+
             returnable.add((DispatchOrder) list.get(i));
         }
         

@@ -72,5 +72,5 @@ public class Parameters {
         
         return (float) tmp / factor;
     }
-
+    
 }
