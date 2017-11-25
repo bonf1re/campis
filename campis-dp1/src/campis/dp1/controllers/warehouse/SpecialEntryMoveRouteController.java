@@ -14,12 +14,18 @@ import campis.dp1.models.CNode;
 import campis.dp1.models.CRack;
 import campis.dp1.models.Coord;
 import campis.dp1.models.Coordinates;
+import campis.dp1.models.TabuProblem;
+import campis.dp1.models.TabuSolution;
 import campis.dp1.models.Vehicle;
 import campis.dp1.models.utils.GraphicsUtils;
 import campis.dp1.models.Warehouse;
 import campis.dp1.models.WarehouseMove;
 import campis.dp1.models.WarehouseZone;
+import campis.dp1.models.routing.Grasp;
+import campis.dp1.models.routing.GraspResults;
+import campis.dp1.models.routing.RouteGen;
 import campis.dp1.models.utils.RoutingUtils;
+import campis.dp1.services.TabuSearchService;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
@@ -227,7 +233,7 @@ public class SpecialEntryMoveRouteController implements Initializable{
         ContextFX.getInstance().setPolymorphic_list(routing_data);
         ContextFX.getInstance().setId(this.id_warehouse);
         
-        main.showWhEntryMoveRoute();
+        main.showWhSpecialEntryMoveRoute();
     }
     
     @FXML
@@ -241,7 +247,7 @@ public class SpecialEntryMoveRouteController implements Initializable{
         this.routing_data.set(0, index-1);
         ContextFX.getInstance().setPolymorphic_list(routing_data);
         ContextFX.getInstance().setId(this.id_warehouse);
-        main.showWhEntryMoveRoute();
+        main.showWhSpecialEntryMoveRoute();
     }
 
     private void loadData(Session session) throws SQLException, ClassNotFoundException{
@@ -275,6 +281,53 @@ public class SpecialEntryMoveRouteController implements Initializable{
         batchTable.setItems(null);
         batchTable.setItems(batchesList);
     }
+    
+    @FXML
+    public void VisualizeMyRoute(){
+        GraphicsUtils gu = new GraphicsUtils();
+        this.y=this.wh.getWidth();
+        this.x=this.wh.getLength();
+        this.real_map=gu.initMap(this.y,this.x);
+        this.crackList=gu.putCRacks(id_warehouse, real_map);
+        setupCRacksGraph();
+        gc = mapCanvas.getGraphicsContext2D();
+        int index= (int) this.routing_data.get(0);
+        ArrayList<Object> routing_sub_data = (ArrayList<Object>) this.routing_data.get(index);
+        ArrayList<Coord> route = generateRoute((ArrayList<WarehouseZone>)routing_sub_data.get(1));
+        gu.drawVisualizationMap(gc, y, x,this.real_map, route);
+    }
+    
+    private ArrayList<Coord> generateRoute(ArrayList<WarehouseZone> r_zones){
+        RoutingUtils utils=new RoutingUtils();
+        ArrayList<Coord> batchesCoords = readPositions(r_zones);
+        System.out.println(batchesCoords);
+        setupCRacksGraph();
+        Grasp graspSolution = new Grasp(this.real_map,this.routesGraph, batchesCoords);
+        GraspResults gResults = graspSolution.execute();
+        ArrayList<Coordinates> tabuInput = utils.toCoordinates(gResults.getProducts()); // orden de productos
+        RouteGen routeGen = graspSolution.getRouteGen();
+        routeGen.printDict();
+        utils.printCoords(gResults.getRoute());
+        utils.printCoordinates(tabuInput);
+        TabuSearchService tabu = new TabuSearchService();
+        TabuProblem tabuProblem = new TabuProblem(routeGen);
+        TabuSolution tabuSolution = tabu.search(tabuProblem, tabuInput);
+        
+        return new ArrayList<Coord>(utils.getRoute(tabuSolution.getOrder(),routeGen));
+        
+    }
+    
+    private ArrayList<Coord> readPositions(ArrayList<WarehouseZone> r_zones) {
+        ArrayList<Coord> returnable =  new ArrayList<>();
+        for (WarehouseZone r_zone : r_zones) {
+            returnable.add(new Coord(r_zone.getPos_y(),r_zone.getPos_x()));
+        }
+        
+        return returnable;
+    }
+    
+    
+    
 
     private void drawMap(Session session) {
         Criteria criteria = session.createCriteria(Warehouse.class);
