@@ -182,6 +182,10 @@ public class SpecialEntryMoveRouteController implements Initializable{
                 Batch batch = batch_list.get(j);
                 System.out.println("campis.dp1.controllers.warehouse.SpecialEntryMoveRouteController.saveEntryMove()");
                 System.out.println(batch.getId_supplier());
+                if (batch.getId_supplier()==3){
+                    Query refund_update = session.createSQLQuery("UPDATE campis.refund SET status = 'Ingresada'");
+                    refund_update.executeUpdate();
+                }
                 // batch save
                 batch.setType_batch(3);
                 batch.setState(true);

@@ -342,6 +342,7 @@ public class RefundEntryCreateController implements Initializable {
         session.close();
         sessionFactory.close();
         
+        ContextFX.getInstance().setId_Refund(id_refund);
         main.showWhSpecialEntryMoveRoute();    
     }
     
