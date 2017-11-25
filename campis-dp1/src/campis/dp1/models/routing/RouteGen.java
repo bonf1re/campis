@@ -49,6 +49,12 @@ public class RouteGen {
                 route = this.retrieve((normalize_start(new Coord(prods.get(i-1).getY(),prods.get(i-1).getX()))),
                     (normalize_start(new Coord(prods.get(i).getY(),prods.get(i).getX()))));
             }else{
+                route = this.retrieve((normalize_start(new Coord(prods.get(i-1).getY(),prods.get(i-1).getX()))),
+                    (normalize_start(new Coord(prods.get(i).getY(),prods.get(i).getX()))));
+                for (int j = 0; j < route.getPaths().size(); j++) {
+                    returnable.addPath(route.getPaths().get(j));
+                    route.getPaths().get(j).print_c();
+                }
                 route = this.retrieve((normalize_start(new Coord(prods.get(i).getY(),prods.get(i).getX()))),
                     new Coord(0,0));
             }
@@ -314,45 +320,6 @@ public class RouteGen {
      }
     }
 
-    private boolean adyacent_c(Coord pos, Coord c_destiny) {
-        int c_i;
-        int c_f;
-        int opt;
-        if (pos.x != c_destiny.x && pos.y != c_destiny.y) return false;
-        if (pos.x==c_destiny.x) opt = 1;
-        else opt=0;
-        if (opt==0){
-            c_i=pos.x;
-            c_f=c_destiny.x;
-        }else{
-            c_i=pos.y;
-            c_f=c_destiny.y;
-        }
-        int init;
-        int fin;
-        if (c_i<c_f){
-            init=c_i;
-            fin=c_f;
-        }else{
-            init=c_f;
-            fin=c_i;
-        }
-        if (opt==0){
-            for (int k = init; k<fin ;k++){
-                if (map[pos.y][k]==1){
-                    return false;
-                }
-            }
-        }else{
-            for (int k = init; k<fin ;k++){
-                if (map[k][pos.x]==1){
-                    return false;
-                }
-            }
-        }
-
-        return true;
-    }
 
     private void sortPerCost(ArrayList<Integer> aux_costs, ArrayList<Coord> aux_nodes) {
         

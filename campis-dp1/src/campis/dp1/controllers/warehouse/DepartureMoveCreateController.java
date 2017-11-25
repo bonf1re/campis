@@ -657,7 +657,8 @@ public class DepartureMoveCreateController implements Initializable{
             aux.add(r_zones);
             aux.add(vh);
             System.out.println(r_zones.toString());
-            ArrayList<Coord> route =generateRoute(r_zones,session);
+            //ArrayList<Coord> route =generateRoute(r_zones,session);
+            ArrayList<Coord> route =new ArrayList<>();
             aux.add(new ArrayList<Coord>(route));
             aux.add(false); // to know whether this move has been saved or not
             sendable.add(aux);
