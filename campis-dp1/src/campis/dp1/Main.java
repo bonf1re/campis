@@ -607,6 +607,13 @@ public class Main extends Application {
         BorderPane newClient = loader.load();
         mainLayout.setCenter(newClient);    
     }
+    
+    public static void showViewRefund() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/refunds/view.fxml"));
+        BorderPane newClient = loader.load();
+        mainLayout.setCenter(newClient);    
+    }
 
     /* End RequestOrder*/
     

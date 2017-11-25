@@ -27,6 +27,12 @@ public class Refund {
         this.status = "Por Llegar";
         this.id_invoice = id_invoice;
     }
+    
+    public Refund(Integer idrefund,Integer id_invoice) {
+        this.status = "Por Llegar";
+        this.id_invoice = id_invoice;
+        this.id_refund = idrefund;
+    }
 
     /**
      * @return the id_refund
