@@ -5,12 +5,15 @@
  */
 package campis.dp1.models.utils;
 
+import campis.dp1.models.BatchWH_Move;
 import campis.dp1.models.CRack;
 import campis.dp1.models.Coord;
 import campis.dp1.models.Rack;
+import campis.dp1.models.WarehouseZone;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
+import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
 import javafx.scene.canvas.GraphicsContext;
 import javafx.scene.control.Alert;
@@ -163,7 +166,7 @@ public class GraphicsUtils {
     }
 
     @FXML
-    public void drawVisualizationMap(GraphicsContext gc, int y, int x, int[][] map, ArrayList<Coord> route) {
+    public void drawVisualizationMap(GraphicsContext gc, int y, int x, int[][] map, ArrayList<Coord> route, ObservableList<BatchWH_Move> b_zones) {
         //System.out.println(ContextFX.getInstance().getId());
         // String filename = "/media/Multimedia/Projects/GitProjects/GRASP-OPT2/Inputs/map_0.txt";
         // read_map(filename);
@@ -239,6 +242,12 @@ public class GraphicsUtils {
                 gc.setFill(Color.TRANSPARENT);
                 gc.strokeRect(i * mult / scaling_factor_x + padding_x, j * mult / scaling_factor_y + padding_y, mult, mult);
             }
+        }
+        
+        for (BatchWH_Move b_zone : b_zones) {
+            gc.setStroke(Color.LAVENDER);
+            gc.setFill(Color.LAVENDER);
+            gc.fillRect(b_zone.getZone().getPos_x() * mult / scaling_factor_x + padding_x, b_zone.getZone().getPos_y() * mult / scaling_factor_y + padding_y, mult, mult);
         }
         
 

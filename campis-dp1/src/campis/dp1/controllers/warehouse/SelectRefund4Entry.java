@@ -1,18 +1,20 @@
 package campis.dp1.controllers.warehouse;
 
+import campis.dp1.ContextFX;
+import campis.dp1.Main;
+import campis.dp1.models.Product;
 import campis.dp1.models.ProductWH_Move;
 import campis.dp1.models.Refund;
 import campis.dp1.models.RefundLine;
-import campis.dp1.models.RequestOrder;
-import campis.dp1.models.RequestOrderLine;
-import campis.dp1.models.RequestOrderLineDisplay;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXTextField;
-import java.math.BigDecimal;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.ResourceBundle;
+import javafx.beans.property.SimpleIntegerProperty;
+import javafx.beans.property.SimpleStringProperty;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.fxml.FXML;
@@ -67,16 +69,33 @@ public class SelectRefund4Entry implements Initializable{
     private Refund refund;
     private ArrayList<Refund> listRefund;
     private Integer id;
-    private ObservableList<RefundLine> rfLineView;
-
+    private ObservableList<ProductWH_Move> rfLineView;
+    private Main main;
+    
     @FXML
-    void goListEntryMove() {
-
+    void goListEntryMove() throws IOException {
+        main.showWhEntryMoveList();
     }
 
     @FXML
-    void goRefundMoveCreate() {
-
+    void goRefundMoveCreate() throws IOException {
+        // Should take the refund ID for further save
+        // Should take the the list of ProductWH_Move
+        ArrayList<Object> sendable = new ArrayList<>();
+        sendable.add(this.refund.getId_refund());
+        sendable.add(new ArrayList<>(this.rfLineView));
+        ContextFX.getInstance().setPolymorphic_list(sendable);
+        Configuration configuration = new Configuration();
+            configuration.configure("hibernate.cfg.xml");
+            configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+            SessionFactory sessionFactory = configuration.buildSessionFactory();
+            Session session = sessionFactory.openSession();
+            session.beginTransaction();
+        int principal_wh_id = (int) session.createSQLQuery("SELECT id_warehouse FROM campis.wh_config WHERE wh_type = 1").list().get(0);
+        ContextFX.getInstance().setId(principal_wh_id);
+        session.close();
+        sessionFactory.close();
+        main.showRefundMoveCreate();
     }
 
     @Override
@@ -88,11 +107,11 @@ public class SelectRefund4Entry implements Initializable{
         Session s2 = sessionF2.openSession();
         s2.beginTransaction();
         Criteria criteria = s2.createCriteria(Refund.class);
-        criteria.add(Restrictions.eq("status", "EN PROGRESO"));
+        criteria.add(Restrictions.eq("status", "Por Ingresar"));
         this.listRefund = new ArrayList<>(criteria.list());
         try{
-        setupCbRefundId();
-        setupFields(s2);
+            setupCbRefundId();
+            setupFields(s2);
         }catch(Exception e){
             e.printStackTrace();
         }
@@ -108,9 +127,10 @@ public class SelectRefund4Entry implements Initializable{
         ObservableList rq_olist = FXCollections.observableArrayList(refund_ids);
         cbRefundId.setItems(null);
         cbRefundId.setItems(rq_olist);
-        cbRefundId.getSelectionModel().selectFirst();
         this.id = this.listRefund.get(0).getId_refund();
         this.refund = this.listRefund.get(0);
+        cbRefundId.getSelectionModel().selectFirst();
+        
         
         
         cbRefundId.getSelectionModel().selectedItemProperty().addListener(
@@ -136,26 +156,76 @@ public class SelectRefund4Entry implements Initializable{
         );
     }
 
-    private void setupFields(Session s2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+    private void setupFields(Session session) {
+        List<RefundLine> list = getRefundLine(id,session);
+        Refund ref = this.refund;
+        int idCli = getIdCli(ref.getId_invoice(),session);
+        String nameCli = getNameCli(ref.getId_invoice(),session);
+        this.nameClientField.setText(nameCli);
+        this.clientField.setText(String.valueOf(idCli));
+        this.requestField.setText(String.valueOf((int)session
+                                    .createSQLQuery("SELECT id_dispatch_order FROM campis.invoice WHERE id_invoice = "+ref.getId_invoice())
+                                    .list()
+                                    .get(0)));
+        this.invoiceField.setText(String.valueOf(ref.getId_invoice()));
+        idColumn.setCellValueFactory(cellData -> new SimpleIntegerProperty(cellData.getValue().getId_product()).asObject());
+        nameColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getName()));
+        typeColumn.setCellValueFactory(cellData -> new SimpleStringProperty(cellData.getValue().getId_product_type().toString()));
+        qtColumn.setCellValueFactory(cellData -> cellData.getValue().getNum().asObject());
+        
+        
+        this.tablaProd.setEditable(true);
+        loadData(list,session);
     }
 
     private List<RefundLine> getRefundLine(Integer id, Session s2) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+        Criteria criteria = s2.createCriteria(RefundLine.class);
+        criteria.add(Restrictions.eq("id_refund", id));
+        List<RefundLine> aux = criteria.list();
+        ArrayList<RefundLine> returnable = new ArrayList<>(aux);
+        return returnable;
     }
 
     private void loadData(List<RefundLine> list, Session session) {
         this.rfLineView = FXCollections.observableArrayList();
-        Query query = session.createSQLQuery("SELECT * FROM campis.refund_line WHERE id_refund = "+this.id);
+        Query query = session.createSQLQuery("SELECT * FROM campis.refund_line WHERE id_refund = "+this.refund.getId_refund());
         ArrayList<Object[]> rows = new ArrayList<>(query.list());
         for (Object[] row : rows){
-            RefundLine aux_rf = new RefundLine((int)row[0],(int)row[0]);
-            
-            rfLineView.add();
+            RefundLine aux_rf = new RefundLine((int)row[1],(int)row[2]);
+            aux_rf.setId_product((int)row[3]);
+            System.out.println(row[0].toString());
+            System.out.println(row[1].toString());
+            System.out.println(row[2].toString());
+            System.out.println(row[3].toString());
+            System.out.println("Quantity in rf_line is:"+aux_rf.getQuantity());
+            Product aux_prod = (Product) session.createCriteria(Product.class)
+                                .add(Restrictions.eq("id_product", aux_rf.getId_product())).list().get(0);
+            //cantLote.setCellValueFactory(cellData -> cellData.getValue().getQtLt().asObject());
+            //cant_x_lote.setCellValueFactory(cellData -> cellData.getValue().getNum().asObject());
+            rfLineView.add(new ProductWH_Move(aux_prod,0,1,(int)row[2]));
         }
-        
         tablaProd.setItems(null);
         tablaProd.setItems(rfLineView);
+    }
+
+    private String getNameCli(int id_invoice, Session session) {
+        int id_client = getIdCli(id_invoice, session);
+        return (String) session.createSQLQuery("SELECT name FROM campis.client WHERE id_client = "+id_client)
+                                            .list()
+                                            .get(0);
+    }
+
+    private int getIdCli(Integer id_invoice, Session session) {
+        int id_dispatch_order = (int) session.createSQLQuery("SELECT id_dispatch_order FROM campis.invoice WHERE id_invoice = "+id_invoice)
+                                        .list()
+                                        .get(0);
+        int id_request_order = (int) session.createSQLQuery("SELECT id_request_order FROM campis.dispatch_order WHERE id_dispatch_order = "+id_dispatch_order)
+                                        .list()
+                                        .get(0);
+        
+        return (int) session.createSQLQuery("SELECT id_client FROM campis.request_order WHERE id_request_order = "+id_request_order)
+                    .list()
+                    .get(0);
     }
 
 }

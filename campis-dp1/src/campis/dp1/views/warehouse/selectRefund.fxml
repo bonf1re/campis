@@ -45,10 +45,10 @@
                   <Font size="20.0" />
                </font>
             </Label>
-            <Label layoutX="75.0" layoutY="98.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" text="Código de Venta:" />
+            <Label layoutX="75.0" layoutY="98.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" text="Código de Despacho:" />
             <Label layoutX="263.0" layoutY="99.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" text="Código Factura:" />
             <JFXTextField fx:id="invoiceField" disable="true" editable="false" layoutX="344.0" layoutY="90.0" prefHeight="25.0" prefWidth="52.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
-            <JFXTextField fx:id="requestField" disable="true" editable="false" layoutX="179.0" layoutY="88.0" prefHeight="25.0" prefWidth="52.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
+            <JFXTextField fx:id="requestField" disable="true" editable="false" layoutX="187.0" layoutY="88.0" prefHeight="25.0" prefWidth="52.0" styleClass="batch_table" stylesheets="@../../assets/css/whmoves.css" />
          </children>
       </AnchorPane>
    </bottom>
