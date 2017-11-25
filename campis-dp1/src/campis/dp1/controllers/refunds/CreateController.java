@@ -11,19 +11,26 @@ import java.io.File;
 import java.io.FileOutputStream;
 import campis.dp1.ContextFX;
 import campis.dp1.Main;
+import campis.dp1.models.Client;
 import com.itextpdf.text.Rectangle;
 import com.itextpdf.text.pdf.PdfPCell;
 import com.itextpdf.text.pdf.PdfPTable;
 import campis.dp1.models.DispatchOrder;
+import campis.dp1.models.District;
 import campis.dp1.models.Invoice;
 import campis.dp1.models.InvoiceLine;
 import campis.dp1.models.InvoiceLineDisplay;
+import campis.dp1.models.Product;
 import campis.dp1.models.Refund;
 import campis.dp1.models.RefundLine;
 import campis.dp1.models.RefundLineDisplay;
 import campis.dp1.models.RequestOrder;
 import campis.dp1.models.RequestOrderLine;
 import campis.dp1.models.RequestOrderLineDisplay;
+import com.itextpdf.text.Font;
+import com.itextpdf.text.Font.FontFamily;
+import com.itextpdf.text.Phrase;
+import com.itextpdf.text.pdf.PdfWriter;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
@@ -324,7 +331,7 @@ public class CreateController implements Initializable {
     }
 
     @FXML
-    private void goCreateRefund(ActionEvent event) throws IOException {
+    private void goCreateRefund(ActionEvent event) throws IOException, DocumentException {
         Configuration conf2 = new Configuration();
         conf2.configure("hibernate.cfg.xml");
         conf2.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
@@ -350,9 +357,10 @@ public class CreateController implements Initializable {
         s2.close();
         sessionF2.close();
         ContextFX.getInstance().setId(cbRequestOrderId.getValue());
+        createInvoicePdf();
         this.main.showViewRefund();
     }
-/*
+
     public void createInvoicePdf() throws IOException, DocumentException {
         String dest = "reports/crediteNotes/NOTA_CREDITO_" + idref  + ".pdf";
         File file = new File(dest);
@@ -368,7 +376,7 @@ public class CreateController implements Initializable {
         createPdf(dest, invoice_lines, client, district, create_date, delivery_date);
     }
 
-    public void createPdf(String dest, List<InvoiceLine> invoice_lines, String client, String district_data, String create_date_data, String delivery_date_data) throws IOException, DocumentException {
+    public void createPdf(String dest, List<RefundLine> invoice_lines, String client, String district_data, String create_date_data, String delivery_date_data) throws IOException, DocumentException {
         Document document = new Document();
         PdfWriter.getInstance(document, new FileOutputStream(dest));
         document.open();
@@ -428,7 +436,7 @@ public class CreateController implements Initializable {
         info.addCell(blank);
         info.addCell(blank);
             
-        PdfPTable table = new PdfPTable(4);
+        PdfPTable table = new PdfPTable(5);
         table.addCell("Nombre");
         table.addCell("Marca");
         table.addCell("Cantidad");
@@ -440,8 +448,8 @@ public class CreateController implements Initializable {
             table.addCell(pro.getName());
             table.addCell(pro.getTrademark());
             table.addCell(invoice_lines.get(i).getQuantity().toString());
-            table.addCell(invoice_lines.get(i).getCost().toString());
-            Float cost = invoice_lines.get(i).getQuantity() * invoice_lines.get(i).getCost();
+            table.addCell(pro.getBase_price().toString());
+            Float cost = invoice_lines.get(i).getQuantity() * pro.getBase_price();
             subtotal_counter += cost;
             table.addCell(cost.toString());
         }
@@ -463,5 +471,5 @@ public class CreateController implements Initializable {
         document.add(table);
         document.add(totales);
         document.close();
-    }*/
+    }
 }

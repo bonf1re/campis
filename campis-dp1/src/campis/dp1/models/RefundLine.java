@@ -91,7 +91,7 @@ public class RefundLine {
         this.quantity = quantity;
     }
 
-    /*public Integer get_idProduct() {
-        return RequestOrderLine.getRequestOrderLine(id_request_order_line).getId_product();
-    }*/
+    public Integer get_idProduct() {
+        return id_product;
+    }
 }
