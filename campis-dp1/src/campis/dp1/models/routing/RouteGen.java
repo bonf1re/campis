@@ -313,19 +313,18 @@ public class RouteGen {
         ArrayList<String> keys =  new ArrayList<String>(this.paths.keySet());
         for (int i = 0; i < keys.size(); i++) {
             CNode node = this.paths.getNode(keys.get(i));
-            if (zero_racks(node.getPos(),c_destiny,this.map)==true){
+            if (frontTofront(node.getPos(), c_destiny)==true){
+            //if (zero_racks(node.getPos(),c_destiny,this.map)==true){
                 destiny_nodes.add(node);
                 if (destiny_nodes.size()==2) break;
             }            
         }
         
-        if (destiny_nodes.size()==0){
-            
-        }
         
         for (int i = 0; i < keys.size(); i++) {
             CNode node = this.paths.getNode(keys.get(i));
-            if (zero_racks(node.getPos(),c_origin,this.map)==true){
+            if (frontTofront(node.getPos(), c_origin)==true){
+            //if (zero_racks(node.getPos(),c_origin,this.map)==true){
                 origin_nodes.add(node);
                 if (origin_nodes.size()==2) break;
             }            
