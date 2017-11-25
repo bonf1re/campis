@@ -26,12 +26,11 @@
             <TableView fx:id="tablaProd" layoutX="150.0" layoutY="243.0" prefHeight="163.0" prefWidth="657.0">
               <columns>
                 <TableColumn fx:id="idColumn" prefWidth="43.0" text="COD" />
-                <TableColumn fx:id="nameColumn" prefWidth="151.0" text="Nombre" />
-                  <TableColumn fx:id="quantityColumn" prefWidth="57.0" text="#" />
-                  <TableColumn fx:id="unitaryAmountColumn" prefWidth="85.0" text="M. Unit." />
-                  <TableColumn fx:id="finalAmountColumn" prefWidth="87.0" text="M. Final" />
-                  <TableColumn fx:id="discountColumn" prefWidth="90.0" text="Desc." />
-                  <TableColumn fx:id="stateColumn" prefWidth="143.0" text="Estado" />
+                <TableColumn fx:id="nameColumn" prefWidth="220.0" text="Nombre" />
+                  <TableColumn fx:id="quantityColumn" prefWidth="61.0" text="#" />
+                  <TableColumn fx:id="unitaryAmountColumn" prefWidth="112.0" text="M. Unit." />
+                  <TableColumn fx:id="finalAmountColumn" prefWidth="122.0" text="M. Final" />
+                  <TableColumn fx:id="discountColumn" prefWidth="98.0" text="Desc." />
               </columns>
             </TableView>
             <Label layoutX="565.0" layoutY="418.0" prefHeight="17.0" prefWidth="62.0" text="Subtotal:" />

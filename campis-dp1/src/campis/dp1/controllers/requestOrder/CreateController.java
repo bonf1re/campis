@@ -89,8 +89,8 @@ public class CreateController implements Initializable {
     @FXML
     private TableColumn<RequestLineDisplay, Float> discountColumn;
 
-    @FXML
-    private TableColumn<RequestLineDisplay, String> stateColumn;
+   // @FXML
+   // private TableColumn<RequestLineDisplay, String> stateColumn;
     @FXML
     private JFXComboBox<String> nameClientField;
     @FXML
@@ -259,19 +259,24 @@ public class CreateController implements Initializable {
             n_c_aux = discounts.get(i).getN_tocount();
             
             if (type == 1) {
-                if (Objects.equals(prod.getId_product(), taken_id))
+                if (Objects.equals(prod.getId_product(), taken_id)){
                     returnable = returnable + discounts.get(i).getAmount() / 100;
-
+                    if (n_d_aux != 1 || n_c_aux != 1) {
+                        n_discount = n_d_aux;
+                        n_tocount = n_c_aux;
+                    }
+                }
             } else if (type == 2) {
                 if (Objects.equals(prod.getId_product_type(), taken_id)) {
                     returnable = returnable + discounts.get(i).getAmount() / 100;
+                    if (n_d_aux != 1 || n_c_aux != 1) {
+                        n_discount = n_d_aux;
+                        n_tocount = n_c_aux;
+                    }
                 }
             }
             
-            if (n_d_aux != 1 || n_c_aux != 1) {
-                n_discount = n_d_aux;
-                n_tocount = n_c_aux;
-            }
+            
             
         }
         return returnable;
@@ -299,9 +304,10 @@ public class CreateController implements Initializable {
         freightTotal = getFreight(this.districtField.getValue());
         noIGVamount = baseTotalAmount - discountTotal + freightTotal;
         igvTotal = noIGVamount * (IGV);
-        totalAmount = noIGVamount * (IGV+1);
-        this.freightField.setText(String.format("%.2f", freightTotal));
-        this.amountField.setText(String.format("%.2f", totalAmount));
+        totalAmount = noIGVamount + igvTotal;
+        this.IGVField.setText(Float.toString(param.roundingMethod(igvTotal, 2)));
+        this.freightField.setText(Float.toString(param.roundingMethod(freightTotal, 2)));
+        this.amountField.setText(Float.toString(param.roundingMethod(totalAmount, 2)));
     }
 
     private void loadData(int cod, int quant) {
@@ -325,16 +331,16 @@ public class CreateController implements Initializable {
         discountTotal = discountTotal + base_amount * disc + promo;
         freightTotal = ContextFX.getInstance().getFreight();
         igvTotal = (baseTotalAmount - discountTotal + freightTotal) * IGV;
-        totalAmount = (baseTotalAmount - discountTotal + freightTotal)*(IGV+1);
+        totalAmount = baseTotalAmount - discountTotal + freightTotal  + igvTotal;
         ContextFX.getInstance().setDiscount(discountTotal);
         ContextFX.getInstance().setBaseTotAmount(baseTotalAmount);
         ContextFX.getInstance().setIgvTot(igvTotal);
         ContextFX.getInstance().setTotAmount(totalAmount);
-        this.subtotalField.setText(String.format("%.2f",baseTotalAmount));
-        this.discountField.setText(String.format("%.2f",discountTotal));
-        this.freightField.setText(String.format("%.2f",freightTotal));
-        this.IGVField.setText(String.format("%.2f",igvTotal));
-        this.amountField.setText(String.format("%.2f",totalAmount));
+        this.subtotalField.setText(Float.toString(param.roundingMethod(baseTotalAmount, 2)));
+        this.discountField.setText(Float.toString(param.roundingMethod(discountTotal, 2)));
+        this.freightField.setText(Float.toString(param.roundingMethod(freightTotal, 2)));
+        this.IGVField.setText(Float.toString(param.roundingMethod(igvTotal, 2)));
+        this.amountField.setText(Float.toString(param.roundingMethod(totalAmount, 2)));
         RequestLineDisplay prod = new RequestLineDisplay(products.get(0).getId_product(), products.get(0).getName(),
                 quantity,
                 products.get(0).getBase_price(),
@@ -386,11 +392,11 @@ public class CreateController implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
         
         
-        subtotalField.setText(String.format("%.2f", baseTotalAmount));
-        discountField.setText(String.format("%.2f", discountTotal));
-        freightField.setText(String.format("%.2f", freightTotal));
-        IGVField.setText(String.format("%.2f", igvTotal));
-        amountField.setText(String.format("%.2f", totalAmount));
+        subtotalField.setText(Float.toString(param.roundingMethod(baseTotalAmount, 2)));
+        discountField.setText(Float.toString(param.roundingMethod(discountTotal, 2)));
+        freightField.setText(Float.toString(param.roundingMethod(freightTotal, 2)));
+        IGVField.setText(Float.toString(param.roundingMethod(igvTotal, 2)));
+        amountField.setText(Float.toString(param.roundingMethod(totalAmount, 2)));
         
         
         
@@ -404,7 +410,7 @@ public class CreateController implements Initializable {
                 });
         try {
             IGV = ContextFX.getInstance().getIGV();
-            igvField.setText(String.format("%.2f", IGV));
+            igvField.setText(Float.toString(param.roundingMethod(IGV, 2)));
             
             statesField.setText("EN PROGRESO");
             priorityField.getItems().addAll("1", "2", "3");
@@ -430,7 +436,7 @@ public class CreateController implements Initializable {
             quantityColumn.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
             unitaryAmountColumn.setCellValueFactory(cellData -> cellData.getValue().getBase_price().asObject());
             finalAmountColumn.setCellValueFactory(cellData -> cellData.getValue().getFinal_price().asObject());
-            stateColumn.setCellValueFactory(cellData -> cellData.getValue().getStatus());
+    //        stateColumn.setCellValueFactory(cellData -> cellData.getValue().getStatus());
             discountColumn.setCellValueFactory(cellData -> cellData.getValue().getDiscount().asObject());
             loadData(id, quantity);
         } catch (NullPointerException e) {
@@ -439,7 +445,7 @@ public class CreateController implements Initializable {
             quantityColumn.setCellValueFactory(cellData -> cellData.getValue().getQuantity().asObject());
             unitaryAmountColumn.setCellValueFactory(cellData -> cellData.getValue().getBase_price().asObject());
             finalAmountColumn.setCellValueFactory(cellData -> cellData.getValue().getFinal_price().asObject());
-            stateColumn.setCellValueFactory(cellData -> cellData.getValue().getStatus());
+    //        stateColumn.setCellValueFactory(cellData -> cellData.getValue().getStatus());
             discountColumn.setCellValueFactory(cellData -> cellData.getValue().getDiscount().asObject());
         }
     }
