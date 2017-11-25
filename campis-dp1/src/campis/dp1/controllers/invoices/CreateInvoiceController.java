@@ -7,8 +7,8 @@ package campis.dp1.controllers.invoices;
 
 import campis.dp1.Main;
 import campis.dp1.models.Invoice;
+import campis.dp1.models.InvoiceLine;
 import campis.dp1.models.Delivery;
-import campis.dp1.models.DispatchOrder;
 import campis.dp1.models.DispatchOrderLine;
 import campis.dp1.models.RequestOrderLine;
 import com.jfoenix.controls.JFXComboBox;
@@ -287,13 +287,18 @@ public class CreateInvoiceController implements Initializable {
                 float final_cost  = (aux_ro.getCost()*line.getQuantity()) - desc;
                 total += final_cost;
                 
-                String qryStr7 = "INSERT INTO campis.invoice_line VALUES(DEFAULT," + line.getId_dispatch_order()+ ","
-                    + line.getId_prod() + ","
-                    + line.getQuantity() + ","
-                    + aux_ro.getCost() + ","
-                    + desc + ","
-                    + aux_ro.getQuantity() + ","
-                    + final_cost+ ")";
+                InvoiceLine i_line = new InvoiceLine( aux_id_invoice, line.getId_prod(), 
+                                                    line.getQuantity(), aux_ro.getCost(),
+                                                    desc, aux_ro.getQuantity(),
+                                                    final_cost);
+                
+                String qryStr7 = "INSERT INTO campis.invoice_line VALUES(DEFAULT," + i_line.getId_invoice() + ","
+                    + i_line.getId_product()+ ","
+                    + i_line.getQuantity()+ ","
+                    + i_line.getCost()+ ","
+                    + i_line.getDiscount() + ","
+                    + i_line.getQuantity_ro()+ ","
+                    + i_line.getFinal_cost()+ ")";
                 
                 SQLQuery qry7 = session.createSQLQuery(qryStr7);
                 qry7.executeUpdate();
