@@ -92,18 +92,6 @@ public class WarehouseListController implements Initializable {
         }
     }
     
-    @FXML
-    private void goWhEntryMoveList() throws IOException {
-        if (selected_id > 0) {
-            ContextFX.getInstance().setId(selected_id);
-            try {
-                main.showWhEntryMoveList();
-            } catch (IOException ex) {
-                Logger.getLogger(WarehouseListController.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
-            
-    }
     
     @FXML 
     private void goWhVisualize() throws IOException {
