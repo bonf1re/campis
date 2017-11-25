@@ -7,6 +7,5 @@
    <children>
       <JFXButton fx:id="userButton" onAction="#goListUser" prefHeight="47.0" prefWidth="95.0" styleClass="option" text="Usuarios" />
       <JFXButton fx:id="roleButton" onAction="#goListRoles" prefHeight="47.0" prefWidth="95.0" styleClass="option" text="Roles" />
-      <JFXButton fx:id="logButton" prefHeight="47.0" prefWidth="95.0" styleClass="option" text="Logs" />
    </children>
 </VBox>

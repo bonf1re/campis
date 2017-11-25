@@ -29,10 +29,7 @@ public class DispatchSidebarController implements Initializable {
     private JFXButton depButton;
     
     @FXML
-    private JFXButton delButton;
-    
-    @FXML
-    private JFXButton batchxdispButton;
+    private JFXButton deliveryButton;
     
     @FXML
     private void goDepartureMoveList() throws IOException {
@@ -59,7 +56,7 @@ public class DispatchSidebarController implements Initializable {
             View entView = View.getView("entries_dispatch");
             View depView = View.getView("departures_dispatch");
             if (!Permission.canVisualize(id_role, entView.getId_view()))
-                delButton.setVisible(false);
+                deliveryButton.setVisible(false);
             if (!Permission.canVisualize(id_role, depView.getId_view()))
                 depButton.setVisible(false);
         } catch(NullPointerException e) {

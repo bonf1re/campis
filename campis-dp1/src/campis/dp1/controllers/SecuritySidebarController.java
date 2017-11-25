@@ -30,22 +30,16 @@ public class SecuritySidebarController implements Initializable {
     @FXML
     private JFXButton roleButton;
 
-    @FXML
-    private JFXButton logButton;
-
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
             id_role = (ContextFX.getInstance().getUser().getId_role());
             View userView = View.getView("users");
             View roleView = View.getView("roles");
-            View logView = View.getView("log");
             if (!Permission.canVisualize(id_role, userView.getId_view()))
                 userButton.setVisible(false);
             if (!Permission.canVisualize(id_role, roleView.getId_view()))
                 roleButton.setVisible(false);
-            if (!Permission.canVisualize(id_role, logView.getId_view()))
-                logButton.setVisible(false);
         } catch(NullPointerException e) {
         }
     } 

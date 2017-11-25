@@ -40,13 +40,16 @@ public class CommerceSidebarController implements Initializable {
     private JFXButton freButton;
 
     @FXML
-    private JFXButton comButton;
-
-    @FXML
     private JFXButton refButton;
     
     @FXML
     private JFXButton supButton;
+
+    @FXML
+    private JFXButton invButton;
+
+    @FXML
+    private JFXButton curButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -56,10 +59,11 @@ public class CommerceSidebarController implements Initializable {
             View scView = View.getView("sale_conditions");
             View rsView = View.getView("request_statuses");
             View cliView = View.getView("clients");
-            //View supView = View.getView("suppliers");
             View freView = View.getView("districts");
-            View comView = View.getView("complaints");
             View refView = View.getView("refunds");
+            View supView = View.getView("supplier");
+            View facView = View.getView("factura");
+            View changeView = View.getView("changetypes");
             if (!Permission.canVisualize(id_role, roView.getId_view()))
                 roButton.setVisible(false);
             if (!Permission.canVisualize(id_role, scView.getId_view()))
@@ -68,14 +72,18 @@ public class CommerceSidebarController implements Initializable {
                 rsButton.setVisible(false);
             if (!Permission.canVisualize(id_role, cliView.getId_view()))
                 cliButton.setVisible(false);
-            /*if (!Permission.canVisualize(id_role, supView.getId_view()))
-                supButton.setVisible(false);*/
-            if (!Permission.canVisualize(id_role, comView.getId_view()))
-                comButton.setVisible(false);
+            if (!Permission.canVisualize(id_role, supView.getId_view()))
+                supButton.setVisible(false);
             if (!Permission.canVisualize(id_role, refView.getId_view()))
                 refButton.setVisible(false);
             if (!Permission.canVisualize(id_role, freView.getId_view()))
                 freButton.setVisible(false);
+
+            if (!Permission.canVisualize(id_role, facView.getId_view()))
+                invButton.setVisible(false);
+            if (!Permission.canVisualize(id_role, changeView.getId_view()))
+                curButton.setVisible(false);
+
         } catch(NullPointerException e) {
         }
     }

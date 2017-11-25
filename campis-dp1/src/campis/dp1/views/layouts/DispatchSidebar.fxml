@@ -4,17 +4,12 @@
 <?import java.net.URL?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" 
-      minWidth="-Infinity" prefHeight="800.0" prefWidth="110.0" 
-      styleClass="container" stylesheets="@../../assets/css/sidebar.css" 
-      xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" 
-      fx:controller="campis.dp1.controllers.DispatchSidebarController">
+<VBox maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="800.0" prefWidth="110.0" styleClass="container" stylesheets="@../../assets/css/sidebar.css" xmlns="http://javafx.com/javafx/8.0.141" xmlns:fx="http://javafx.com/fxml/1" fx:controller="campis.dp1.controllers.DispatchSidebarController">
     <stylesheets>
         <URL value="@/campis/dp1/assets/css/dispatchsidebar.css" />
     </stylesheets>
     <children>
       <JFXButton fx:id="depButton" onAction="#goDepartureMoveList" prefHeight="51.0" prefWidth="110.0" styleClass="option" text="Salidas" />
       <JFXButton fx:id="deliveryButton" onAction="#goDeliveryList" prefHeight="46.0" prefWidth="110.0" styleClass="option" text="Entregas" />
-      <JFXButton fx:id="batchxdispButton" layoutX="10.0" layoutY="61.0" onAction="#goListDispatchBatch" prefHeight="65.0" prefWidth="110.0" styleClass="option" text="Lotes en despacho" textAlignment="CENTER" wrapText="true" />
    </children>
 </VBox>
