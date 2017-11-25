@@ -39,7 +39,7 @@
             <Button layoutX="408.0" layoutY="543.0" mnemonicParsing="false" onAction="#nextRoute" text="&gt;" />
             <Button layoutX="316.0" layoutY="543.0" mnemonicParsing="false" onAction="#prevRoute" text="&lt;" />
             <Text fx:id="pCounterField" layoutX="355.0" layoutY="561.0" strokeType="OUTSIDE" strokeWidth="0.0" text="&lt;x/x&gt;" />
-            <Button layoutX="275.0" layoutY="492.0" mnemonicParsing="false" onAction="#VisualizeMyRoute" prefHeight="26.0" prefWidth="119.0" text="Generar Ruta" textAlignment="CENTER" />
+            <Button layoutX="271.0" layoutY="485.0" mnemonicParsing="false" onAction="#VisualizeMyRoute" prefHeight="26.0" prefWidth="119.0" text="Visualizar Ruta" textAlignment="CENTER" />
          </children>
       </Pane>
    </right>
