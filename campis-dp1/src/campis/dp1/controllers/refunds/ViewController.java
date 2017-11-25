@@ -15,6 +15,7 @@ import campis.dp1.models.RefundLine;
 import campis.dp1.models.RequestOrder;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
+import java.io.IOException;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.List;
@@ -324,7 +325,8 @@ public class ViewController implements Initializable {
     }
     
     @FXML
-    private void goListDepartureMove(ActionEvent event) {
+    private void goListDepartureMove(ActionEvent event) throws IOException {
+        main.showListRefund();
     }
 
 }
