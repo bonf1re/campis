@@ -42,7 +42,7 @@ public class ReportSidebarController implements Initializable {
     private void goExpirationReport() throws IOException {
         main.showExpirationReportConf();
     }
-    
+
     @FXML
     private void goStocksReport() throws IOException {
         main.showStocksReportConf();
@@ -52,7 +52,7 @@ public class ReportSidebarController implements Initializable {
     private void goBills() throws IOException {
         main.showBillList();
     }
-    
+
     @Override
     public void initialize(URL url, ResourceBundle rb) {
         try {
