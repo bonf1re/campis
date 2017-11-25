@@ -80,3 +80,13 @@ Miguel Guanira se acaba de logear a CAMPIS.
 Miguel Guanira se acaba de logear a CAMPIS.
 2017/11/25 13:23:36
 Miguel Guanira se acaba de logear a CAMPIS.
+2017/11/25 13:28:23
+UserTest1 Testito se acaba de logear a CAMPIS.
+2017/11/25 13:28:50
+Miguel Guanira se acaba de logear a CAMPIS.
+2017/11/25 13:39:07
+Miguel Guanira se acaba de logear a CAMPIS.
+2017/11/25 13:43:19
+Miguel Guanira se acaba de logear a CAMPIS.
+2017/11/25 13:43:39
+Miguel Guanira creo una orden de despacho de id: 4194

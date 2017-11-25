@@ -536,7 +536,7 @@ public class DispatchMoveCreateController implements Initializable{
             Query query = session.createSQLQuery("SELECT z.* FROM campis.zone z\n" +
                                                     "INNER JOIN\n" +
                                                     "campis.movement m on m.id_zone = z.id_zone\n" +
-                                                    "WHERE m.id_batch ="+parsed_id_batch+" AND id_warehouse = "+this.id_warehouse+"\n" +
+                                                    "WHERE m.id_batch ="+parsed_id_batch+" AND z.id_warehouse = "+this.id_warehouse+"\n" +
                                                     "ORDER BY mov_date");
             List<Object[]> rs = query.list();
             if (rs.size()<=0) continue;
