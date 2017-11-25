@@ -18,7 +18,7 @@
       <TableView fx:id="tableRefund" prefHeight="335.0" prefWidth="737.0" BorderPane.alignment="CENTER">
         <columns>
           <TableColumn fx:id="idRequestOrderColumn" prefWidth="75.0" text="ID Factura" />
-            <TableColumn fx:id="idComplaintColumn" prefWidth="75.0" text="ID Reclamo" />
+            <TableColumn fx:id="idComplaintColumn" prefWidth="75.0" text="ID Devoluciones" />
             <TableColumn fx:id="statusColumn" prefWidth="75.0" text="Estado" />
         </columns>
          <columnResizePolicy>
