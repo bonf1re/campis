@@ -230,4 +230,22 @@ public class RequestOrder {
 
         return request_ordes_lines;
     }
+
+    public static RequestOrder getRO(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        Criteria criteria = session.createCriteria(RequestOrder.class);
+        criteria.add(Restrictions.eq("id_request_order",cod));
+        String descrip;
+        List rsMeasure = criteria.list();
+        RequestOrder result = (RequestOrder)rsMeasure.get(0);
+        session.close();
+        sessionFactory.close();
+
+        return result;
+    }
 }
