@@ -8,6 +8,7 @@ import campis.dp1.models.Product;
 import campis.dp1.models.ProductDisplay;
 import campis.dp1.models.ProductType;
 import campis.dp1.models.UnitOfMeasure;
+import campis.dp1.models.utils.GraphicsUtils;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextArea;
@@ -86,12 +87,12 @@ public class ListController implements Initializable {
         this.selected_id = 0;
         ContextFX.getInstance().modifyValidation(createButton, editButton, deleteButton, id_role, "products");
         tablaProd.getSelectionModel().selectedItemProperty().addListener(
-        (observable, oldValue, newValue) -> {
-            if (newValue == null) {
-                return;
-            }
-            this.selected_id = newValue.codProdProperty().getValue().intValue();
-            }
+                (observable, oldValue, newValue) -> {
+                    if (newValue == null) {
+                        return;
+                    }
+                    this.selected_id = newValue.codProdProperty().getValue().intValue();
+                }
         );
         try {
             itemCol.setCellValueFactory(cellData -> cellData.getValue().codProdProperty().asObject());
@@ -109,7 +110,7 @@ public class ListController implements Initializable {
     private ObservableList<Product> getProducts() {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -124,16 +125,16 @@ public class ListController implements Initializable {
         sessionFactory.close();
         return returnable;
     }
-    
+
     public static String searchNameType(Integer type) throws SQLException, ClassNotFoundException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(ProductType.class);
-        criteria.add(Restrictions.eq("id_product_type",type));
+        criteria.add(Restrictions.eq("id_product_type", type));
         String codType;
         List rsType = criteria.list();
         ProductType result = (ProductType) rsType.get(0);
@@ -142,37 +143,37 @@ public class ListController implements Initializable {
         sessionFactory.close();
         return codType;
     }
-    
+
     public static String searchCodMeasure(Integer measure) throws SQLException, ClassNotFoundException {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(UnitOfMeasure.class);
-        criteria.add(Restrictions.eq("id_unit_of_measure",measure));
+        criteria.add(Restrictions.eq("id_unit_of_measure", measure));
         String codMeasure;
         List rsMeasure = criteria.list();
-        UnitOfMeasure result = (UnitOfMeasure)rsMeasure.get(0);
+        UnitOfMeasure result = (UnitOfMeasure) rsMeasure.get(0);
         codMeasure = result.getDescription();
         session.close();
         sessionFactory.close();
         return codMeasure;
     }
-    
+
     private void cargarData() throws SQLException, ClassNotFoundException {
         productos = FXCollections.observableArrayList();
         productosView = FXCollections.observableArrayList();
         productos = getProducts();
-        
+
         for (int i = 0; i < productos.size(); i++) {
             String nType = searchNameType(productos.get(i).getId_product_type());
             String nMeasure = searchCodMeasure(productos.get(i).getId_unit_of_measure());
             ProductDisplay prod = new ProductDisplay(productos.get(i).getId_product(), productos.get(i).getName(),
                     nType, productos.get(i).getP_stock(), productos.get(i).getC_stock(),
                     productos.get(i).getWeight(), nMeasure, productos.get(i).getBase_price(),
-                    productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type(),productos.get(i).getMax_qt());
+                    productos.get(i).getId_unit_of_measure(), productos.get(i).getId_product_type(), productos.get(i).getMax_qt());
             productosView.add(prod);
         }
         tablaProd.setItems(null);
@@ -184,7 +185,7 @@ public class ListController implements Initializable {
         returnable = FXCollections.observableArrayList();
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -237,7 +238,7 @@ public class ListController implements Initializable {
             main.showEditProduct();
         }
     }
-    
+
     @FXML
     private void goViewProduct(ActionEvent event) throws IOException {
         if (selected_id > 0) {
@@ -249,7 +250,7 @@ public class ListController implements Initializable {
     private void deleteProduct(int cod) {
         Configuration configuration = new Configuration();
         configuration.configure("hibernate.cfg.xml");
-        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionFactory = configuration.buildSessionFactory();
         Session session = sessionFactory.openSession();
         session.beginTransaction();
@@ -269,12 +270,12 @@ public class ListController implements Initializable {
             Integer id_product = ContextFX.getInstance().getId();
             deleteProduct(selected_id);
             for (int i = 0; i < productos.size(); i++) {
-                if(productos.get(i).getId_product().compareTo(id_product) == 0){
+                if (productos.get(i).getId_product().compareTo(id_product) == 0) {
                     productos.remove(i);
                 }
             }
             cargarData();
         }
+
     }
 }
-
