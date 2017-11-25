@@ -24,7 +24,7 @@ public class Refund {
     }
 
     public Refund(Integer id_invoice) {
-        this.status = "Completa";
+        this.status = "Por Llegar";
         this.id_invoice = id_invoice;
     }
 
