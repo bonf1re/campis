@@ -632,6 +632,24 @@ public class Main extends Application {
         mainLayout.setCenter(viewSupplier);       
      }
      /* End Suppliers */
+     
+     /* Invoices */
+     
+     public static void showListInvoice() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/invoices/listInvoice.fxml"));
+        BorderPane listSupplier = loader.load();
+        mainLayout.setCenter(listSupplier);  
+    }
+     
+     public static void showCreateInvoice() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/invoices/createInvoice.fxml"));
+        BorderPane listSupplier = loader.load();
+        mainLayout.setCenter(listSupplier);  
+    }
+     
+     /* End Invoices */
     
     /**  
      * @param args the command line arguments

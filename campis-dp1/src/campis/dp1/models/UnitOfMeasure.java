@@ -12,6 +12,7 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.Table;
 import org.hibernate.Criteria;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -76,5 +77,25 @@ public class UnitOfMeasure {
         sessionFactory.close();
 
         return result;
+    }
+
+    public static String getName(int cod) {
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults","false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String queryStr = "select description\n" +
+                            "from campis.unit_of_measure\n" +
+                            " WHERE id_unit_of_measure =" + cod;
+        SQLQuery query = session.createSQLQuery(queryStr);
+        List list = query.list();
+        String returnable = (String) list.get(0);
+
+        session.close();
+        sessionFactory.close();
+
+        return returnable;
     }
 }

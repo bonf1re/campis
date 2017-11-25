@@ -113,7 +113,7 @@ public class EditDeliveryController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction();
         Criteria criteria = session.createCriteria(DispatchOrder.class);
-        criteria.add(Restrictions.eq("status", "EN PROGRESO"));
+        criteria.add(Restrictions.eq("status", "POR DESPACHAR"));
         
         ObservableList<DispatchOrder> returnable = FXCollections.observableArrayList();
         
