@@ -6,7 +6,6 @@
 package campis.dp1.controllers.invoices;
 
 import campis.dp1.Main;
-<<<<<<< HEAD
 import com.itextpdf.text.Document;
 import campis.dp1.models.Client;
 import java.io.File;
@@ -19,7 +18,6 @@ import campis.dp1.models.Delivery;
 import campis.dp1.models.DispatchOrder;
 import campis.dp1.models.DispatchOrderLine;
 import campis.dp1.models.RequestOrder;
-=======
 import campis.dp1.controllers.suppliers.ListController;
 import campis.dp1.models.Invoice;
 import campis.dp1.models.InvoiceLine;
@@ -27,7 +25,6 @@ import campis.dp1.models.Delivery;
 import campis.dp1.models.DeliveryDisplay;
 import campis.dp1.models.DispatchOrderLine;
 import campis.dp1.models.DispatchOrderLineDisplay;
->>>>>>> dev3
 import campis.dp1.models.RequestOrderLine;
 import com.itextpdf.text.DocumentException;
 import com.itextpdf.text.Font;
