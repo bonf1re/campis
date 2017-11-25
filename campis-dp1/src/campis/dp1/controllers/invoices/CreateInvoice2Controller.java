@@ -66,6 +66,10 @@ public class CreateInvoice2Controller implements Initializable {
     @FXML
     private JFXTextField typeField;
     @FXML
+    private JFXTextField IGVField;
+    @FXML
+    private JFXTextField fleteField;
+    @FXML
     private JFXTextField disttricField;
     @FXML
     private JFXTextField creationField;
@@ -163,7 +167,11 @@ public class CreateInvoice2Controller implements Initializable {
         
         this.invoiceView = FXCollections.observableArrayList();
         
-         for (DispatchOrderLine line: do_lines) {
+        Float total_view = Float.parseFloat("0"); 
+        Float total_weigth = Float.parseFloat("0"); 
+        Float total_weigth_ro = Float.parseFloat("0");  
+        
+        for (DispatchOrderLine line: do_lines) {
                 //hallamos la reques order line correspondiente
                 
                 RequestOrderLine aux_ro = null;
@@ -190,15 +198,26 @@ public class CreateInvoice2Controller implements Initializable {
                 Float m_sub = line.getQuantity()*aux_ro.getCost();
                 
                 float desc = aux_ro.getDiscount()*line.getQuantity()/aux_ro.getQuantity();
-                float final_cost  = (aux_ro.getCost()*line.getQuantity()) - desc;
+                float total_cost  = (aux_ro.getCost()*line.getQuantity()) - desc;
+                
+                //para calculos posteriores
+                total_view += total_cost;
+                total_weigth += p_aux.getWeight()*line.getQuantity();
+                total_weigth_ro += p_aux.getWeight()*aux_ro.getQuantity();
                 
                 InvoiceLineDisplay i_line = new InvoiceLineDisplay(0, 0, line.getId_prod(), nameProd, "X", trademark, m_sub, 
                                                                     aux_ro.getCost(), aux_ro.getDiscount(), aux_ro.getQuantity(),
-                                                                    final_cost, line.getQuantity(), 0, 0);
+                                                                    total_cost, line.getQuantity(), 0, 0);
                 
 
                 this.invoiceView.add(i_line);
             }
+        
+            Float igv = total_view*ContextFX.getInstance().getIGV();
+            Float freigth = getFreigth()*total_weigth/total_weigth_ro;
+            
+            this.IGVField.setText(igv.toString());
+            this.fleteField.setText(freigth.toString());
          
             this.depreTable.setItems(null);
             this.depreTable.setItems(invoiceView);
@@ -266,6 +285,7 @@ public class CreateInvoice2Controller implements Initializable {
             
             System.out.println("campis.dp1.controllers.invoices.CreateInvoiceController.insertInvoice()");
             System.out.println(rows4.size());
+            
             
             for (Object[] row : rows4) {
                 System.out.println(Integer.parseInt(row[0].toString()));
@@ -438,7 +458,7 @@ public class CreateInvoice2Controller implements Initializable {
         
         if (aux_cli.getDni().compareTo("--") == 0){
             //es una persona jurídica, asi que se le entrga una factura
-            return  1;
+            return  1; 
         } else if (aux_cli.getRuc().compareTo("--") == 0) {
             //se entrga una boleta
             return 0;
