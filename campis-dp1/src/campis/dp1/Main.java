@@ -663,6 +663,13 @@ public class Main extends Application {
         mainLayout.setCenter(listSupplier);  
     }
      
+    public static void showCreateInvoice2() throws IOException {
+        FXMLLoader loader = new FXMLLoader();
+        loader.setLocation(Main.class.getResource("views/invoices/createInvoice2.fxml"));
+        BorderPane listSupplier = loader.load();
+        mainLayout.setCenter(listSupplier);  
+    }
+     
      /* End Invoices */
     
     /**  

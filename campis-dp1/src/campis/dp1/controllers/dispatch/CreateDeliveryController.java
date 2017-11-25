@@ -6,10 +6,12 @@
 package campis.dp1.controllers.dispatch;
 
 import campis.dp1.Main;
+import campis.dp1.controllers.suppliers.ListController;
 import campis.dp1.models.Client;
 import campis.dp1.models.DispatchOrder;
 import campis.dp1.models.Delivery;
 import campis.dp1.models.DispatchOrderLine;
+import campis.dp1.models.DispatchOrderLineDisplay;
 import campis.dp1.models.District;
 import campis.dp1.models.Product;
 import campis.dp1.models.RequestOrder;
@@ -38,6 +40,12 @@ import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
 import com.itextpdf.text.Document;
+import java.sql.SQLException;
+import java.util.Objects;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javafx.scene.control.TableColumn;
+import javafx.scene.control.TableView;
 import org.hibernate.Criteria;
 import org.hibernate.SQLQuery;
 import org.hibernate.Session;
@@ -69,7 +77,27 @@ public class CreateDeliveryController implements Initializable {
     private JFXComboBox<String> dipatchOrderCb;
     
     private ObservableList<DispatchOrder> dispatchOrders;
-    private Integer selected_do;
+    ObservableList<DispatchOrderLine> do_lines;
+    
+    @FXML
+    private TableView<DispatchOrderLineDisplay> tableDelivery;
+    @FXML
+    private TableColumn<DispatchOrderLineDisplay, Integer> idCol;
+    @FXML
+    private TableColumn<DispatchOrderLineDisplay, String> prodCol;
+    @FXML
+    private TableColumn<DispatchOrderLineDisplay, Integer> cantCol;
+    @FXML
+    private TableColumn<DispatchOrderLineDisplay, String> unitCol;
+    @FXML
+    private TableColumn<DispatchOrderLineDisplay, Float> weigthCol;
+    
+    private ObservableList<Delivery> deliveries;
+   
+    private ObservableList<DispatchOrderLineDisplay>  delieveriesView;
+    private Integer selected_del; 
+    private Integer selected_do; 
+    private Integer selected_ro;
     
     /**
      * Initializes the controller class.
@@ -78,13 +106,94 @@ public class CreateDeliveryController implements Initializable {
     public void initialize(URL url, ResourceBundle rb) {
         
         setUpDipatchOrderCb();
+        setupDeliveriesTable();
         this.selected_do = 0;
         
-         dipatchOrderCb.getSelectionModel().selectedItemProperty().addListener( (ObservableValue<? extends String> options, String oldValue, String newValue) -> {
+        dipatchOrderCb.getSelectionModel().selectedItemProperty().addListener( (ObservableValue<? extends String> options, String oldValue, String newValue) -> {
             System.out.println(newValue);
-            this.selected_do = Integer.parseInt(newValue);         
+            this.selected_do = Integer.parseInt(newValue);  
+            
+            try {
+                loadData_deliveries();
+            } catch (SQLException | ClassNotFoundException ex) {
+                Logger.getLogger(ListController.class.getName()).log(Level.SEVERE, null, ex);
+            }
         }); 
     }
+    
+    private void setupDeliveriesTable() {
+        idCol.setCellValueFactory(cellData -> cellData.getValue().id_dispatch_order_lineProperty().asObject());
+        prodCol.setCellValueFactory(cellData -> cellData.getValue().product_nameProperty());
+        cantCol.setCellValueFactory(cellData -> cellData.getValue().quantityProperty().asObject());
+        unitCol.setCellValueFactory(cellData -> cellData.getValue().unit_of_measure_nameProperty());
+        weigthCol.setCellValueFactory(cellData -> cellData.getValue().weigthProperty().asObject());       
+    }
+    
+    private void loadData_deliveries() throws SQLException, ClassNotFoundException {
+        //Obtenemos el dispatch order
+//        for (int i = 0; i < this.dispatchOrders.size(); i++) {
+//            if (Objects.equals(this.selected_del, this.deliveries.get(i).getId_delivery())) {
+//                this.selected_do = this.deliveries.get(i).getId_dispatch_order();
+//            }
+//        }
+       
+        //Obtenemos las lineas de las ordenes de despacho
+        this.do_lines = getDispatchOrderLines(this.selected_do);
+        
+        //llenamos la tabla con las líneas de la orden de despacho
+        delieveriesView = FXCollections.observableArrayList();
+        
+        for (int i = 0; i < this.do_lines.size(); i++) {
+            DispatchOrderLine aux = this.do_lines.get(i);
+            
+            Product aux_prod = Product.getProduct(aux.getId_prod());
+            
+            String nombProd = aux_prod.getName();
+            Float w = aux_prod.getWeight()*aux.getQuantity();
+            Integer unid  = aux_prod.getId_unit_of_measure();
+            String unid_name = UnitOfMeasure.getName(unid);
+            
+            DispatchOrderLineDisplay d = new DispatchOrderLineDisplay(aux.getId_dispatch_order_line(), 
+                                                                     aux.getId_dispatch_order(), 
+                                                                     aux.getId_prod(), nombProd, aux.getQuantity(), 
+                                                                     unid, unid_name, w, aux.isDelivered());
+
+            
+            delieveriesView.add(d);
+        }
+        
+        this.tableDelivery.setItems(null);
+        this.tableDelivery.setItems(delieveriesView);
+    }    
+    
+    private ObservableList<DispatchOrderLine> getDispatchOrderLines(int aux_id_do) {
+         //Enlistamos las dispatch order lines
+        Configuration configuration = new Configuration();
+        configuration.configure("hibernate.cfg.xml");
+        configuration.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
+        SessionFactory sessionFactory = configuration.buildSessionFactory();
+        Session session = sessionFactory.openSession();
+        session.beginTransaction();
+        String qryStr3 = "SELECT * FROM campis.dispatch_order_line WHERE id_dispatch_order = " + aux_id_do;
+        SQLQuery qry3 = session.createSQLQuery(qryStr3);
+        List<Object[]> rows3 = qry3.list();
+        ObservableList<DispatchOrderLine> do_lines = FXCollections.observableArrayList();
+
+        for (Object[] row : rows3) {
+            DispatchOrderLine sup = new DispatchOrderLine(Integer.parseInt(row[0].toString()),
+                                        Integer.parseInt(row[1].toString()),
+                                        Integer.parseInt(row[2].toString()),
+                                        Integer.parseInt(row[3].toString()));
+            do_lines.add(sup);
+
+        }
+        
+        session.close();
+        sessionFactory.close();
+        
+        return do_lines;
+     }
+     
     
     @FXML
     private void setUpDipatchOrderCb() {
