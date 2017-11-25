@@ -41,13 +41,15 @@ public class ListController implements Initializable {
     @FXML
     private TableView<RefundDisplay> tableRefund;
     @FXML
-    private TableColumn<RefundDisplay,String> typeRefundColumn;
-    @FXML
     private TableColumn<RefundDisplay,Integer> idComplaintColumn;
     @FXML
     private TableColumn<RefundDisplay,Integer> idRequestOrderColumn;
     @FXML
     private TableColumn<RefundDisplay,String> statusColumn;
+    @FXML
+    private Button createButton;
+    @FXML
+    private Button confirmButton;
 
     @Override
     public void initialize(URL url, ResourceBundle rb) {
@@ -68,9 +70,9 @@ public class ListController implements Initializable {
             }
         );
         try {
+            idRequestOrderColumn.setCellValueFactory(cellData -> cellData.getValue().getId_invoice().asObject());
             statusColumn.setCellValueFactory(cellData -> cellData.getValue().getStatus());
-            idComplaintColumn.setCellValueFactory(cellData -> cellData.getValue().getId_complaint().asObject());
-            idRequestOrderColumn.setCellValueFactory(cellData -> cellData.getValue().getId_request_order().asObject());
+            idComplaintColumn.setCellValueFactory(cellData -> cellData.getValue().getId_refund().asObject());
             /**/
             loadData();
         } catch (SQLException | ClassNotFoundException ex) {
@@ -121,5 +123,9 @@ public class ListController implements Initializable {
     @FXML
     private void goCreateRefund(ActionEvent event) throws IOException {
         main.showCreateRefund();
+    }
+
+    @FXML
+    private void goConfirm(ActionEvent event) {
     }
 }

@@ -19,6 +19,7 @@ import campis.dp1.models.RequestOrderLineDisplay;
 import com.jfoenix.controls.JFXComboBox;
 import com.jfoenix.controls.JFXDatePicker;
 import com.jfoenix.controls.JFXTextField;
+import java.io.IOException;
 import java.math.BigDecimal;
 import java.net.URL;
 import java.util.ArrayList;
@@ -307,23 +308,25 @@ public class CreateController implements Initializable {
     }
 
     @FXML
-    private void goListDepartureMove(ActionEvent event) {
+    private void goListDepartureMove(ActionEvent event) throws IOException {
+        main.showListRefund();
     }
 
     @FXML
-    private void goCreateRefund(ActionEvent event) {
+    private void goCreateRefund(ActionEvent event) throws IOException {
         Configuration conf2 = new Configuration();
         conf2.configure("hibernate.cfg.xml");
         conf2.setProperty("hibernate.temp.use_jdbc_metadata_defaults", "false");
         SessionFactory sessionF2 = conf2.buildSessionFactory();
         Session s2 = sessionF2.openSession();
         s2.beginTransaction();
-        //Criteria criteria = s2.createCriteria(Refund.class);
+        Criteria criteria = s2.createCriteria(Refund.class);
         Refund ref = new Refund(cbRequestOrderId.getValue());
         /*Query qry = s2.createSQLQuery("INSERT INTO campis.refund VALUES(DEFAULT,"++
                 ",'COMPLETO',DEFAULT)");
         int idref = (int)qry.executeUpdate();*/
         s2.save(ref);
+        
         int idref = ref.getId_refund();
         for (int i = 0; i < tablaProd.getItems().size(); i++) {
             /*Query qry2 = s2.createSQLQuery("INSERT INTO campis.refund_line VALUES(DEFAULT,"+idref+","+tablaProd.getItems().get(i).getQtRef().getValue()
@@ -332,8 +335,9 @@ public class CreateController implements Initializable {
             RefundLine refLine = new RefundLine(idref,tablaProd.getItems().get(i).getQtRef().getValue());
             s2.save(refLine);
         }
+        s2.getTransaction().commit();
         s2.close();
         sessionF2.close();
+        this.goListDepartureMove(event);
     }
-
 }
