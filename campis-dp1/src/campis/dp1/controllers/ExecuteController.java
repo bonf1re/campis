@@ -5,16 +5,16 @@
  */
 package campis.dp1.controllers;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
 import java.net.URL;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.ResourceBundle;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Label;
+import org.hibernate.SQLQuery;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.cfg.Configuration;
@@ -42,9 +42,9 @@ public class ExecuteController implements Initializable {
     
     @FXML
     private void executeBulk (ActionEvent actionEvent) throws SQLException, IOException {
-        Integer rows=0;
-        FileReader fr = new FileReader("db/seed_test.sql");
-        BufferedReader br = new BufferedReader(fr);
+        
+        String txt= "Carga masiva finalizada con éxito.";
+        
         
         
         Configuration configuration = new Configuration();
@@ -54,31 +54,27 @@ public class ExecuteController implements Initializable {
         Session session = sessionFactory.openSession();
         session.beginTransaction(); 
 
-        while (true){
-                String sql = br.readLine();
-                if (sql == null)
-                {
-                        break;
-                }
+        
                 try
                 {
-                        int result = session.createSQLQuery(sql).executeUpdate();
-                        System.out.printf("Got result %d from '%s'\n", result, sql);
-                        lblResults.setText(sql);
-                        rows++;
+                        SQLQuery query = session.createSQLQuery("select campis.bulk_campis()");
+                        //System.out.printf("Got result %d from '%s'\n", result, sql);
+                        List<Object[]> rows = query.list();
+                        //rows++;
                 }
                 catch (Exception e)
                 {
-                        System.err.printf("Error executing '%s'\n", sql);
+                        System.err.printf("Error executing sql command");
+                        txt= "Error en la carga masiva";
                 }
-        }
-        session.getTransaction().commit();
-        fr.close();
+        
+        
+        
         
         session.close();
         sessionFactory.close();
 
-        lblResults.setText("Carga masiva finalizada. "+ rows.toString() + " filas afectadas.");
+        lblResults.setText(txt);
         
     }
     
