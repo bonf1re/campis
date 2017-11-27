@@ -21,7 +21,12 @@
                </font>
             </Label>
             <Button layoutX="449.0" layoutY="299.0" mnemonicParsing="false" onAction="#executeBulk" text="Ejecutar" />
-            <Label fx:id="lblResults" alignment="CENTER" contentDisplay="CENTER" layoutX="299.0" layoutY="373.0" prefHeight="16.0" prefWidth="373.0" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS" />
+            <Label fx:id="lblResults" alignment="CENTER" contentDisplay="CENTER" layoutX="299.0" layoutY="436.0" prefHeight="16.0" prefWidth="373.0" textAlignment="CENTER" textOverrun="CENTER_ELLIPSIS">
+               <font>
+                  <Font name="System Bold" size="13.0" />
+               </font></Label>
+            <Label layoutX="232.0" layoutY="365.0" text="Si desea limpiar TODOS los datos ingresados a la aplicación:" />
+            <Button layoutX="655.0" layoutY="360.0" mnemonicParsing="false" onAction="#executeClean" text="LIMPIAR" textFill="#1f00ff" />
          </children>
       </AnchorPane>
    </center>

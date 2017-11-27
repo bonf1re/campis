@@ -41,9 +41,17 @@ public class ExecuteController implements Initializable {
     
     
     @FXML
+    private void executeClean (ActionEvent actionEvent) throws SQLException, IOException {
+        executeAction("select campis.clean_campis()", "Limpieza de datos");
+    }
+    
+     @FXML
     private void executeBulk (ActionEvent actionEvent) throws SQLException, IOException {
-        
-        String txt= "Carga masiva finalizada con éxito.";
+        executeAction("select campis.bulk_campis()", "Carga masiva");
+    }
+    
+    private void executeAction(String command, String action) throws SQLException, IOException {
+        String txt= action + " finalizada con éxito.";
         
         
         
@@ -57,7 +65,7 @@ public class ExecuteController implements Initializable {
         
                 try
                 {
-                        SQLQuery query = session.createSQLQuery("select campis.bulk_campis()");
+                        SQLQuery query = session.createSQLQuery(command);
                         //System.out.printf("Got result %d from '%s'\n", result, sql);
                         List<Object[]> rows = query.list();
                         //rows++;
@@ -65,7 +73,7 @@ public class ExecuteController implements Initializable {
                 catch (Exception e)
                 {
                         System.err.printf("Error executing sql command");
-                        txt= "Error en la carga masiva";
+                        txt= action + " falló en su ejecución.";;
                 }
         
         
@@ -76,6 +84,10 @@ public class ExecuteController implements Initializable {
 
         lblResults.setText(txt);
         
+    
+        
     }
+    
+    
     
 }
