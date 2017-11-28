@@ -312,9 +312,10 @@ public class RefundEntryCreateController implements Initializable {
     
     public void goWhEntryMoveRoute() throws IOException{
         // Weight check
+        GraphicsUtils gu = new GraphicsUtils();
         double total_weight = weight_check();
         if (total_weight<0){
-            System.out.println("No hay suficientes carritos para el piso a transportar o no se ha seleccionado algo.");
+            gu.popupError("Error de configuracion","No hay suficientes carritos para el piso a transportar o no se ha seleccionado algo.","Volver");
             return;
         }
         
@@ -329,7 +330,7 @@ public class RefundEntryCreateController implements Initializable {
         List zone_sel = getZones((ArrayList<Batch>)aux,session);
         
         if (zone_sel.size() != aux.size()){
-            System.out.println("No se pudo colocar todos los lotes, abortando.");
+            gu.popupError("Error de configuracion","No se pudo colocar todos los lotes, abortando.","Volver");  
             return;
         }
 
@@ -338,12 +339,8 @@ public class RefundEntryCreateController implements Initializable {
         // Dynamic route generation per vehicle
         sortPerWeight((ArrayList<Batch>)aux,(ArrayList<WarehouseZone>)zone_sel,session);
         
-        sendBatches_n_Routes((ArrayList<Batch>)aux,(ArrayList<WarehouseZone>)zone_sel,session);
-        session.close();
-        sessionFactory.close();
+        sendBatches_n_Routes((ArrayList<Batch>)aux,(ArrayList<WarehouseZone>)zone_sel,session,sessionFactory);
         
-        ContextFX.getInstance().setId_Refund(id_refund);
-        main.showWhSpecialEntryMoveRoute();    
     }
     
     private ArrayList<WarehouseZone> getZones(ArrayList<Batch> batch_route_list, Session session) {
@@ -355,6 +352,7 @@ public class RefundEntryCreateController implements Initializable {
         
         Criteria criteria = session.createCriteria(WarehouseZone.class);
         criteria.add(Restrictions.eq("free",true));
+        criteria.add(Restrictions.eq("id_warehouse", this.id_warehouse));
         List zones = criteria.list();
         
         criteria = session.createCriteria(Area.class);
@@ -456,7 +454,7 @@ public class RefundEntryCreateController implements Initializable {
     }
 
     
-    private void sendBatches_n_Routes(ArrayList<Batch> batch_list,ArrayList<WarehouseZone> zone_list,Session session) {
+    private void sendBatches_n_Routes(ArrayList<Batch> batch_list,ArrayList<WarehouseZone> zone_list,Session session, SessionFactory sessionFactory) throws IOException {
         routingSetup(session);
         ArrayList<Object> sendable = new ArrayList<Object>();
         sendable.add(1); // index
@@ -521,7 +519,18 @@ public class RefundEntryCreateController implements Initializable {
             sendable.add(aux);
             // Corregir otros loops con removal al reves csm
         }
+        session.close();
+        sessionFactory.close();
+        try{
+            Vehicle vh =(Vehicle) ((ArrayList<Object>) sendable.get((int)sendable.get(0))).get(2);
+        }catch(Exception e){
+            GraphicsUtils gu = new GraphicsUtils();
+            gu.popupError("Error de ubicación", "Uno de los lotes no ha encontrado lugar donde ser ubicado.", "Volver");
+            return;
+        }
         ContextFX.getInstance().setPolymorphic_list(sendable);
+        ContextFX.getInstance().setId_Refund(id_refund);
+        main.showWhSpecialEntryMoveRoute();    
     }
     
      private ArrayList<Batch> getMarked(Session session){

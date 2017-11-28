@@ -487,11 +487,7 @@ public class EntryMoveSpecialCreateController implements Initializable {
         // Dynamic route generation per vehicle
         sortPerWeight((ArrayList<Batch>)aux,(ArrayList<WarehouseZone>)zone_sel,session);
         
-        sendBatches_n_Routes((ArrayList<Batch>)aux,(ArrayList<WarehouseZone>)zone_sel,session);
-        session.close();
-        sessionFactory.close();
-        
-        main.showWhSpecialEntryMoveRoute();    
+        sendBatches_n_Routes((ArrayList<Batch>)aux,(ArrayList<WarehouseZone>)zone_sel,session,sessionFactory);    
     }
     
     private ArrayList<WarehouseZone> getZones(ArrayList<Batch> batch_route_list, Session session) {
@@ -605,7 +601,7 @@ public class EntryMoveSpecialCreateController implements Initializable {
     }
 
     
-    private void sendBatches_n_Routes(ArrayList<Batch> batch_list,ArrayList<WarehouseZone> zone_list,Session session) {
+    private void sendBatches_n_Routes(ArrayList<Batch> batch_list,ArrayList<WarehouseZone> zone_list,Session session, SessionFactory sessionFactory) throws IOException {
         routingSetup(session);
         ArrayList<Object> sendable = new ArrayList<Object>();
         sendable.add(1); // index
@@ -670,7 +666,19 @@ public class EntryMoveSpecialCreateController implements Initializable {
             sendable.add(aux);
             // Corregir otros loops con removal al reves csm
         }
+        session.close();
+        sessionFactory.close();
+        try{
+            Vehicle vh =(Vehicle) ((ArrayList<Object>) sendable.get((int)sendable.get(0))).get(2);
+        }catch(Exception e){
+            GraphicsUtils gu = new GraphicsUtils();
+            gu.popupError("Error de ubicación", "Uno de los lotes no ha encontrado lugar donde ser ubicado.", "Volver");
+            return;
+        }
         ContextFX.getInstance().setPolymorphic_list(sendable);
+        
+        main.showWhSpecialEntryMoveRoute();
+        
     }
     
      private ArrayList<Batch> getMarked(Session session){
